@@ -1,0 +1,8 @@
+.tooltip-inner {
+    max-width: none;
+    white-space: nowrap;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

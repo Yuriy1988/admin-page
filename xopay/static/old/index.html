@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html ng-app="application">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>XOPay</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="static/old/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="static/old/plugins/select2/select2.min.css">
+    <!-- DateRangePicker -->
+    <link rel="stylesheet" href="static/old/plugins/daterangepicker/daterangepicker-bs3.css">
+    <!-- DataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="static/old/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect.
+    -->
+    <link rel="stylesheet" href="static/old/dist/css/skins/skin-green-light.min.css">
+
+    <link rel="stylesheet" href="static/old/dist/css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="static/old/plugins/jGrowl/jquery.jgrowl.css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body ng-class      = "{'skin-green-light':true, 'sidebar-mini':true, 'sidebar-collapse': !globals.currentUser}"
+      ng-controller = "Main">
+<div class="wrapper">
+
+    <header class="main-header">
+
+       <a ui-sref="main" class="logo">
+            <span class="logo-mini"><b>XO</b>P</span>
+            <span class="logo-lg"><b>XOP</b>ay</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+           <div class="navbar-custom-menu" ng-if="globals.currentUser">
+              <ul class="nav navbar-nav">
+
+                 <li class="dropdown">
+                    <a href class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                       <i class="glyphicon glyphicon-user"></i> {{globals.currentUser.username}}
+                    </a>
+                    <ul class="dropdown-menu">
+                       <li>
+                          <a href="#/login" x-translate>Выход</a>
+                       </li>
+                       <li class="divider"></li>
+                       <li ng-repeat="lang in langs()">
+                          <a href ng-click="setLang(lang.code)">
+                             {{lang.name}}
+                             <i ng-if="getLang() === lang.code" class="fa fa-hand-o-left"></i>
+                          </a>
+                       </li>
+                    </ul>
+                 </li>
+              </ul>
+           </div>
+        </nav>
+    </header>
+
+    <aside class="main-sidebar" ng-if="globals.currentUser">
+        <section class="sidebar" ng-controller="Sidebar">
+            <ul class="sidebar-menu">
+
+               <li class="treeview">
+                  <a href="#">
+                     <i class="fa fa-suitcase"></i>
+                     <span x-translate>Торговцы</span>
+                     <i class="fa fa-angle-left pull-right"></i>
+                  </a>
+                  <ul class="treeview-menu">
+                     <li>
+                        <a ui-sref="merchantAdd">
+                           <i class="fa fa-plus-circle text-green"></i>
+                           <span x-translate>Добавить</span>
+                        </a>
+                     </li>
+                     <li ng-repeat="(id, merchant) in merchants" ng-class="{active:$state.is('merchant', {merchantId: id})}">
+                        <a ui-sref="merchant.sites({merchantId: id})">
+                           <i class="fa"><b>{{$index+1}}) </b></i>
+                           <span>{{merchant.name}}</span>
+                        </a>
+                     </li>
+                  </ul>
+                </li>
+
+                <li>
+                    <a ui-sref="pay">
+                        <i class="fa fa-credit-card"></i>
+                        <span x-translate>Платежные системы</span>
+                    </a>
+                </li>
+
+                <li class="treeview">
+                  <a href="#">
+                     <i class="fa fa-user-secret"></i>
+                     <span x-translate>Администраторы</span>
+                     <i class="fa fa-angle-left pull-right"></i>
+                  </a>
+                  <ul class="treeview-menu">
+                     <li>
+                        <a ui-sref="adminAdd">
+                           <i class="fa fa-plus-circle text-green"></i>
+                           <span x-translate>Добавить</span>
+                        </a>
+                     </li>
+                     <!--li-- ng-repeat="(id, admin) in admins" ng-class="{active:$state.is('admin', {adminId: id})}">
+                        <a ui-sref="admins({adminId: id})">
+                           <i class="fa"><b>{{$index+1}}) </b></i>
+                           <span>{{admin.name}}</span>
+                        </a>
+                     </li-->
+                  </ul>
+                </li>
+
+                <li class="treeview">
+                    <a ui-sref="moneyCourses">
+                        <i class="fa fa-money"></i>
+                        <span x-translate>Валюты и курсы</span>
+                        <!--i class="fa fa-angle-left pull-right"></i-->
+                    </a>
+
+                    <!--ul class="treeview-menu">
+
+                    </ul-->
+                </li>
+
+            </ul>
+        </section>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content" ui-view></section>
+    </div>
+
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 2.1.4 -->
+<script src="static/old/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- Select2 -->
+<script src="static/old/plugins/select2/select2.full.min.js"></script>
+<!-- ChartJs -->
+<script src="static/old/plugins/chartjs/Chart.min.js"></script>
+<!-- DateRangePicker -->
+<script src="static/old/plugins/daterangepicker/moment.min.js"></script>
+<script src="static/old/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- DateRangePicker -->
+<script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="static/old/dist/js/app.min.js"></script>
+<!-- jGrowl notifications -->
+<script src="static/old/plugins/jGrowl/jquery.jgrowl.js"></script>
+<!-- AngularJS 1.4.7 -->
+<script src="static/old/plugins/AngularJS/angular.min.js"></script>
+<!-- AngularJS Router 0.2.15 -->
+<script src="static/old/plugins/AngularJS/angular-ui-router.js"></script>
+<!-- ngCookies for AngularJS 1.4.7-->
+<script src="static/old/plugins/AngularJS/angular-cookies.min.js"></script>
+<!-- Angular translate 2.7.2 -->
+<script src="static/old/plugins/AngularJS/angular-translate.min.js"></script>
+<script src="static/old/plugins/AngularJS/angular-translate-loader-url.min.js"></script>
+<script src="static/old/plugins/AngularJS/angular-translate-storage-cookie.min.js"></script>
+<script src="static/old/plugins/AngularJS/angular-translate-storage-local.min.js"></script>
+
+<!-- AngularJS Mocks 1.4.7 -->
+<!--<script src="plugins/AngularJS/angular-mocks.js"></script>-->
+<!-- Bootstrap 3.3.5 -->
+<script src="static/old/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Domain angular scripts -->
+<script src="static/old/dist/js/core.js"></script>
+<script src="static/old/dist/js/config.js"></script>
+<script src="static/old/dist/js/directives.js"></script>
+<script src="static/old/dist/js/controllers.js"></script>
+<script src="static/old/dist/js/services.js"></script>
+</body>
+</html>

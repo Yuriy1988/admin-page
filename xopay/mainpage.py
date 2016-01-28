@@ -9,4 +9,4 @@ __author__ = 'Kostel Serhii'
 @app.route('/')
 def main_page():
     """ Return main page for xopay admin. """
-    return "Hello, World!"
+    return app.send_static_file('old/index.html')
