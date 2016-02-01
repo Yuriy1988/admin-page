@@ -6,11 +6,11 @@ from xopay import app
 db = SQLAlchemy(app)
 
 
-class StoreSettings(db.Model):
+class User(db.Model):
 
     NOTIFICATION_TYPE = ('sms', 'email')
 
-    __tablename__ = 'store_settings'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False)
     password = db.Column(db.String(32), nullable=False)
@@ -22,6 +22,8 @@ class StoreSettings(db.Model):
     active = db.Column(db.Boolean, default=True)
     last_login = db.Column(db.DateTime)
     created = db.Column(db.DateTime, default=datetime.now())
+    merchant = db.relationship("Merchant", uselist=False, back_populates="user")
+    manager = db.relationship("Manager", uselist=False, back_populates="user")
 
     def __repr__(self):
         return '<User %r>' % self.username
