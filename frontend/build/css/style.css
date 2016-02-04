@@ -1,0 +1,27 @@
+.tooltip-inner {
+    max-width: none;
+    white-space: nowrap;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.main-header .sidebar-toggle:before {
+    content: "\f0c9";
+}
+
+.content-wrapper {
+	padding-bottom: 50px;
+}
+
+footer {
+	position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+html, body, .wrapper .components {
+	height: 100%;
+}

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Merchants Test1</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="skin-green-light.min.css">
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="AdminLTE.min.css">
+</head>
+<body class="skin-green-light">
+	<div class="wrapper">
+		<header class="main-header">
+			<a class="logo" href="#/">
+            	<span class="logo-mini"><b>XO</b>P</span>
+            	<span class="logo-lg"><b>XOP</b>ay</span>
+        	</a>
+        	<nav class="navbar navbar-static-top">
+            	<a href="#" class="sidebar-toggle">
+                	<span class="sr-only">Toggle navigation</span>
+            	</a>
+            	<div class="navbar-custom-menu">
+              	<ul class="nav navbar-nav">
+
+                 <li class="dropdown open"> <!-- class open should be added/removed by click event -->
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                       <i class="glyphicon glyphicon-user"></i> test
+                    </a>
+                    <ul class="dropdown-menu">
+                       <li>
+                          <a href="#/login">Logout</a>
+                       </li>
+                       <li class="divider"></li>
+                       <li>
+                          <a href="">
+                             Русский
+                          </a>
+                       </li>
+                       <li>
+                          <a href="">
+                             English
+                             <i class="fa fa-hand-o-left"></i>
+                          </a>
+                       </li>
+                    </ul>
+                 </li>
+              </ul>
+	        </nav>
+		</header>
+
+		<aside class="main-sidebar">
+	        <section class="sidebar">
+	            <ul class="sidebar-menu">
+
+	               <li class="treeview">
+	                  <a href="#">
+	                     <i class="fa fa-suitcase"></i>
+	                     <span>Merchants</span>
+	                     <i class="fa fa-angle-left pull-right"></i>
+	                  </a>
+	                  <ul class="treeview-menu">
+	                     <li>
+	                        <a href="#/merchants/add">
+	                           <i class="fa fa-plus-circle text-green"></i>
+	                           <span>Add</span>
+	                        </a>
+	                     </li>
+	                    <li>
+	                        <a href="#/merchant/1/sites">
+	                           <i class="fa"><b>1) </b></i>
+	                           <span>test1</span>
+	                        </a>
+	                     </li>
+	                     <li>
+	                        <a href="#/merchant/35/sites">
+	                           <i class="fa"><b>2) </b></i>
+	                           <span>hello world</span>
+	                        </a>
+	                     </li>
+	                  </ul>
+	                </li>
+
+	                <li>
+	                    <a href="#/pay">
+	                        <i class="fa fa-credit-card"></i>
+	                        <span>Payment Systems</span>
+	                    </a>
+	                </li>
+
+	                <li class="treeview">
+	                  <a href="#">
+	                     <i class="fa fa-user-secret"></i>
+	                     <span>Administrators</span>
+	                     <i class="fa fa-angle-left pull-right"></i>
+	                  </a>
+	                  <ul class="treeview-menu">
+	                     <li>
+	                        <a href="#/admins/add">
+	                           <i class="fa fa-plus-circle text-green"></i>
+	                           <span>Add</span>
+	                        </a>
+	                     </li>
+	                  </ul>
+	                </li>
+
+	                <li class="treeview">
+	                    <a href="#/money">
+	                        <i class="fa fa-money"></i>
+	                        <span>Currency Courses</span>
+	                        <!--i class="fa fa-angle-left pull-right"></i-->
+	                    </a>	                   
+	                </li>
+
+	            </ul>
+	        </section>
+    	</aside>
+
+		<div class="content-wrapper">
+			<section class="content">
+				<div class="row">
+                <div class="col-xs-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs pull-right">
+                            <li>
+                                <a href="#/merchant/1/users">Users</a>
+                            </li>
+                            <li class="active">
+                                <a href="#/merchant/1/sites">Web Sites</a>
+                            </li>
+                            <li class="pull-left header">
+                                <i class="fa "></i>
+                                test1
+                            </li>
+                            <li class="dropdown pull-left">
+                                <a class="dropdown-toggle cursor-pointer">
+                                   <span>Actions</span>
+                                   <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li role="presentation"><a href="#/merchant/1/addSite">Add Web Site</a></li>
+                                    <li role="presentation"><a href="#/merchant/1/add">Add User</a></li>
+                                    <li role="presentation"><a href="#/merchant/1/edit">Modify</a></li>
+                                    <li role="presentation"><a class="text-red cursor-pointer" >Delete</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <!-- uiView:  --><div class="tab-content no-padding"><table class="table table-condensed">
+                <tbody><tr>
+                    <th class="text-center" style="width:15px">#</th>
+                    <th>Name</th>
+                    <th>Url</th>
+                    <th>Logo</th>
+                    <th class="text-center" style="width:300px">Operations</th>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle;" class="text-center">1.</td>
+                    <td style="vertical-align: middle;" >
+                       sasas
+                    </td>
+                    <td style="vertical-align: middle;">
+                       <i class="glyphicon glyphicon-globe"></i>&nbsp;
+                       http://asas.com
+                    </td>
+                    <td>
+                      <!-- ngIf: site.setting.logo -->
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-primary btn-xs" href="#/merchant/1/sites/5/edit">Modify</a>
+                        <a class="btn btn-success btn-xs" href="#/merchant/1/sites/5/pays">Payment Systems</a>
+                        <!--a ui-sref="merchant.statSite({merchantId: merchantId, siteId: id})" class="btn btn-warning btn-xs">Статистика</a-->
+                        <a class="btn btn-danger btn-xs">Delete</a>
+                    </td>
+                </tr><!-- end ngRepeat: (id, site) in sites -->
+            </tbody></table></div>
+
+                    </div>
+                </div>
+            </div>
+			</section>
+		</div>
+		<footer class="main-footer">
+        	<strong>Copyright © 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    	</footer>
+	</div>
+</body>
+</html>

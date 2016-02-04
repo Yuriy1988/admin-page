@@ -4,3 +4,4 @@
 *.db
 venv
 secret.key
+frontend/node_modules/
