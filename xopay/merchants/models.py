@@ -16,7 +16,10 @@ class Merchant(db.Model):
     okpo = db.Column(db.String(32), nullable=True)
     bank_name = db.Column(db.String(32), nullable=True)
     currency = db.Column(db.String(3), nullable=True)
-    user_profile = db.relationship("User", back_populates="merchant")
+
+    user = db.relationship("User", uselist=False, back_populates="merchant")
+    store = db.relationship("MerchantStore")
+    manager = db.relationship("Manager")
 
     def __repr__(self):
         return '<User %r>' % self.сhairman
@@ -29,7 +32,7 @@ class MerchantStore(db.Model):
     url = db.Column(db.String(32))
     category = db.Column(db.String(320), nullable=True)
     description = db.Column(db.Text(32), nullable=True)
-    store_settings = db.relationship("StoreSettings", uselist=False, back_populates="store")
+    store_settings = db.relationship("StoreSettings", uselist=False, back_populates="merchant_store")
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'))
 
     def __repr__(self):
@@ -38,8 +41,8 @@ class MerchantStore(db.Model):
 
 class StoreSettings(db.Model):
 
-    CRYPT_ALGORYTHM = ('md5', 'sha1')
-    NOTIFICATION_TYPE = ('sms', 'email')
+    CRYPT_ALGORYTHM = ['md5', 'sha1']
+    NOTIFICATION_TYPE = ['sms', 'email']
 
     __tablename__ = 'store_settings'
     id = db.Column(db.Integer, primary_key=True)
@@ -50,9 +53,10 @@ class StoreSettings(db.Model):
     reject_url = db.Column(db.String(32), nullable=True)
     logo = db.Column(db.String(32), nullable=True)
     show_logo = db.Column(db.Boolean, default=False)
-    notif_type = db.Column(db.Enum(NOTIFICATION_TYPE))
-    crypt_algorythm = db.Column(db.Enum(CRYPT_ALGORYTHM))
-    store = db.relationship("MerchantStore", back_populates="store_settings")
+    notif_type = db.Column(db.Enum(*NOTIFICATION_TYPE))
+    crypt_algorythm = db.Column(db.Enum(*CRYPT_ALGORYTHM))
+    store_id = db.Column(db.Integer, db.ForeignKey('merchant_store.id'), nullable=True)
+    merchant_store = db.relationship("MerchantStore", back_populates="store_settings")
 
     def __repr__(self):
         return '<Store %r>' % self.store.store_name
@@ -63,6 +67,7 @@ class Manager(db.Model):
     __tablename__ = 'manager'
     id = db.Column(db.Integer, primary_key=True)
     enabled = db.Column(db.Boolean, default=False)
-    user = db.relationship("User", back_populates="manager")
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship("User", uselist=False, back_populates="manager")
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'))
-    child = db.relationship("Merchant")
+    merchant = db.relationship("Merchant", back_populates="manager")
