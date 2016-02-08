@@ -59,10 +59,15 @@ def logout():
     flash('You logout')
     return redirect(url_for('main_page'))
 
+
 @app.before_request
 def before_request():
     g.user = current_user
 
+
+@lm.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 # @app.route('/login', methods=['GET', 'POST'])
 # def login():

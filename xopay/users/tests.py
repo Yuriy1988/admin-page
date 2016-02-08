@@ -1,22 +1,26 @@
 import unittest
-from flask import url_for, get_flashed_messages
+from flask import url_for, get_flashed_messages, g
+from flask.ext.login import current_user
 
 from xopay import app, db
 from xopay.users.models import User
-from xopay.init_testing import AbstactTestCase
+from xopay.init_testing import AbstractTestCase
 
 
-class UserTest(AbstactTestCase):
+class UserTest(AbstractTestCase):
 
     def test_user_login(self):
-        response = self.login(username=self.user['username'], password='wrong')
-        assert 'Username or Password is invalid' in str(response.data)
-        response = self.login(username='wrong', password='wrong')
-        assert 'Username or Password is invalid' in str(response.data)
-        response = self.login(**self.user)
-        assert 'Logged in successfully' in str(response.data)
-        response = self.logout()
-        assert 'You logout' in str(response.data)
+        with self.client:
+            a = app.app_ctx_globals_class()
+            response = self.login(username=self.user['username'], password='wrong')
+            self.assertFalse(g.user.is_authenticated)
+            response = self.login(username='wrong', password='wrong')
+            self.assertFalse(g.user.is_authenticated)
+            response = self.login(**self.user)
+            self.assertTrue(g.user.is_authenticated)
+            response = self.logout()
+            self.assertFalse(g.user.is_authenticated)
+
 
 
 
