@@ -35,7 +35,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print(g.user.is_authenticated())
+    # print(g.user.is_authenticated())
     if request.method == 'GET':
         return render_template('login.html')
 
@@ -56,6 +56,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('You logout')
     return redirect(url_for('main_page'))
 
 @app.before_request

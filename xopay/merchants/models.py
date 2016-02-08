@@ -16,7 +16,6 @@ class Merchant(db.Model):
     okpo = db.Column(db.String(32), nullable=True)
     bank_name = db.Column(db.String(32), nullable=True)
     currency = db.Column(db.String(3), nullable=True)
-
     user = db.relationship("User", uselist=False, back_populates="merchant")
     store = db.relationship("MerchantStore")
     manager = db.relationship("Manager")
@@ -67,7 +66,6 @@ class Manager(db.Model):
     __tablename__ = 'manager'
     id = db.Column(db.Integer, primary_key=True)
     enabled = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", uselist=False, back_populates="manager")
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'))
     merchant = db.relationship("Merchant", back_populates="manager")

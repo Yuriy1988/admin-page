@@ -13,5 +13,6 @@ def old_page():
 
 @app.route('/')
 def main_page():
-    """ Return edited main page for xopay admin. """
-    return app.send_static_file('index.html')
+    # """ Return edited main page for xopay admin. """
+    # return app.send_static_file('index.html')
+    return render_template('layout.html')

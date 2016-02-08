@@ -23,8 +23,8 @@ class User(db.Model):
     created = db.Column(db.DateTime, default=datetime.now())
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=True)
     manager_id = db.Column(db.Integer, db.ForeignKey('manager.id'), nullable=True)
-    merchant = db.relationship("Merchant", uselist=False, back_populates="user")
-    manager = db.relationship("Manager", uselist=False, back_populates="user")
+    merchant = db.relationship("Merchant", back_populates="user")
+    manager = db.relationship("Manager", back_populates="user")
 
     def __repr__(self):
         return '<User %r>' % self.username
