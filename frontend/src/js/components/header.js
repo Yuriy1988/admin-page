@@ -1,9 +1,11 @@
 import React from 'react'
-import LoginDropdown from './header_components/login_dropdown'
+import LoginDropdown from './header/login_dropdown'
 
 const Header = React.createClass({
+  componentWillMount() {
+      document.body.classList.add('sidebar-mini'); 
+  },
   render() {
-    var ifLogedDropdownList = this.props.isLoged? <LoginDropdown isLoged={this.props.isLoged} /> : null;
     return (
        <header className="main-header">
 				<a className="logo" href="#/">
@@ -11,13 +13,17 @@ const Header = React.createClass({
             	<span className="logo-lg"><b>XOP</b>ay</span>
         	</a>
         	<nav className="navbar navbar-static-top">
-            	<a href="#" className="sidebar-toggle">
+            	<a href="#" onClick={this.sidebarToggle} className="sidebar-toggle">
                 	<span className="sr-only">Toggle navigation</span>
             	</a>
-              {ifLogedDropdownList}
+              <LoginDropdown isLoged={this.props.isLoged} />
 	        </nav>
 			</header>
     )
+  },
+  sidebarToggle (){
+    document.body.classList.toggle('sidebar-collapse');
+    document.body.classList.toggle('sidebar-open');
   }
 })
 

@@ -31,3 +31,20 @@ html, body, .wrapper, .components {
 .move-icon {
 	padding-right: 5px;
 }
+
+.dropdown-menu>.divider {
+    background-color: #eee !important;
+}
+
+.dropdown-menu {
+    right: 0 !important;
+}
+
+.dropdown-menu>li>a {
+    color: #000 !important;
+}
+
+.dropdown-menu>li>a:hover {
+    background-color: #e1e3e9 !important;
+    color: #333 !important;
+}
