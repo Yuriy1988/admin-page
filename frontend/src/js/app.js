@@ -1,9 +1,10 @@
 import React from 'react'
+import { render } from 'react-dom'
 
-import Header from './header'
-import Footer from './footer'
-import Sidebar from './sidebar'
-import Content from './content'
+import Header from './components/header'
+import Footer from './components/footer'
+import Sidebar from './components/sidebar'
+import Content from './components/content'
 
 const App = React.createClass({
   getInitialState() {
@@ -25,4 +26,4 @@ const App = React.createClass({
   }
 })
 
-export default App
+render(<App />, document.getElementById('app'))

@@ -5,3 +5,4 @@
 venv
 secret.key
 frontend/node_modules/
+xopay/static/js/

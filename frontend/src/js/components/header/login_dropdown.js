@@ -12,7 +12,7 @@ const Login = React.createClass({
               </a>
               <ul className="dropdown-menu">
                 <li>
-                  <a href="#/login">Logout</a>
+                  <a href="#">Logout</a>
                 </li>
                 <li className="divider"></li>
                 <li>

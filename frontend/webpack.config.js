@@ -5,8 +5,8 @@ module.exports = {
 	devtool: 'eval-source-map',
 	watch: true,
 	entry: {
-		main: './src/js/main.js',
-		login: './src/js/components/login/index.js'
+		app: './src/js/app.js',
+		//login: './src/js/components/login/index.js'
 	},
 	output: {
 		filename: '[name].js',
