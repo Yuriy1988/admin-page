@@ -1,26 +1,65 @@
-var path = require('path');
-var WebpackNotifierPlugin = require('webpack-notifier');
+const path = require('path');
+const webpack = require('webpack');
 
-module.exports = {
-	devtool: 'eval-source-map',
-	watch: true,
-	entry: {
-		app: './src/js/app.js',
-		//login: './src/js/components/login/index.js'
-	},
-	output: {
-		filename: '[name].js',
-		path: path.join(__dirname, '../xopay/static/js/')
+const DEV_MODE = process.env.DEV_MODE == 'true' || 'false';
+const DEV_SERVER = process.env.DEV_SERVER == 'true' || 'false';
 
-	},
-	plugins: [
-		new WebpackNotifierPlugin({title: 'XOPAY'})
-	],
-	module: {
-		loaders: [{
-				test: /\.jsx?$/,
-        loader: 'react-hot!babel-loader',
-        include: path.join(__dirname, './src/js')
-			}]
-	}
+var config = {
+    DEV_MODE: DEV_MODE,
+    DEV_SERVER: DEV_SERVER,
+    entry: [
+        './index'
+    ],
+    output: {
+        path: path.join(__dirname, 'dist'),
+        filename: 'bundle.js',
+        publicPath: '/static/'
+    },
+    plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.NoErrorsPlugin(),
+        new webpack.DefinePlugin({
+            DEV_MODE: DEV_MODE
+        })
+    ],
+    module: {
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015', 'react']
+                },
+                exclude: /node_modules/,
+                include: __dirname
+            }
+        ]
+    }
+};
+
+if (DEV_MODE == 'true') {
+    config.entry.push('webpack-hot-middleware/client');
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    config.devtool = 'cheap-module-eval-source-map';
+    config.module.loaders[0].query.presets.push("react-hmre");
 }
+
+module.exports = config;
+// When inside Redux repo, prefer src to compiled version.
+// You can safely delete these lines in your project.
+/*var reduxSrc = path.join(__dirname, '..', '..', 'src')
+ var reduxNodeModules = path.join(__dirname, '..', '..', 'node_modules')
+ var fs = require('fs')
+ if (fs.existsSync(reduxSrc) && fs.existsSync(reduxNodeModules)) {
+ // Resolve Redux to source
+ module.exports.resolve = {alias: {'redux': reduxSrc}}
+ // Our root .babelrc needs this flag for CommonJS output
+ process.env.BABEL_ENV = 'commonjs'
+ // Compile Redux from source
+ module.exports.module.loaders.push({
+ test: /\.js$/,
+ loaders: ['babel'],
+ include: reduxSrc
+ })
+ }
+ */
