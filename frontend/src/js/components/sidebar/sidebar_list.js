@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const SidebarList = React.createClass({
   render() {
@@ -12,30 +13,30 @@ const SidebarList = React.createClass({
 	                  </a>
 	                  <ul className="treeview-menu ">{/*add class menu-open if merchant tab open*/}
 	                     <li>
-	                        <a href="#/merchants/add">
+	                        <Link to="/merchant/add">
 	                           <i className="fa fa-plus-circle text-green"></i>
 	                           <span>Add</span>
-	                        </a>
+	                        </Link>
 	                     </li>
 	                    <li>
-	                        <a href="#/merchant/1/sites">
+	                        <Link to="/merchant/1">
 	                           <i className="fa"><b>1) </b></i>
 	                           <span>test1</span>
-	                        </a>
+	                        </Link>
 	                     </li>
 	                     <li>
-	                        <a href="#/merchant/35/sites">
+	                        <Link to="/merchant/2">
 	                           <i className="fa"><b>2) </b></i>
 	                           <span>hello world</span>
-	                        </a>
+	                        </Link>
 	                     </li>
 	                  </ul>
 	                </li>
 	                <li>
-	                    <a href="#/pay">
+	                    <Link to="/pay">
 	                        <i className="fa fa-credit-card"></i>
 	                        <span>Payment Systems</span>
-	                    </a>
+	                    </Link>
 	                </li>
 	                <li className="treeview">
 	                  <a href="#">
@@ -45,18 +46,18 @@ const SidebarList = React.createClass({
 	                  </a>
 	                  <ul className="treeview-menu">
 	                     <li>
-	                        <a href="#/admins/add">
+	                        <Link to="/admins/add">
 	                           <i className="fa fa-plus-circle text-green"></i>
 	                           <span>Add</span>
-	                        </a>
+	                        </Link>
 	                     </li>
 	                  </ul>
 	                </li>
 	                <li className="treeview">
-	                    <a href="#/money">
+	                    <Link to="/money">
 	                        <i className="fa fa-money"></i>
 	                        <span>Currency Courses</span> 
-	                    </a>	                   
+	                    </Link>	                   
 	                </li>
 	            </ul>
     )

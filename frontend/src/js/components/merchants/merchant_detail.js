@@ -2,6 +2,7 @@ import React from 'react';
 import MerchantUser from './merchant_user'; 
 import MerchantSites from './merchant_websites';
 
+let fakeID = 0;
 const MerchantDetail = React.createClass({
   render() {
     return (
@@ -17,7 +18,7 @@ const MerchantDetail = React.createClass({
                   </li>
                   <li className="pull-left header">
                       <i className="fa "></i>
-                      test1
+                      {'User № ' + ++fakeID}
                   </li>
                 <li className="dropdown pull-left">{/*add open class for dropdown list*/}
                     <a className="dropdown-toggle cursor-pointer">

@@ -1,10 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
+import {browserHistory, Router, Route, Link, Redirect, IndexRoute} from 'react-router'
 
 import Header from './components/header'
 import Footer from './components/footer'
 import Sidebar from './components/sidebar'
 import Content from './components/content'
+import AddMerchant from './components/merchants/merchant_registration'
+import MerchantDetails from './components/merchants/merchant_detail'
 
 const App = React.createClass({
   getInitialState() {
@@ -18,7 +21,7 @@ const App = React.createClass({
         <Header isLoged={this.state.isLoged}/>
         <Sidebar />
         <div className="content-wrapper">
-            <Content loged={this.state.isLoged}/>
+            {this.props.children}
         </div>
         <Footer isLoged={this.state.isLoged}/>
       </div>
@@ -26,4 +29,12 @@ const App = React.createClass({
   }
 })
 
-render(<App />, document.getElementById('app'))
+render((
+  <Router history={browserHistory}>
+    <Route path="/admin/" component={App}>
+      <IndexRoute component={Content} />
+      <Route path="merchant/add" component={AddMerchant} />
+      <Route path="merchant/:merchantID" component={MerchantDetails} />
+    </Route>
+  </Router>),
+   document.getElementById('app'));

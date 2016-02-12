@@ -8,10 +8,9 @@ import AddAdmin from './admin/addAdmin.js'
 
 const Content = React.createClass({
   render() {
-  	var showContent = this.props.loged? <AddMerchant /> : <Login />;
     return (
     	<section className="content">
-    		<AddMerchant />
+    		{this.props.children}
     	</section>
     )
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import LoginDropdown from './header/login_dropdown'
 
 const Header = React.createClass({
@@ -8,10 +9,10 @@ const Header = React.createClass({
   render() {
     return (
        <header className="main-header">
-				<a className="logo" href="#/">
+				<Link className="logo" to="/">
             	<span className="logo-mini"><b>XO</b>P</span>
             	<span className="logo-lg"><b>XOP</b>ay</span>
-        	</a>
+        	</Link>
         	<nav className="navbar navbar-static-top">
             	<a href="#" onClick={this.sidebarToggle} className="sidebar-toggle">
                 	<span className="sr-only">Toggle navigation</span>
