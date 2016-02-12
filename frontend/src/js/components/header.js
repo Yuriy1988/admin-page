@@ -9,7 +9,7 @@ const Header = React.createClass({
   render() {
     return (
        <header className="main-header">
-				<Link className="logo" to="/">
+				<Link className="logo" to="/admin/">
             	<span className="logo-mini"><b>XO</b>P</span>
             	<span className="logo-lg"><b>XOP</b>ay</span>
         	</Link>

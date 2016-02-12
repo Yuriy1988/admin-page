@@ -8,6 +8,8 @@ import Sidebar from './components/sidebar'
 import Content from './components/content'
 import AddMerchant from './components/merchants/merchant_registration'
 import MerchantDetails from './components/merchants/merchant_detail'
+import PayList from './components/paymentSystems/payList'
+import AddAdmin from './components/admin/addAdmin'
 
 const App = React.createClass({
   getInitialState() {
@@ -35,6 +37,8 @@ render((
       <IndexRoute component={Content} />
       <Route path="merchant/add" component={AddMerchant} />
       <Route path="merchant/:merchantID" component={MerchantDetails} />
+      <Route path="paysys/" component={PayList} />
+      <Route path="admins/add" component={AddAdmin} />
     </Route>
   </Router>),
    document.getElementById('app'));

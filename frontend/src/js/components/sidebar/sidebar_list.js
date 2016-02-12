@@ -13,19 +13,19 @@ const SidebarList = React.createClass({
 	                  </a>
 	                  <ul className="treeview-menu ">{/*add class menu-open if merchant tab open*/}
 	                     <li>
-	                        <Link to="/merchant/add">
+	                        <Link to="/admin/merchant/add">
 	                           <i className="fa fa-plus-circle text-green"></i>
 	                           <span>Add</span>
 	                        </Link>
 	                     </li>
 	                    <li>
-	                        <Link to="/merchant/1">
+	                        <Link to="/admin/merchant/1">
 	                           <i className="fa"><b>1) </b></i>
 	                           <span>test1</span>
 	                        </Link>
 	                     </li>
 	                     <li>
-	                        <Link to="/merchant/2">
+	                        <Link to="/admin/merchant/2">
 	                           <i className="fa"><b>2) </b></i>
 	                           <span>hello world</span>
 	                        </Link>
@@ -33,12 +33,12 @@ const SidebarList = React.createClass({
 	                  </ul>
 	                </li>
 	                <li>
-	                    <Link to="/pay">
+	                    <Link to="/admin/paysys/">
 	                        <i className="fa fa-credit-card"></i>
 	                        <span>Payment Systems</span>
 	                    </Link>
 	                </li>
-	                <li className="treeview">
+	                <li className="treeview active">
 	                  <a href="#">
 	                     <i className="fa fa-user-secret"></i>
 	                     <span>Administrators</span>
@@ -46,7 +46,7 @@ const SidebarList = React.createClass({
 	                  </a>
 	                  <ul className="treeview-menu">
 	                     <li>
-	                        <Link to="/admins/add">
+	                        <Link to="/admin/admins/add/">
 	                           <i className="fa fa-plus-circle text-green"></i>
 	                           <span>Add</span>
 	                        </Link>

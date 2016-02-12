@@ -4,7 +4,8 @@ import Login from './login'
 import AddMerchant from './merchants/merchant_registration'
 import MerchantDetail from './merchants/merchant_detail'
 import MerchantAddWebsite from './merchants/merchant_add_website'
-import AddAdmin from './admin/addAdmin.js'
+import AddAdmin from './admin/addAdmin'
+import PayList from './paymentSystems/payList'
 
 const Content = React.createClass({
   render() {
