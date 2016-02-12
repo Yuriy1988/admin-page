@@ -37,7 +37,7 @@ var config = {
     }
 };
 
-if (DEV_MODE == 'true') {
+if (DEV_MODE == true) {
     config.entry.push('webpack-hot-middleware/client');
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
     config.devtool = 'cheap-module-eval-source-map';

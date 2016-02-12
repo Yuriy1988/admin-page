@@ -5,19 +5,19 @@ import DevTools from './DevTools'
 import { Router, browserHistory } from 'react-router'
 
 export default class Root extends Component {
-  render() {
-    const { store } = this.props
-    return (
-      <Provider store={store}>
-        <div>
-          <Router history={browserHistory} routes={routes} />
-          <DevTools />
-        </div>
-      </Provider>
-    )
-  }
+    render() {
+        const { store } = this.props
+        return (
+            <Provider store={store}>
+                <div>
+                    <Router history={browserHistory} routes={routes}/>
+                    <DevTools />
+                </div>
+            </Provider>
+        )
+    }
 }
 
 Root.propTypes = {
-  store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired
 }
