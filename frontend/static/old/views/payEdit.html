@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <!--h3 ng-if="actionType == 'create'" class="box-title">Создание платежной системы</h3-->
+                <h3 ng-if="actionType == 'edit'" class="box-title" x-translate>Редактирование платежной системы</h3>
+                <!--input ng-if="actionType == 'create'" type="text" placeholder="Введите название" ng-model="system.name" class="pull-right"-->
+                <b class="pull-right" ng-if="actionType == 'edit'">{{$parent.systems[systemId-1].name}}</b>
+            </div>
+            <div class="box-body">
+                <label for="number" x-translate>Номер карты/аккаунта (логин)</label>
+                <span ng-if="errors.login">
+                    <small class="text-danger pull-right tooltip-wide">
+                       <span data-toggle         = "tooltip"
+                             data-original-title = "{{errors.login.join(', ')}}">
+                          [?]
+                       </span>
+                    </small>
+                </span>
+                <div ng-class="{'has-error': errors.login, 'form-group': true}">
+                    <input type        = "text"
+                           class       = "form-control"
+                           id          = "number"
+                           placeholder = "{{'Введите номер карты/аккаунта'|translate}}"
+                           ng-model    = "$parent.systems[systemId-1].login">
+                </div>
+                <label for="password" x-translate>Пароль</label>
+                <span ng-if="errors.password">
+                    <small class="text-danger pull-right tooltip-wide">
+                       <span data-toggle         = "tooltip"
+                             data-original-title = "{{errors.password.join(', ')}}">
+                          [?]
+                       </span>
+                    </small>
+                </span>
+                <div ng-class="{'has-error': errors.password, 'form-group': true}">
+                    <input type        = "password"
+                           class       = "form-control"
+                           id          = "password"
+                           placeholder = "{{'Введите пароль'|translate}}"
+                           ng-model    = "$parent.systems[systemId-1].password">
+                </div>
+                <div class="checkbox">
+                    <label>
+                       <input type     = "checkbox"
+                              ng-model = "$parent.systems[systemId-1].enabled">
+                       <span  x-translate>Активность</span>
+                    </label>
+                </div>
+            </div>
+            <div class="box-footer clearfix">
+                <div class="pull-right">
+                    <button class="btn btn-success" ng-click="save()" x-translate>Сохранить</button>
+                    <a ui-sref="pay" class="btn btn-default" x-translate>Отмена</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

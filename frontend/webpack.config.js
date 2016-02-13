@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const DEV_MODE = process.env.DEV_MODE == 'true' || 'false';
 const DEV_SERVER = process.env.DEV_SERVER == 'true' || 'false';
 
+const TransferWebpackPlugin = require('transfer-webpack-plugin');
+
 var config = {
     DEV_MODE: DEV_MODE,
     DEV_SERVER: DEV_SERVER,
@@ -11,9 +13,9 @@ var config = {
         './index'
     ],
     output: {
-        path: path.join(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/static/'
+        path: path.join(__dirname, 'static/js'),
+        filename: 'app.js',
+        publicPath: '/static/js/'
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
@@ -37,10 +39,14 @@ var config = {
     }
 };
 
+
 if (DEV_MODE == true) {
+
     config.entry.push('webpack-hot-middleware/client');
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
-    config.devtool = 'cheap-module-eval-source-map';
+
+    // config.devtool = 'cheap-module-eval-source-map';
+
     config.module.loaders[0].query.presets.push("react-hmre");
 }
 

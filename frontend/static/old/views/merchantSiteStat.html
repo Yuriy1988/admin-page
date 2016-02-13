@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Статистика</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label>Промежуток времени для выборки платежей:</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="dataRange" ng-click="renderTable()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-success btn-block" id="search">Поиск</button>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <h4>Колличество платежей по платежным системам:</h4>
+                        <canvas id="chart1" style="width:100%" height="200"></canvas>
+                    </div>
+                    <div class="col-xs-6">
+                        <canvas id="chart2" style="width:100%" height="200"></canvas>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <table id="table" class="table table-bordered table-hover dataTable" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Дата</th>
+                                <th>Платежая система</th>
+                                <th>Валюта</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th>ID заказа</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>Дата</th>
+                                <th>Платежая система</th>
+                                <th>Валюта</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th>ID заказа</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

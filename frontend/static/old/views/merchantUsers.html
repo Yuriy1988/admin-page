@@ -1,0 +1,44 @@
+<table class="table table-condensed">
+    <tr>
+        <th class="text-center" style="width:15px">#</th>
+        <th x-translate>Логин</th>
+        <th x-translate>Имя</th>
+        <th x-translate>Фамилия</th>
+        <th x-translate>Активность</th>
+        <th class="text-center" style="width:300px" x-translate>Операции</th>
+    </tr>
+    <tr ng-repeat="user in users">
+        <td class="text-center">{{$index+1}}.</td>
+        <td>
+            <span ng-if="user.userName">
+                <span ng-switch="validateEmail(user.userName)">
+                    <span ng-switch-when="true">
+                        <i class="glyphicon glyphicon-envelope"></i>&nbsp;
+                        <a ng-attr-href="mailto:{{user.userName}}">{{user.userName}}</a>
+                    </span>
+                    <span ng-switch-when="false">
+                        <i class="glyphicon glyphicon-user"></i>&nbsp;
+                        {{user.userName}}
+                    </span>
+                </span>
+            </span>
+        </td>
+        <td>
+            {{user.firstName}}
+        </td>
+        <td>
+            {{user.lastName}}
+        </td>
+        <td>
+            <span ng-switch="user.enabled">
+               <span ng-switch-when="true" class="badge alert-success" x-translate>Да</span>
+               <span ng-switch-when="false" class="badge alert-danger" x-translate>Нет</span>
+            </span>
+        </td>
+        <td class="text-center">
+            <a ui-sref = "merchant.usersEdit({merchantId: merchantId, userId: user.id})"
+               class   = "btn btn-primary btn-xs" x-translate>Изменить</a>
+            <a class="btn btn-danger btn-xs" ng-click="remove(merchantId, user.id)" x-translate>Удалить</a>
+        </td>
+    </tr>
+</table>

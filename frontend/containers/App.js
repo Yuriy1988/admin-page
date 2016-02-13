@@ -4,6 +4,9 @@ import { push } from 'react-router-redux'
 import Explore from '../components/Explore'
 import { resetErrorMessage } from '../actions'
 
+import Sidebar from '../components/Sidebar'
+import Header from '../components/Header'
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -42,11 +45,17 @@ class App extends Component {
         const { children, inputValue } = this.props;
         return (
             <div>
-                <Explore value={inputValue}
-                         onChange={this.handleChange}/>
-                <hr />
-                {this.renderErrorMessage()}
-                {children}
+                <Header isLoged={false}/>
+                <Sidebar />
+                <div className="content-wrapper">
+                    <section className="content">
+                        <Explore value={inputValue}
+                                 onChange={this.handleChange}/>
+                        <hr />
+                        {this.renderErrorMessage()}
+                        {children}
+                    </section>
+                </div>
             </div>
         )
     }
