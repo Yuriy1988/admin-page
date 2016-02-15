@@ -1,14 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const DEV_MODE = process.env.DEV_MODE == 'true' || 'false';
-const DEV_SERVER = process.env.DEV_SERVER == 'true' || 'false';
+const DEV_MODE = process.env.DEV_MODE == 'true' || false;
+const DEV_SERVER = process.env.DEV_SERVER == 'true' || false;
+const DEV_TEST = process.env.DEV_TEST == 'true' || false;
 
 const TransferWebpackPlugin = require('transfer-webpack-plugin');
 
 var config = {
     DEV_MODE: DEV_MODE,
     DEV_SERVER: DEV_SERVER,
+    DEV_TEST: DEV_TEST,
     entry: [
         './index'
     ],
@@ -48,6 +50,14 @@ if (DEV_MODE == true) {
     // config.devtool = 'cheap-module-eval-source-map';
 
     config.module.loaders[0].query.presets.push("react-hmre");
+}
+if (DEV_TEST) {
+    config.entry = ['./test'];
+    config.output = {
+        path: path.join(__dirname, 'test_build'),
+        filename: 'tests.js',
+        publicPath: '/test_build/'
+    };
 }
 
 module.exports = config;

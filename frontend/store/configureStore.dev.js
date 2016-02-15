@@ -7,28 +7,28 @@ import api from '../middleware/api'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 
-const reduxRouterMiddleware = syncHistory(browserHistory)
+const reduxRouterMiddleware = syncHistory(browserHistory);
 
 export default function configureStore(initialState) {
-  const store = createStore(
-    rootReducer,
-    initialState,
-    compose(
-      applyMiddleware(thunk, api, reduxRouterMiddleware, createLogger()),
-      DevTools.instrument()
-    )
-  )
+    const store = createStore(
+        rootReducer,
+        initialState,
+        compose(
+            applyMiddleware(thunk, api, reduxRouterMiddleware, createLogger()),
+            DevTools.instrument()
+        )
+    );
 
-  // Required for replaying actions from devtools to work
-  reduxRouterMiddleware.listenForReplays(store)
+    // Required for replaying actions from devtools to work
+    reduxRouterMiddleware.listenForReplays(store);
 
-  if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers').default
-      store.replaceReducer(nextRootReducer)
-    })
-  }
+    if (module.hot) {
+        // Enable Webpack hot module replacement for reducers
+        module.hot.accept('../reducers', () => {
+            const nextRootReducer = require('../reducers').default;
+            store.replaceReducer(nextRootReducer);
+        })
+    }
 
-  return store
+    return store
 }

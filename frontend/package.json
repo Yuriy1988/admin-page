@@ -5,7 +5,8 @@
   "scripts": {
     "build": "DEV_SERVER=false DEV_MODE=false node server.js",
     "dev": "DEV_SERVER=true DEV_MODE=true node server.js",
-    "dev-py": "DEV_SERVER=false DEV_MODE=true node server.js"
+    "dev-py": "DEV_SERVER=false DEV_MODE=true node server.js",
+    "test": "DEV_SERVER=false DEV_MODE=false DEV_TEST=true node server.js && node ./test_build/tests.js"
   },
   "repository": {
     "type": "git",

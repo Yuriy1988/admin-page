@@ -12,6 +12,7 @@ var compiler = webpack(config);
 console.log("[WEBPACK] start");
 console.log("-CONFIG DEV_MODE = ", config.DEV_MODE);
 console.log("-CONFIG DEV_SERVER = ", config.DEV_SERVER);
+console.log("-CONFIG DEV_TEST = ", config.DEV_TEST);
 
 
 if (config.DEV_MODE == true) {
@@ -22,8 +23,14 @@ if (config.DEV_MODE == true) {
     console.log("[WEBPACK] building in production");
     webpack(config, function () {
         console.log("[WEBPACK] production building finished");
+        if (config.DEV_TEST == true) {
+            console.log("[TEST] running test");
+            console.log("***")
+        };
     });
 }
+
+
 
 if (config.DEV_SERVER == true) {
     app.use(function (req, res) {
