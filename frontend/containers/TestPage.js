@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Sidebar from '../components/Sidebar'
 
 
-class AdminPage extends Component {
+class TestPage extends Component {
     constructor(props) {
         super(props);
     }
@@ -13,8 +12,7 @@ class AdminPage extends Component {
 
         return (
             <div>
-                <Sidebar />
-                <h1>It is admin page</h1>
+                <h1>Dimka</h1>
                 {children}
             </div>
         )
@@ -22,6 +20,4 @@ class AdminPage extends Component {
 }
 
 
-export default connect((state)=> {
-    return {sideBar: state.sideBar}
-})(AdminPage)
+export default connect()(TestPage)

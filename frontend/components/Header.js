@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
+import  SideBarToggler  from '../components/SideBarToggler'
 
 //import LoginDropdown from './header/login_dropdown'
 
@@ -23,9 +24,7 @@ export default Header;
 
 export default class Header extends Component {
 
-    componentWillMount() {
-        document.body.classList.add('sidebar-mini');
-    }
+//sidebar-mini
     render() {
         return (
             <header className="main-header">
@@ -34,22 +33,17 @@ export default class Header extends Component {
                     <span className="logo-lg"><b>XOP</b>ay</span>
                 </Link>
                 <nav className="navbar navbar-static-top">
-                    <a href="#" onClick={this.sidebarToggle} className="sidebar-toggle">
-                        <span className="sr-only">Toggle navigation</span>
-                    </a>
+                    <SideBarToggler/>
                     {/*<LoginDropdown isLoged={this.props.isLoged} />*/}
                 </nav>
             </header>
         );
     }
     sidebarToggle (){
-        document.body.classList.toggle('sidebar-collapse');
-        document.body.classList.toggle('sidebar-open');
+        //document.body.classList.toggle('sidebar-collapse');
+        //document.body.classList.toggle('sidebar-open');
     }
 }
-Header.propTypes = {
-
-};
 
 
 /* < */

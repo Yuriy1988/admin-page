@@ -6,10 +6,8 @@ export default function user(state = {name: null, login: null}, action) {
 
     if (type === UserActions.USER_LOGIN) {
         return Object.assign({}, state, {
-            user: {
-                name: "Vlad",
-                login: "vladik7244"
-            }
+            name: "Vlad",
+            login: "vladik7244"
         });
     }
 
