@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const payList = React.createClass({
   render() {
@@ -33,7 +34,7 @@ const payList = React.createClass({
                                  </span>
                               </th>
                               <td className="text-center">
-                                  <a className="btn btn-primary btn-xs">Изменить</a>
+                                  <Link to="/admin/paysys/edit" className="btn btn-primary btn-xs">Изменить</Link>
                                   <a className="btn btn-danger btn-xs">Удалить</a>
                               </td>
                           </tr>
@@ -49,7 +50,7 @@ const payList = React.createClass({
                                  </span>
                               </th>
                               <td className="text-center">
-                                  <a className="btn btn-primary btn-xs">Изменить</a>
+                                  <Link to="/admin/paysys/edit" className="btn btn-primary btn-xs">Изменить</Link>
                                   <a className="btn btn-danger btn-xs">Удалить</a>
                               </td>
                           </tr>
