@@ -16,6 +16,10 @@
     margin-left: 0;
 }*/
 
+.content-maximizer {
+    min-height: 100% !important;
+}
+
 footer {
     position: fixed;
     bottom: 0;

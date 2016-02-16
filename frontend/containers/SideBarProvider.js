@@ -12,7 +12,7 @@ class SideBarProvider extends Component {
         const { children, sideBar:{display,enable} } = this.props;
 
         return (
-            <div className={((enable)?" sidebar-mini ":"")+((display)?"":" sidebar-collapse ")}>
+            <div className={((enable)?" sidebar-mini ":"")+((display)?"":" sidebar-collapse ") + " content-maximizer "}>
                 {children}
             </div>
         )

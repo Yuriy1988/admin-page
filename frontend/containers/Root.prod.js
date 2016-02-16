@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Provider } from 'react-redux'
-import routes from '../routes'
+import Routes from '../routes'
 import { Router, browserHistory } from 'react-router'
 
 export default class Root extends Component {
@@ -9,7 +9,7 @@ export default class Root extends Component {
         const routes = new Routes(store);
         return (
             <Provider store={store}>
-                <Router history={browserHistory} routes={routes}/>
+                <Router history={browserHistory} routes={routes.getRoutes()}/>
             </Provider>
         )
     }

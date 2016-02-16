@@ -12,7 +12,7 @@ export default class Root extends Component {
         const routes = new Routes(store);
         return (
             <Provider store={store}>
-                <div>
+                <div className="content-maximizer">
                     <Router history={browserHistory} routes={routes.getRoutes()}/>
                     <DevTools />
                 </div>
