@@ -5,3 +5,5 @@ venv_install:
 	virtualenv --no-site-packages -p python3.4 venv
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
 
+venv_update:
+	bash -c "source venv/bin/activate && pip install -r requirements.txt"
