@@ -47,7 +47,7 @@ if (DEV_MODE == true) {
     config.entry.push('webpack-hot-middleware/client');
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
-    // config.devtool = 'cheap-module-eval-source-map';
+     config.devtool = 'cheap-module-eval-source-map';
 
     config.module.loaders[0].query.presets.push("react-hmre");
 }

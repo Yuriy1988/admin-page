@@ -38,21 +38,18 @@ class Routes {
 
     getRoutes() {
         return (
-            <Route component={App} >
-                <Route path="/admin"  >
+            <Route component={App}   >
+                <Route path="/admin"  onEnter={this.requireLogin}>
                     <IndexRoute component={AdminPage} />
-                    <Route path="test"
-                           onEnter={this.requireLogin}
-                           component={TestPage}/>
-                    <Route path="login"
-                           component={LoginPage}/>
-                    <Route path=":login/:name"
-                           onEnter={this.requireLogin}
-                           component={RepoPage}/>
 
-                    <Route path=":login"
-                           component={UserPage}/>
+                    <Route path="test"
+                           component={TestPage}/>
+
+
                 </Route>
+                <Route path="/admin/login"
+                       component={LoginPage}/>
+
                 <Route path="*" component={NotFoundPage} status={404}/>
             </Route>
         );

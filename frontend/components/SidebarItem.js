@@ -7,48 +7,86 @@ class SidebarItem extends Component {
         super(props);
     }
 
+
     render() {
-        const {subItems,item} = this.props;
 
-        if (typeof subItems != 'undefined') {
-            return (
-                <li className="treeview active">
-                    <a href="#">
-                        <i className={"fa "+item.icon}/>
-                        {item.children}
-                        <i className="fa fa-angle-left pull-right"/>
-                    </a>
-                    <ul className="treeview-menu ">
-                        {subItems.map((item)=> {
-                            return (
-                                <li>
-                                    <Link to={item.to}>
-                                        <i className={"fa "+item.icon}/>
-                                        {item.children}
-                                    </Link>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </li>
-            );
-        } else {
-            return (
-                <li>
-                    <Link to={item.to}>
-                        <i className={"fa "+item.icon}/>
-                        {item.children}
-                    </Link>
-                </li>
-            );
+        const {icon, to, children} =  this.props;
+
+
+        switch (typeof to) {
+            case 'string':
+                return (
+                    <li >
+                        <Link to={to}>
+                            <i className={"fa " + icon}/>
+                            <span>{children}</span>
+                        </Link>
+                    </li>
+                );
+                break;
+            case 'undefined':
+                return (
+                    <li  >
+                        <a >
+                            <i className={"fa " + icon}/>
+                            <span>{children}</span>
+                        </a>
+                    </li>
+                );
+                break;
         }
-
-
     }
+
 }
 
 
-export default connect()(SidebarItem);
+class SidebarContainer extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {showChildren: false};
+        this.toggleShow = this.toggleShow.bind(this);
+    }
+
+    toggleShow(e) {
+        const {showChildren} = this.state;
+        this.setState({
+            showChildren: !showChildren
+        });
+        e.preventDefault();
+    }
+
+    render() {
+
+        const {icon, title, children} = this.props;
+        const {showChildren} = this.state;
+        /* const activeClass = "active";
+         const hasSubItemsClass = (this.hasSubItems(props)) ? "treeview" : "";*/
+
+        return (
+            <li className={["treeview", (showChildren)?"active":""].join(" ")}>
+                <a href="#" onClick={this.toggleShow}>
+                    <i className={"fa " + icon}/>
+                    <span>{title}</span>
+                    <i className="fa fa-angle-left pull-right"/>
+                </a>
+                <ul className="treeview-menu ">
+                    {children.map((item)=> {
+                        return item
+                    })}
+                </ul>
+            </li>
+        );
+
+    }
+
+}
+
+
+SidebarItem = connect()(SidebarItem);
+SidebarContainer = connect()(SidebarContainer);
+
+export { SidebarItem as SidebarItem, SidebarContainer as SidebarContainer};
+
 /* < */
 /*
  <!--i className="fa fa-angle-left pull-right"></i-->*/

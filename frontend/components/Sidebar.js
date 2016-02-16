@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import * as SideBarAction from '../actions/sideBar'
-import SidebarItem from '../components/SidebarItem'
 
 class Sidebar extends Component {
     constructor(props) {
@@ -22,7 +21,7 @@ class Sidebar extends Component {
 
     render() {
 
-        const {enable} = this.props.sideBar;
+        const {sideBar:{enable},children} = this.props;
 
         if (!enable) {
             return null;
@@ -32,22 +31,7 @@ class Sidebar extends Component {
             <aside className="main-sidebar">
                 <section className="sidebar">
                     <ul className="sidebar-menu">
-
-                        <SidebarItem item={{icon:"fa-suitcase", children:"Merchants"}}
-                                     subItems={[
-                                         {to:"/admin/admins/add", icon:"fa-plus-circle text-green", children:"Add"},
-                                         {to:"/admin/merchant/1", children:"test1"},
-                                         {to:"/admin/merchant/2", children:"test2"},
-                                         {to:"/admin/merchant/3", children:"test3"}
-                                     ]}/>
-                        <SidebarItem item={{to:"/admin/paysys",icon:"fa-credit-card",children:"Payment Systems"}}/>
-                        <SidebarItem item={{icon:"fa-user-secret",children:"Administrators"}}
-                                     subItems={[
-                                         {to:"/admin/admins/add",icon:"fa-plus-circle text-green",children:"Add"}
-                                     ]}/>
-
-                        <SidebarItem item={{to:"/admin/money",icon:"fa-money",children:"Currency Courses"}}/>
-
+                        {children}
                     </ul>
                 </section>
             </aside>
