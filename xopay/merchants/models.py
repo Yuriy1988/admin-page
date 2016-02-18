@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from xopay.backend import db, enum, Base
 
 __author__ = 'Kostel Serhii'

@@ -1,4 +1,6 @@
-from flask import Flask, redirect, url_for
+# -*- coding: utf-8 -*-
+from flask import Flask, make_response, jsonify
+from flask_restful import Api
 from flask.ext.login import LoginManager
 
 from xopay.backend import db
@@ -11,26 +13,15 @@ app = Flask(__name__, static_folder=STATIC_FOLDER)
 app.config.from_object('config')
 app.json_encoder = json_tools.JSONModelEncoder
 
+api = Api(app)
+
 db.init_app(app)
 
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
+import xopay.tools.wrappers
 
-@app.route('/admin/')
-@app.route('/admin/<path:path>/')
-def admin_page(path=None):
-    """
-    Return single page html for xopay admin
-    :param path: any valid url (used in frontend routing system)
-    :return: index html page
-    """
-    # TODO: enable this only in debug mode. In production use apache for this purpose
-    return app.send_static_file('index.html')
-
-
-@app.route('/')
-def index():
-    """ Redirect from root to admin page """
-    return redirect(url_for('admin_page'))
+import xopay.admin_page
+import xopay.merchants.views

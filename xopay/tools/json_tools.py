@@ -73,7 +73,7 @@ class JSONModelEncoder(json.JSONEncoder):
 
     @staticmethod
     def _encode_object(obj):
-        return dict((key, value) for key, value in obj.__dict__.tems() if key[0] != '_')
+        return dict((key, value) for key, value in obj.__dict__.items() if key[0] != '_')
 
     def _encode_table(self, obj):
         """
