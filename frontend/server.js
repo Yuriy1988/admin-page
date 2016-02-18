@@ -21,8 +21,13 @@ if (config.DEV_MODE == true) {
     app.use(webpackHotMiddleware(compiler));
 } else {
     console.log("[WEBPACK] building in production");
-    webpack(config, function () {
-        console.log("[WEBPACK] production building finished");
+    compiler.run(function (err,stats) {
+        if (!err) {
+            console.log("[WEBPACK] production building finished");
+        }else{
+            console.error("[WEBPACK] ERROR! production building FAILED!");
+        }
+
         if (config.DEV_TEST == true) {
             console.log("[TEST] running test");
             console.log("***")

@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import DevTools from '../containers/DevTools'
 import thunk from 'redux-thunk'
 import api from '../middleware/api'
+import redirect from '../middleware/redirect'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 
@@ -14,7 +15,7 @@ export default function configureStore(initialState) {
         rootReducer,
         initialState,
         compose(
-            applyMiddleware(thunk, api, reduxRouterMiddleware, createLogger()),
+            applyMiddleware(redirect, thunk, api, reduxRouterMiddleware/*, createLogger()*/),
             DevTools.instrument()
         )
     );

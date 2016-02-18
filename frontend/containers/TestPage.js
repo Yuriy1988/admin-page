@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-
 class TestPage extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +11,7 @@ class TestPage extends Component {
 
         return (
             <div>
-                <h1>Dimka</h1>
+                <h1>Test page</h1>
                 {children}
             </div>
         )

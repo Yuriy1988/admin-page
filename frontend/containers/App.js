@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Content from '../components/Content'
+//import Content from '../components/Content'
 import SideBarProvider from '../containers/SideBarProvider'
 
 class App extends Component {
@@ -19,9 +19,8 @@ class App extends Component {
         return (
             <SideBarProvider>
                 <Header isLoged={false}/>
-                <Content>
-                    {children}
-                </Content>
+                {children}
+
                 <Footer />
             </SideBarProvider>
         )

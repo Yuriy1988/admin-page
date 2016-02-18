@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import LoginForm from '../components/LoginForm'
-
+import Content from '../components/Content'
 
 class LoginPage extends Component {
     constructor(props) {
@@ -12,14 +12,21 @@ class LoginPage extends Component {
         const { children } = this.props;
 
         return (
-            <div>
-                <div className="alert alert-info ng-scope">
-                    <p >Login: test</p>
-                    <p >Password: test</p>
+            <Content>
+                <div className="box">
+                    <div className="box-header with-border">
+                        <h1 className="box-title">Authorisation</h1>
+                    </div>
+                    <div className="box-body">
+                        <div className="alert alert-info ng-scope">
+                            <p >Login: test</p>
+                            <p >Password: test</p>
+                        </div>
+                        <LoginForm />
+                    </div>
                 </div>
-                <LoginForm />
                 {children}
-            </div>
+            </Content>
         )
     }
 }

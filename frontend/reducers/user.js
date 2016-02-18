@@ -7,8 +7,14 @@ export default function user(state = null, action) {
     if (type === UserActions.USER_LOGIN) {
         return Object.assign({}, state, {
             name: "Vlad",
-            login: "vladik7244"
+            login: action.login, //"vladik7244",
+            mainPage: "/admin/administrator",
+            roles: ["ROLE_ADMINISTRATOR"]
         });
+    }
+
+    if (type === UserActions.USER_LOGOUT) {
+        return null;
     }
 
     return state;

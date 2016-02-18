@@ -2,6 +2,7 @@ import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
+import session from './session'
 import sideBar from './sideBar'
 import { routeReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
@@ -52,6 +53,7 @@ const rootReducer = combineReducers({
     entities,
     pagination,
     user,
+    session,
     sideBar,
     errorMessage,
     routing: routeReducer

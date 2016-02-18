@@ -1,9 +1,19 @@
-
 export const USER_LOGIN = 'USER_LOGIN';
+export const USER_LOGOUT = 'USER_LOGOUT';
 
-export function login(name) {
+export function login(login, password, redirectTo) {
     return {
         type: USER_LOGIN,
-        name: name || "Hello from actions"
+        login,
+        password,
+        redirectTo: redirectTo || "/admin"
+    }
+}
+
+
+export function logout(redirectTo) {
+    return {
+        type: USER_LOGOUT,
+        redirectTo: redirectTo || "/admin"
     }
 }

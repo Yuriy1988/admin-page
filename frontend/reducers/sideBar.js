@@ -24,7 +24,8 @@ export default function sideBar(state = {display: false, enable: false}, action)
             break;
         case SideBarActions.SIDEBAR_ENABLE:
             result = Object.assign({}, state, {
-                enable: true
+                enable: true,
+                display:true
             });
             break;
         case SideBarActions.SIDEBAR_DISABLE:

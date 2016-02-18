@@ -14,7 +14,7 @@ export default class Root extends Component {
             <Provider store={store}>
                 <div className="content-maximizer">
                     <Router history={browserHistory} routes={routes.getRoutes()}/>
-                    <DevTools />
+                    <DevTools  />
                 </div>
             </Provider>
         )

@@ -1,30 +1,26 @@
-
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import  SideBarToggler  from '../components/SideBarToggler'
 
-//import LoginDropdown from './header/login_dropdown'
+import HeaderUser from '../components/HeaderUser'
 
 /*const Header = React.createClass({
-    componentWillMount() {
-        document.body.classList.add('sidebar-mini');
-    },
-    sidebarToggle (){
-        document.body.classList.toggle('sidebar-collapse');
-        document.body.classList.toggle('sidebar-open');
-    }
-})
+ componentWillMount() {
+ document.body.classList.add('sidebar-mini');
+ },
+ sidebarToggle (){
+ document.body.classList.toggle('sidebar-collapse');
+ document.body.classList.toggle('sidebar-open');
+ }
+ })
 
-export default Header;
-*/
-
-
+ export default Header;
+ */
 
 
+class Header extends Component {
 
-export default class Header extends Component {
-
-//sidebar-mini
     render() {
         return (
             <header className="main-header">
@@ -34,18 +30,12 @@ export default class Header extends Component {
                 </Link>
                 <nav className="navbar navbar-static-top">
                     <SideBarToggler/>
-                    {/*<LoginDropdown isLoged={this.props.isLoged} />*/}
+                    <HeaderUser />
                 </nav>
             </header>
         );
     }
-    sidebarToggle (){
-        //document.body.classList.toggle('sidebar-collapse');
-        //document.body.classList.toggle('sidebar-open');
-    }
 }
 
+export default connect()(Header)
 
-/* < */
-/*
- <!--i className="fa fa-angle-left pull-right"></i-->*/

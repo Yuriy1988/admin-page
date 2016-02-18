@@ -1,4 +1,4 @@
-.tooltip-inner {
+/*.tooltip-inner {
     max-width: none;
     white-space: nowrap;
 }
@@ -11,10 +11,10 @@
     content: "\f0c9";
 }
 
-/*.content-wrapper {
+.content-wrapper {
     padding-bottom: 50px;
     margin-left: 0;
-}*/
+}
 
 .content-maximizer {
     min-height: 100% !important;
@@ -29,7 +29,7 @@ footer {
 }
 
 html, body, .wrapper, .components {
-    height: 100%;
+    min-height: 100%;
 }
 
 .move-icon {
@@ -53,9 +53,6 @@ html, body, .wrapper, .components {
     color: #333 !important;
 }
 
-.sidebar-toggle{
-    cursor: pointer;
-}
 
 .treeview-menu {
     overflow: hidden;
@@ -67,3 +64,42 @@ html, body, .wrapper, .components {
 .sidebar-menu li.active>.treeview-menu{
     max-height: none !important;
 }
+
+.content {
+    min-height: 200px;
+}
+.content-wrapper{
+    padding-bottom: 60px;
+}*/
+
+.sidebar-toggle {
+    cursor: pointer;
+}
+
+@media (max-width: 767px) {
+    .skin-green-light .main-header .navbar .dropdown-menu li a {
+         color: #333;
+    }
+}
+@media (max-width: 991px) {
+    .navbar-custom-menu>.navbar-nav>li>.dropdown-menu {
+        right: 0;
+    }
+}
+/*
+@media (min-width: 768px) {
+    .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.active):hover > a > span,
+    .sidebar-menu > li:hover > ul {
+        box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5);
+        z-index: -100;
+    }
+}
+
+.sidebar-menu > li:hover {
+    z-index: 2100;
+}
+
+.sidebar-mini.sidebar-collapse .sidebar-menu > li > a > .pull-right {
+    display: inline-block !important;
+}
+*/
