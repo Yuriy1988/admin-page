@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Merchant, Manager and Store database models
-"""
 
 from xopay.backend import db, enum, Base
 
@@ -19,7 +16,7 @@ class Merchant(Base):
     merchant_account = db.relationship('MerchantAccount', backref=db.backref('merchant', uselist=False, lazy='joined'))
 
     merchant_info_id = db.Column(db.Integer, db.ForeignKey('merchant_info.id'), nullable=False)
-    merchant_info = db.relationship('MerchantInfo',backref=db.backref('merchant', uselist=False, lazy='joined'))
+    merchant_info = db.relationship('MerchantInfo', backref=db.backref('merchant', uselist=False, lazy='joined'))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('merchant', uselist=False, lazy='joined'))
@@ -44,7 +41,7 @@ class MerchantAccount(Base):
     id = db.Column(db.Integer, primary_key=True)
     bank_name = db.Column(db.String(100), nullable=False)
     checking_account = db.Column(db.String(14), nullable=False)
-    currency = db.Column(db.Enum(*enum.CURRENCY_ENUM), nullable=False)
+    currency = db.Column(db.Enum(*enum.CURRENCY_ENUM), default='USD', nullable=False)
     mfo = db.Column(db.String(6), nullable=False)
     okpo = db.Column(db.String(8), nullable=False)
 
@@ -101,12 +98,12 @@ class Store(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     store_name = db.Column(db.String(32), nullable=False)
-    store_url = db.Column(db.String(256), nullable=False)
-    store_identifier = db.Column(db.String(128), nullable=False, unique=True)
+    store_url = db.Column(db.String(255), nullable=False)
+    store_identifier = db.Column(db.String(127), nullable=False, unique=True)
 
     category = db.Column(db.Enum(*enum.STORE_CATEGORY_ENUM))
-    description = db.Column(db.String(256))
-    logo = db.Column(db.String(256))
+    description = db.Column(db.String(255))
+    logo = db.Column(db.String(255))
     show_logo = db.Column(db.Boolean, default=False)
 
     store_settings_id = db.Column(db.Integer, db.ForeignKey('store_settings.id'), nullable=False)
@@ -137,9 +134,9 @@ class StoreSettings(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     sign_algorithm = db.Column(db.Enum(*enum.SIGN_ALGORITHM_ENUM), default='MD5', nullable=False)
-    sign_key = db.Column(db.String(128), nullable=False, unique=True)
-    succeed_url = db.Column(db.String(256), nullable=False)
-    failure_url = db.Column(db.String(256), nullable=False)
+    sign_key = db.Column(db.String(127), nullable=False, unique=True)
+    succeed_url = db.Column(db.String(255), nullable=False)
+    failure_url = db.Column(db.String(255), nullable=False)
     commission_pct = db.Column(db.Numeric(precision=2, scale=4), nullable=False)
 
     def __init__(self, sign_algorithm, sign_key, succeed_url, failure_url, commission_pct):
