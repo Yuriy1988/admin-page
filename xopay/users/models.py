@@ -9,11 +9,10 @@ __author__ = 'Kostel Serhii'
 
 class User(Base):
     """
-    User model
+    User model.
     User model can be created by another user with blank password.
     While password blank - user is not activated.
     """
-
 
     __tablename__ = 'user'
 
