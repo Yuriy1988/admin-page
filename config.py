@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
 
-# Statement for enabling the development environment
 DEBUG = True
 
-# Define the application directory
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
+FRONTEND_FOLDER = os.path.join(BASE_FOLDER, 'frontend')
+STATIC_FOLDER = os.path.join(FRONTEND_FOLDER, 'static')
+
 
 # Define the database
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'xopay.db')
-DATABASE_CONNECT_OPTIONS = {}
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_FOLDER, 'xopay.db')
+SQLALCHEMY_TRACK_MODIFICATIONS = False      # flask-sql signaling not used now
 
-# Enable protection agains *Cross-site Request Forgery (CSRF)*
 CSRF_ENABLED = True
+CSRF_SESSION_KEY = "mhe=d4#2xvb1348j%m+sn0d8ssdbjv18yi+f_w#&yd!+&4ic4)"
 
-# CSRF secret key
-CSRF_SESSION_KEY = "secret"
-
-# Secret key for signing cookies
-SECRET_KEY = "secret"
+SECRET_KEY = "ugGB0uH1cJTW=1L9Vs|8roMlFfFgsWD%NA|*WBpYQ3Uytr-6rImVk2Rp%BJ+"
