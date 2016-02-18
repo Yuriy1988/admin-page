@@ -1,9 +1,8 @@
 import os
 import unittest
 from flask.ext.testing import TestCase
-from flask import Flask
 
-from config import BASE_DIR
+from config import BASE_FOLDER
 from xopay import app, db
 from xopay.users.models import User
 
@@ -17,7 +16,7 @@ class AbstractTestCase(TestCase):
         app.config['DEBUG'] = True
         app.config['TESTING'] = True
         app.config['CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'test.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_FOLDER, 'test.db')
         self.client = app.test_client()
         db.create_all()
         # self.app_context = app.app_context()
@@ -45,7 +44,6 @@ def create_users(user_data):
     u.hash_password(user_data['password'])
     db.session.add(u)
     db.session.commit()
-
 
 
 if __name__ == '__main__':

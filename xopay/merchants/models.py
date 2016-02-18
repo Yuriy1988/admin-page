@@ -1,71 +1,181 @@
+# -*- coding: utf-8 -*-
+"""
+Merchant, Manager and Store database models
+"""
+
+from xopay.backend import db, enum, Base
+
+__author__ = 'Kostel Serhii'
 
 
-from xopay import app, db
-from xopay.users.models import User
+class Merchant(Base):
 
-
-class Merchant(db.Model):
     __tablename__ = 'merchant'
+
     id = db.Column(db.Integer, primary_key=True)
-    сhairman = db.Column(db.String(320))
-    phone = db.Column(db.String(15))
-    adress = db.Column(db.String(320), nullable=True)
-    email = db.Column(db.String(32), unique=True)
-    checking_account = db.Column(db.String(32), nullable=True)
-    mfo = db.Column(db.String(32), nullable=True)
-    okpo = db.Column(db.String(32), nullable=True)
-    bank_name = db.Column(db.String(32), nullable=True)
-    currency = db.Column(db.String(3), nullable=True)
-    user = db.relationship("User", uselist=False, back_populates="merchant")
-    store = db.relationship("MerchantStore")
-    manager = db.relationship("Manager")
+    merchant_name = db.Column(db.String(32), nullable=False, unique=True)
+
+    merchant_account_id = db.Column(db.Integer, db.ForeignKey('merchant_account.id'), nullable=False)
+    merchant_account = db.relationship('MerchantAccount', backref=db.backref('merchant', uselist=False, lazy='joined'))
+
+    merchant_info_id = db.Column(db.Integer, db.ForeignKey('merchant_info.id'), nullable=False)
+    merchant_info = db.relationship('MerchantInfo',backref=db.backref('merchant', uselist=False, lazy='joined'))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('merchant', uselist=False, lazy='joined'))
+
+    managers = db.relationship('Manager', back_populates='merchant')
+    stores = db.relationship('Store', back_populates='merchant')
+
+    def __init__(self, merchant_name, merchant_account, merchant_info, user):
+        self.merchant_name = merchant_name
+        self.merchant_account = merchant_account
+        self.merchant_info = merchant_info
+        self.user = user
 
     def __repr__(self):
-        return '<User %r>' % self.сhairman
+        return '<Merchant %r>' % self.merchant_name
 
 
-class MerchantStore(db.Model):
-    __tablename__ = 'merchant_store'
+class MerchantAccount(Base):
+
+    __taclename__ = 'merchant_account'
+
     id = db.Column(db.Integer, primary_key=True)
-    store_name = db.Column(db.String(32))
-    url = db.Column(db.String(32))
-    category = db.Column(db.String(320), nullable=True)
-    description = db.Column(db.Text(32), nullable=True)
-    store_settings = db.relationship("StoreSettings", uselist=False, back_populates="merchant_store")
-    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'))
+    bank_name = db.Column(db.String(100), nullable=False)
+    checking_account = db.Column(db.String(14), nullable=False)
+    currency = db.Column(db.Enum(*enum.CURRENCY_ENUM), nullable=False)
+    mfo = db.Column(db.String(6), nullable=False)
+    okpo = db.Column(db.String(8), nullable=False)
+
+    def __init__(self, bank_name, checking_account, currency, mfo, okpo):
+        self.bank_name = bank_name
+        self.checking_account = checking_account
+        self.currency = currency
+        self.mfo = mfo
+        self.okpo = okpo
+
+    def __repr__(self):
+        return '<MerchantAccount %r>' % self.id
+
+
+class MerchantInfo(Base):
+
+    __tablename__ = 'merchant_info'
+
+    id = db.Column(db.Integer, primary_key=True)
+    address = db.Column(db.String(320))
+    director_name = db.Column(db.String(100))
+
+    def __init__(self, address=None, director_name=None):
+        self.address = address
+        self.director_name = director_name
+
+    def __repr__(self):
+        return '<MerchantInfo %r>' % self.id
+
+
+class Manager(Base):
+
+    __tablename__ = 'manager'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('manager', uselist=False, lazy='joined'))
+
+    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
+    merchant = db.relationship('Merchant', back_populates='managers')
+
+    def __init__(self, user, merchant):
+        self.user = user
+        self.merchant = merchant
+
+    def __repr__(self):
+        return '<Manager %r>' % self.id
+
+
+class Store(Base):
+
+    __tablename__ = 'store'
+
+    id = db.Column(db.Integer, primary_key=True)
+    store_name = db.Column(db.String(32), nullable=False)
+    store_url = db.Column(db.String(256), nullable=False)
+    store_identifier = db.Column(db.String(128), nullable=False, unique=True)
+
+    category = db.Column(db.Enum(*enum.STORE_CATEGORY_ENUM))
+    description = db.Column(db.String(256))
+    logo = db.Column(db.String(256))
+    show_logo = db.Column(db.Boolean, default=False)
+
+    store_settings_id = db.Column(db.Integer, db.ForeignKey('store_settings.id'), nullable=False)
+    store_settings = db.relationship('StoreSettings', backref=db.backref('store', uselist=False, lazy='joined'))
+
+    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
+    merchant = db.relationship('Merchant', back_populates='stores')
+
+    def __init__(self, store_name, store_url, store_identifier, store_settings, merchant,
+                 category=None, description=None, logo=None, show_logo=False):
+        self.store_name = store_name
+        self.store_url = store_url
+        self.store_identifier = store_identifier
+        self.category = category
+        self.description = description
+        self.logo = logo
+        self.show_logo = show_logo
+        self.store_settings = store_settings
+        self.merchant = merchant
 
     def __repr__(self):
         return '<Store %r>' % self.store_name
 
 
-class StoreSettings(db.Model):
-
-    CRYPT_ALGORYTHM = ['md5', 'sha1']
-    NOTIFICATION_TYPE = ['sms', 'email']
+class StoreSettings(Base):
 
     __tablename__ = 'store_settings'
+
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(32))
-    key = db.Column(db.String(320), nullable=True)
-    commission = db.Column(db.Float(asdecimal=True), default=0)
-    success_url = db.Column(db.String(32), nullable=True)
-    reject_url = db.Column(db.String(32), nullable=True)
-    logo = db.Column(db.String(32), nullable=True)
-    show_logo = db.Column(db.Boolean, default=False)
-    notif_type = db.Column(db.Enum(*NOTIFICATION_TYPE))
-    crypt_algorythm = db.Column(db.Enum(*CRYPT_ALGORYTHM))
-    store_id = db.Column(db.Integer, db.ForeignKey('merchant_store.id'), nullable=True)
-    merchant_store = db.relationship("MerchantStore", back_populates="store_settings")
+    sign_algorithm = db.Column(db.Enum(*enum.SIGN_ALGORITHM_ENUM), default='MD5', nullable=False)
+    sign_key = db.Column(db.String(128), nullable=False, unique=True)
+    succeed_url = db.Column(db.String(256), nullable=False)
+    failure_url = db.Column(db.String(256), nullable=False)
+    commission_pct = db.Column(db.Numeric(precision=2, scale=4), nullable=False)
+
+    def __init__(self, sign_algorithm, sign_key, succeed_url, failure_url, commission_pct):
+        self.sign_algorithm = sign_algorithm
+        self.sign_key = sign_key
+        self.succeed_url = succeed_url
+        self.failure_url = failure_url
+        self.commission_pct = commission_pct
 
     def __repr__(self):
-        return '<Store %r>' % self.store.store_name
+        return '<StoreSettings %r>' % self.id
 
 
-class Manager(db.Model):
+if __name__ == '__main__':
 
-    __tablename__ = 'manager'
-    id = db.Column(db.Integer, primary_key=True)
-    enabled = db.Column(db.Boolean, default=False)
-    user = db.relationship("User", uselist=False, back_populates="manager")
-    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'))
-    merchant = db.relationship("Merchant", back_populates="manager")
+    from flask import Flask
+
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+    db.init_app(app)
+
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+
+        merch_account = MerchantAccount(
+            bank_name='Privat', checking_account='12345678901234', currency='USD', mfo=123456, okpo=12345678)
+        merch_info = MerchantInfo(address='Home', director_name='Ivanov Ivan Ivanovich')
+
+        merchant = Merchant(merchant_name='guido', merchant_account=merch_account, merchant_info=merch_info, user=None)
+
+        db.session.add(merch_account)
+        db.session.add(merch_info)
+        db.session.add(merchant)
+
+        db.session.commit()
+
+        merch = Merchant.query.first()
+        print(merch, merch.merchant_info, merch.merchant_account)
