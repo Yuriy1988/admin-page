@@ -28,8 +28,6 @@ class User(Base):
     notify = db.Column(db.Enum(*enum.USER_NOTIFY_ENUM), nullable=True)
 
     enabled = db.Column(db.Boolean, nullable=False, default=False)
-
-    last_login = json_ignore(db.Column(db.DateTime))
     created = json_ignore(db.Column(db.DateTime, default=datetime.now()))
 
     def __init__(self, username, password='', enabled=False,

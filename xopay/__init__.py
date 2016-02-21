@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, make_response, jsonify
+from flask import Flask
 from flask_restful import Api
 from flask.ext.login import LoginManager
 
