@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from xopay.backend import db, enum, Base
+
+from xopay.backend import db, enum, BaseModel
 
 __author__ = 'Kostel Serhii'
 
 
-class Merchant(Base):
+class Merchant(BaseModel):
 
     __tablename__ = 'merchant'
 
@@ -33,12 +34,12 @@ class Merchant(Base):
         return '<Merchant %r>' % self.merchant_name
 
 
-class MerchantAccount(Base):
+class MerchantAccount(BaseModel):
 
     __taclename__ = 'merchant_account'
 
     id = db.Column(db.Integer, primary_key=True)
-    bank_name = db.Column(db.String(100), nullable=False)
+    bank_name = db.Column(db.String(255), nullable=False)
     checking_account = db.Column(db.String(14), nullable=False)
     currency = db.Column(db.Enum(*enum.CURRENCY_ENUM), default='USD', nullable=False)
     mfo = db.Column(db.String(6), nullable=False)
@@ -55,7 +56,7 @@ class MerchantAccount(Base):
         return '<MerchantAccount %r>' % self.id
 
 
-class MerchantInfo(Base):
+class MerchantInfo(BaseModel):
 
     __tablename__ = 'merchant_info'
 
@@ -71,7 +72,7 @@ class MerchantInfo(Base):
         return '<MerchantInfo %r>' % self.id
 
 
-class Manager(Base):
+class Manager(BaseModel):
 
     __tablename__ = 'manager'
 
@@ -91,7 +92,7 @@ class Manager(Base):
         return '<Manager %r>' % self.id
 
 
-class Store(Base):
+class Store(BaseModel):
 
     __tablename__ = 'store'
 
@@ -127,7 +128,7 @@ class Store(Base):
         return '<Store %r>' % self.store_name
 
 
-class StoreSettings(Base):
+class StoreSettings(BaseModel):
 
     __tablename__ = 'store_settings'
 
@@ -154,7 +155,7 @@ if __name__ == '__main__':
     from flask import Flask
 
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
     db.init_app(app)
 
     with app.app_context():

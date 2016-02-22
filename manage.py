@@ -1,17 +1,21 @@
-from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
+#!venv/bin/python
+# -*- coding: utf-8 -*-
+
+import flask_script as script
+import flask_migrate as migrate
 
 from xopay import app, db
+
 from xopay.users.models import User
-from xopay.merchants.models import Merchant, MerchantStore, StoreSettings
-from xopay.pay_systems.models import PaymentSystem
+from xopay.merchants.models import Merchant, MerchantAccount, MerchantInfo, Manager, Store
+from xopay.payment_systems.models import PaymentSystem
 
 
-migrate = Migrate(app, db)
+migration = migrate.Migrate(app, db)
 
-manager = Manager(app)
+manager = script.Manager(app)
 
-manager.add_command('db', MigrateCommand)
+manager.add_command('db', migrate.MigrateCommand)
 
 if __name__ == '__main__':
     manager.run()

@@ -1,7 +1,7 @@
 import unittest
 from flask.ext.testing import TestCase
 
-from xopay import app, db as xop_db
+from xopay import app, db as xopay_db
 from xopay.users.models import User
 
 
@@ -11,17 +11,17 @@ class BaseTestCase(TestCase):
 
     def setUp(self):
         """ Setup before test case """
-        xop_db.create_all()
+        xopay_db.create_all()
 
     def tearDown(self):
         """ Teardown after test case """
         self.db.remove()
-        xop_db.drop_all()
+        xopay_db.drop_all()
 
     @property
     def db(self):
         """ Database session, that can be used in test """
-        return xop_db.session
+        return xopay_db.session
 
     def create_app(self):
         """ App for testing """
