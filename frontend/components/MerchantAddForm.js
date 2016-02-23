@@ -11,17 +11,14 @@ class MerchantAddForm extends Component {
             <div className="box">
                 <div className="box-header with-border">
                     <h3 className="box-title" >Merchant registration</h3>
-                    {/*<!-- ngIf: actionType == 'create' --><h3 ng-if="actionType == 'create'" className="box-title ng-scope" x-translate="">Merchant registration</h3><!-- end ngIf: actionType == 'create' -->
-                    <!-- ngIf: actionType == 'edit' -->*/}
                 </div>
                 <div className="box-body">
                     <div className="row">
                         <div className="col-xs-6">
                             <label htmlFor="name" >Merchant name</label>
-                            {/*
-                            <div ng-className="{'has-error': errors.name, 'form-group': true}" className="form-group">
-                                <input type="text" className="has-error form-control ng-pristine ng-untouched ng-valid" id="name" placeholder="Please, insert merchant name" ng-model="merchant.name">
-                            </div>*/}
+                            <div className="form-group">
+                                <input type="text" className="has-error form-control" id="name" placeholder="Please, insert merchant name" />
+                            </div>
                         </div>
                         <div className="col-xs-12">
                             <h3 >Main information</h3>
@@ -34,15 +31,12 @@ class MerchantAddForm extends Component {
                         </div>
                         <div className="col-xs-3">
                             <label htmlFor="name">Email</label>
-                            {/*
-                            <!-- ngIf: errors['merchantInfo.email'] -->*/}
                             <div className="form-group has-error">
                                 <input type="text" className="form-control" id="email" placeholder="Email" />
                             </div>
                         </div>
                         <div className="col-xs-3">
                             <label htmlFor="name" >Phone</label>
-                            {/*<!-- ngIf: errors['merchantInfo.phone'] -->*/}
                             <div className="form-group">
                                 <input type="text" className="form-control" id="phone" placeholder="Phone" />
                             </div>
@@ -87,7 +81,6 @@ class MerchantAddForm extends Component {
                                 <select className="form-control " id="currency" data-tags="true" ><option selected="selected">USD</option></select>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div className="box-footer clearfix">

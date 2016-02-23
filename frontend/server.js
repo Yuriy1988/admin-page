@@ -21,42 +21,48 @@ if (config.DEV_MODE == true) {
     app.use(webpackHotMiddleware(compiler));
 } else {
     console.log("[WEBPACK] building in production");
-    compiler.run(function (err,stats) {
+    compiler.run(function (err, stats) {
         if (!err) {
             console.log("[WEBPACK] production building finished");
-        }else{
+        } else {
             console.error("[WEBPACK] ERROR! production building FAILED!");
         }
 
         if (config.DEV_TEST == true) {
             console.log("[TEST] running test");
             console.log("***")
-        };
+        }
+        ;
     });
 }
 
 
-
 if (config.DEV_SERVER == true) {
     app.use(function (req, res) {
-        console.log("[SERVER] <-- ", req.url);
 
-        const fileName = __dirname + req.url;
+        if (req.url.substr(0, 5) === '/err/') {
+            res.status(req.url.substr(5, 3));
+            res.send({a:1});
+        } else {
 
-        console.log("[FILE] = ", fileName);
+            //if (req.url.substr(0,5)==);
+            console.log("[SERVER] <-- ", req.url);
 
-        fs.stat(fileName, (err, stats) => {
+            const fileName = __dirname + req.url;
 
-            if (!err && stats.isFile()) {
-                console.log("[SERVER] --> ", fileName);
-                res.sendFile(fileName);
-            } else {
-                console.log("[SERVER] --> INDEX.HTML");
-                res.sendFile(__dirname + '/static/index.html');
-            }
-        });
+            console.log("[FILE] = ", fileName);
 
+            fs.stat(fileName, (err, stats) => {
 
+                if (!err && stats.isFile()) {
+                    console.log("[SERVER] --> ", fileName);
+                    res.sendFile(fileName);
+                } else {
+                    console.log("[SERVER] --> INDEX.HTML");
+                    res.sendFile(__dirname + '/static/index.html');
+                }
+            });
+        }
     });
 
     app.listen(port, function (error) {

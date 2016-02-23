@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import * as MerchantActions from '../actions/merchants';
+import Alert, {TYPE_ERROR} from '../components/Alert';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 class MerchantList extends Component {
     constructor(props) {
@@ -28,13 +30,9 @@ class MerchantList extends Component {
 
         let {merchants, merchantPagination} = this.props;
 
-        console.log(merchantPagination);
-
         const merchantList = MerchantList.renderList(merchantPagination.ids.map((merchantId) => {
             return `${merchants[merchantId].id} - ${merchants[merchantId].merchantName}`;
         }));
-
-        console.log(merchantList);
 
         return (
             <div className="box">
@@ -42,12 +40,14 @@ class MerchantList extends Component {
                     <h3 className="box-title">Merchants</h3>
                 </div>
                 <div className="box-body">
+
                     {
-                        (merchantPagination.isFetching) ? <p>Loading...</p> : null
+                        (!!merchantPagination.error) ?
+                            <Alert type={TYPE_ERROR}>{merchantPagination.error.message}</Alert> : null
                     }
                     { merchantList }
-
                 </div>
+                <LoadingOverlay loading={merchantPagination.isFetching}/>
             </div>
         )
     }
@@ -57,7 +57,7 @@ class MerchantList extends Component {
 export default connect(
     (state)=>({
         merchants: state.entities.merchants,
-        merchantPagination: state.pagination.merchants, st: state
+        merchantPagination: state.pagination.merchants
     }),
     {loadMerchants: MerchantActions.getList}
 )(MerchantList)

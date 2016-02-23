@@ -20,24 +20,28 @@ export default function paginate({ types, mapActionToKey }) {
         isFetching: false,
         nextPageUrl: undefined,
         pageCount: 0,
-        ids: []
+        ids: [],
+        error: null
     }, action) {
         const key = mapActionToKey(action);
         switch (action.type) {
             case requestType:
                 return merge({}, state, {
-                    isFetching: true
+                    isFetching: true,
+                    error: null // TODO is it necessary?
                 });
             case successType:
                 return merge({}, state, {
                     isFetching: false,
                     ids: union(state.ids, action.response.result[key]),
                     nextPageUrl: action.response.nextPageUrl,
-                    pageCount: state.pageCount + 1
+                    pageCount: state.pageCount + 1,
+                    error: null
                 });
             case failureType:
                 return merge({}, state, {
-                    isFetching: false
+                    isFetching: false,
+                    error: action.error
                 });
             default:
                 return state

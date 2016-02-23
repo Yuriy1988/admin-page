@@ -86,6 +86,10 @@ html, body, .wrapper, .components {
         right: 0;
     }
 }
+
+.fa-spin {
+    animation-duration: 0.7s !important;
+}
 /*
 @media (min-width: 768px) {
     .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.active):hover > a > span,
