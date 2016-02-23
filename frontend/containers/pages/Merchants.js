@@ -16,7 +16,7 @@ class Merchants extends Component {
             <div>
                 <div className="box">
                     <div className="box-header">
-                        <h2 className="box-title">Merchants</h2>
+                        <h2 className="box-title">Title</h2>
                     </div>
                 </div>
                 {children}

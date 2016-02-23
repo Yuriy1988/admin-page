@@ -1,25 +1,14 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 
-class NotFoundPage extends Component {
+class Error404 extends Component {
     constructor(props) {
         super(props);
     }
 
-    static get contextTypes() {
-        return {
-            router: React.PropTypes.object.isRequired
-        }
-    };
-
     render() {
-
-        const {router} = this.context;
-
         return (
-
             <div className="box box-danger">
                 <div className="box-header ">
                     <h1 className="box-title box-warning">Error 404. Page not found <b
@@ -40,11 +29,9 @@ class NotFoundPage extends Component {
                     </p>
                 </div>
             </div>
-
-
         )
     }
 }
 
 
-export default connect()(NotFoundPage)
+export default Error404

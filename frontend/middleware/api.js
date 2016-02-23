@@ -17,7 +17,7 @@ function getNextPageUrl(response) {
     return nextLink.split(';')[0].slice(1, -1);
 }
 
-const API_ROOT = 'https://api.github.com/';
+const API_ROOT = 'http://192.168.1.150:3000/';
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
@@ -58,6 +58,8 @@ const repoSchema = new Schema('repos', {
     idAttribute: 'fullName'
 });
 
+const merchantSchema = new Schema('merchants');
+
 repoSchema.define({
     owner: userSchema
 });
@@ -67,7 +69,8 @@ export const Schemas = {
     USER: userSchema,
     USER_ARRAY: arrayOf(userSchema),
     REPO: repoSchema,
-    REPO_ARRAY: arrayOf(repoSchema)
+    REPO_ARRAY: arrayOf(repoSchema),
+    MERCHANTS_LIST: {merchants: arrayOf(merchantSchema)}
 };
 
 // Action key that carries API call info interpreted by this Redux middleware.

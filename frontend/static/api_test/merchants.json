@@ -1,0 +1,20 @@
+{
+  "merchants": [
+    {
+      "id": 1,
+      "merchant_name": "Merchant 1"
+    },
+    {
+      "id": 2,
+      "merchant_name": "Merchant 2"
+    },
+    {
+      "id": 3,
+      "merchant_name": "Merchant 3"
+    },
+    {
+      "id": 4,
+      "merchant_name": "Merchant 4"
+    }
+  ]
+}

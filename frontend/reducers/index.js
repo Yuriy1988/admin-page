@@ -1,14 +1,14 @@
 import * as ActionTypes from '../actions'
+import * as MerchantActions from '../actions/merchants'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
-import session from './session'
 import sideBar from './sideBar'
 import { routeReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
-function entities(state = {users: {}, repos: {}}, action) {
+function entities(state = {users: {}, repos: {}, merchants: {}}, action) {
     if (action.response && action.response.entities) {
         return merge({}, state, action.response.entities);
     }
@@ -46,6 +46,14 @@ const pagination = combineReducers({
             ActionTypes.STARGAZERS_SUCCESS,
             ActionTypes.STARGAZERS_FAILURE
         ]
+    }),
+    merchants: paginate({
+        mapActionToKey: action => "merchants",
+        types: [
+            MerchantActions.MERCHANTS_LIST_REQUEST,
+            MerchantActions.MERCHANTS_LIST_SUCCESS,
+            MerchantActions.MERCHANTS_LIST_FAILURE
+        ]
     })
 });
 
@@ -53,7 +61,6 @@ const rootReducer = combineReducers({
     entities,
     pagination,
     user,
-    session,
     sideBar,
     errorMessage,
     routing: routeReducer

@@ -307,6 +307,8 @@ $.AdminLTE = {}, $.AdminLTE.options = {
     }(jQuery);
 
 setInterval( function() {
-    $.AdminLTE.layout.fix();
-    $.AdminLTE.layout.fixSidebar();
-},300);
+    if ( $.AdminLTE ) {
+        $.AdminLTE.layout.fix();
+        $.AdminLTE.layout.fixSidebar();
+    }
+},100);
