@@ -1,37 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from xopay.backend import db, enum, BaseModel
+from xopay.users.models import User
 
 __author__ = 'Kostel Serhii'
-
-
-class Merchant(BaseModel):
-
-    __tablename__ = 'merchant'
-
-    id = db.Column(db.Integer, primary_key=True)
-    merchant_name = db.Column(db.String(32), nullable=False, unique=True)
-
-    merchant_account_id = db.Column(db.Integer, db.ForeignKey('merchant_account.id'), nullable=False)
-    merchant_account = db.relationship('MerchantAccount', backref=db.backref('merchant', uselist=False, lazy='joined'))
-
-    merchant_info_id = db.Column(db.Integer, db.ForeignKey('merchant_info.id'), nullable=False)
-    merchant_info = db.relationship('MerchantInfo', backref=db.backref('merchant', uselist=False, lazy='joined'))
-
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('merchant', uselist=False, lazy='joined'))
-
-    managers = db.relationship('Manager', back_populates='merchant')
-    stores = db.relationship('Store', back_populates='merchant')
-
-    def __init__(self, merchant_name, merchant_account, merchant_info, user):
-        self.merchant_name = merchant_name
-        self.merchant_account = merchant_account
-        self.merchant_info = merchant_info
-        self.user = user
-
-    def __repr__(self):
-        return '<Merchant %r>' % self.merchant_name
 
 
 class MerchantAccount(BaseModel):
@@ -72,6 +44,59 @@ class MerchantInfo(BaseModel):
         return '<MerchantInfo %r>' % self.id
 
 
+class Merchant(BaseModel):
+
+    __tablename__ = 'merchant'
+
+    id = db.Column(db.Integer, primary_key=True)
+    merchant_name = db.Column(db.String(32), nullable=False, unique=True)
+
+    merchant_account_id = db.Column(db.Integer, db.ForeignKey('merchant_account.id'), nullable=False)
+    merchant_account = db.relationship('MerchantAccount', backref=db.backref('merchant', uselist=False, lazy='joined'))
+
+    merchant_info_id = db.Column(db.Integer, db.ForeignKey('merchant_info.id'), nullable=False)
+    merchant_info = db.relationship('MerchantInfo', backref=db.backref('merchant', uselist=False, lazy='joined'))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('merchant', uselist=False, lazy='joined'))
+
+    managers = db.relationship('Manager', back_populates='merchant')
+    stores = db.relationship('Store', back_populates='merchant')
+
+    def __init__(self, merchant_name, merchant_account, merchant_info, user):
+        self.merchant_name = merchant_name
+        self.merchant_account = merchant_account
+        self.merchant_info = merchant_info
+        self.user = user
+
+    def __repr__(self):
+        return '<Merchant %r>' % self.merchant_name
+
+    @classmethod
+    def create(cls, data, add_to_db=True):
+        merchant_account_data = data.pop('merchant_account', {})
+        merchant_info_data = data.pop('merchant_info', {})
+        user_data = data.pop('user', {})
+
+        data['merchant_account'] = MerchantAccount.create(merchant_account_data)
+        data['merchant_info'] = MerchantInfo.create(merchant_info_data)
+        data['user'] = User.create(user_data)
+
+        merchant = super(Merchant, cls).create(data)
+        return merchant
+
+    def update(self, data, add_to_db=True):
+        merchant_account_data = data.pop('merchant_account', {})
+        merchant_info_data = data.pop('merchant_info', {})
+        user_data = data.pop('user', {})
+
+        self.merchant_account.update(merchant_account_data)
+        self.merchant_info.update(merchant_info_data)
+        self.user.update(user_data)
+
+        super(Merchant, self).update(data)
+
+
 class Manager(BaseModel):
 
     __tablename__ = 'manager'
@@ -90,6 +115,42 @@ class Manager(BaseModel):
 
     def __repr__(self):
         return '<Manager %r>' % self.id
+
+    @classmethod
+    def create(cls, data, add_to_db=True):
+        user_data = data.pop('user', {})
+        data['user'] = User.create(user_data)
+
+        manager = super(Manager, cls).create(data)
+        return manager
+
+    def update(self, data, add_to_db=True):
+        user_data = data.pop('user', {})
+        self.user.update(user_data)
+
+        super(Manager, self).update(data)
+
+
+class StoreSettings(BaseModel):
+
+    __tablename__ = 'store_settings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    sign_algorithm = db.Column(db.Enum(*enum.SIGN_ALGORITHM_ENUM), default='MD5', nullable=False)
+    sign_key = db.Column(db.String(127), nullable=False, unique=True)
+    succeed_url = db.Column(db.String(255), nullable=False)
+    failure_url = db.Column(db.String(255), nullable=False)
+    commission_pct = db.Column(db.Numeric(precision=2, scale=4), nullable=False)
+
+    def __init__(self, sign_algorithm, sign_key, succeed_url, failure_url, commission_pct):
+        self.sign_algorithm = sign_algorithm
+        self.sign_key = sign_key
+        self.succeed_url = succeed_url
+        self.failure_url = failure_url
+        self.commission_pct = commission_pct
+
+    def __repr__(self):
+        return '<StoreSettings %r>' % self.id
 
 
 class Store(BaseModel):
@@ -127,27 +188,19 @@ class Store(BaseModel):
     def __repr__(self):
         return '<Store %r>' % self.store_name
 
+    @classmethod
+    def create(cls, data, add_to_db=True):
+        store_settings_data = data.pop('store_settings', {})
+        data['store_settings'] = StoreSettings.create(store_settings_data)
 
-class StoreSettings(BaseModel):
+        store = super(Store, cls).create(data)
+        return store
 
-    __tablename__ = 'store_settings'
+    def update(self, data, add_to_db=True):
+        store_settings_data = data.pop('store_settings', {})
+        self.store_settings.update(store_settings_data)
 
-    id = db.Column(db.Integer, primary_key=True)
-    sign_algorithm = db.Column(db.Enum(*enum.SIGN_ALGORITHM_ENUM), default='MD5', nullable=False)
-    sign_key = db.Column(db.String(127), nullable=False, unique=True)
-    succeed_url = db.Column(db.String(255), nullable=False)
-    failure_url = db.Column(db.String(255), nullable=False)
-    commission_pct = db.Column(db.Numeric(precision=2, scale=4), nullable=False)
-
-    def __init__(self, sign_algorithm, sign_key, succeed_url, failure_url, commission_pct):
-        self.sign_algorithm = sign_algorithm
-        self.sign_key = sign_key
-        self.succeed_url = succeed_url
-        self.failure_url = failure_url
-        self.commission_pct = commission_pct
-
-    def __repr__(self):
-        return '<StoreSettings %r>' % self.id
+        super(Store, self).update(data)
 
 
 if __name__ == '__main__':
@@ -166,7 +219,7 @@ if __name__ == '__main__':
             bank_name='Privat', checking_account='12345678901234', currency='USD', mfo=123456, okpo=12345678)
         merch_info = MerchantInfo(address='Home', director_name='Ivanov Ivan Ivanovich')
 
-        merchant = Merchant(merchant_name='guido', merchant_account=merch_account, merchant_info=merch_info, user=None)
+        merchant = Merchant(merchant_name='Guido', merchant_account=merch_account, merchant_info=merch_info, user=None)
 
         db.session.add(merch_account)
         db.session.add(merch_info)
