@@ -18,4 +18,5 @@ manager = script.Manager(app)
 manager.add_command('db', migrate.MigrateCommand)
 
 if __name__ == '__main__':
+
     manager.run()

@@ -1,4 +1,3 @@
-
 from flask import request, abort, jsonify
 
 from xopay import app, db
@@ -7,6 +6,8 @@ from xopay.merchants.schemas import MerchantSchema, ManagerSchema, StoreSchema
 
 __author__ = 'Kostel Serhii'
 
+
+# -------- Merchants --------
 
 @app.route('/api/admin/dev/merchants', methods=['GET'])
 def merchants_list():
@@ -130,6 +131,9 @@ def merchant_stores_create(merchant_id):
     return jsonify(result.data)
 
 
+# -------- Manager --------
+
+
 @app.route('/api/admin/dev/managers/<manager_id>', methods=['GET'])
 def manager_detail(manager_id):
     manager = Manager.query.get(manager_id)
@@ -167,6 +171,9 @@ def manager_delete(manager_id):
         return abort(404)
 
     db.session.commit()
+
+
+# -------- Store --------
 
 
 @app.route('/api/admin/dev/stores/<store_id>', methods=['GET'])

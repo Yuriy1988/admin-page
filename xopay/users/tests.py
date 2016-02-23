@@ -4,10 +4,10 @@ from flask.ext.login import current_user
 
 from xopay import app, db
 from xopay.users.models import User
-from xopay.init_testing import AbstractTestCase
+from xopay.testing import BaseTestCase
 
 
-class UserTest(AbstractTestCase):
+class UserTest(BaseTestCase):
 
     def test_user_login(self):
         with self.client:
@@ -22,7 +22,6 @@ class UserTest(AbstractTestCase):
             self.assertFalse(g.user.is_authenticated)
 
 
-
-
 if __name__ == '__main__':
+
     unittest.main()

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from xopay.backend import db, enum, BaseModel
 from xopay.users.models import User
 
@@ -201,31 +199,3 @@ class Store(BaseModel):
         self.store_settings.update(store_settings_data)
 
         super(Store, self).update(data)
-
-
-if __name__ == '__main__':
-
-    from flask import Flask
-
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
-    db.init_app(app)
-
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-
-        merch_account = MerchantAccount(
-            bank_name='Privat', checking_account='12345678901234', currency='USD', mfo=123456, okpo=12345678)
-        merch_info = MerchantInfo(address='Home', director_name='Ivanov Ivan Ivanovich')
-
-        merchant = Merchant(merchant_name='Guido', merchant_account=merch_account, merchant_info=merch_info, user=None)
-
-        db.session.add(merch_account)
-        db.session.add(merch_info)
-        db.session.add(merchant)
-
-        db.session.commit()
-
-        merch = Merchant.query.first()
-        print(merch, merch.merchant_info, merch.merchant_account)
