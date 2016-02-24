@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ Describes values for enumerate fields """
 
 __author__ = 'Kostel Serhii'

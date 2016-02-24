@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
 
-from xopay.backend import db, enum, BaseModel
+from xopay import db
+from xopay.models import base, enum
 
 __author__ = 'Kostel Serhii'
 
 
-class User(BaseModel):
+class User(base.BaseModel):
     """
     User model.
     User model can be created by another user with blank password.

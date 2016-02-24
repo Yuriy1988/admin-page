@@ -3,7 +3,7 @@ from flask import url_for, get_flashed_messages, g
 from flask.ext.login import current_user
 
 from xopay import app, db
-from xopay.users.models import User
+from xopay.models import User
 from xopay.testing import BaseTestCase
 
 

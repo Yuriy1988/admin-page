@@ -2,7 +2,7 @@ import unittest
 from flask.ext.testing import TestCase
 
 from xopay import app, db as xopay_db
-from xopay.users.models import User
+from xopay.models import User
 
 
 class BaseTestCase(TestCase):

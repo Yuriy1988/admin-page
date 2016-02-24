@@ -1,5 +1,4 @@
 #!venv/bin/python
-# -*- coding: utf-8 -*-
 
 from xopay import app
 

@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
-
-from flask_sqlalchemy import SQLAlchemy
+from xopay import db
 
 __author__ = 'Kostel Serhii'
-
-
-db = SQLAlchemy()
 
 
 def _first_level_dict(obj, data):

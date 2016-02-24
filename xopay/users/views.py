@@ -3,8 +3,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 
 from xopay import app, db, lm
 # from forms import LoginForm
-from .models import User
-from xopay.merchants.models import Merchant, Manager
+from xopay.models import User, Merchant, Manager
 
 
 @lm.user_loader

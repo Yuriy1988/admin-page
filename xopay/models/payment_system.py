@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-
-from xopay.backend import db, enum, BaseModel
+from xopay import db
+from xopay.models import base, enum
 
 __author__ = 'Kostel Serhii'
 
 
-class PaymentSystem(BaseModel):
+class PaymentSystem(base.BaseModel):
 
     __tablename__ = 'payment_systems'
 

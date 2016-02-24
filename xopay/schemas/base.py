@@ -1,10 +1,10 @@
-from marshmallow import Schema as MMSchema, fields, ValidationError
-from marshmallow.validate import Validator
+from marshmallow import Schema as _Schema, fields, ValidationError
+from marshmallow.validate import Validator as _Validator
 
 __author__ = 'Kostel Serhii'
 
 
-class Schema(MMSchema):
+class BaseSchema(_Schema):
 
     def __init__(self, *args, **kwargs):
         partial_nested = kwargs.pop('partial_nested', False)
@@ -19,7 +19,7 @@ class Schema(MMSchema):
                 setattr(value, 'partial', True)
 
 
-class Unique(Validator):
+class Unique(_Validator):
     """Validator which succeeds if the value passed to it
     is unique for specified has model field.
 
