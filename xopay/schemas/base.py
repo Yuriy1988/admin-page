@@ -1,4 +1,4 @@
-from marshmallow import Schema as _Schema, fields, ValidationError
+from marshmallow import Schema as _Schema, fields, ValidationError, validates_schema
 from marshmallow.validate import Validator as _Validator
 
 __author__ = 'Kostel Serhii'
@@ -17,6 +17,11 @@ class BaseSchema(_Schema):
         for attr_name, value in self.__dict__.items():
             if attr_name[0] != '_' and isinstance(value, fields.Nested):
                 setattr(value, 'partial', True)
+
+    @validates_schema
+    def validate_not_none(self, data):
+        if data is None:
+            raise ValidationError('Content-Type header missing')
 
 
 class Unique(_Validator):
