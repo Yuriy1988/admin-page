@@ -10,6 +10,6 @@ export default function configureStore(initialState) {
     return createStore(
         rootReducer,
         initialState,
-        applyMiddleware(redirect, thunk, api, syncHistory(browserHistory))
+        applyMiddleware( thunk, api, redirect, syncHistory(browserHistory))
     )
 }

@@ -307,8 +307,12 @@ $.AdminLTE = {}, $.AdminLTE.options = {
     }(jQuery);
 
 setInterval( function() {
-    if ( $.AdminLTE ) {
-        $.AdminLTE.layout.fix();
-        $.AdminLTE.layout.fixSidebar();
+    if (!!$.AdminLTE ) {
+        if (!!$.AdminLTE.layout ) {
+            if (typeof $.AdminLTE.layout.fix == 'function') {
+                $.AdminLTE.layout.fix();
+                $.AdminLTE.layout.fixSidebar();
+            }
+        }
     }
 },100);

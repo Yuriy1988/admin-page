@@ -14,11 +14,7 @@ class Merchants extends Component {
 
         return (
             <div>
-                <div className="box">
-                    <div className="box-header">
-                        <h2 className="box-title">Title</h2>
-                    </div>
-                </div>
+                <h1 className="page-header">Merchants</h1>
                 {children}
             </div>
         )

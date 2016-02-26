@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+/*import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {create, createCError} from '../actions/merchants'
+import {create, createCError} from '../actions/stores'
 import LoadingOverlay from '../components/LoadingOverlay'
 import Alert, {TYPE_ERROR} from '../components/Alert'
 import {redirect} from '../actions/redirect'
 
-class MerchantAddForm extends Component {
+class StoreAddForm extends Component {
     constructor(props) {
         super(props);
         this._onMerchantChange = this._onMerchantChange.bind(this);
@@ -13,28 +13,21 @@ class MerchantAddForm extends Component {
         this._onCreate = this._onCreate.bind(this);
 
         this.state = {
-            merchant: {
-                merchant_name: "",		    // {required} Обозначение торговца в системе
-                merchant_account: {
-                    bank_name: "",		    // {required}
-                    checking_account: "",	// {required}
-                    currency: "USD",		// {required}
-                    mfo: "",			    // {required}
-                    okpo: ""			    // {required}
+            store: {
+                store_name: "",			// {required}
+                store_url: "",		// {required}
+
+                category: enum,
+                description: "",
+                logo: url,
+                show_logo: boolean,
+
+                settings: {
+                    sign_algorithm: enum,	// {required}
+                    succeed_url: url,		// {required}
+                    failure_url: url,			// {required}
+                    commission_pct: decimal,	// {required}
                 },
-                merchant_info: {
-                    address: "",
-                    director_name: ""
-                },
-                user: {
-                    username: "",  	// {required, unique} username for login
-                    first_name: "", // имя
-                    last_name: "",	// фамилия
-                    email: "",		// user email (can be blank)
-                    phone: "",      // {digits only, len fixed} user phone - 12 numbers
-                    notify: "EMAIL",// [“EMAIL”, “PHONE”, null] - where to send notification (if null - do not send)
-                    enabled: false	// {required, default=False} is user enabled or not (admin always enabled!)
-                }
             }
         }
     }
@@ -292,4 +285,5 @@ export default connect(
         createCError,
         redirect
     }
-)(MerchantAddForm);
+)(StoreAddForm);
+*/

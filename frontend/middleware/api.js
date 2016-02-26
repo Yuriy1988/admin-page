@@ -1,17 +1,39 @@
-import { Schema, arrayOf, normalize } from 'normalizr'
+import { normalize } from 'normalizr'
 import { camelizeKeys } from 'humps'
 import 'isomorphic-fetch'
 
-const API_ROOT = 'http://localhost:3000/';
+const API_VERSION = "dev";
+const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
+
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, schema) {
-    const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
+function callApi(endpoint, body) {
+    const { schema, path, method } = endpoint;
 
-    const options = {
-        credentials: 'same-origin'
+    const fullUrl = API_ROOT + path;
+
+    const headers = new Headers();
+
+    headers.append("Content-type", "application/json");
+
+    let options = {
+        credentials: 'same-origin',
+        method,
+        headers
     };
+
+
+    if (!!body) {
+        if (typeof body == 'object') {
+            options.body = JSON.stringify(body);
+        }
+        if (typeof body == 'string') {
+            options.body = body;
+        }
+    }
+
+    console.log(options);
 
     return fetch(fullUrl, options)
         .then(
@@ -56,39 +78,16 @@ function callApi(endpoint, schema) {
         );
 }
 
-// We use this Normalizr schemas to transform API responses from a nested form
-// to a flat form where repos and users are placed in `entities`, and nested
-// JSON objects are replaced with their IDs. This is very convenient for
-// consumption by reducers, because we can easily build a normalized tree
-// and keep it updated as we fetch more data.
-
-// Read more about Normalizr: https://github.com/gaearon/normalizr
-
-const userSchema = new Schema('users', {
-    idAttribute: 'login'
-});
-
-const repoSchema = new Schema('repos', {
-    idAttribute: 'fullName'
-});
-
-const merchantSchema = new Schema('merchants');
-
-repoSchema.define({
-    owner: userSchema
-});
-
-// Schemas for Github API responses.
-export const Schemas = {
-    USER: userSchema,
-    USER_ARRAY: arrayOf(userSchema),
-    REPO: repoSchema,
-    REPO_ARRAY: arrayOf(repoSchema),
-    MERCHANTS_LIST: {merchants: arrayOf(merchantSchema)}
-};
 
 // Action key that carries API call info interpreted by this Redux middleware.
 export const CALL_API = Symbol('Call API');
+const ALLOWED_METHODS = ["GET", "PUT", "POST", "DELETE"];
+
+function actionWith(action, data) {
+    const finalAction = Object.assign({}, action, data);
+    delete finalAction[CALL_API];
+    return finalAction;
+}
 
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.
@@ -99,48 +98,64 @@ export default store => next => action => {
         return next(action);
     }
 
-    let { endpoint } = callAPI;
-    const { schema, types, method="GET" } = callAPI;
+    const { endpoint, types, body, cError } = callAPI;
 
-    if (typeof endpoint === 'function') {
-        endpoint = endpoint(store.getState());
+    if (typeof cError === 'undefined') {
+        throw new Error('Specify clear Error action');
     }
 
-    if (typeof endpoint !== 'string') {
-        throw new Error('Specify a string endpoint URL.');
+    if (typeof endpoint !== 'object') {
+        throw new Error('Specify an endpoint { method: [GET|POST|PUT|DELETE], path: string, schema:normalizrSchema }');
     }
+
+    const { schema, path, method } = endpoint;
+
+    if (typeof path !== 'string') {
+        throw new Error('Endpoint.path should be a string');
+    }
+
+    if (ALLOWED_METHODS.indexOf(method) === -1) {
+        throw new Error('Endpoint.method should be one of [GET|POST|PUT|DELETE]');
+    }
+
     if (!schema) {
         throw new Error('Specify one of the exported Schemas.');
     }
     if (!Array.isArray(types) || types.length !== 3) {
         throw new Error('Expected an array of three action types.');
     }
-    if (!types.every(type => typeof type === 'string')) {
+    if (!types.every(type => typeof type === 'string' || typeof type === 'object')) {
         throw new Error('Expected action types to be strings.');
     }
 
-    function actionWith(data) {
-        const finalAction = Object.assign({}, action, data);
-        delete finalAction[CALL_API];
-        return finalAction;
+
+
+    let [ requestType, successType, failureType ] = types;
+    let [rParams, sParams, fParams] = [{}, {}, {}];
+    if (typeof requestType == 'object') {
+        rParams = requestType;
+    }
+    if (typeof successType == 'object') {
+        sParams = successType;
+    }
+    if (typeof failureType == 'object') {
+        fParams = failureType;
     }
 
-    const [ requestType, successType, failureType ] = types;
+    next(actionWith(action, Object.assign({type: requestType},rParams)));
 
-    next(actionWith({type: requestType}));
-
-    return callApi(endpoint, schema ).then(
+    return callApi(endpoint, body).then(
         response => {
-            next(actionWith({
+            next(actionWith(action, Object.assign({
                 response,
                 type: successType
-            }))
+            },sParams)))
         },
         error => {
-            next(actionWith({
-                type: failureType,
-                error
-            }))
+            next(actionWith(action, Object.assign({
+                error,
+                type: failureType
+            },fParams)))
         }
     )
 }

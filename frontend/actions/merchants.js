@@ -1,19 +1,70 @@
-import { CALL_API, Schemas} from '../middleware/api'
+import { CALL_API } from '../middleware/api'
 
+
+import {MERCHANT_LIST} from '../lib/api'
 export const MERCHANTS_LIST_REQUEST = 'MERCHANTS_LIST_REQUEST';
 export const MERCHANTS_LIST_SUCCESS = 'MERCHANTS_LIST_SUCCESS';
 export const MERCHANTS_LIST_FAILURE = 'MERCHANTS_LIST_FAILURE';
-
-
+export const MERCHANTS_LIST_CERROR = 'MERCHANTS_LIST_CERROR';
+export function getListCError() {
+    return {
+        type: MERCHANTS_LIST_CERROR
+    }
+}
 export function getList() {
     return {
         [CALL_API]: {
             types: [MERCHANTS_LIST_REQUEST, MERCHANTS_LIST_SUCCESS, MERCHANTS_LIST_FAILURE],
-            endpoint: "static/api_test/merchants.json",
-            schema: Schemas.MERCHANTS_LIST
+            cError: MERCHANTS_LIST_CERROR,
+            endpoint: MERCHANT_LIST
         }
     }
 }
+
+import {MERCHANT_CREATE} from '../lib/api'
+export const MERCHANT_CREATE_REQUEST = 'MERCHANT_CREATE_REQUEST';
+export const MERCHANT_CREATE_SUCCESS = 'MERCHANT_CREATE_SUCCESS';
+export const MERCHANT_CREATE_FAILURE = 'MERCHANT_CREATE_FAILURE';
+export const MERCHANT_CREATE_CERROR = 'MERCHANT_CREATE_CERROR';
+export function createCError() {
+    return {
+        type: MERCHANT_CREATE_CERROR
+    }
+}
+export function create(merchant) {
+    return {
+        [CALL_API]: {
+            types: [MERCHANT_CREATE_REQUEST, MERCHANT_CREATE_SUCCESS, MERCHANT_CREATE_FAILURE],
+            cError: MERCHANT_CREATE_CERROR,
+            endpoint: MERCHANT_CREATE,
+            body: merchant
+        }
+    }
+}
+
+
+import {MERCHANT_GET} from '../lib/api'
+export const MERCHANT_GET_REQUEST = 'MERCHANT_GET_REQUEST';
+export const MERCHANT_GET_SUCCESS = 'MERCHANT_GET_SUCCESS';
+export const MERCHANT_GET_FAILURE = 'MERCHANT_GET_FAILURE';
+export const MERCHANT_GET_CERROR = 'MERCHANT_GET_CERROR';
+export function getByIdCError() {
+    return {
+        type: MERCHANT_GET_CERROR
+    }
+}
+export function getById(merchantId) {
+    return {
+        [CALL_API]: {
+            types: [MERCHANT_GET_REQUEST, MERCHANT_GET_SUCCESS, MERCHANT_GET_FAILURE],
+            cError: MERCHANT_GET_CERROR,
+            endpoint: MERCHANT_GET(merchantId)
+        }
+    }
+}
+
+
+
 /*
  // Fetches a single user from Github API unless it is cached.
  // Relies on Redux Thunk middleware.

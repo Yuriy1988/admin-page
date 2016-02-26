@@ -2,10 +2,14 @@ var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 var config = require('./webpack.config');
+var httpProxy = require('http-proxy');
+
 
 var app = new (require('express'))();
 var fs = require('fs');
 var port = 3000;
+var apiDelay = 1000;
+
 
 var compiler = webpack(config);
 
@@ -32,19 +36,22 @@ if (config.DEV_MODE == true) {
             console.log("[TEST] running test");
             console.log("***")
         }
-        ;
     });
 }
 
 
 if (config.DEV_SERVER == true) {
+
+    var proxy = httpProxy.createProxyServer({});
+
     app.use(function (req, res) {
 
-        if (req.url.substr(0, 5) === '/err/') {
-            res.status(req.url.substr(5, 3));
-            res.send({a:1});
-        } else {
+        if (req.url.substr(0, 10) === '/api/admin') {
+            setTimeout(function () {
+                proxy.web(req, res, {target: 'http://localhost:7128'});
+            }, apiDelay);
 
+        } else {
             //if (req.url.substr(0,5)==);
             console.log("[SERVER] <-- ", req.url);
 

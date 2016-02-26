@@ -1,5 +1,6 @@
 import * as ActionTypes from '../actions'
 import * as MerchantActions from '../actions/merchants'
+import * as StoresActions from '../actions/stores'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
@@ -16,44 +17,55 @@ function entities(state = {users: {}, repos: {}, merchants: {}}, action) {
     return state;
 }
 
-// Updates error message to notify about the failed fetches.
-function errorMessage(state = null, action) {
-    const { type, error } = action;
-
-    if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-        return null
-    } else if (error) {
-        return action.error
-    }
-
-    return state;
-}
 
 // Updates the pagination data for different actions.
 const pagination = combineReducers({
-    starredByUser: paginate({
-        mapActionToKey: action => action.login,
-        types: [
-            ActionTypes.STARRED_REQUEST,
-            ActionTypes.STARRED_SUCCESS,
-            ActionTypes.STARRED_FAILURE
-        ]
-    }),
-    stargazersByRepo: paginate({
-        mapActionToKey: action => action.fullName,
-        types: [
-            ActionTypes.STARGAZERS_REQUEST,
-            ActionTypes.STARGAZERS_SUCCESS,
-            ActionTypes.STARGAZERS_FAILURE
-        ]
-    }),
+//Merchants
     merchants: paginate({
         mapActionToKey: action => "merchants",
         types: [
             MerchantActions.MERCHANTS_LIST_REQUEST,
             MerchantActions.MERCHANTS_LIST_SUCCESS,
             MerchantActions.MERCHANTS_LIST_FAILURE
-        ]
+        ],
+        cError: MerchantActions.MERCHANTS_LIST_CERROR
+    }),
+    merchant: paginate({
+        mapActionToKey: action => "merchant",
+        types: [
+            MerchantActions.MERCHANT_GET_REQUEST,
+            MerchantActions.MERCHANT_GET_SUCCESS,
+            MerchantActions.MERCHANT_GET_FAILURE
+        ],
+        cError: MerchantActions.MERCHANT_GET_CERROR
+    }),
+    merchantCreate: paginate({
+        mapActionToKey: action => "merchant",
+        types: [
+            MerchantActions.MERCHANT_CREATE_REQUEST,
+            MerchantActions.MERCHANT_CREATE_SUCCESS,
+            MerchantActions.MERCHANT_CREATE_FAILURE
+        ],
+        cError: MerchantActions.MERCHANT_CREATE_CERROR
+    }),
+//Stores
+    stores: paginate({
+        mapActionToKey: action => "stores",
+        types: [
+            StoresActions.STORES_CREATE_REQUEST,
+            StoresActions.STORES_CREATE_SUCCESS,
+            StoresActions.STORES_CREATE_FAILURE
+        ],
+        cError: StoresActions.STORES_CREATE_CERROR
+    }),
+    storeCreate: paginate({
+        mapActionToKey: action => "store",
+        types: [
+            StoresActions.STORES_CREATE_REQUEST,
+            StoresActions.STORES_CREATE_SUCCESS,
+            StoresActions.STORES_CREATE_FAILURE
+        ],
+        cError: StoresActions.STORES_CREATE_CERROR
     })
 });
 
@@ -62,7 +74,6 @@ const rootReducer = combineReducers({
     pagination,
     user,
     sideBar,
-    errorMessage,
     routing: routeReducer
 });
 

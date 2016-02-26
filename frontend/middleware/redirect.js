@@ -13,6 +13,4 @@ export default store => next => action => {
     if (!!action.redirectTo) {
         browserHistory.push(action.redirectTo);
     }
-
-
 }

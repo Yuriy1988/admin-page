@@ -32,30 +32,31 @@ class LoginForm extends Component {
 
         return (
             <form name="form" role="form" onSubmit={this.handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="username">Login&nbsp;</label>
-                    <i className="fa fa-key"/>
+                <div className="form-group has-feedback">
                     <input type="text"
                            value={login}
                            id="username"
                            onChange={this.handleChange}
                            name="login"
+                           placeholder="Login"
                            className="form-control"/>
-                    <span className="help-block">Login required</span>
+
+                    <span className="glyphicon glyphicon-user form-control-feedback"/>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password&nbsp;</label>
-                    <i className="fa fa-lock"/>
+                <div className="form-group has-feedback">
                     <input type="password"
                            value={password}
                            id="password"
                            onChange={this.handleChange}
                            name="password"
+                           placeholder="Password"
                            className="form-control"/>
-                    <span className="help-block">Password required</span>
+                    <span className="glyphicon glyphicon-lock form-control-feedback"/>
                 </div>
-                <div className="form-actions">
-                    <button type="submit" className="btn btn-danger">Enter</button>
+                <div className="row">
+                    <div className="col-xs-offset-8 col-xs-4">
+                        <button type="submit" className="btn btn-success btn-block btn-flat">Sign In</button>
+                    </div>
                 </div>
             </form>
         )

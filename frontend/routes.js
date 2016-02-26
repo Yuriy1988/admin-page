@@ -15,6 +15,7 @@ import NoticePage       from './containers/pages/Notice'
 import Merchants        from './containers/pages/Merchants'
 import MerchantAddForm  from './components/MerchantAddForm'
 import MerchantList     from './components/MerchantList'
+import MerchantPage     from './components/MerchantPage'
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -33,28 +34,36 @@ class Routes {
 
     getRoutes() {
         return (
-            <Route component={App}>
-
+            <Route>
                 <Route path="/admin/login" component={LoginPage}/>
+                <Route component={App}>
 
-                <Route path="/admin/access_denied" component={ErrorPage} status={403} />
 
-                <Route path="/admin">
-                    <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
+                    <Route path="/admin/access_denied" component={ErrorPage} status={403}/>
 
-                    <Route path="administrator" component={AdminPage} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                        <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                        <Route path="notice" component={NoticePage} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                        <Route path="merchants" component={Merchants} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                            <Route path="add" component={MerchantAddForm} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                            <Route path="list" component={MerchantList} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                    <Route path="/admin">
+                        <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
+
+                        <Route path="administrator" component={AdminPage}
+                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                            <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                            <Route path="notice" component={NoticePage} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                            <Route path="merchants" component={Merchants}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                <Route path="add" component={MerchantAddForm}
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                <Route path="list" component={MerchantList}
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                <Route path=":merchantId" component={MerchantPage}
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                            </Route>
+                            {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
                         </Route>
-                        {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
+
                     </Route>
 
+                    <Route path="*" component={ErrorPage} status={404}/>
                 </Route>
-
-                <Route path="*" component={ErrorPage} status={404}/>
             </Route>
         );
     }

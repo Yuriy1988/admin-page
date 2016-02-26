@@ -1,8 +1,16 @@
 setup:
 	sudo apt-get install python3.4 python3-pip python-virtualenv
 
+db_create:
+	./manage.py db upgrade 
+	./manage.py db migrate	
+
 venv_install:
 	virtualenv --no-site-packages -p python3.4 venv
+	bash -c "source venv/bin/activate && pip install -r requirements.txt"
+
+venv_install_mac:
+	virtualenv --no-site-packages -p /usr/local/bin/python3 venv
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
 
 venv_update:

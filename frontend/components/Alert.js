@@ -29,13 +29,14 @@ const config = {
 
 
 export default class Alert extends Component {
+
     render() {
-        const { children, type = config.defaultType } = this.props;
+        const { children, type = config.defaultType, handleClose = ()=>0} = this.props;
         const { title = config.title[type] } = this.props;
 
         return (
             <div className={`alert ${config.alert[type]} alert-dismissible`}>
-                <button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <button type="button" className="close" onClick={handleClose}>×</button>
                 <h4><i className={`icon fa ${config.icon[type]}`}/> {title}</h4>
                 {children}
             </div>

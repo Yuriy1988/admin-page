@@ -58,6 +58,7 @@ if (DEV_TEST) {
         filename: 'tests.js',
         publicPath: '/test_build/'
     };
+    config.plugins = [];
 }
 
 module.exports = config;
