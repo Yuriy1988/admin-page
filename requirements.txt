@@ -9,4 +9,8 @@ flask-wtf==0.12
 flask-migrate==1.7.0
 flask-script==2.0.5
 flask-login
-#apispec
+# apispec
+
+beautifulsoup4==4.4.1
+Fabric==1.10.2
+requests==2.9.1

@@ -4,5 +4,6 @@ from .manager import Manager
 from .payment_system import PaymentSystem
 from .store import Store, StoreSettings
 from .user import User
+from .currency import Currency
 
 __author__ = 'Kostel Serhii'
