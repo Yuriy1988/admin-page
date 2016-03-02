@@ -21,7 +21,7 @@ class Currency(base.BaseModel):
         self.base_ccy = base_ccy
         self.ccy = ccy
         self.sale = sale
-        self.bay = buy
+        self.buy = buy
         self.commit_time = commit_time
 
     def __repr__(self):

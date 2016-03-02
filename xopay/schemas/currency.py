@@ -13,3 +13,10 @@ class CurrencySchema(base.BaseSchema):
     sale = fields.Float()
     buy = fields.Float()
     commit_time = fields.DateTime()
+
+
+class CurrencyHistorySchema(base.BaseSchema):
+
+    sale = fields.Float()
+    buy = fields.Float()
+    commit_time = fields.DateTime()
