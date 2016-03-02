@@ -1,4 +1,4 @@
-from flask import request, abort, jsonify
+from flask import request, jsonify
 
 from xopay import app
 from xopay.errors import ValidationError

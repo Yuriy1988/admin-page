@@ -1,5 +1,5 @@
 from marshmallow import fields
-from marshmallow.validate import Length, OneOf, Regexp
+from marshmallow.validate import Length, OneOf
 
 from xopay.schemas import base
 from xopay.models import enum, User
@@ -16,7 +16,7 @@ class UserSchema(base.BaseSchema):
     last_name = fields.Str(validate=Length(max=80))
 
     email = fields.Email()
-    phone = fields.Str(validate=Regexp('^[1-9]{1}[0-9]{3,14}$'))
+    phone = fields.Str(validate=base.Phone())
     notify = fields.Str(validate=OneOf(enum.USER_NOTIFY_ENUM))
 
     enabled = fields.Bool(required=True, default=False)

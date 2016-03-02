@@ -1,7 +1,7 @@
 import datetime
 
 from xopay import db
-from xopay.models import base, user
+from xopay.models import base
 
 __author__ = 'Omelchenko Daniel'
 

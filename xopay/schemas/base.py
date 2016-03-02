@@ -1,5 +1,5 @@
 from marshmallow import Schema as _Schema, fields, ValidationError, validates_schema
-from marshmallow.validate import Validator as _Validator
+from marshmallow.validate import Validator as _Validator, Regexp
 
 __author__ = 'Kostel Serhii'
 
@@ -24,9 +24,12 @@ class BaseSchema(_Schema):
             raise ValidationError('Content-Type header missing')
 
 
+# Validators
+
+
 class Unique(_Validator):
-    """Validator which succeeds if the value passed to it
-    is unique for specified has model field.
+    """
+    Validator which succeeds if the value passed to it is unique for specified model field.
 
     :param db.Model model: Database model class.
     :param str field_name: Name of the field in model, that will be checked.
@@ -50,3 +53,24 @@ class Unique(_Validator):
             raise ValidationError(self._format_error(value, self.message))
 
         return value
+
+
+class Phone(Regexp):
+
+    default_message = 'Wrong phone format.'
+    default_regex = '^[1-9]{1}[0-9]{3,14}$'
+
+    def __init__(self, **kwargs):
+        regex = kwargs.pop('regex', self.default_regex)
+        super().__init__(regex, **kwargs)
+
+
+class FixedDigitsNum(Regexp):
+
+    default_message = 'Value must contain exactly {num} digits.'
+    default_regex = '^\d{%d}$'
+
+    def __init__(self, digits_number, **kwargs):
+        regex = kwargs.pop('regex', self.default_regex % digits_number)
+        error = kwargs.pop('error', self.default_message.format(num=digits_number))
+        super().__init__(regex, error=error, **kwargs)

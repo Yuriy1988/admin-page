@@ -1,5 +1,5 @@
 from marshmallow import fields
-from marshmallow.validate import Length, OneOf, Regexp
+from marshmallow.validate import Length, OneOf
 
 from xopay.schemas import base, user
 from xopay.models import enum, Merchant
@@ -10,10 +10,10 @@ __author__ = 'Kostel Serhii'
 class MerchantAccountSchema(base.BaseSchema):
 
     bank_name = fields.Str(required=True, validate=Length(max=255))
-    checking_account = fields.Str(required=True, validate=Regexp('^\d{14}$'))
+    checking_account = fields.Str(required=True, validate=base.FixedDigitsNum(14))
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM), default='USD')
-    mfo = fields.Str(required=True, validate=Regexp('^\d{6}$'))
-    okpo = fields.Str(required=True, validate=Regexp('^\d{8}$'))
+    mfo = fields.Str(required=True, validate=base.FixedDigitsNum(6))
+    okpo = fields.Str(required=True, validate=base.FixedDigitsNum(8))
 
 
 class MerchantInfoSchema(base.BaseSchema):
