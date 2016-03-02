@@ -33,7 +33,6 @@ function callApi(endpoint, body) {
         }
     }
 
-    console.log(options);
 
     return fetch(fullUrl, options)
         .then(
@@ -98,7 +97,7 @@ export default store => next => action => {
         return next(action);
     }
 
-    const { endpoint, types, body, cError } = callAPI;
+    const { endpoint, types, body, cError, deleteId } = callAPI;
 
     if (typeof cError === 'undefined') {
         throw new Error('Specify clear Error action');
@@ -129,7 +128,6 @@ export default store => next => action => {
     }
 
 
-
     let [ requestType, successType, failureType ] = types;
     let [rParams, sParams, fParams] = [{}, {}, {}];
     if (typeof requestType == 'object') {
@@ -142,20 +140,21 @@ export default store => next => action => {
         fParams = failureType;
     }
 
-    next(actionWith(action, Object.assign({type: requestType},rParams)));
+    next(actionWith(action, Object.assign({type: requestType}, rParams)));
 
     return callApi(endpoint, body).then(
         response => {
             next(actionWith(action, Object.assign({
                 response,
+                deleteId,
                 type: successType
-            },sParams)))
+            }, sParams)))
         },
         error => {
             next(actionWith(action, Object.assign({
                 error,
                 type: failureType
-            },fParams)))
+            }, fParams)))
         }
     )
 }

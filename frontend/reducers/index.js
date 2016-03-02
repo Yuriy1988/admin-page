@@ -9,11 +9,11 @@ import { routeReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
-function entities(state = {users: {}, repos: {}, merchants: {}}, action) {
+function entities(state = {merchants: {}, stores: {}}, action) {
+    console.log(action);
     if (action.response && action.response.entities) {
         return merge({}, state, action.response.entities);
     }
-
     return state;
 }
 
@@ -48,15 +48,24 @@ const pagination = combineReducers({
         ],
         cError: MerchantActions.MERCHANT_CREATE_CERROR
     }),
+    merchantDelete: paginate({
+        mapActionToKey: action => "merchant",
+        types: [
+            MerchantActions.MERCHANT_DELETE_REQUEST,
+            MerchantActions.MERCHANT_DELETE_SUCCESS,
+            MerchantActions.MERCHANT_DELETE_FAILURE
+        ],
+        cError: MerchantActions.MERCHANT_DELETE_CERROR
+    }),
 //Stores
     stores: paginate({
         mapActionToKey: action => "stores",
         types: [
-            StoresActions.STORES_CREATE_REQUEST,
-            StoresActions.STORES_CREATE_SUCCESS,
-            StoresActions.STORES_CREATE_FAILURE
+            StoresActions.STORES_LIST_REQUEST,
+            StoresActions.STORES_LIST_SUCCESS,
+            StoresActions.STORES_LIST_FAILURE
         ],
-        cError: StoresActions.STORES_CREATE_CERROR
+        cError: StoresActions.STORES_LIST_CERROR
     }),
     storeCreate: paginate({
         mapActionToKey: action => "store",
@@ -66,6 +75,15 @@ const pagination = combineReducers({
             StoresActions.STORES_CREATE_FAILURE
         ],
         cError: StoresActions.STORES_CREATE_CERROR
+    }),
+    store: paginate({
+        mapActionToKey: action => "store",
+        types: [
+            StoresActions.STORE_GET_REQUEST,
+            StoresActions.STORE_GET_SUCCESS,
+            StoresActions.STORE_GET_FAILURE
+        ],
+        cError: StoresActions.STORE_GET_CERROR
     })
 });
 

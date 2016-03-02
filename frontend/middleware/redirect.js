@@ -11,6 +11,13 @@ export default store => next => action => {
     next(newAction);
 
     if (!!action.redirectTo) {
-        browserHistory.push(action.redirectTo);
+        switch(action.redirectTo) {
+            case "_back_":
+                browserHistory.goBack();
+                break;
+            default:
+                browserHistory.push(action.redirectTo);
+                break;
+        }
     }
 }

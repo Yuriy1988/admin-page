@@ -10,17 +10,23 @@ class HeaderUser extends Component {
         this.handleToggle = this.handleToggle.bind(this);
         this.hideMe = this.hideMe.bind(this);
         this.logoutHandle = this.logoutHandle.bind(this);
+        this.onOutClick = this.onOutClick.bind(this);
         this.state = {
             open: false
         };
 
 
-        document.addEventListener('click', ((e)=> {
-            if (!e.leaveOpen) {
-                this.hideMe();
-            }
+        document.addEventListener('click', this.onOutClick);
+    }
 
-        }).bind(this))
+    componentWillUnmount() {
+        document.removeEventListener('click', this.onOutClick);
+    }
+
+    onOutClick(e) {
+        if (!e.leaveOpen) {
+            this.hideMe();
+        }
     }
 
     handleToggle(e) {
@@ -64,10 +70,10 @@ class HeaderUser extends Component {
                                 <a href="#" onClick={this.logoutHandle}>Logout</a>
                             </li>
                             {/*<<li className="divider"/>
-                            <li>
-                                <a href="">Русский</a>
-                            </li>
-                            li>
+                             <li>
+                             <a href="">Русский</a>
+                             </li>
+                             li>
                              <a href="">English
                              <i className="fa fa-hand-o-left"/>
                              </a>

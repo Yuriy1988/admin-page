@@ -4,7 +4,7 @@ import Sidebar from '../../components/Sidebar'
 import {SidebarItem, SidebarContainer} from '../../components/SidebarItem'
 
 
-class NoticePage extends Component {
+class NotificationsPage extends Component {
     constructor(props) {
         super(props);
     }
@@ -17,7 +17,7 @@ class NoticePage extends Component {
 
                 <div className="box">
                     <div className="box-header">
-                        <h2 className="box-title">Notice</h2>
+                        <h2 className="box-title">Notifications</h2>
                     </div>
                 </div>
                 {children}
@@ -28,5 +28,5 @@ class NoticePage extends Component {
 
 
 export default connect((state)=> {
-    return {notice: state.notice}
-})(NoticePage)
+    return {notifications: state.notifications}
+})(NotificationsPage)

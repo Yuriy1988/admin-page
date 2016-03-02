@@ -42,6 +42,10 @@ var config = {
 };
 
 
+if (DEV_MODE == false) {
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
+
 if (DEV_MODE == true) {
 
     config.entry.push('webpack-hot-middleware/client');

@@ -31,22 +31,23 @@ export default function paginate({ types, mapActionToKey, cError }) {
         const key = mapActionToKey(action);
         if (!!cError) {
             if (action.type === cError) {
-                return merge({}, state, {
+                return Object.assign({}, state, {
                     error: null
                 });
             }
         }
+
         switch (action.type) {
             case requestType:
-                return merge({}, state, {
+                return Object.assign({}, state, {
                     isFetching: true,
                     error: null,
                     success: false
                 });
             case successType:
-                return merge({}, state, {
+                return Object.assign({}, state, {
                     isFetching: false,
-                    ids: union(state.ids, action.response.result[key]),
+                    ids: action.response.result[key],
                     result: action.response.result,
                     nextPageUrl: action.response.nextPageUrl,
                     pageCount: state.pageCount + 1,
@@ -54,7 +55,7 @@ export default function paginate({ types, mapActionToKey, cError }) {
                     success: true
                 });
             case failureType:
-                return merge({}, state, {
+                return Object.assign({}, state, {
                     isFetching: false,
                     error: action.error,
                     success: false

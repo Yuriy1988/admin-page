@@ -8,7 +8,7 @@ var httpProxy = require('http-proxy');
 var app = new (require('express'))();
 var fs = require('fs');
 var port = 3000;
-var apiDelay = 1000;
+var apiDelay = 200;
 
 
 var compiler = webpack(config);

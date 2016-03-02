@@ -4,3 +4,9 @@ export function redirect(redirectTo) {
         redirectTo
     }
 }
+export function back() {
+    return {
+        type: "__REDIRECT_TYPE",
+        redirectTo: "_back_"
+    }
+}

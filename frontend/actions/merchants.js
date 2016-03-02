@@ -64,6 +64,26 @@ export function getById(merchantId) {
 }
 
 
+import {MERCHANT_DELETE} from '../lib/api'
+export const MERCHANT_DELETE_REQUEST = 'MERCHANT_DELETE_REQUEST';
+export const MERCHANT_DELETE_SUCCESS = 'MERCHANT_DELETE_SUCCESS';
+export const MERCHANT_DELETE_FAILURE = 'MERCHANT_DELETE_FAILURE';
+export const MERCHANT_DELETE_CERROR = 'MERCHANT_DELETE_CERROR';
+export function deleteByIdCError() {
+    return {
+        type: MERCHANT_DELETE_CERROR
+    }
+}
+export function deleteById(merchantId) {
+    return {
+        [CALL_API]: {
+            types: [MERCHANT_DELETE_REQUEST, MERCHANT_DELETE_SUCCESS, MERCHANT_DELETE_FAILURE],
+            cError: MERCHANT_DELETE_CERROR,
+            endpoint: MERCHANT_DELETE(merchantId)
+        }
+    }
+}
+
 
 /*
  // Fetches a single user from Github API unless it is cached.

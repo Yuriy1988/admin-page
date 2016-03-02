@@ -4,7 +4,8 @@
   "description": "xopay",
   "scripts": {
     "build": "rm -f ./static/js/app.js && DEV_SERVER=false DEV_MODE=false node server.js",
-    "dev": "DEV_SERVER=true DEV_MODE=true node server.js",
+    "dev": "npm run flask & DEV_SERVER=true DEV_MODE=true node server.js ",
+    "flask": "cd .. && ./run.py && cd frontend",
     "dev-py": "DEV_SERVER=false DEV_MODE=true node server.js",
     "test": "DEV_SERVER=false DEV_MODE=false DEV_TEST=true node server.js && node ./test_build/tests.js"
   },
@@ -26,7 +27,7 @@
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.2.1",
-    "react-router": "2.0.0-rc5",
+    "react-router": "2.0.0",
     "react-router-redux": "^2.1.0",
     "redux": "^3.2.1",
     "redux-logger": "^2.4.0",

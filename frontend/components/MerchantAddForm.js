@@ -57,7 +57,7 @@ class MerchantAddForm extends Component {
                 newMerchant[field] = value;
             }
             this.setState({merchant: newMerchant});
-            console.log(newMerchant);
+
         }).bind(this);
     }
 
@@ -70,7 +70,7 @@ class MerchantAddForm extends Component {
             if (!!name) {
                 newMerchant[field] = Object.assign({}, merchant[field], {[name]: checked});
             } else {
-                newMerchant[field] = value;
+                newMerchant[field] = checked;
             }
             this.setState({merchant: newMerchant});
             console.log(newMerchant);

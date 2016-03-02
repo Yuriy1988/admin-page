@@ -14,7 +14,6 @@ class Merchants extends Component {
 
         return (
             <div>
-                <h1 className="page-header">Merchants</h1>
                 {children}
             </div>
         )

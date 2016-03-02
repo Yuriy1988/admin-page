@@ -36,7 +36,7 @@ class AdminPage extends Component {
                         <SidebarItem to="/admin/admins/add" icon="fa-plus-circle text-green">Add</SidebarItem>
                     </SidebarContainer>*/}
 
-                    <SidebarItem to="/admin/administrator/notice" icon="fa-bell">Notice</SidebarItem>
+                    <SidebarItem to="/admin/administrator/notifications" icon="fa-bell">Notifications</SidebarItem>
                     <SidebarItem to="/admin/administrator/money" icon="fa-money">Currency Courses</SidebarItem>
 
 

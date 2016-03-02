@@ -17,13 +17,20 @@ class MerchantList extends Component {
     }
 
     static renderList(items) {
-        const preRender = items.map((value, i) => {
-            return (<li key={i}>{value}</li>);
-        });
+        // const preRender = items.map((value, i) => (value));
         return (items.length > 0) ? (
-            <ul>
-                {preRender}
-            </ul>
+            <div className="table-responsive">
+                <table className="table table-hover table-striped">
+                    <tbody>
+                    <tr key="header">
+                        <th width="5%">#</th>
+                        <th>Name</th>
+                        <th width="145px">Actions</th>
+                    </tr>
+                    {items}
+                    </tbody>
+                </table>
+            </div>
         ) : <p>No items</p>;
     }
 
@@ -31,8 +38,29 @@ class MerchantList extends Component {
 
         let {merchants, merchantPagination, loadMerchantsCE} = this.props;
 
-        const merchantList = MerchantList.renderList(merchantPagination.ids.map((merchantId) => {
-            return <Link to={`/admin/administrator/merchants/${merchants[merchantId].id}`}>{`${merchants[merchantId].id} - ${merchants[merchantId].merchantName}`}</Link>;
+        const merchantList = MerchantList.renderList(merchantPagination.ids.map((merchantId, i) => {
+            return (
+                <tr key={i}>
+                    <td>{i + 1}</td>
+                    <td>
+                        <Link to={`/admin/administrator/merchants/${merchants[merchantId].id}`}>
+                            {merchants[merchantId].merchantName}
+                        </Link>
+                    </td>
+                    <td >
+                        <div className="btn-toolbar">
+                            <Link className="btn btn-sm btn-primary"
+                                  to={`/admin/administrator/merchants/${merchants[merchantId].id}`}>
+                                <i className="fa fa-edit"/> Edit
+                            </Link>
+                            <Link className="btn btn-sm btn-danger"
+                                  to={`/admin/administrator/merchants/${merchants[merchantId].id}`}>
+                                <i className="fa fa-trash"/> Delete
+                            </Link>
+                        </div>
+                    </td>
+                </tr>
+            );
         }));
 
         return (
@@ -41,8 +69,8 @@ class MerchantList extends Component {
                     <h3 className="box-title"><i className="fa fa-briefcase"/> List of merchants</h3>
 
                     <div className="box-tools pull-right">
-
-                        <Link className="btn btn-xs btn-success" to="/admin/administrator/merchants/add"><i className="fa fa-plus" /> Add</Link>
+                        <Link className="btn btn-sm btn-success" to="/admin/administrator/merchants/add"><i
+                            className="fa fa-plus"/> Add</Link>
                     </div>
 
                 </div>
@@ -50,7 +78,8 @@ class MerchantList extends Component {
 
                     {
                         (!!merchantPagination.error) ?
-                            <Alert type={TYPE_ERROR} handleClose={loadMerchantsCE}>{merchantPagination.error.message}</Alert> : null
+                            <Alert type={TYPE_ERROR}
+                                   handleClose={loadMerchantsCE}>{merchantPagination.error.message}</Alert> : null
                     }
                     { merchantList }
                 </div>

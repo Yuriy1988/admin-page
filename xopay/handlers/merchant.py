@@ -2,7 +2,7 @@ from flask import request, jsonify, Response
 
 from xopay import app, db
 from xopay.errors import NotFoundError, ValidationError
-from xopay.models import Merchant, Manager
+from xopay.models import Merchant, Manager, Store
 from xopay.schemas import MerchantSchema, ManagerSchema, StoreSchema
 
 __author__ = 'Kostel Serhii'
@@ -124,8 +124,8 @@ def merchant_stores_create(merchant_id):
         raise ValidationError(errors=errors)
 
     data['merchant'] = merchant
-    manager = Manager.create(data)
+    store = Store.create(data)
     db.session.commit()
 
-    result = schema.dump(manager)
+    result = schema.dump(store)
     return jsonify(result.data)

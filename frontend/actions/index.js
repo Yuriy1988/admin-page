@@ -140,3 +140,15 @@ export function resetErrorMessage() {
         type: RESET_ERROR_MESSAGE
     }
 }
+
+
+import * as MerchantActions from './merchants'
+export {MerchantActions}
+import * as StoreActions from './stores'
+export {StoreActions}
+import * as SideBarActions from './sideBar'
+export {SideBarActions}
+import * as UserActions from './user'
+export {UserActions}
+import * as RedirectActions from './redirect'
+export {RedirectActions}

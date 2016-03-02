@@ -42,23 +42,23 @@ export function create(merchantId, store) {
     }
 }
 
-/*
-import {MERCHANT_GET} from '../lib/api'
-export const MERCHANT_GET_REQUEST = 'MERCHANT_GET_REQUEST';
-export const MERCHANT_GET_SUCCESS = 'MERCHANT_GET_SUCCESS';
-export const MERCHANT_GET_FAILURE = 'MERCHANT_GET_FAILURE';
-export const MERCHANT_GET_CERROR = 'MERCHANT_GET_CERROR';
+
+import {STORE_GET} from '../lib/api'
+export const STORE_GET_REQUEST = 'STORE_GET_REQUEST';
+export const STORE_GET_SUCCESS = 'STORE_GET_SUCCESS';
+export const STORE_GET_FAILURE = 'STORE_GET_FAILURE';
+export const STORE_GET_CERROR = 'STORE_GET_CERROR';
 export function getByIdCError() {
     return {
-        type: MERCHANT_GET_CERROR
+        type: STORE_GET_CERROR
     }
 }
-export function getById(merchantId) {
+export function getById(storeId) {
     return {
         [CALL_API]: {
-            types: [MERCHANT_GET_REQUEST, MERCHANT_GET_SUCCESS, MERCHANT_GET_FAILURE],
-            cError: MERCHANT_GET_CERROR,
-            endpoint: MERCHANT_GET(merchantId)
+            types: [STORE_GET_REQUEST, STORE_GET_SUCCESS, STORE_GET_FAILURE],
+            cError: STORE_GET_CERROR,
+            endpoint: STORE_GET(storeId)
         }
     }
-}*/
+}
