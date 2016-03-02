@@ -1,6 +1,7 @@
-from flask import request, abort, jsonify
+from flask import request, jsonify
 
 from xopay import app, db
+from xopay.errors import NotFoundError, ValidationError
 from xopay.models import Merchant, Manager
 from xopay.schemas import MerchantSchema, ManagerSchema, StoreSchema
 
@@ -21,7 +22,7 @@ def merchant_create():
     schema = MerchantSchema()
     data, errors = schema.load(request.get_json())
     if errors:
-        return abort(400, errors)
+        raise ValidationError(errors=errors)
 
     merchant = Merchant.create(data)
     db.session.commit()
@@ -34,7 +35,7 @@ def merchant_create():
 def merchant_detail(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
-        return abort(404)
+        raise NotFoundError()
 
     schema = MerchantSchema()
 
@@ -46,12 +47,12 @@ def merchant_detail(merchant_id):
 def merchant_update(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
-        return abort(404)
+        raise NotFoundError()
 
     schema = MerchantSchema(partial=True, partial_nested=True)
     data, errors = schema.load(request.get_json())
     if errors:
-        return abort(400, errors)
+        raise ValidationError(errors=errors)
 
     merchant.update(data)
     db.session.commit()
@@ -64,7 +65,7 @@ def merchant_update(merchant_id):
 def merchant_delete(merchant_id):
     delete_count = Merchant.query.filter_by(id=merchant_id).delete()
     if delete_count == 0:
-        return abort(404)
+        raise NotFoundError()
 
     db.session.commit()
 
@@ -73,7 +74,7 @@ def merchant_delete(merchant_id):
 def merchant_managers_list(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
-        return abort(404)
+        raise NotFoundError()
 
     schema = ManagerSchema(many=True)
     result = schema.dump(merchant.managers)
@@ -84,12 +85,12 @@ def merchant_managers_list(merchant_id):
 def merchant_manager_create(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
-        return abort(404)
+        raise NotFoundError()
 
     schema = ManagerSchema()
     data, errors = schema.load(request.get_json())
     if errors:
-        return abort(400, errors)
+        raise ValidationError(errors=errors)
 
     data['merchant'] = merchant
     manager = Manager.create(data)
@@ -103,7 +104,7 @@ def merchant_manager_create(merchant_id):
 def merchant_stores_list(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
-        return abort(404)
+        raise NotFoundError()
 
     schema = StoreSchema(many=True)
     result = schema.dump(merchant.stores)
@@ -114,12 +115,12 @@ def merchant_stores_list(merchant_id):
 def merchant_stores_create(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
-        return abort(404)
+        raise NotFoundError()
 
     schema = StoreSchema()
     data, errors = schema.load(request.get_json())
     if errors:
-        return abort(400, errors)
+        raise ValidationError(errors=errors)
 
     data['merchant'] = merchant
     manager = Manager.create(data)

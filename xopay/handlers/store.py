@@ -1,6 +1,7 @@
-from flask import request, abort, jsonify
+from flask import request, jsonify
 
 from xopay import app, db
+from xopay.errors import NotFoundError, ValidationError
 from xopay.models import Store
 from xopay.schemas import StoreSchema
 
@@ -11,7 +12,7 @@ __author__ = 'Kostel Serhii'
 def store_detail(store_id):
     store = Store.query.get(store_id)
     if not store:
-        return abort(404)
+        raise NotFoundError()
 
     schema = StoreSchema()
 
@@ -23,12 +24,12 @@ def store_detail(store_id):
 def store_update(store_id):
     store = Store.query.get(store_id)
     if not store:
-        return abort(404)
+        raise NotFoundError()
 
     schema = StoreSchema(partial=True, partial_nested=True)
     data, errors = schema.load(request.get_json())
     if errors:
-        return abort(400, errors)
+        raise ValidationError(errors=errors)
 
     store.update(data)
     db.session.commit()
@@ -41,6 +42,6 @@ def store_update(store_id):
 def store_delete(store_id):
     delete_count = Store.query.filter_by(id=store_id).delete()
     if delete_count == 0:
-        return abort(404)
+        raise NotFoundError()
 
     db.session.commit()

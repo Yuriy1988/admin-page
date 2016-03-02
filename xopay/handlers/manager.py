@@ -1,6 +1,7 @@
-from flask import request, abort, jsonify
+from flask import request, jsonify
 
 from xopay import app, db
+from xopay.errors import NotFoundError, ValidationError
 from xopay.models import Manager
 from xopay.schemas import ManagerSchema
 
@@ -11,7 +12,7 @@ __author__ = 'Kostel Serhii'
 def manager_detail(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
-        return abort(404)
+        raise NotFoundError()
 
     schema = ManagerSchema()
 
@@ -23,12 +24,12 @@ def manager_detail(manager_id):
 def manager_update(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
-        return abort(404)
+        raise NotFoundError()
 
     schema = ManagerSchema(partial=True, partial_nested=True)
     data, errors = schema.load(request.get_json())
     if errors:
-        return abort(400, errors)
+        raise ValidationError(errors=errors)
 
     manager.update(data)
     db.session.commit()
@@ -41,6 +42,6 @@ def manager_update(manager_id):
 def manager_delete(manager_id):
     delete_count = Manager.query.filter_by(id=manager_id).delete()
     if delete_count == 0:
-        return abort(404)
+        raise NotFoundError()
 
     db.session.commit()
