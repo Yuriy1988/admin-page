@@ -9,7 +9,7 @@ __author__ = 'Kostel Serhii'
 
 class MerchantAccountSchema(base.BaseSchema):
 
-    bank_name = fields.Str(required=True, validate=Length(max=255))
+    bank_name = fields.Str(required=True, validate=Length(min=3, max=255))
     checking_account = fields.Str(required=True, validate=base.FixedDigitsNum(14))
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM), default='USD')
     mfo = fields.Str(required=True, validate=base.FixedDigitsNum(6))
@@ -25,7 +25,7 @@ class MerchantInfoSchema(base.BaseSchema):
 class MerchantSchema(base.BaseSchema):
 
     id = fields.Int(dump_only=True)
-    merchant_name = fields.Str(required=True, validate=(Length(max=32), base.Unique(Merchant, 'merchant_name')))
+    merchant_name = fields.Str(required=True, validate=(Length(min=3, max=32), base.Unique(Merchant, 'merchant_name')))
 
     merchant_account = fields.Nested(MerchantAccountSchema, required=True)
     merchant_info = fields.Nested(MerchantInfoSchema)

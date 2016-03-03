@@ -10,7 +10,7 @@ __author__ = 'Kostel Serhii'
 class StoreSettingsSchema(base.BaseSchema):
 
     sign_algorithm = fields.Str(required=True, validate=OneOf(enum.SIGN_ALGORITHM_ENUM), default='MD5')
-    sign_key = fields.Str(required=True, validate=(Length(max=127), base.Unique(StoreSettings, 'sign_key')))
+    sign_key = fields.Str(required=True, validate=(Length(min=8, max=127), base.Unique(StoreSettings, 'sign_key')))
     succeed_url = fields.Url(required=True)
     failure_url = fields.Url(required=True)
     commission_pct = fields.Decimal(places=4, rounding=2, required=True, validate=Range(min=0, max=100))
@@ -19,9 +19,10 @@ class StoreSettingsSchema(base.BaseSchema):
 class StoreSchema(base.BaseSchema):
 
     id = fields.Int(dump_only=True)
-    store_name = fields.Str(required=True, validate=Length(max=32))
+    store_name = fields.Str(required=True, validate=Length(min=3, max=32))
     store_url = fields.Url(required=True)
-    store_identifier = fields.Str(required=True, validate=(Length(max=127), base.Unique(Store, 'store_identifier')))
+    store_identifier = fields.Str(required=True,
+                                  validate=(Length(min=8, max=127), base.Unique(Store, 'store_identifier')))
 
     category = fields.Str(validate=OneOf(enum.STORE_CATEGORY_ENUM))
     description = fields.Str(validate=Length(max=255))
