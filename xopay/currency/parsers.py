@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 import requests
-
 from bs4 import BeautifulSoup, CData
 
-from xopay import db
 from xopay.models import Currency
 
 
@@ -88,9 +85,3 @@ def parse_privat24():
 # cross_rate_record = cross_rate.find('cross_rate_record', {'mnem': 'EUR/USD'})
 # # Получаем соотношение евро к доллару (продажа)
 # eur_usd_sale = cross_rate_record['rate']
-
-if __name__ == '__main__':
-    exchange_rates = parse_alphabank() + parse_privat24()
-    for exchange_rate in exchange_rates:
-        db.session.add(exchange_rate)
-    db.session.commit()

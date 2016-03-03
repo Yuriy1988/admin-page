@@ -25,4 +25,4 @@ class Currency(base.BaseModel):
         self.commit_time = commit_time
 
     def __repr__(self):
-        return '<Currency %r>' % self.id
+        return '{}/{}:\t {}\t {}'.format(self.base_ccy, self.ccy, self.sale, self.buy)

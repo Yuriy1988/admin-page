@@ -14,3 +14,12 @@ CSRF_ENABLED = True
 CSRF_SESSION_KEY = "mhe=d4#2xvb1348j%m+sn0d8ssdbjv18yi+f_w#&yd!+&4ic4)"
 
 SECRET_KEY = "ugGB0uH1cJTW=1L9Vs|8roMlFfFgsWD%NA|*WBpYQ3Uytr-6rImVk2Rp%BJ+"
+
+# mail settings TODO: unhardcode SMTP settings
+MAIL_SERVER = "smtp.gmail.com"
+MAIL_USERNAME = "daniel.omelchenko@digitaloutlooks.com"
+MAIL_PASSWORD = "Po03yeFGd54c9jHq"
+DEFAULT_MAIL_SENDER = "daniel.omelchenko@digitaloutlooks.com"
+
+# TODO: unhardcode admin email
+ADMIN_EMAIL = "dpixelstudio@gmail.com"
