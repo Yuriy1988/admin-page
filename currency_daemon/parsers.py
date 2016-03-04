@@ -1,11 +1,21 @@
+import datetime
+
 import requests
 from bs4 import BeautifulSoup, CData
 
-from xopay.models import Currency
+
+def __catch_parse_errors(func):
+    def wrapper():
+        try:
+            return func()
+        except Exception as ex:
+            # TODO: add logging
+            return []
+    return wrapper
 
 
+@__catch_parse_errors
 def parse_alphabank():
-
     # Парсим alfabank.ru
     page1 = requests.get("https://alfabank.ru/_/rss/_currency.html")
     soup1 = BeautifulSoup(page1.text, "html.parser")
@@ -41,21 +51,24 @@ def parse_alphabank():
     ).text.replace(',', '.')
 
     return [
-        Currency(
+        dict(
             base_ccy='RUR',
             ccy='EUR',
             buy=eur_rur_buy,
-            sale=eur_rur_sale
+            sale=eur_rur_sale,
+            commit_time=datetime.datetime.utcnow()
         ),
-        Currency(
+        dict(
             base_ccy='RUR',
             ccy='USD',
             buy=usd_rur_buy,
-            sale=usd_rur_sale
+            sale=usd_rur_sale,
+            commit_time=datetime.datetime.utcnow()
         )
     ]
 
 
+@__catch_parse_errors
 def parse_privat24():
     currency_records = []
     # Парсим https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5
@@ -67,11 +80,12 @@ def parse_privat24():
         # Obtain exchange rates for UAH (RUR, USD, EUR):
         if currency.attrs['base_ccy'] == 'UAH':
             currency_records.append(
-                Currency(
+                dict(
                     base_ccy=currency.attrs.get('base_ccy'),
                     ccy=currency.attrs.get('ccy'),
                     buy=currency.attrs.get('buy'),
-                    sale=currency.attrs.get('sale')
+                    sale=currency.attrs.get('sale'),
+                    commit_time=datetime.datetime.utcnow()
                 ))
     return currency_records
 

@@ -12,5 +12,4 @@ flask-login
 # apispec
 
 beautifulsoup4==4.4.1
-Fabric==1.10.2
 requests==2.9.1

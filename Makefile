@@ -7,3 +7,11 @@ venv_install:
 
 venv_update:
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
+
+
+
+
+s:
+	echo '*/1 * * * * bash -c "TEST=$(pwd) && cd $(pwd)/currency_daemon && ./update.py"' > temp
+	bash -c "crontab temp"
+	rm temp
