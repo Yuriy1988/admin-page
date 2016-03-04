@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from xopay import db
 from xopay.models import base, enum, user
 
@@ -72,6 +74,8 @@ class Merchant(base.BaseModel):
 
     @classmethod
     def create(cls, data, add_to_db=True):
+        data = deepcopy(data)
+
         merchant_account_data = data.pop('merchant_account', {})
         merchant_info_data = data.pop('merchant_info', {})
         user_data = data.pop('user', {})
@@ -84,6 +88,8 @@ class Merchant(base.BaseModel):
         return merchant
 
     def update(self, data, add_to_db=True):
+        data = deepcopy(data)
+
         merchant_account_data = data.pop('merchant_account', {})
         merchant_info_data = data.pop('merchant_info', {})
         user_data = data.pop('user', {})

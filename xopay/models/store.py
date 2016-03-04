@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from xopay import db
 from xopay.models import base, enum
 
@@ -63,6 +65,8 @@ class Store(base.BaseModel):
 
     @classmethod
     def create(cls, data, add_to_db=True):
+        data = deepcopy(data)
+
         store_settings_data = data.pop('store_settings', {})
         data['store_settings'] = StoreSettings.create(store_settings_data)
 
@@ -70,6 +74,8 @@ class Store(base.BaseModel):
         return store
 
     def update(self, data, add_to_db=True):
+        data = deepcopy(data)
+
         store_settings_data = data.pop('store_settings', {})
         self.store_settings.update(store_settings_data)
 

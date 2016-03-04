@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from xopay import db
 from xopay.models import base, user
 
@@ -25,6 +27,8 @@ class Manager(base.BaseModel):
 
     @classmethod
     def create(cls, data, add_to_db=True):
+        data = deepcopy(data)
+
         user_data = data.pop('user', {})
         data['user'] = user.User.create(user_data)
 
@@ -32,6 +36,8 @@ class Manager(base.BaseModel):
         return manager
 
     def update(self, data, add_to_db=True):
+        data = deepcopy(data)
+
         user_data = data.pop('user', {})
         self.user.update(user_data)
 
