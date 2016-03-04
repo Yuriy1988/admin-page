@@ -18,8 +18,8 @@ class MerchantAccountSchema(base.BaseSchema):
 
 class MerchantInfoSchema(base.BaseSchema):
 
-    address = fields.Str(validate=Length(max=320))
-    director_name = fields.Str(validate=Length(max=100))
+    address = fields.Str(allow_none=True, validate=Length(min=4, max=320))
+    director_name = fields.Str(allow_none=True, validate=Length(min=4, max=100))
 
 
 class MerchantSchema(base.BaseSchema):
@@ -28,5 +28,5 @@ class MerchantSchema(base.BaseSchema):
     merchant_name = fields.Str(required=True, validate=(Length(min=3, max=32), base.Unique(Merchant, 'merchant_name')))
 
     merchant_account = fields.Nested(MerchantAccountSchema, required=True)
-    merchant_info = fields.Nested(MerchantInfoSchema)
+    merchant_info = fields.Nested(MerchantInfoSchema, allow_none=True)
     user = fields.Nested(user.UserSchema, required=True)

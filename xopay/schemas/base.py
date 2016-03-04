@@ -67,10 +67,21 @@ class Phone(Regexp):
 
 class FixedDigitsNum(Regexp):
 
-    default_message = 'Value must contain exactly {num} digits.'
+    default_message = 'Value must contains exactly {num} digits.'
     default_regex = '^\d{%d}$'
 
     def __init__(self, digits_number, **kwargs):
         regex = kwargs.pop('regex', self.default_regex % digits_number)
         error = kwargs.pop('error', self.default_message.format(num=digits_number))
+        super().__init__(regex, error=error, **kwargs)
+
+
+class Login(Regexp):
+    _login_chars = 'A-Za-z0-9._-'
+    default_message = 'Value must contains only {chars} characters.'.format(chars=_login_chars)
+    default_regex = '^[%s]*$' % _login_chars
+
+    def __init__(self, **kwargs):
+        regex = kwargs.pop('regex', self.default_regex)
+        error = kwargs.pop('error', self.default_message)
         super().__init__(regex, error=error, **kwargs)

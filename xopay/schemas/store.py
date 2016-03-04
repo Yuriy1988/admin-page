@@ -24,9 +24,9 @@ class StoreSchema(base.BaseSchema):
     store_identifier = fields.Str(required=True,
                                   validate=(Length(min=8, max=127), base.Unique(Store, 'store_identifier')))
 
-    category = fields.Str(validate=OneOf(enum.STORE_CATEGORY_ENUM))
-    description = fields.Str(validate=Length(max=255))
-    logo = fields.Url()
+    category = fields.Str(allow_none=True, validate=OneOf(enum.STORE_CATEGORY_ENUM))
+    description = fields.Str(allow_none=True, validate=Length(max=255))
+    logo = fields.Url(allow_none=True)
     show_logo = fields.Bool(default=False)
 
     store_settings = fields.Nested(StoreSettingsSchema, required=True)
