@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, Response
 
 from xopay import app, db
 from xopay.errors import NotFoundError, ValidationError
@@ -68,6 +68,7 @@ def merchant_delete(merchant_id):
         raise NotFoundError()
 
     db.session.commit()
+    return Response(status=200)
 
 
 @app.route('/api/admin/dev/merchants/<merchant_id>/managers', methods=['GET'])

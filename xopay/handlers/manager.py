@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, Response
 
 from xopay import app, db
 from xopay.errors import NotFoundError, ValidationError
@@ -45,3 +45,4 @@ def manager_delete(manager_id):
         raise NotFoundError()
 
     db.session.commit()
+    return Response(status=200)
