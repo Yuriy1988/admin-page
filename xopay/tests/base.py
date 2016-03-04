@@ -5,7 +5,7 @@ from copy import deepcopy
 from flask.ext.testing import TestCase
 
 from xopay import app, db as app_db
-from xopay.models import User
+from xopay.models import User, Merchant
 
 __author__ = 'Kostel Serhii'
 
@@ -96,7 +96,7 @@ class BaseTestCase(TestCase):
 
     def delete(self, url):
         response = self.client.delete(self.url_prefix + url)
-        return response.status_code
+        return response.status_code, response.json if response.status_code >=400 else None
 
     def get_merchant(self):
         return deepcopy(self._merchant)
@@ -106,6 +106,15 @@ class BaseTestCase(TestCase):
         self.db.add(user)
         self.db.commit()
         return user
+
+    def create_merchant(self, merchant_dict, merchant_name=None, username=None):
+        merchant_dict['merchant_name'] = merchant_name or "merchant" + self.rand_str()
+        merchant_dict['user']['username'] = username or "user" + self.rand_str()
+
+        merchant_model = Merchant.create(merchant_dict)
+        self.db.commit()
+
+        return merchant_model
 
     def login(self, username, password):
         data = dict(username=username, password=password)
