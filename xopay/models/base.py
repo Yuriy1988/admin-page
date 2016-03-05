@@ -4,7 +4,8 @@ __author__ = 'Kostel Serhii'
 
 
 def _first_level_dict(obj, data):
-    return dict((key, value) for key, value in data.items() if hasattr(obj, key) and not isinstance(value, dict))
+    return dict((key, value) for key, value in data.items() if hasattr(obj, key) and not isinstance(value, dict)) \
+        if data else dict()
 
 
 class BaseModel(db.Model):

@@ -287,7 +287,7 @@ class TestMerchant(base.BaseTestCase):
 
         status, body = self.put('/merchants/%s' % merchant_model.id, {'merchant_info': None})
         self.assertEqual(status, 200)
-        self.assertIsNone(body['merchant_info'])
+        self.assertEqual(body['merchant_info'], merchant_info)
 
     def test_put_merchant_update_merchant_info_from_none(self):
         merchant = self.get_merchant()
