@@ -386,17 +386,20 @@ class TestMerchant(base.BaseTestCase):
 
     def test_delete_merchant_success(self):
         merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        merchant_account_id = merchant.merchant_account.id
+        merchant_info_id = merchant.merchant_info.id
 
-        status, body = self.delete('/merchants/%s' % merchant.id)
+        status, body = self.delete('/merchants/%s' % merchant_id)
         self.assertEqual(status, 200)
 
-        deleted_merchant_model = Merchant.query.get(merchant.id)
+        deleted_merchant_model = Merchant.query.get(merchant_id)
         self.assertIsNone(deleted_merchant_model)
 
-        deleted_merchant_account_model = MerchantAccount.query.get(merchant.merchant_account.id)
+        deleted_merchant_account_model = MerchantAccount.query.get(merchant_account_id)
         self.assertIsNone(deleted_merchant_account_model)
 
-        deleted_merchant_info_model = MerchantInfo.query.get(merchant.merchant_info.id)
+        deleted_merchant_info_model = MerchantInfo.query.get(merchant_info_id)
         self.assertIsNone(deleted_merchant_info_model)
 
     def test_delete_merchant_not_found(self):

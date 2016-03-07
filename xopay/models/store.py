@@ -11,7 +11,8 @@ class StoreSettings(base.BaseModel):
     __tablename__ = 'store_settings'
 
     id = db.Column(db.Integer, primary_key=True)
-    sign_algorithm = db.Column(db.Enum(*enum.SIGN_ALGORITHM_ENUM), default='MD5', nullable=False)
+    sign_algorithm = db.Column(db.Enum(*enum.SIGN_ALGORITHM_ENUM, name='enum_sign_algorithm'),
+                               default='MD5', nullable=False)
     sign_key = db.Column(db.String(127), nullable=False, unique=True)
     succeed_url = db.Column(db.String(255), nullable=False)
     failure_url = db.Column(db.String(255), nullable=False)
@@ -37,7 +38,7 @@ class Store(base.BaseModel):
     store_url = db.Column(db.String(255), nullable=False)
     store_identifier = db.Column(db.String(127), nullable=False, unique=True)
 
-    category = db.Column(db.Enum(*enum.STORE_CATEGORY_ENUM))
+    category = db.Column(db.Enum(*enum.STORE_CATEGORY_ENUM, name='enum_store_category'))
     description = db.Column(db.String(255))
     logo = db.Column(db.String(255))
     show_logo = db.Column(db.Boolean, default=False)

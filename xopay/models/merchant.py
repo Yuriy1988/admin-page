@@ -13,7 +13,7 @@ class MerchantAccount(base.BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     bank_name = db.Column(db.String(255), nullable=False)
     checking_account = db.Column(db.String(14), nullable=False)
-    currency = db.Column(db.Enum(*enum.CURRENCY_ENUM), default='USD', nullable=False)
+    currency = db.Column(db.Enum(*enum.CURRENCY_ENUM, name='enum_currency'), default='USD', nullable=False)
     mfo = db.Column(db.String(6), nullable=False)
     okpo = db.Column(db.String(8), nullable=False)
 
@@ -45,6 +45,13 @@ class MerchantInfo(base.BaseModel):
 
 
 class Merchant(base.BaseModel):
+    """
+    Merchant model.
+    Has One-To-One connection to MerchantAccount, MerchantInfo and User models.
+    Use 'joined' connection, that load current model and one-to-one models in a single request.
+    Use 'cascade delete-orphan', that delete one-to-one models when current model deleted, or
+    one-to-one model lose his parent.
+    """
 
     __tablename__ = 'merchant'
 
@@ -52,13 +59,22 @@ class Merchant(base.BaseModel):
     merchant_name = db.Column(db.String(32), nullable=False, unique=True)
 
     merchant_account_id = db.Column(db.Integer, db.ForeignKey('merchant_account.id'), nullable=False)
-    merchant_account = db.relationship('MerchantAccount', backref=db.backref('merchant', uselist=False, lazy='joined'))
+    merchant_account = db.relationship('MerchantAccount',
+                                       backref=db.backref('merchant', uselist=False, lazy='joined'),
+                                       cascade='all, delete-orphan',
+                                       single_parent=True)
 
     merchant_info_id = db.Column(db.Integer, db.ForeignKey('merchant_info.id'), nullable=False)
-    merchant_info = db.relationship('MerchantInfo', backref=db.backref('merchant', uselist=False, lazy='joined'))
+    merchant_info = db.relationship('MerchantInfo',
+                                    backref=db.backref('merchant', uselist=False, lazy='joined'),
+                                    cascade='all, delete-orphan',
+                                    single_parent=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('merchant', uselist=False, lazy='joined'))
+    user = db.relationship('User',
+                           backref=db.backref('merchant', uselist=False, lazy='joined'),
+                           cascade='all, delete-orphan',
+                           single_parent=True)
 
     managers = db.relationship('Manager', back_populates='merchant')
     stores = db.relationship('Store', back_populates='merchant')

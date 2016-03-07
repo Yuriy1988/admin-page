@@ -237,15 +237,29 @@ class TestUser(base.BaseTestCase):
         self.assertEqual(status, 200)
         self.assertEqual(body['user']['id'], new_user.id)
 
+    def test_put_merchant_user_update_username_old_user_deleted(self):
+        merchant = self.create_merchant(self.get_merchant(), merchant_name='merchant_name', username='old_user')
+        user = User.query.filter_by(username='old_user').first()
+        self.assertIsNotNone(user)
+
+        status, body = self.put('/merchants/%s' % merchant.id, {'user': {'username': 'new_user'}})
+        self.assertEqual(status, 200)
+        self.assertNotEqual(body['user']['id'], merchant.user.id)
+
+        old_user = User.query.filter_by(username='old_user').first()
+        self.assertIsNone(old_user)
+
     # DELETE /merchants/<merchant_id> (user delete, when merchant deleted)
 
-    def test_delete_merchant_user_not_deleted(self):
+    def test_delete_merchant_user_deleted(self):
         merchant_model = self.create_merchant(self.get_merchant())
+        merchant_id = merchant_model.id
+        user_id = merchant_model.user.id
 
-        status, body = self.delete('/merchants/%s' % merchant_model.id)
+        status, body = self.delete('/merchants/%s' % merchant_id)
         self.assertEqual(status, 200)
 
-        user_model = User.query.get(merchant_model.user.id)
+        user_model = User.query.get(user_id)
         self.assertIsNone(user_model)
 
 

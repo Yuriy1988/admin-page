@@ -8,7 +8,7 @@ class PaymentSystem(base.BaseModel):
 
     __tablename__ = 'payment_systems'
 
-    paysys_id = db.Column(db.Enum(*enum.PAYMENT_SYSTEMS_ID_ENUM), primary_key=True)
+    paysys_id = db.Column(db.Enum(*enum.PAYMENT_SYSTEMS_ID_ENUM, name='enum_payment_system_id'), primary_key=True)
     paysys_name = db.Column(db.String(80), nullable=False)
     paysys_login = db.Column(db.String(255), nullable=False)
     # FIXME: make it secure
