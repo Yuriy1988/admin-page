@@ -8,10 +8,10 @@ venv_install:
 venv_update:
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
 
-
-
-
-s:
-	echo '*/1 * * * * bash -c "TEST=$(pwd) && cd $(pwd)/currency_daemon && ./update.py"' > temp
+cron_setup:
+	echo '0 0 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' > temp
+	echo '0 6 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' >> temp
+	echo '0 12 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' >> temp
+	echo '0 18 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' >> temp
 	bash -c "crontab temp"
 	rm temp
