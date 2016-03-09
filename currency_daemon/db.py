@@ -21,8 +21,7 @@ class Currency(Base):
     __tablename__ = 'currency'
 
     id = Column(Integer, primary_key=True)
-    base_ccy = Column(String(3))
-    ccy = Column(String(3))
-    sale = Column(Float)
-    buy = Column(Float)
+    from_currency = Column(String(3))
+    to_currency = Column(String(3))
+    rate = Column(Float)
     commit_time = Column(DateTime)

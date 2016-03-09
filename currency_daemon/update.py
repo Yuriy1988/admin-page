@@ -15,7 +15,7 @@ def send_email(email_from, email_to, subject, text):
 
 
 def format_currency(currency_dict):
-    return '{base_ccy}/{ccy}:\t {buy}\t {sale}'.format(**currency_dict)
+    return '{from_currency}/{to_currency}:\t {rate}'.format(**currency_dict)
 
 
 if __name__ == '__main__':
@@ -40,6 +40,9 @@ if __name__ == '__main__':
         for exchange_rate in exchange_rates:
             session.add(Currency(**exchange_rate))
         session.commit()
+
+        if not exchange_rates:
+            raise Exception("ERROR: Update failed!!!")
 
         # send email notification to admin
         message = MAIL_MESSAGE_TEMPLATE.format(

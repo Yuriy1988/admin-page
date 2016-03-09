@@ -52,17 +52,27 @@ def parse_alphabank():
 
     return [
         dict(
-            base_ccy='RUR',
-            ccy='EUR',
-            buy=eur_rur_buy,
-            sale=eur_rur_sale,
+            from_currency='RUR',
+            to_currency='EUR',
+            rate=1/float(eur_rur_sale),
             commit_time=datetime.datetime.utcnow()
         ),
         dict(
-            base_ccy='RUR',
-            ccy='USD',
-            buy=usd_rur_buy,
-            sale=usd_rur_sale,
+            from_currency='EUR',
+            to_currency='RUR',
+            rate=float(eur_rur_buy),
+            commit_time=datetime.datetime.utcnow()
+        ),
+        dict(
+            from_currency='RUR',
+            to_currency='USD',
+            rate=1/float(usd_rur_sale),
+            commit_time=datetime.datetime.utcnow()
+        ),
+        dict(
+            from_currency='USD',
+            to_currency='RUR',
+            rate=float(usd_rur_buy),
             commit_time=datetime.datetime.utcnow()
         )
     ]
@@ -79,14 +89,20 @@ def parse_privat24():
 
         # Obtain exchange rates for UAH (RUR, USD, EUR):
         if currency.attrs['base_ccy'] == 'UAH':
-            currency_records.append(
+            currency_records.extend([
                 dict(
-                    base_ccy=currency.attrs.get('base_ccy'),
-                    ccy=currency.attrs.get('ccy'),
-                    buy=currency.attrs.get('buy'),
-                    sale=currency.attrs.get('sale'),
+                    from_currency=currency.attrs.get('base_ccy'),
+                    to_currency=currency.attrs.get('ccy'),
+                    rate=1/float(currency.attrs.get('sale')),
                     commit_time=datetime.datetime.utcnow()
-                ))
+                ),
+                dict(
+                    from_currency=currency.attrs.get('ccy'),
+                    to_currency=currency.attrs.get('base_ccy'),
+                    rate=float(currency.attrs.get('buy')),
+                    commit_time=datetime.datetime.utcnow()
+                )]
+            )
     return currency_records
 
 

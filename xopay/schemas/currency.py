@@ -8,15 +8,7 @@ __author__ = 'Omelchenko Daniel'
 class CurrencySchema(base.BaseSchema):
 
     id = fields.Int(dump_only=True)
-    base_ccy = fields.Str()
-    ccy = fields.Str()
-    sale = fields.Float()
-    buy = fields.Float()
-    commit_time = fields.DateTime()
-
-
-class CurrencyHistorySchema(base.BaseSchema):
-
-    sale = fields.Float()
-    buy = fields.Float()
+    from_currency = fields.Str()
+    to_currency = fields.Str()
+    rate = fields.Float()
     commit_time = fields.DateTime()
