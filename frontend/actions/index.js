@@ -152,3 +152,5 @@ import * as UserActions from './user'
 export {UserActions}
 import * as RedirectActions from './redirect'
 export {RedirectActions}
+import * as DictionaryActions from './dictionary'
+export {DictionaryActions}

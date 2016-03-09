@@ -1,4 +1,4 @@
-import { Schema, arrayOf } from 'normalizr'
+import { Schema, arrayOf, valuesOf} from 'normalizr'
 
 /**
  * MERCHANTS
@@ -21,3 +21,18 @@ export const STORES_CREATE = (merchantId) => ({path: `merchants/${merchantId}/st
 export const STORE_GET = (storeId) => ({path: `stores/${storeId}`, method: "GET", schema: storesSchema});
 
 
+/**
+ * DICTIONARY
+ */
+
+export const DICT_SIGN_ALGORITHM = {path: "constants/sign_algorithm", method: "GET" };
+export const DICT_CURRENCY = {path: "constants/currency", method: "GET" };
+export const DICT_NOTIFY = {path: "constants/notify", method: "GET" };
+export const DICT_CATEGORY = {path: "constants/category", method: "GET" };
+export const DICT_PAYSYS_ID = {path: "constants/paysys_id", method: "GET" };
+
+/**
+ * Sign algorithm
+ * > GET /api/admin/{version}/constants/sign_algorithm
+ * < 200 OK { sign_algorithm: [“MD5”, “SHA1”] }
+ */

@@ -37,37 +37,50 @@ function callApi(endpoint, body) {
     return fetch(fullUrl, options)
         .then(
             response => {
+                return response.json().then(json => ({json, response}))
+            },
+            requestError => {
+                const errorObj = {
+                    code: 0,
+                    message: requestError.message,
+                    serverError: {
+                        errors: {},
+                        message: "",
+                        status_code: 0
+                    }
+                };
+                return Promise.reject(errorObj);
+            }
+        )
+        .then(
+            ({json, response}) => {
                 if (response.ok) {
-                    return response.json(); //.then(json => ({json, response}))
+                    let camelizedJson = camelizeKeys(json);
+
+                    if (!!schema) {
+                        camelizedJson = normalize(camelizedJson, schema);
+                    }
+
+                    return Object.assign({}, camelizedJson)
                 } else {
                     const errorObj = {
                         code: response.status,
-                        message: response.statusText
+                        message: response.statusText,
+                        serverError: json.error
                     };
 
                     return Promise.reject(errorObj);
                 }
             },
-            requestError => {
-                const errorObj = {
-                    code: 0,
-                    message: requestError.message
-                };
-
-                return Promise.reject(errorObj);
-            }
-        )
-        .then(
-            jsonData => {
-                const camelizedJson = camelizeKeys(jsonData);
-                return Object.assign({},
-                    normalize(camelizedJson, schema)
-                )
-            },
             error => {
                 let errorObj = {
                     code: 0,
-                    message: error.message
+                    message: error.message,
+                    serverError: {
+                        errors: {},
+                        message: "",
+                        status_code: 0
+                    }
                 };
 
                 errorObj = Object.assign({}, errorObj, error);
@@ -97,11 +110,8 @@ export default store => next => action => {
         return next(action);
     }
 
-    const { endpoint, types, body, cError, deleteId } = callAPI;
+    const { endpoint, types, body, cError } = callAPI;
 
-    if (typeof cError === 'undefined') {
-        throw new Error('Specify clear Error action');
-    }
 
     if (typeof endpoint !== 'object') {
         throw new Error('Specify an endpoint { method: [GET|POST|PUT|DELETE], path: string, schema:normalizrSchema }');
@@ -117,9 +127,10 @@ export default store => next => action => {
         throw new Error('Endpoint.method should be one of [GET|POST|PUT|DELETE]');
     }
 
-    if (!schema) {
+    /*if (!schema) {
         throw new Error('Specify one of the exported Schemas.');
-    }
+    }*/
+
     if (!Array.isArray(types) || types.length !== 3) {
         throw new Error('Expected an array of three action types.');
     }
@@ -146,7 +157,6 @@ export default store => next => action => {
         response => {
             next(actionWith(action, Object.assign({
                 response,
-                deleteId,
                 type: successType
             }, sParams)))
         },

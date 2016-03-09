@@ -6,10 +6,12 @@ import * as MerchantActions from '../actions/merchants';
 import Alert, {TYPE_ERROR} from '../components/Alert';
 import LoadingOverlay from '../components/LoadingOverlay';
 
+
+
+
 class MerchantList extends Component {
     constructor(props) {
         super(props);
-
     }
 
     componentDidMount() {
@@ -83,12 +85,11 @@ class MerchantList extends Component {
                     }
                     { merchantList }
                 </div>
-                <LoadingOverlay loading={merchantPagination.isFetching}/>
+                <LoadingOverlay loading={merchantPagination.isFetching }/>
             </div>
         )
     }
 }
-
 
 export default connect(
     (state)=>({

@@ -32,7 +32,8 @@ var config = {
                 test: /\.js$/,
                 loader: 'babel',
                 query: {
-                    presets: ['es2015', 'react']
+                    presets: ['es2015', 'react'],
+                    plugins: ['transform-decorators-legacy']
                 },
                 exclude: /node_modules/,
                 include: __dirname
@@ -56,7 +57,7 @@ if (DEV_MODE == true) {
     config.module.loaders[0].query.presets.push("react-hmre");
 }
 if (DEV_TEST) {
-    config.entry = ['./test'];
+    config.entry = ['./test.js'];
     config.output = {
         path: path.join(__dirname, 'test_build'),
         filename: 'tests.js',

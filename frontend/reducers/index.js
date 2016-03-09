@@ -4,13 +4,13 @@ import * as StoresActions from '../actions/stores'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
+import dictionary from './dictionary'
 import sideBar from './sideBar'
 import { routeReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
 function entities(state = {merchants: {}, stores: {}}, action) {
-    console.log(action);
     if (action.response && action.response.entities) {
         return merge({}, state, action.response.entities);
     }
@@ -92,6 +92,7 @@ const rootReducer = combineReducers({
     pagination,
     user,
     sideBar,
+    dictionary,
     routing: routeReducer
 });
 

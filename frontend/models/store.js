@@ -5,18 +5,37 @@ export default class StoreModel {
 
     static createStore() {
         return {
-            "store_name": "",
-            "store_identifier": "",
-            "store_url": "",
-            "description": "",
-            "logo": "",
-            "show_logo": true,
+            "store_name": null,
+            "store_identifier": null,
+            "store_url": null,
+            "description": null,
+            "logo": null,
+            "show_logo": false,
             "store_settings": {
                 "sign_algorithm": "MD5",
-                "sign_key": "",
-                "succeed_url": "",
-                "failure_url": "",
-                "commission_pct": ""
+                "sign_key": null,
+                "succeed_url": null,
+                "failure_url": null,
+                "commission_pct": null
+            }
+        };
+    }
+
+
+    static createErrors() {
+        return {
+            "store_name": null,
+            "store_identifier": null,
+            "store_url": null,
+            "description": null,
+            "logo": null,
+            "show_logo": null,
+            "store_settings": {
+                "sign_algorithm": null,
+                "sign_key": null,
+                "succeed_url": null,
+                "failure_url": null,
+                "commission_pct": null
             }
         };
     }

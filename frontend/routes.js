@@ -18,9 +18,10 @@ import MerchantList     from './components/MerchantList'
 import MerchantPage     from './components/MerchantPage'
 
 import StoresPage       from './containers/stores/StoresPage'
-import StoreAddPage       from './containers/stores/StoreAddPage'
-import StoreListPage       from './containers/stores/StoreListPage'
-import StorePage       from './containers/stores/StorePage'
+import StoreAddPage     from './containers/stores/StoreAddPage'
+import StoreListPage    from './containers/stores/StoreListPage'
+import StorePage        from './containers/stores/StorePage'
+import StoreStatPage    from './containers/stores/StoreStatPage'
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -74,8 +75,12 @@ class Routes {
                             </Route>
                             <Route path="stores" component={StoresPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                                <Route path=":storeId" component={StorePage}
-                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                <Route path=":storeId"
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)} component={StorePage}/>
+                                    <Route path="stat" component={StoreStatPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                </Route>
                             </Route>
                             {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
                         </Route>

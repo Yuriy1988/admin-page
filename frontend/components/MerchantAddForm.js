@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 import {create, createCError} from '../actions/merchants'
 import LoadingOverlay from '../components/LoadingOverlay'
 import Alert, {TYPE_ERROR} from '../components/Alert'
+import Field from '../components/Field'
+import MerchantModel from '../models/merchant'
 import {redirect} from '../actions/redirect'
+import {DictionaryActions} from '../actions/index'
 
 class MerchantAddForm extends Component {
     constructor(props) {
@@ -13,29 +16,7 @@ class MerchantAddForm extends Component {
         this._onCreate = this._onCreate.bind(this);
 
         this.state = {
-            merchant: {
-                merchant_name: "",		    // {required} Обозначение торговца в системе
-                merchant_account: {
-                    bank_name: "",		    // {required}
-                    checking_account: "",	// {required}
-                    currency: "USD",		// {required}
-                    mfo: "",			    // {required}
-                    okpo: ""			    // {required}
-                },
-                merchant_info: {
-                    address: "",
-                    director_name: ""
-                },
-                user: {
-                    username: "",  	// {required, unique} username for login
-                    first_name: "", // имя
-                    last_name: "",	// фамилия
-                    email: "",		// user email (can be blank)
-                    phone: "",      // {digits only, len fixed} user phone - 12 numbers
-                    notify: "EMAIL",// [“EMAIL”, “PHONE”, null] - where to send notification (if null - do not send)
-                    enabled: false	// {required, default=False} is user enabled or not (admin always enabled!)
-                }
-            }
+            merchant: MerchantModel.create()
         }
     }
 
@@ -47,9 +28,11 @@ class MerchantAddForm extends Component {
 
     _onMerchantChange(field, name) {
         return ((e) => {
-            const { value } = e.target;
+            let { value } = e.target;
             const { merchant } = this.state;
             let newMerchant = Object.assign({}, merchant);
+
+            value = (value === "") ? null : value;
 
             if (!!name) {
                 newMerchant[field] = Object.assign({}, merchant[field], {[name]: value});
@@ -76,6 +59,11 @@ class MerchantAddForm extends Component {
             console.log(newMerchant);
         }).bind(this);
     }
+    componentDidMount() {
+        const {loadNotifications, loadCurrencies} = this.props;
+        loadCurrencies();
+        loadNotifications();
+    }
 
     render() {
         const onChange = this._onMerchantChange;
@@ -84,6 +72,14 @@ class MerchantAddForm extends Component {
 
         const {merchant} = this.state;
         const {merchantCreate, redirect, createCError} = this.props;
+
+        let errors = MerchantModel.createErrors();
+
+        try {
+            errors = Object.assign({}, errors, merchantCreate.error.serverError.errors);
+        } catch (e) {
+        }
+
 
         if (!!merchantCreate.result) {
             redirect(`/admin/administrator/merchants/${merchantCreate.result}`);
@@ -99,18 +95,19 @@ class MerchantAddForm extends Component {
                     <div className="box-body">
 
                         {(!!merchantCreate.error) ?
-                            <Alert type={TYPE_ERROR} handleClose={createCError}>{merchantCreate.error.message}</Alert> : null}
+                            <Alert type={TYPE_ERROR}
+                                   handleClose={createCError}>{merchantCreate.error.serverError.message}</Alert> : null}
 
 
                         <div className="row">
                             <div className="col-xs-12">
                                 <label htmlFor="name">Merchant name</label>
-                                <div className="form-group">
+                                <Field error={errors.merchant_name}>
                                     <input type="text" className="form-control" id="name"
                                            onChange={onChange("merchant_name")}
                                            value={merchant.merchant_name}
                                            placeholder="Please, insert merchant name"/>
-                                </div>
+                                </Field>
                             </div>
                         </div>
                         <div className="row">
@@ -120,22 +117,22 @@ class MerchantAddForm extends Component {
                                         <h3 className="box-title">Main information</h3>
                                     </div>
                                     <div className="box-body">
-                                        <div className="form-group">
+                                        <Field error={errors.merchant_info.director_name}>
                                             <label htmlFor="directorName">Chairman</label>
                                             <input type="text" className="form-control " id="directorName"
                                                    name="director_name"
                                                    onChange={onChange("merchant_info","director_name")}
                                                    value={merchant.merchant_info.director_name}
                                                    placeholder="Director name"/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.merchant_info.address}>
                                             <label htmlFor="address">Address</label>
                                             <input type="text" className="form-control" id="address"
                                                    onChange={onChange("merchant_info","address")}
                                                    value={merchant.merchant_info.address}
                                                    placeholder="Address"/>
-                                        </div>
+                                        </Field>
                                     </div>
                                 </div>
 
@@ -148,39 +145,40 @@ class MerchantAddForm extends Component {
                                         <h3 className="box-title">Merchant account</h3>
                                     </div>
                                     <div className="box-body">
-                                        <div className="form-group">
+                                        <Field error={errors.merchant_account.checking_account}>
                                             <label htmlFor="checkingAccount">Checking Account</label>
                                             <input type="text" className="form-control" id="checkingAccount"
                                                    onChange={onChange("merchant_account","checking_account")}
                                                    value={merchant.merchant_account.checking_account}
                                                    placeholder="Checking Account"/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.merchant_account.mfo}>
                                             <label htmlFor="mfo">MFO</label>
                                             <input type="text" className="form-control" id="mfo"
                                                    onChange={onChange("merchant_account","mfo")}
                                                    value={merchant.merchant_account.mfo}
                                                    placeholder="MFO"/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.merchant_account.okpo}>
                                             <label htmlFor="okpo">OKPO</label>
                                             <input type="text" className="form-control" id="okpo"
                                                    onChange={onChange("merchant_account","okpo")}
                                                    value={merchant.merchant_account.okpo}
                                                    placeholder="OKPO"/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+
+                                        <Field error={errors.merchant_account.bank_name}>
                                             <label htmlFor="bankName">Bank Name</label>
                                             <input type="text" className="form-control" id="bankName"
                                                    placeholder="Bank Name"
                                                    onChange={onChange("merchant_account","bank_name")}
                                                    value={merchant.merchant_account.bank_name}/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.merchant_account.currency}>
                                             <label htmlFor="currency">Currency</label>
                                             <select className="form-control" id="currency"
                                                     onChange={onChange("merchant_account","currency")}
@@ -190,7 +188,7 @@ class MerchantAddForm extends Component {
                                                 <option value="RUR">RUR</option>
                                                 <option value="EUR">EUR</option>
                                             </select>
-                                        </div>
+                                        </Field>
                                     </div>
                                 </div>
                             </div>
@@ -201,45 +199,45 @@ class MerchantAddForm extends Component {
                                     </div>
                                     <div className="box-body">
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.username}>
                                             <label htmlFor="userName">Username (login)</label>
                                             <input type="text" className="form-control" id="userName"
                                                    onChange={onChange("user","username")}
                                                    value={merchant.user.username}
                                                    placeholder="Username"/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.first_name}>
                                             <label htmlFor="firstName">First name</label>
                                             <input type="text" className="form-control" id="firstName"
                                                    placeholder="First name"
                                                    onChange={onChange("user","first_name")}
                                                    value={merchant.user.first_name}/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.last_name}>
                                             <label htmlFor="firstName">Last name</label>
                                             <input type="text" className="form-control" id="lastName"
                                                    placeholder="Last name"
                                                    onChange={onChange("user","last_name")}
                                                    value={merchant.user.last_name}/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.email}>
                                             <label htmlFor="email">Email</label>
                                             <input type="text" className="form-control" id="email" placeholder="Email"
                                                    onChange={onChange("user","email")}
                                                    value={merchant.user.email}/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.phone}>
                                             <label htmlFor="phone">Phone</label>
                                             <input type="text" className="form-control" id="phone" placeholder="Phone"
                                                    onChange={onChange("user","phone")}
                                                    value={merchant.user.phone}/>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.notify}>
                                             <label htmlFor="notify">Notification</label>
                                             <select className="form-control" id="notify"
                                                     onChange={onChange("user","notify")}
@@ -248,9 +246,9 @@ class MerchantAddForm extends Component {
                                                 <option value="EMAIL">Email</option>
                                                 <option value="PHONE">Phone</option>
                                             </select>
-                                        </div>
+                                        </Field>
 
-                                        <div className="form-group">
+                                        <Field error={errors.user.enabled}>
                                             <div className="checkbox">
                                                 <label >
                                                     <input type="checkbox" id="enabled"
@@ -259,8 +257,7 @@ class MerchantAddForm extends Component {
                                                     Enabled
                                                 </label>
                                             </div>
-
-                                        </div>
+                                        </Field>
                                     </div>
                                 </div>
                             </div>
@@ -284,12 +281,17 @@ class MerchantAddForm extends Component {
 
 export default connect(
     (store) => ({
-        merchantCreate: store.pagination.merchantCreate
+        merchantCreate: store.pagination.merchantCreate,
+        currencies: store.dictionary.currency,
+        notifies: store.dictionary.notify
     })
     ,
     {
         create,
         createCError,
-        redirect
+        redirect,
+
+        loadNotifications: DictionaryActions.loadNotifications,
+        loadCurrencies: DictionaryActions.loadCurrencies
     }
 )(MerchantAddForm);

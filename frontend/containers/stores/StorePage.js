@@ -38,13 +38,12 @@ class StorePage extends Component {
 
     render() {
 
-        const {stores, storePagination, loadStoreCE} = this.props;
+        const {stores, storePagination, loadStoreCE, children} = this.props;
 
         const storeInfo = new StoreModel(stores[storePagination.result]);
 
         return (
             <div>
-
                 <div className="box">
                     <div className="box-body">
                         <img className=" img-responsive" src={storeInfo.logo}/>
@@ -56,8 +55,11 @@ class StorePage extends Component {
                         <h3 className="box-title">
                             {storeInfo.storeName}
                         </h3>
+                        <div className="box-tools pull-right">
+                            <Link className="btn btn-sm btn-success" to={`/admin/administrator/stores/${storeInfo.id}/stat`}><i
+                                className="fa fa-pie-chart"/> Statistic</Link>
+                        </div>
                     </div>
-
                     <LoadingOverlay loading={storePagination.isFetching}/>
                 </div>
                 <div className="row">
@@ -140,6 +142,7 @@ class StorePage extends Component {
                     <Alert type={TYPE_ERROR}
                            handleClose={loadStoreCE}>{storePagination.error.message}</Alert> : null}
 
+                {children}
 
             </div>
         )
