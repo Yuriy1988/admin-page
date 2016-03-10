@@ -47,9 +47,8 @@ class Store(base.BaseModel):
     store_settings = db.relationship('StoreSettings', backref=db.backref('store', uselist=False, lazy='joined'))
 
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
-    merchant = db.relationship('Merchant', back_populates='stores')
 
-    def __init__(self, store_name, store_url, store_identifier, store_settings, merchant,
+    def __init__(self, store_name, store_url, store_identifier, store_settings, merchant_id,
                  category=None, description=None, logo=None, show_logo=False):
         self.store_name = store_name
         self.store_url = store_url
@@ -59,7 +58,7 @@ class Store(base.BaseModel):
         self.logo = logo
         self.show_logo = show_logo
         self.store_settings = store_settings
-        self.merchant = merchant
+        self.merchant_id = merchant_id
 
     def __repr__(self):
         return '<Store %r>' % self.store_name

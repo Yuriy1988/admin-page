@@ -76,8 +76,8 @@ class Merchant(base.BaseModel):
                            cascade='all, delete-orphan',
                            single_parent=True)
 
-    managers = db.relationship('Manager', back_populates='merchant')
-    stores = db.relationship('Store', back_populates='merchant')
+    managers = db.relationship('Manager', backref="merchant")
+    stores = db.relationship('Store', backref="merchant")
 
     def __init__(self, merchant_name, merchant_account, merchant_info, user):
         self.merchant_name = merchant_name

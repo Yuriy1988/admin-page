@@ -16,11 +16,10 @@ class Manager(base.BaseModel):
     user = db.relationship('User', backref=db.backref('manager', uselist=False, lazy='joined'))
 
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
-    merchant = db.relationship('Merchant', back_populates='managers')
 
-    def __init__(self, user, merchant):
+    def __init__(self, user, merchant_id):
         self.user = user
-        self.merchant = merchant
+        self.merchant_id = merchant_id
 
     def __repr__(self):
         return '<Manager %r>' % self.id

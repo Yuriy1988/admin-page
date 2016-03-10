@@ -93,7 +93,7 @@ def merchant_manager_create(merchant_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    data['merchant'] = merchant
+    data['merchant_id'] = merchant.id
     manager = Manager.create(data)
     db.session.commit()
 
@@ -123,7 +123,7 @@ def merchant_stores_create(merchant_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    data['merchant'] = merchant
+    data['merchant_id'] = merchant.id
     store = Store.create(data)
     db.session.commit()
 
