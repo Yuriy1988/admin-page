@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from xopay import db
-from xopay.models import base, user
+from xopay.models import base, user as user_model
 
 __author__ = 'Kostel Serhii'
 
@@ -29,7 +29,7 @@ class Manager(base.BaseModel):
         data = deepcopy(data)
 
         user_data = data.pop('user', {})
-        data['user'] = user.User.create(user_data)
+        data['user'] = user_model.User.create(user_data)
 
         manager = super(Manager, cls).create(data)
         return manager

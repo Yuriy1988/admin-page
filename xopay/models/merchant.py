@@ -1,14 +1,14 @@
 from copy import deepcopy
 
 from xopay import db
-from xopay.models import base, enum, user
+from xopay.models import base, enum, user as user_model
 
 __author__ = 'Kostel Serhii'
 
 
 class MerchantAccount(base.BaseModel):
 
-    __taclename__ = 'merchant_account'
+    __tablename__ = 'merchant_account'
 
     id = db.Column(db.Integer, primary_key=True)
     bank_name = db.Column(db.String(255), nullable=False)
@@ -98,7 +98,7 @@ class Merchant(base.BaseModel):
 
         data['merchant_account'] = MerchantAccount.create(merchant_account_data)
         data['merchant_info'] = MerchantInfo.create(merchant_info_data)
-        data['user'] = user.User.create(user_data)
+        data['user'] = user_model.User.create(user_data)
 
         merchant = super(Merchant, cls).create(data)
         return merchant
