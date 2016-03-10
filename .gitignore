@@ -1,9 +1,6 @@
 .idea
 *.pyc
-*/__pycache__/*
 *.db
 venv
-secret.key
 frontend/node_modules/
-xopay/static/js/
 migrations
