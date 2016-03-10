@@ -1,9 +1,14 @@
 setup:
 	sudo apt-get install python3.4 python3-pip python-virtualenv
 
-db_create:
-	./manage.py db upgrade 
-	./manage.py db migrate	
+db_init:
+	./manage.py db init
+	./manage.py db migrate
+	./manage.py db upgrade
+
+db_update:
+	./manage.py db migrate
+	./manage.py db upgrade
 
 venv_install:
 	virtualenv --no-site-packages -p python3.4 venv

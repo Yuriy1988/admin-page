@@ -10,7 +10,7 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 
 import StoreModel from '../../models/store'
 
-import Chart from 'chart.js/Chart.js'
+import Chart from '../../components/Chart'
 
 
 class StorePage extends Component {
@@ -106,7 +106,7 @@ class StorePage extends Component {
                         </div>
                     </div>
                     <hr />
-
+                    <Chart />
                     <LoadingOverlay loading={false}/>
                 </div>
             </div>

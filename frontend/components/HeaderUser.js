@@ -53,7 +53,7 @@ class HeaderUser extends Component {
         const {open} = this.state;
         const {user} = this.props;
 
-        if (!user) {
+        if (!user.token) {
             return null;
         }
 

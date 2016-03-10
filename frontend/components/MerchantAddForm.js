@@ -5,6 +5,7 @@ import LoadingOverlay from '../components/LoadingOverlay'
 import Alert, {TYPE_ERROR} from '../components/Alert'
 import Field from '../components/Field'
 import MerchantModel from '../models/merchant'
+import CurrencySelect from '../components/CurrencySelect'
 import {redirect} from '../actions/redirect'
 import {DictionaryActions} from '../actions/index'
 
@@ -180,14 +181,9 @@ class MerchantAddForm extends Component {
 
                                         <Field error={errors.merchant_account.currency}>
                                             <label htmlFor="currency">Currency</label>
-                                            <select className="form-control" id="currency"
+                                            <CurrencySelect id="currency"
                                                     onChange={onChange("merchant_account","currency")}
-                                                    value={merchant.merchant_account.currency}>
-                                                <option value="USD">USD</option>
-                                                <option value="UAH">UAH</option>
-                                                <option value="RUR">RUR</option>
-                                                <option value="EUR">EUR</option>
-                                            </select>
+                                                    value={merchant.merchant_account.currency} />
                                         </Field>
                                     </div>
                                 </div>

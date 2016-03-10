@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as UserActions from '../actions/user'
-
+import Alert,{TYPE_ERROR} from '../components/Alert'
 class LoginForm extends Component {
 
     constructor(props) {
@@ -29,9 +29,13 @@ class LoginForm extends Component {
 
     render() {
         const {login,password} = this.state;
+        const {user} = this.props;
 
         return (
             <form name="form" role="form" onSubmit={this.handleSubmit}>
+                <Alert type={TYPE_ERROR} >
+                    {user.error}
+                </Alert>
                 <div className="form-group has-feedback">
                     <input type="text"
                            value={login}

@@ -68,7 +68,7 @@ class MerchantList extends Component {
         return (
             <div className="box">
                 <div className="box-header with-border">
-                    <h3 className="box-title"><i className="fa fa-briefcase"/> List of merchants</h3>
+                    <h3 className="box-title"><i className="fa fa-briefcase"/> Merchants</h3>
 
                     <div className="box-tools pull-right">
                         <Link className="btn btn-sm btn-success" to="/admin/administrator/merchants/add"><i

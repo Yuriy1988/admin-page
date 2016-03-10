@@ -92,8 +92,8 @@ class StoreAddPage extends Component {
                                                            placeholder="Example Shop"/>
                                                 </Field>
                                                 <Field error={errors.store_identifier}>
-                                                    <label htmlFor="storeName">Store name</label>
-                                                    <input type="text" className="form-control " id="storeName"
+                                                    <label htmlFor="storeIdentifier">Store identifier</label>
+                                                    <input type="text" className="form-control " id="storeIdentifier"
                                                            onChange={bindStore("store_identifier")}
                                                            value={store.store_identifier}
                                                            placeholder="as8d78ys87"/>
@@ -103,7 +103,7 @@ class StoreAddPage extends Component {
                                                     <input type="text" className="form-control " id="storeUrl"
                                                            onChange={bindStore("store_url")}
                                                            value={store.store_url}
-                                                           placeholder="www.example.com"/>
+                                                           placeholder="http://www.example.com"/>
                                                 </Field>
 
                                                 <Field error={errors.description}>
@@ -179,7 +179,7 @@ class StoreAddPage extends Component {
                                                     <input type="text" className="form-control " id="succeed_url"
                                                            onChange={bindStoreSettings("succeed_url")}
                                                            value={store.store_settings.succeed_url}
-                                                           placeholder="www.example.com/success"/>
+                                                           placeholder="http://www.example.com/success"/>
                                                 </Field>
 
                                                 <Field error={errors.store_settings.failure_url}>
@@ -187,7 +187,7 @@ class StoreAddPage extends Component {
                                                     <input type="text" className="form-control " id="failure_url"
                                                            onChange={bindStoreSettings("failure_url")}
                                                            value={store.store_settings.failure_url}
-                                                           placeholder="www.example.com/fail"/>
+                                                           placeholder="http://www.example.com/fail"/>
                                                 </Field>
 
                                                 <Field error={errors.store_settings.commission_pct}>

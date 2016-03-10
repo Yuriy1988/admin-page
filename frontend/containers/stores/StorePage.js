@@ -44,19 +44,24 @@ class StorePage extends Component {
 
         return (
             <div>
-                <div className="box">
-                    <div className="box-body">
-                        <img className=" img-responsive" src={storeInfo.logo}/>
-                    </div>
-                    <LoadingOverlay loading={storePagination.isFetching}/>
-                </div>
+                {
+                    (!!storeInfo.logo) ?
+                        <div className="box">
+                            <div className="box-body">
+                                <img  height="86px" src={storeInfo.logo}/>
+                            </div>
+                            <LoadingOverlay loading={storePagination.isFetching}/>
+                        </div> : null
+                }
+
                 <div className="box">
                     <div className="box-header with-border">
                         <h3 className="box-title">
                             {storeInfo.storeName}
                         </h3>
                         <div className="box-tools pull-right">
-                            <Link className="btn btn-sm btn-success" to={`/admin/administrator/stores/${storeInfo.id}/stat`}><i
+                            <Link className="btn btn-sm btn-success"
+                                  to={`/admin/administrator/stores/${storeInfo.id}/stat`}><i
                                 className="fa fa-pie-chart"/> Statistic</Link>
                         </div>
                     </div>

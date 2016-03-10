@@ -23,6 +23,8 @@ import StoreListPage    from './containers/stores/StoreListPage'
 import StorePage        from './containers/stores/StorePage'
 import StoreStatPage    from './containers/stores/StoreStatPage'
 
+import CurrenciesPage   from './containers/pages/CurrenciesPage'
+
 //TODO fix hardcode. Move to separate module
 const ROLE = {
     ADMINISTRATOR: "ROLE_ADMINISTRATOR",
@@ -82,6 +84,7 @@ class Routes {
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 </Route>
                             </Route>
+                            <Route path="currencies" component={CurrenciesPage} onEnter={this.requireRole(ROLE.ADMINISTRATOR)} />
                             {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
                         </Route>
 
@@ -96,7 +99,7 @@ class Routes {
     redirectToMain(nextState, replace, cb) {
         const { user } = this.store.getState();
 
-        if (!user) {
+        if (!user.token) {
             replace('/admin/login');
         } else {
             if (user.mainPage) {
@@ -118,6 +121,10 @@ class Routes {
                         accessDenied = false;
                     }
                 }
+            }
+
+            if (!user.token) {
+                accessDenied = true;
             }
 
             if (accessDenied) {

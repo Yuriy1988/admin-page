@@ -31,12 +31,16 @@ const config = {
 export default class Alert extends Component {
 
     render() {
-        const { children, type = config.defaultType, handleClose = ()=>0} = this.props;
+        const { children, type = config.defaultType, handleClose = undefined} = this.props;
         const { title = config.title[type] } = this.props;
-
+        if (!children) {
+            return null;
+        }
         return (
             <div className={`alert ${config.alert[type]} alert-dismissible`}>
-                <button type="button" className="close" onClick={handleClose}>×</button>
+                {(handleClose) ?
+                    <button type="button" className="close" onClick={handleClose}>×</button>
+                    : null}
                 <h4><i className={`icon fa ${config.icon[type]}`}/> {title}</h4>
                 {children}
             </div>
