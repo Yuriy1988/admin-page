@@ -1,5 +1,10 @@
+install_python35:
+	sudo add-apt-repository ppa:fkrull/deadsnakes
+	sudo apt-get update
+	sudo apt-get install python3.5
+
 setup:
-	sudo apt-get install python3.4 python3-pip python-virtualenv
+	sudo apt-get install python3.5 python3.5-dev python3-pip python-virtualenv
 
 db_init:
 	./manage.py db init
@@ -11,7 +16,7 @@ db_update:
 	./manage.py db upgrade
 
 venv_install:
-	virtualenv --no-site-packages -p python3.4 venv
+	virtualenv --no-site-packages -p python3.5 venv
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
 
 venv_install_mac:
