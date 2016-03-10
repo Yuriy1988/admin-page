@@ -10,32 +10,42 @@ __author__ = 'Omelchenko Daniel'
 
 @app.route('/api/admin/dev/currency/current', methods=['GET'])
 def currency():
+    from_currency = request.args.get('from_currency')
+    to_currency = request.args.get('to_currency')
+
     latest_version = Currency.query.order_by(desc(Currency.commit_time)).first().commit_time
-    exchange_rates = Currency.query.filter_by(commit_time=latest_version).all()
+
+    query = Currency.query.filter_by(commit_time=latest_version).all()
+    if from_currency:
+        query = query.filter_by(from_currency=from_currency)
+    if to_currency:
+        query = query.filter_by(to_currency=to_currency)
+    currencies = query.all()
 
     schema = CurrencySchema(many=True)
-    result = schema.dump(exchange_rates)
-    return jsonify(exchange_rates=result.data)
+    result = schema.dump(currencies)
+    return jsonify(current=result.data)
 
 
 @app.route('/api/admin/dev/currency/history', methods=['GET'])
 def currency_history():
     from_currency = request.args.get('from_currency', '')
     to_currency = request.args.get('to_currency', '')
-    date_from = request.args.get('date_from', '')
-    date_to = request.args.get('date_to', '')
+    # from_date = request.args.get('from_date')
+    # till_date = request.args.get('till_date')
 
-    exchange_rates = Currency.query\
-        .filter(Currency.to_currency == to_currency)\
-        .filter(Currency.from_currency == from_currency)
+    query = Currency.query
+    if from_currency:
+        query = query.filter_by(from_currency=from_currency)
+    if to_currency:
+        query = query.filter_by(to_currency=to_currency)
+    # if from_date:
+    #     query = query.filter(Currency.commit_time >= from_date)
+    # if till_date:
+    #     query = query.filter(Currency.commit_time <= till_date)
 
-    if date_from:
-        exchange_rates = exchange_rates.filter(Currency.commit_time >= date_from)
-    if date_to:
-        exchange_rates = exchange_rates.filter(Currency.commit_time <= date_to)
-
-    exchange_rates = exchange_rates.all()
+    query = query.all()
 
     schema = CurrencySchema(many=True)
-    result = schema.dump(exchange_rates)
-    return jsonify(exchange_rates=result.data)
+    result = schema.dump(query)
+    return jsonify(history=result.data)
