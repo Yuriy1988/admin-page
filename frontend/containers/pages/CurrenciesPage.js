@@ -31,19 +31,23 @@ class StoreAddPage extends Component {
                         <tr>
                             <th>Date</th>
                             <th>Currency</th>
-                            <th>Course</th>
+                            <th>Rate</th>
                         </tr>
-                        <tr>
-                            <td>18d3</td>
-                            <td>John Doe</td>
-                            <td>11-7-2014</td>
-                        </tr>
+                        {
+                            currencyHistoryPagination.ids.map((id) => {
+                                return (
+                                    <tr>
+                                        <td>{currencyHistory[id].commitTime}</td>
+                                        <td>{currencyHistory[id].fromCurrency}/{currencyHistory[id].toCurrency}</td>
+                                        <td>{currencyHistory[id].rate}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+
                         </tbody>
                     </table>
                 </div>
-                <pre>
-                    {JSON.stringify(currencyHistory, null, 4)}
-                </pre>
                 <LoadingOverlay loading={currencyHistoryPagination.isFetching}/>
             </div>
         )
@@ -54,7 +58,7 @@ class StoreAddPage extends Component {
 export default connect(
     (state)=>({
         currencyHistoryPagination: state.pagination.currencyHistory,
-        currencyHistory: state.pagination.currencyHistory.result
+        currencyHistory: state.entities.currency
     }),
     {
         loadHistory: CurrenciesActions.getHistory,

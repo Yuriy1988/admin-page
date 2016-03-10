@@ -36,7 +36,7 @@ export const DICT_PAYSYS_ID = {path: "constants/paysys_id", method: "GET" };
  * CURRENCY
  */
 const currencySchema = new Schema('currency');
-const currenciesSchema = {exchangeRates: arrayOf(currencySchema)};
+const currenciesSchema = {history: arrayOf(currencySchema)};
 export const CURRENCY_HISTORY = {path: "currency/history", method: "GET", schema: currenciesSchema}; //?from_currency=USD&to_currency=UAH&from_date=2016-04-01&till_date=2016-04-08
 
 

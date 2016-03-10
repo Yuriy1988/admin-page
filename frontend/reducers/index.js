@@ -88,7 +88,7 @@ const pagination = combineReducers({
     }),
     //currencies
     currencyHistory: paginate({
-        mapActionToKey: action => "currency",
+        mapActionToKey: action => "history",
         types: [
             CurrenciesActions.CURRENCY_HISTORY_REQUEST,
             CurrenciesActions.CURRENCY_HISTORY_SUCCESS,
