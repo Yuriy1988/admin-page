@@ -2,70 +2,49 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import {RedirectActions, StoreActions, DictionaryActions} from '../../actions/index'
-import StoreModel from '../../models/store'
-import Field from '../../components/Field'
+import {RedirectActions, CurrenciesActions, DictionaryActions} from '../../actions/index'
 import Alert, {TYPE_ERROR} from '../../components/Alert'
 import LoadingOverlay from '../../components/LoadingOverlay'
-import {changeHandlerMixin} from '../../mixins/index'
 
-@changeHandlerMixin
 class StoreAddPage extends Component {
     constructor(props) {
 
         super(props);
 
-        this._onCreate = this._onCreate.bind(this);
-
-        this.onChange = this.changeHandler(this);
-        this.changeStore = this.onChange("store");
-        this.changeStoreSettings = this.changeStore("store_settings");
-
-        this.state = {
-            store: StoreModel.createStore()
-        }
     }
 
     componentDidMount() {
-        const {loadAlgorithms} = this.props;
+        const {loadHistory} = this.props;
 
-        loadAlgorithms();
-    }
-
-    _onCreate(e) {
-        e.preventDefault();
-        const { create } = this.props;
-        const { merchantId } = this.props.params;
-        const { store } = this.state;
-        create(merchantId, store);
+        loadHistory();
     }
 
     render() {
-        const { cancel, storeCreatePagination, createCE, redirect} = this.props;
-        const {signAlgorithms} = this.props;
-        const { store } = this.state;
+        const { currencyHistoryPagination, currencyHistory} = this.props;
 
-        const onCreate = this._onCreate;
-        const bindStore = this.changeStore;
-        const bindStoreSettings = this.changeStoreSettings;
-
-
-        let errors = StoreModel.createErrors();
-
-        try {
-            errors = Object.assign({}, errors, storeCreatePagination.error.serverError.errors);
-        } catch (e) {
-        }
-
-
-        if (!!storeCreatePagination.result) {
-            redirect(`/admin/administrator/stores/${storeCreatePagination.result}`);
-        }
 
         return (
-            <div>
-
-                <LoadingOverlay loading={storeCreatePagination.isFetching}/>
+            <div className="box">
+                <div className="box-body table-responsive ">
+                    <table className="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>Date</th>
+                            <th>Currency</th>
+                            <th>Course</th>
+                        </tr>
+                        <tr>
+                            <td>18d3</td>
+                            <td>John Doe</td>
+                            <td>11-7-2014</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <pre>
+                    {JSON.stringify(currencyHistory, null, 4)}
+                </pre>
+                <LoadingOverlay loading={currencyHistoryPagination.isFetching}/>
             </div>
         )
     }
@@ -74,14 +53,12 @@ class StoreAddPage extends Component {
 
 export default connect(
     (state)=>({
-        storeCreatePagination: state.pagination.storeCreate,
-        signAlgorithms: state.dictionary.signAlgorithm
+        currencyHistoryPagination: state.pagination.currencyHistory,
+        currencyHistory: state.pagination.currencyHistory.result
     }),
     {
-        cancel: RedirectActions.back,
-        create: StoreActions.create,
-        redirect: RedirectActions.redirect,
-        createCE: StoreActions.createCError,
-        loadAlgorithms: DictionaryActions.loadSignAlgorithm
+        loadHistory: CurrenciesActions.getHistory,
+        loadHistoryCE: CurrenciesActions.getHistoryCError,
+        redirect: RedirectActions.redirect
     }
 )(StoreAddPage)

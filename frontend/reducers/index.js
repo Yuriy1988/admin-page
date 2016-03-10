@@ -1,6 +1,7 @@
 import * as ActionTypes from '../actions'
 import * as MerchantActions from '../actions/merchants'
 import * as StoresActions from '../actions/stores'
+import {CurrenciesActions} from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
@@ -84,6 +85,16 @@ const pagination = combineReducers({
             StoresActions.STORE_GET_FAILURE
         ],
         cError: StoresActions.STORE_GET_CERROR
+    }),
+    //currencies
+    currencyHistory: paginate({
+        mapActionToKey: action => "currency",
+        types: [
+            CurrenciesActions.CURRENCY_HISTORY_REQUEST,
+            CurrenciesActions.CURRENCY_HISTORY_SUCCESS,
+            CurrenciesActions.CURRENCY_HISTORY_FAILURE
+        ],
+        cError: CurrenciesActions.CURRENCY_HISTORY_CERROR
     })
 });
 

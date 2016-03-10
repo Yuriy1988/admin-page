@@ -31,6 +31,15 @@ export const DICT_NOTIFY = {path: "constants/notify", method: "GET" };
 export const DICT_CATEGORY = {path: "constants/category", method: "GET" };
 export const DICT_PAYSYS_ID = {path: "constants/paysys_id", method: "GET" };
 
+
+/**
+ * CURRENCY
+ */
+const currencySchema = new Schema('currency');
+const currenciesSchema = {exchangeRates: arrayOf(currencySchema)};
+export const CURRENCY_HISTORY = {path: "currency/history", method: "GET", schema: currenciesSchema}; //?from_currency=USD&to_currency=UAH&from_date=2016-04-01&till_date=2016-04-08
+
+
 /**
  * Sign algorithm
  * > GET /api/admin/{version}/constants/sign_algorithm

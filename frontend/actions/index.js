@@ -154,3 +154,5 @@ import * as RedirectActions from './redirect'
 export {RedirectActions}
 import * as DictionaryActions from './dictionary'
 export {DictionaryActions}
+import * as CurrenciesActions from './currencies'
+export {CurrenciesActions}
