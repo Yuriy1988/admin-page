@@ -7,6 +7,10 @@ import configureStore from './store/configureStore'
 
 const store = configureStore();
 
+if (DEV_MODE) {
+    window.store = store;
+}
+
 render(
     <Root store={store}/>,
     document.getElementById('root')

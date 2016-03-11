@@ -1,6 +1,6 @@
 import merge from 'lodash/merge'
 import union from 'lodash/union'
-
+import {CLEAN_PAGINATION} from '../actions/pagination'
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
 export default function paginate({ types, mapActionToKey, cError }) {
@@ -19,7 +19,7 @@ export default function paginate({ types, mapActionToKey, cError }) {
     if (typeof successType == 'object') successType = successType.type;
     if (typeof failureType == 'object') failureType = failureType.type;
 
-    return function updatePagination(state = {
+    const initState = {
         isFetching: false,
         nextPageUrl: undefined,
         pageCount: 0,
@@ -27,7 +27,9 @@ export default function paginate({ types, mapActionToKey, cError }) {
         result: null,
         success: false,
         error: null
-    }, action) {
+    };
+
+    return function updatePagination(state = initState, action) {
         const key = mapActionToKey(action);
         if (!!cError) {
             if (action.type === cError) {
@@ -60,6 +62,8 @@ export default function paginate({ types, mapActionToKey, cError }) {
                     error: action.error,
                     success: false
                 });
+            case CLEAN_PAGINATION:
+                return initState;
             default:
                 return state
         }

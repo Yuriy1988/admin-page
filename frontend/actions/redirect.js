@@ -1,12 +1,14 @@
-export function redirect(redirectTo) {
+export function redirect(redirectTo, cleanPagination = false) {
     return {
         type: "__REDIRECT_TYPE",
-        redirectTo
+        redirectTo,
+        cleanPagination
     }
 }
-export function back() {
+export function back(cleanPagination = false) {
     return {
         type: "__REDIRECT_TYPE",
-        redirectTo: "_back_"
+        redirectTo: "_back_",
+        cleanPagination
     }
 }

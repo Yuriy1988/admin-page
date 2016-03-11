@@ -90,6 +90,19 @@ html, body, .wrapper, .components {
 .fa-spin {
     animation-duration: 0.7s !important;
 }
+
+
+
+.animated{
+    transition: 0.15s ease all;
+    cursor: pointer;
+}
+.animated:hover{
+    transform: scale(1.1,1.1);
+    z-index:1000;
+    -webkit-filter: drop-shadow( -5px -5px 15px #000 );
+    filter: drop-shadow( -5px -5px 15px #000 );
+}
 /*
 @media (min-width: 768px) {
     .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.active):hover > a > span,

@@ -83,7 +83,7 @@ class MerchantAddForm extends Component {
 
 
         if (!!merchantCreate.result) {
-            redirect(`/admin/administrator/merchants/${merchantCreate.result}`);
+            redirect(`/admin/administrator/merchants/${merchantCreate.result}`, true);
         }
 
         return (

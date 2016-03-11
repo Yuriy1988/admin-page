@@ -11,7 +11,7 @@ const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 function callApi(endpoint, body) {
     const { schema, path, method } = endpoint;
 
-    const fullUrl = API_ROOT + path;
+    let fullUrl = API_ROOT + path;
 
     const headers = new Headers();
 
@@ -25,14 +25,32 @@ function callApi(endpoint, body) {
 
 
     if (!!body) {
-        if (typeof body == 'object') {
-            options.body = JSON.stringify(body);
-        }
-        if (typeof body == 'string') {
+
+        if (method == "GET") {
+            if (typeof body == 'string') {
+                body = JSON.parse(body);
+            }
+
+            let params = [];
+            for (let key in body) {
+                params.push(`${key}=${body[key]}`);
+
+            }
+
+            if (fullUrl.indexOf("?") == -1) {
+                fullUrl += "?"
+            }
+
+            fullUrl += params.join("&");
+
+        } else {
+            if (typeof body !== 'string') {
+                body = JSON.stringify(body);
+            }
             options.body = body;
         }
-    }
 
+    }
 
     return fetch(fullUrl, options)
         .then(
@@ -128,8 +146,8 @@ export default store => next => action => {
     }
 
     /*if (!schema) {
-        throw new Error('Specify one of the exported Schemas.');
-    }*/
+     throw new Error('Specify one of the exported Schemas.');
+     }*/
 
     if (!Array.isArray(types) || types.length !== 3) {
         throw new Error('Expected an array of three action types.');

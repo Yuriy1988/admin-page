@@ -59,7 +59,7 @@ class StoreAddPage extends Component {
 
 
         if (!!storeCreatePagination.result) {
-            redirect(`/admin/administrator/stores/${storeCreatePagination.result}`);
+            redirect(`/admin/administrator/stores/${storeCreatePagination.result}`, true);
         }
 
         return (
