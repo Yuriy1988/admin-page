@@ -49,7 +49,7 @@ class Routes {
 
                     <Route path="/admin/access_denied" component={ErrorPage} status={403}/>
 
-                    <Route path="/admin">
+                    <Route path="/admin" >
                         <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
 
                         <Route path="administrator" component={AdminPage}

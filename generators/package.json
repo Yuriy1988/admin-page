@@ -1,0 +1,12 @@
+{
+  "name": "generators",
+  "version": "1.0.0",
+  "description": "Generates some data for XOPay",
+  "main": "index.js",
+  "scripts": {
+    "gen_merchants": "node index.js merchants",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vlad Harahan",
+  "license": "ISC"
+}
