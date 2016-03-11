@@ -17,6 +17,6 @@ class UserSchema(base.BaseSchema):
 
     email = fields.Email(allow_none=True)
     phone = fields.Str(allow_none=True, validate=base.Phone())
-    notify = fields.Str(allow_none=True, validate=OneOf(enum.USER_NOTIFY_ENUM))
+    notify = fields.Str(required=True, default='NONE', validate=OneOf(enum.USER_NOTIFY_ENUM))
 
     enabled = fields.Bool(required=True, default=False)
