@@ -1,51 +1,57 @@
-from flask import jsonify, request
+from datetime import timedelta
 from sqlalchemy import desc
+from flask import jsonify, request
 
 from xopay import app
+from xopay.errors import ValidationError
 from xopay.models import Currency
-from xopay.schemas import CurrencySchema
+from xopay.schemas import CurrencySchema, CurrencyRequestSchema
 
 __author__ = 'Omelchenko Daniel'
 
 
 @app.route('/api/admin/dev/currency/current', methods=['GET'])
 def currency():
-    from_currency = request.args.get('from_currency')
-    to_currency = request.args.get('to_currency')
+    request_schema = CurrencyRequestSchema()
+    data, errors = request_schema.load(request.args)
+    if errors:
+        raise ValidationError(errors=errors)
 
-    latest_version = Currency.query.order_by(desc(Currency.commit_time)).first().commit_time
+    query = Currency.query
+    if 'from_currency' in data:
+        query = query.filter_by(from_currency=data['from_currency'])
+    if 'to_currency' in data:
+        query = query.filter_by(to_currency=data['to_currency'])
 
-    query = Currency.query.filter_by(commit_time=latest_version).all()
-    if from_currency:
-        query = query.filter_by(from_currency=from_currency)
-    if to_currency:
-        query = query.filter_by(to_currency=to_currency)
-    currencies = query.all()
+    last_currency = Currency.query.order_by(desc(Currency.commit_time)).first()
+    if last_currency:
+        query = query.filter_by(commit_time=last_currency.commit_time)
 
     schema = CurrencySchema(many=True)
-    result = schema.dump(currencies)
+    result = schema.dump(query.all())
     return jsonify(current=result.data)
 
 
 @app.route('/api/admin/dev/currency/history', methods=['GET'])
 def currency_history():
-    from_currency = request.args.get('from_currency', '')
-    to_currency = request.args.get('to_currency', '')
-    # from_date = request.args.get('from_date')
-    # till_date = request.args.get('till_date')
+    request_schema = CurrencyRequestSchema()
+    data, errors = request_schema.load(request.args)
+    if errors:
+        raise ValidationError(errors=errors)
 
     query = Currency.query
-    if from_currency:
-        query = query.filter_by(from_currency=from_currency)
-    if to_currency:
-        query = query.filter_by(to_currency=to_currency)
-    # if from_date:
-    #     query = query.filter(Currency.commit_time >= from_date)
-    # if till_date:
-    #     query = query.filter(Currency.commit_time <= till_date)
-
-    query = query.all()
+    if 'from_currency' in data:
+        query = query.filter_by(from_currency=data['from_currency'])
+    if 'to_currency' in data:
+        query = query.filter_by(to_currency=data['to_currency'])
+    if 'from_date' in data:
+        query = query.filter(Currency.commit_time >= data['from_date'])
+    if 'till_date' in data:
+        query = query.filter(Currency.commit_time < data['till_date'] + timedelta(days=1))
 
     schema = CurrencySchema(many=True)
-    result = schema.dump(query)
+    result = schema.dump(query.all())
     return jsonify(history=result.data)
+
+
+# TODO: add API for currency load
