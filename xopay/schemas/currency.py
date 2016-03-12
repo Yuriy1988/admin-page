@@ -13,7 +13,7 @@ class CurrencySchema(base.BaseSchema):
     from_currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     to_currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     rate = fields.Number(required=True)
-    commit_time = fields.DateTime(required=True)
+    commit_time = fields.DateTime(dump_only=True)
 
 
 class CurrencyRequestSchema(base.BaseSchema):

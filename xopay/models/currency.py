@@ -22,3 +22,7 @@ class Currency(base.BaseModel):
 
     def __repr__(self):
         return '<Currency %r/%r (%r)>'.format(self.from_currency, self.to_currency, self.commit_time)
+
+    @classmethod
+    def request_last_commit_time(cls):
+        return db.session.query(cls.commit_time).order_by(cls.commit_time).first()
