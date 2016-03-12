@@ -11,7 +11,7 @@ const randomFloat = (min, max) => {
     return (Math.random() * (max - min)) + min;
 };
 
-const randomBool = (min, max) => {
+const randomBool = () => {
     return !!(Math.floor(Math.random() * 2));
 };
 

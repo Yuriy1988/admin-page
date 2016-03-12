@@ -3,44 +3,34 @@
  */
 console.log("#XOPay demo generator");
 
-const http = require("http");
 const configs = require("./config");
+const Requester = require('./lib/requester');
+
+
+const requester = new Requester(configs);
+
+
+const endpoints = require("./endpoints");
+
 
 const generateMerchant = require("./data/merchants");
 
-console.log();
+const generateStore = require("./data/store");
 
+for (var i = 0; i < 25; i++) {
+    requester.makeRequest(endpoints.CREATE_MERCHANT, generateMerchant());
+}
 
-var postData = JSON.stringify(generateMerchant());
-
-
-var options = {
-    hostname: configs.host,
-    port: configs.port,
-    path: '/api/admin/dev/merchants',
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': postData.length
+for (var i = 0; i < 5; i++) {
+    for (var j = 0; j < 20; j++) {
+        requester.makeRequest(endpoints.CREATE_MERCHANT_STORE(i), generateStore());
     }
-};
+}
 
-var req = http.request(options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => {
-        console.log(`BODY: ${chunk}`);
-    });
-    res.on('end', () => {
-        console.log('No more data in response.')
-    })
-});
 
-req.on('error', (e) => {
-    console.log(`problem with request: ${e.message}`);
-});
+//requester.makeRequest(endpoints.CREATE_MERCHANT, generateMerchant());
 
-// write data to request body
-req.write(postData);
-req.end();
+
+
+
+

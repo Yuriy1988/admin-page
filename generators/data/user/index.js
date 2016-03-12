@@ -33,5 +33,4 @@ generate.generateName = () => {
     return fName + " " + lName;
 };
 
-
 module.exports = generate;
