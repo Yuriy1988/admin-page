@@ -55,11 +55,11 @@ function callApi(endpoint, body) {
     return fetch(fullUrl, options)
         .then(
             response => {
-                return response.json().then(json => ({json, response}))
+                return response;//response.json().then(json => ({json, response}))
             },
             requestError => {
                 const errorObj = {
-                    code: 0,
+                    code: 1,
                     message: requestError.message,
                     serverError: {
                         errors: {},
@@ -71,20 +71,18 @@ function callApi(endpoint, body) {
             }
         )
         .then(
-            ({json, response}) => {
+            (response) => {
                 if (response.ok) {
-                    let camelizedJson = camelizeKeys(json);
-
-                    if (!!schema) {
-                        camelizedJson = normalize(camelizedJson, schema);
-                    }
-
-                    return Object.assign({}, camelizedJson)
+                    return response.json()
                 } else {
                     const errorObj = {
                         code: response.status,
                         message: response.statusText,
-                        serverError: json.error
+                        serverError: {
+                            errors: {},
+                            message: "",
+                            status_code: 0
+                        }
                     };
 
                     return Promise.reject(errorObj);
@@ -92,7 +90,7 @@ function callApi(endpoint, body) {
             },
             error => {
                 let errorObj = {
-                    code: 0,
+                    code: 2,
                     message: error.message,
                     serverError: {
                         errors: {},
@@ -104,6 +102,25 @@ function callApi(endpoint, body) {
                 errorObj = Object.assign({}, errorObj, error);
 
                 return Promise.reject(errorObj);
+            }
+        ).then(
+            json => {
+                let camelizedJson = camelizeKeys(json);
+
+                if (!!schema) {
+                    camelizedJson = normalize(camelizedJson, schema);
+                }
+
+                return Object.assign({}, camelizedJson)
+            },
+            error => {
+                if (!error.code) {
+                    return {
+                        result: {}
+                    }
+                } else {
+                    return Promise.reject(error)
+                }
             }
         );
 }
@@ -153,7 +170,7 @@ export default store => next => action => {
         throw new Error('Expected an array of three action types.');
     }
     if (!types.every(type => typeof type === 'string' || typeof type === 'object')) {
-        throw new Error('Expected action types to be strings.');
+        throw new Error('Expected action types to be strings or action object.');
     }
 
 

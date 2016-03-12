@@ -8,7 +8,7 @@ export default class Field extends Component {
         return (
             <div className={`form-group ${(!!error) ? "has-error" : ""} `}>
                 {children}
-                {(!!error) ? (error.map(e=><p className="help-block">{e}</p>)) : null}
+                {(!!error) ? (error.map(e => <p className="help-block">{e}</p>)) : null}
             </div>
         );
     }

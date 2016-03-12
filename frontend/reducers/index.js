@@ -12,8 +12,13 @@ import { combineReducers } from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
 function entities(state = {merchants: {}, stores: {}}, action) {
-    if (action.response && action.response.entities) {
+    if (!!action.response && !!action.response.entities) {
         return merge({}, state, action.response.entities);
+    }
+    if (!!action.deleteObject && !!action.deleteObject.entity) {
+        const newState = merge({}, state);
+        delete newState[action.deleteObject.entity][action.deleteObject.id];
+        return newState;
     }
     return state;
 }
@@ -24,6 +29,7 @@ const pagination = combineReducers({
 //Merchants
     merchants: paginate({
         mapActionToKey: action => "merchants",
+        entity: "merchants",
         types: [
             MerchantActions.MERCHANTS_LIST_REQUEST,
             MerchantActions.MERCHANTS_LIST_SUCCESS,
@@ -50,7 +56,7 @@ const pagination = combineReducers({
         cError: MerchantActions.MERCHANT_CREATE_CERROR
     }),
     merchantDelete: paginate({
-        mapActionToKey: action => "merchant",
+        mapActionToKey: action => "merchants",
         types: [
             MerchantActions.MERCHANT_DELETE_REQUEST,
             MerchantActions.MERCHANT_DELETE_SUCCESS,
@@ -61,6 +67,7 @@ const pagination = combineReducers({
 //Stores
     stores: paginate({
         mapActionToKey: action => "stores",
+        entity: "stores",
         types: [
             StoresActions.STORES_LIST_REQUEST,
             StoresActions.STORES_LIST_SUCCESS,

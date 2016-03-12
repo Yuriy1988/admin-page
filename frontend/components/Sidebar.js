@@ -48,6 +48,3 @@ export default connect((store)=> {
     enableSideBar: SideBarAction.enable,
     disableSideBar: SideBarAction.disable
 })(Sidebar);
-/* < */
-/*
- <!--i className="fa fa-angle-left pull-right"></i-->*/

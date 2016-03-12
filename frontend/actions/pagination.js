@@ -2,9 +2,10 @@
  * Created by gasya on 11.03.16.
  * DigitalOutlooks corporation.
  */
-export const CLEAN_PAGINATION = "CLEAN_PAGINATION";
-export function cleanPagination() {
+
+export const CLEAR_PAGINATION = "CLEAR_PAGINATION";
+export function clear() {
     return {
-        type: CLEAN_PAGINATION
+        type: CLEAR_PAGINATION
     }
 }

@@ -5,9 +5,7 @@ import App              from './containers/App'
 
 import ErrorPage        from './containers/ErrorPage'
 
-import UserPage         from './containers/UserPage'
 import LoginPage        from './containers/LoginPage'
-import RepoPage         from './containers/RepoPage'
 import TestPage         from './containers/TestPage'
 import AdminPage        from './containers/AdminPage'
 import SelectRolePage   from './containers/SelectRolePage'

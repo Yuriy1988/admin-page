@@ -1,3 +1,4 @@
+//TODO refactor
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
@@ -7,11 +8,8 @@ class SidebarItem extends Component {
         super(props);
     }
 
-
     render() {
-
         const {icon, to, children} =  this.props;
-
 
         switch (typeof to) {
             case 'string':
@@ -34,9 +32,10 @@ class SidebarItem extends Component {
                     </li>
                 );
                 break;
+            default:
+                return null
         }
     }
-
 }
 
 
@@ -56,12 +55,8 @@ class SidebarContainer extends Component {
     }
 
     render() {
-
         const {icon, title, children} = this.props;
         const {showChildren} = this.state;
-        /* const activeClass = "active";
-         const hasSubItemsClass = (this.hasSubItems(props)) ? "treeview" : "";*/
-
         return (
             <li className={["treeview", (showChildren)?"active":""].join(" ")}>
                 <a href="#" onClick={this.toggleShow}>
@@ -78,15 +73,6 @@ class SidebarContainer extends Component {
         );
 
     }
-
 }
 
-
-SidebarItem = connect()(SidebarItem);
-SidebarContainer = connect()(SidebarContainer);
-
-export { SidebarItem as SidebarItem, SidebarContainer as SidebarContainer};
-
-/* < */
-/*
- <!--i className="fa fa-angle-left pull-right"></i-->*/
+export { SidebarItem, SidebarContainer };

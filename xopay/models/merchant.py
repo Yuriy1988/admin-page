@@ -12,7 +12,7 @@ class MerchantAccount(base.BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     bank_name = db.Column(db.String(255), nullable=False)
-    checking_account = db.Column(db.String(14), nullable=False)
+    checking_account = db.Column(db.String(24), nullable=False)
     currency = db.Column(db.Enum(*enum.CURRENCY_ENUM, name='enum_currency'), default='USD', nullable=False)
     mfo = db.Column(db.String(6), nullable=False)
     okpo = db.Column(db.String(8), nullable=False)

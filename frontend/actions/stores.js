@@ -21,6 +21,7 @@ export function getList(merchantId) {
     }
 }
 
+
 import {STORES_CREATE} from '../lib/api'
 export const STORES_CREATE_REQUEST = 'STORES_CREATE_REQUEST';
 export const STORES_CREATE_SUCCESS = 'STORES_CREATE_SUCCESS';

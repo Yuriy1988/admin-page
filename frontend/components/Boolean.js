@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 
 export default class Boolean extends Component {
 
-    renderContent(value) {
-        switch(value) {
+    static renderContent(value) {
+        switch (value) {
             case true:
                 return <i className="fa fa-check text-green"/>;
                 break;
@@ -21,7 +21,7 @@ export default class Boolean extends Component {
 
         return (
             <div {...this.props} >
-                {this.renderContent(value)}
+                {Boolean.renderContent(value)}
             </div>
         );
     }

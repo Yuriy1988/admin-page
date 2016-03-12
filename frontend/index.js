@@ -1,5 +1,4 @@
 import Polyfill from 'babel-polyfill'
-
 import React from 'react'
 import { render } from 'react-dom'
 import Root from './containers/Root'
@@ -11,7 +10,9 @@ if (DEV_MODE) {
     window.store = store;
 }
 
-render(
-    <Root store={store}/>,
-    document.getElementById('root')
-);
+const targetNode = document.getElementById('root');
+const RootComponent = <Root store={store}/>;
+
+
+//ENTRY point (Root render)
+render(RootComponent, targetNode);

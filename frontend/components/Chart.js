@@ -2,6 +2,9 @@
  * Created by gasya on 10.03.16.
  * DigitalOutlooks corporation.
  */
+
+
+//TODO  refactor
 import React, {Component} from 'react'
 
 export default class Chart extends Component {

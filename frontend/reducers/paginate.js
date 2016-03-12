@@ -1,9 +1,9 @@
 import merge from 'lodash/merge'
 import union from 'lodash/union'
-import {CLEAN_PAGINATION} from '../actions/pagination'
+import {CLEAR_PAGINATION} from '../actions/pagination'
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
-export default function paginate({ types, mapActionToKey, cError }) {
+export default function paginate({ types, mapActionToKey, cError, entity}) {
     if (!Array.isArray(types) || types.length !== 3) {
         throw new Error('Expected types to be an array of three elements.')
     }
@@ -29,13 +29,22 @@ export default function paginate({ types, mapActionToKey, cError }) {
         error: null
     };
 
-    return function updatePagination(state = initState, action) {
+    return function updatePagination(stateOrigin = initState, actionOrigin) {
+        const action = merge({}, actionOrigin);
+        const state = merge({}, stateOrigin);
         const key = mapActionToKey(action);
         if (!!cError) {
             if (action.type === cError) {
                 return Object.assign({}, state, {
                     error: null
                 });
+            }
+        }
+
+
+        if (!!entity) {
+            if (!!action.deleteObject && action.deleteObject.entity == entity) {
+                state.ids = state.ids.filter((id) => id != action.deleteObject.id);
             }
         }
 
@@ -47,11 +56,16 @@ export default function paginate({ types, mapActionToKey, cError }) {
                     success: false
                 });
             case successType:
+                const response = action.response;
+                let ids = [];
+                if (!!response.result[key]) {
+                    ids = response.result[key]
+                }
                 return Object.assign({}, state, {
                     isFetching: false,
-                    ids: action.response.result[key],
-                    result: action.response.result,
-                    nextPageUrl: action.response.nextPageUrl,
+                    ids,
+                    result: response.result,
+                    nextPageUrl: response.nextPageUrl,
                     pageCount: state.pageCount + 1,
                     error: null,
                     success: true
@@ -62,7 +76,7 @@ export default function paginate({ types, mapActionToKey, cError }) {
                     error: action.error,
                     success: false
                 });
-            case CLEAN_PAGINATION:
+            case CLEAR_PAGINATION:
                 return initState;
             default:
                 return state

@@ -1,3 +1,4 @@
+//TODO refactor
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
@@ -5,8 +6,6 @@ import { Link } from 'react-router'
 import * as MerchantActions from '../actions/merchants';
 import Alert, {TYPE_ERROR} from '../components/Alert';
 import LoadingOverlay from '../components/LoadingOverlay';
-
-
 
 
 class MerchantList extends Component {
@@ -36,9 +35,16 @@ class MerchantList extends Component {
         ) : <p>No items</p>;
     }
 
+    handleDeleteButton(mid) {
+        const {deleteMerchant} = this.props;
+        if (confirm("Are you sure you want to delete merchant?")) {
+            deleteMerchant(mid);
+        }
+    }
+
     render() {
 
-        let {merchants, merchantPagination, loadMerchantsCE} = this.props;
+        let {merchants, merchantPagination, loadMerchantsCE,  deleteMerchantCE} = this.props;
 
         const merchantList = MerchantList.renderList(merchantPagination.ids.map((merchantId, i) => {
             return (
@@ -52,13 +58,13 @@ class MerchantList extends Component {
                     <td >
                         <div className="btn-toolbar">
                             <Link className="btn btn-sm btn-primary"
-                                  to={`/admin/administrator/merchants/${merchants[merchantId].id}`}>
+                                  to={`/admin/administrator/merchants/${merchants[merchantId].id}/edit`}>
                                 <i className="fa fa-edit"/> Edit
                             </Link>
-                            <Link className="btn btn-sm btn-danger"
-                                  to={`/admin/administrator/merchants/${merchants[merchantId].id}`}>
+                            <button className="btn btn-sm btn-danger"
+                                    onClick={this.handleDeleteButton.bind(this, merchants[merchantId].id)}>
                                 <i className="fa fa-trash"/> Delete
-                            </Link>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -98,7 +104,9 @@ export default connect(
     }),
     {
         loadMerchants: MerchantActions.getList,
-        loadMerchantsCE: MerchantActions.getListCError
+        loadMerchantsCE: MerchantActions.getListCError,
+        deleteMerchant: MerchantActions.deleteById,
+        deleteMerchantCE: MerchantActions.deleteByIdCError
     }
 )(MerchantList)
 
