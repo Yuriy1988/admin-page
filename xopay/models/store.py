@@ -16,7 +16,7 @@ class StoreSettings(base.BaseModel):
     sign_key = db.Column(db.String(127), nullable=False, unique=True)
     succeed_url = db.Column(db.String(255), nullable=False)
     failure_url = db.Column(db.String(255), nullable=False)
-    commission_pct = db.Column(db.Numeric(precision=2, scale=4), nullable=False)
+    commission_pct = db.Column(db.Numeric, nullable=False)
 
     def __init__(self, sign_algorithm, sign_key, succeed_url, failure_url, commission_pct):
         self.sign_algorithm = sign_algorithm
@@ -39,7 +39,7 @@ class Store(base.BaseModel):
     store_identifier = db.Column(db.String(127), nullable=False, unique=True)
 
     category = db.Column(db.Enum(*enum.STORE_CATEGORY_ENUM, name='enum_store_category'))
-    description = db.Column(db.String(255))
+    description = db.Column(db.String(512))
     logo = db.Column(db.String(255))
     show_logo = db.Column(db.Boolean, default=False)
 

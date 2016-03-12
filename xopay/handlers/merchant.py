@@ -31,7 +31,7 @@ def merchant_create():
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>', methods=['GET'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>', methods=['GET'])
 def merchant_detail(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -43,7 +43,7 @@ def merchant_detail(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>', methods=['PUT'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>', methods=['PUT'])
 def merchant_update(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -61,7 +61,7 @@ def merchant_update(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>', methods=['DELETE'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>', methods=['DELETE'])
 def merchant_delete(merchant_id):
     delete_count = Merchant.query.filter_by(id=merchant_id).delete()
     if delete_count == 0:
@@ -71,7 +71,7 @@ def merchant_delete(merchant_id):
     return Response(status=200)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>/managers', methods=['GET'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>/managers', methods=['GET'])
 def merchant_managers_list(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -82,7 +82,7 @@ def merchant_managers_list(merchant_id):
     return jsonify(managers=result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>/managers', methods=['POST'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>/managers', methods=['POST'])
 def merchant_manager_create(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -101,7 +101,7 @@ def merchant_manager_create(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>/stores', methods=['GET'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['GET'])
 def merchant_stores_list(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -112,7 +112,7 @@ def merchant_stores_list(merchant_id):
     return jsonify(stores=result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>/stores', methods=['POST'])
+@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['POST'])
 def merchant_stores_create(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:

@@ -8,7 +8,7 @@ from xopay.schemas import ManagerSchema
 __author__ = 'Kostel Serhii'
 
 
-@app.route('/api/admin/dev/managers/<manager_id>', methods=['GET'])
+@app.route('/api/admin/dev/managers/<int:manager_id>', methods=['GET'])
 def manager_detail(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -20,7 +20,7 @@ def manager_detail(manager_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/managers/<manager_id>', methods=['PUT'])
+@app.route('/api/admin/dev/managers/<int:manager_id>', methods=['PUT'])
 def manager_update(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -38,7 +38,7 @@ def manager_update(manager_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/managers/<manager_id>', methods=['DELETE'])
+@app.route('/api/admin/dev/managers/<int:manager_id>', methods=['DELETE'])
 def manager_delete(manager_id):
     delete_count = Manager.query.filter_by(id=manager_id).delete()
     if delete_count == 0:
