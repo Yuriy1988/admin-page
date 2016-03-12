@@ -84,8 +84,7 @@ def merchant_managers_list(merchant_id):
 
 @app.route('/api/admin/dev/merchants/<int:merchant_id>/managers', methods=['POST'])
 def merchant_manager_create(merchant_id):
-    merchant = Merchant.query.get(merchant_id)
-    if not merchant:
+    if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
     schema = ManagerSchema()
@@ -93,7 +92,7 @@ def merchant_manager_create(merchant_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    data['merchant_id'] = merchant.id
+    data['merchant_id'] = merchant_id
     manager = Manager.create(data)
     db.session.commit()
 
@@ -103,7 +102,7 @@ def merchant_manager_create(merchant_id):
 
 @app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['GET'])
 def merchant_stores_list(merchant_id):
-    merchant = Merchant.query.get(merchant_id)
+    merchant = Merchant.exists(merchant_id)
     if not merchant:
         raise NotFoundError()
 
@@ -114,8 +113,7 @@ def merchant_stores_list(merchant_id):
 
 @app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['POST'])
 def merchant_stores_create(merchant_id):
-    merchant = Merchant.query.get(merchant_id)
-    if not merchant:
+    if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
     schema = StoreSchema()
@@ -123,7 +121,7 @@ def merchant_stores_create(merchant_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    data['merchant_id'] = merchant.id
+    data['merchant_id'] = merchant_id
     store = Store.create(data)
     db.session.commit()
 

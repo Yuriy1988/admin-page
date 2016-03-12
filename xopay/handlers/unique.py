@@ -13,7 +13,7 @@ def _unique_checker(field_models):
         value = request.args.get(field)
         if not value:
             continue
-        unique = model.check_unique(field_name=field, checked_value=value)
+        unique = model.unique(field_name=field, checked_value=value)
         return jsonify(unique=unique)
 
     raise ValidationError(message='Wrong request argument')

@@ -49,7 +49,7 @@ class Unique(_Validator):
         return (self.error or message).format(input=value, field_name=self.field_name)
 
     def __call__(self, value):
-        if not self.model.check_unique(self.field_name, value):
+        if not self.model.unique(self.field_name, value):
             raise ValidationError(self._format_error(value, self.message))
 
         return value
