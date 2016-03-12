@@ -7,7 +7,7 @@ FRONTEND_FOLDER = os.path.join(BASE_FOLDER, 'frontend')
 STATIC_FOLDER = os.path.join(FRONTEND_FOLDER, 'static')
 
 # Define the database
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_FOLDER, 'xopay.db')
+SQLALCHEMY_DATABASE_URI = 'postgresql://xopadmin:UC4EhhQ6HkwNn7qK@localhost/xopadmindb'
 SQLALCHEMY_TRACK_MODIFICATIONS = False      # flask-sql signaling not used now
 
 CSRF_ENABLED = True

@@ -12,9 +12,10 @@ __author__ = 'Kostel Serhii'
 
 class BaseTestCase(TestCase):
 
-    SQLALCHEMY_DATABASE_URI = "sqlite://"   # in memory
+    # If database is missing, run shell command: make db_test_create
+    SQLALCHEMY_DATABASE_URI = "postgresql://xopadmintest:test123@localhost/xopadmintestdb"
 
-    url_prefix = '/api/admin/dev'
+    api_base = '/api/admin/dev'
 
     # defaults
 
@@ -35,7 +36,7 @@ class BaseTestCase(TestCase):
         "last_name": "Doe",
         "email": "jhon.doe@test.com",
         "phone": "304201234567",
-        "notify": None,
+        "notify": "NONE",
         "enabled": True
     }
     _merchant = {
@@ -47,11 +48,14 @@ class BaseTestCase(TestCase):
 
     def setUp(self):
         """ Setup before test case """
+        app_db.session.close()
+        app_db.drop_all()
         app_db.create_all()
 
     def tearDown(self):
         """ Teardown after test case """
         self.db.remove()
+        app_db.session.close()
         app_db.drop_all()
 
     @property
@@ -81,21 +85,21 @@ class BaseTestCase(TestCase):
         return ''.join((random.choice(a_zA_Z0_9) for i in range(str_len)))
 
     def get(self, url):
-        response = self.client.get(self.url_prefix + url)
+        response = self.client.get(self.api_base + url)
         return response.status_code, response.json
 
     def put(self, url, body):
         headers = {"Content-Type": "application/json"}
-        response = self.client.put(self.url_prefix + url, data=json.dumps(body), headers=headers)
+        response = self.client.put(self.api_base + url, data=json.dumps(body), headers=headers)
         return response.status_code, response.json
 
     def post(self, url, body):
         headers = {"Content-Type": "application/json"}
-        response = self.client.post(self.url_prefix + url, data=json.dumps(body), headers=headers)
+        response = self.client.post(self.api_base + url, data=json.dumps(body), headers=headers)
         return response.status_code, response.json
 
     def delete(self, url):
-        response = self.client.delete(self.url_prefix + url)
+        response = self.client.delete(self.api_base + url)
         return response.status_code, response.json if response.status_code >=400 else None
 
     def get_merchant(self):
