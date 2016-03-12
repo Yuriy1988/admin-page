@@ -2,5 +2,6 @@
 *.pyc
 *.db
 venv
-frontend/node_modules/
+node_modules
 migrations
+*.DS_Store
