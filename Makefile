@@ -9,7 +9,7 @@ DB_TEST_PASSWORD=test123
 
 # ========== Linux ==========
 
-# Install
+# ----- Install -----
 
 install_python35_repo:
 	sudo add-apt-repository ppa:fkrull/deadsnakes
@@ -26,7 +26,7 @@ install: install_python install_postgres
 	sudo chmod +x manage.py
 
 
-# Database
+# ------ Database -----
 
 db_psql_remove:
 	sudo -u postgres dropdb -e --if-exists $(DB_NAME)
@@ -63,7 +63,7 @@ db_update:
 db_create: db_psql_create db_update
 
 
-# Virtualenv
+# ----- Virtualenv -----
 
 venv_install:
 	virtualenv --no-site-packages -p python3.5 venv
@@ -71,17 +71,6 @@ venv_install:
 
 venv_update:
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
-
-
-
-
-cron_setup:
-	echo '0 0 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' > temp
-	echo '0 6 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' >> temp
-	echo '0 12 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' >> temp
-	echo '0 18 * * * bash -c "cd $(CURDIR)/currency_daemon && ./update.py"' >> temp
-	bash -c "crontab temp"
-	rm temp
 
 
 # ========== MacOS ==========
