@@ -10,6 +10,8 @@
   "author": "Vlad Harahan",
   "license": "ISC",
   "devDependencies": {
-    "lorem-ipsum": "^1.0.3"
+    "lodash": "^4.6.1",
+    "lorem-ipsum": "^1.0.3",
+    "node-argument-parser": "^0.1.0"
   }
 }

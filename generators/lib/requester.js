@@ -10,12 +10,14 @@ class Requester {
     constructor(configs) {
         this.configs = configs;
         this.makeRequest = this.makeRequest.bind(this);
+        this.showLogs = false;
     }
 
     makeRequest(endpoint, data) {
         const postData = JSON.stringify(data);
 
-        console.log("REQEST",endpoint, data);
+        if (this.showLogs) console.log("REQEST",endpoint);
+        if (this.showLogs) console.log("REQEST_DATA", data);
         const options = {
             hostname: this.configs.host,
             port: this.configs.port,
@@ -28,19 +30,19 @@ class Requester {
         };
 
         const req = http.request(options, (res) => {
-            console.log(`STATUS: ${res.statusCode}`);
-            console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+            if (this.showLogs) console.log(`STATUS: ${res.statusCode}`);
+            if (this.showLogs) console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
             res.setEncoding('utf8');
             res.on('data', (chunk) => {
-                console.log(`BODY: ${chunk}`);
+                if (this.showLogs) console.log(`BODY: ${chunk}`);
             });
             res.on('end', () => {
-                console.log('No more data in response.')
+                if (this.showLogs) console.log('No more data in response.')
             })
         });
 
         req.on('error', (e) => {
-            console.log(`problem with request: ${e.message}`);
+            if (this.showLogs) console.log(`problem with request: ${e.message}`);
         });
 
         req.write(postData);
