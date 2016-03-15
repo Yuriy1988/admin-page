@@ -102,7 +102,7 @@ def merchant_manager_create(merchant_id):
 
 @app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['GET'])
 def merchant_stores_list(merchant_id):
-    merchant = Merchant.exists(merchant_id)
+    merchant = Merchant.query.get(merchant_id)
     if not merchant:
         raise NotFoundError()
 

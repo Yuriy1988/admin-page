@@ -65,14 +65,14 @@ class Phone(Regexp):
         super().__init__(regex, **kwargs)
 
 
-class FixedDigitsNum(Regexp):
+class DigitsOnly(Regexp):
 
-    default_message = 'Value must contains exactly {num} digits.'
-    default_regex = '^\d{%d}$'
+    default_message = 'Value must contains only digits.'
+    default_regex = '^\d+$'
 
-    def __init__(self, digits_number, **kwargs):
-        regex = kwargs.pop('regex', self.default_regex % digits_number)
-        error = kwargs.pop('error', self.default_message.format(num=digits_number))
+    def __init__(self, **kwargs):
+        regex = kwargs.pop('regex', self.default_regex)
+        error = kwargs.pop('error', self.default_message)
         super().__init__(regex, error=error, **kwargs)
 
 

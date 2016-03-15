@@ -10,10 +10,10 @@ __author__ = 'Kostel Serhii'
 class MerchantAccountSchema(base.BaseSchema):
 
     bank_name = fields.Str(required=True, validate=Length(min=3, max=255))
-    checking_account = fields.Str(required=True, validate=Length(min=12, max=24))
+    checking_account = fields.Str(required=True, validate=[base.DigitsOnly(), Length(min=12, max=24)])
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM), default='USD')
-    mfo = fields.Str(required=True, validate=base.FixedDigitsNum(6))
-    okpo = fields.Str(required=True, validate=base.FixedDigitsNum(8))
+    mfo = fields.Str(required=True, validate=[base.DigitsOnly(), Length(equal=6)])
+    okpo = fields.Str(required=True, validate=[base.DigitsOnly(), Length(equal=8)])
 
 
 class MerchantInfoSchema(base.BaseSchema):

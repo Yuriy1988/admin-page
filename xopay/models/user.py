@@ -24,7 +24,7 @@ class User(base.BaseModel):
     last_name = db.Column(db.String(80))
 
     email = db.Column(db.String(255))
-    phone = db.Column(db.String(12))
+    phone = db.Column(db.String(16))
     notify = db.Column(db.Enum(*enum.USER_NOTIFY_ENUM, name='enum_user_notify'), nullable=False, default='NONE')
 
     enabled = db.Column(db.Boolean, nullable=False, default=False)

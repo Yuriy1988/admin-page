@@ -160,10 +160,16 @@ class TestMerchant(base.BaseTestCase):
         errors = body['error']['errors']
         self.assertIn('currency', errors['merchant_account'])
 
-    def test_post_merchant_not_valid_merchant_account_fixer_digits_num(self):
+    def test_post_merchant_not_valid_merchant_account_digits_fields(self):
         merchant = self.get_merchant()
+        checked_values = [
+            ('', '', ''),
+            ('a'+'0'*13, 'b'+'5'*5, 'c'+'7'*7),
+            ('1'*11, '2'*5, '3'*7),
+            ('4'*25, '5'*7, '6'*9)
+        ]
 
-        for checking_account, mfo, okpo in [('1'*13, '2'*5, '3'*7), ('4'*15, '5'*7, '6'*9)]:
+        for checking_account, mfo, okpo in checked_values:
             merchant['merchant_account']['checking_account'] = checking_account
             merchant['merchant_account']['mfo'] = mfo
             merchant['merchant_account']['okpo'] = okpo
@@ -240,20 +246,9 @@ class TestMerchant(base.BaseTestCase):
     def test_get_merchant_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        status, body = self.get('/merchants/0')
-        self.assertEqual(status, 404)
-
-        status, body = self.get('/merchants/2')
-        self.assertEqual(status, 404)
-
-        status, body = self.get('/merchants/test')
-        self.assertEqual(status, 404)
-
-        status, body = self.get('/merchants/null')
-        self.assertEqual(status, 404)
-
-        status, body = self.get('/merchants/')
-        self.assertEqual(status, 404)
+        for merchant_id in ['0', '2', 'test', 'null', '']:
+            status, body = self.get('/merchants/%s' % merchant_id)
+            self.assertEqual(status, 404)
 
     # PUT /merchants/<merchant_id>
 
@@ -303,8 +298,6 @@ class TestMerchant(base.BaseTestCase):
         status, body = self.put('/merchants/%s' % merchant_model.id, {'merchant_info': merchant_info})
         self.assertEqual(status, 200)
         self.assertEqual(body['merchant_info'], merchant_info)
-
-    # def test_put_merchant_update_merchant_info
 
     def test_put_merchant_update_merchant_account_success(self):
         merchant = self.create_merchant(self.get_merchant(), merchant_name='merchant_name')
@@ -367,20 +360,9 @@ class TestMerchant(base.BaseTestCase):
     def test_put_merchant_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        status, body = self.put('/merchants/0', {'merchant_name': 'not found'})
-        self.assertEqual(status, 404)
-
-        status, body = self.put('/merchants/2', {'merchant_name': 'not found'})
-        self.assertEqual(status, 404)
-
-        status, body = self.put('/merchants/test', {'merchant_name': 'not found'})
-        self.assertEqual(status, 404)
-
-        status, body = self.put('/merchants/null', {'merchant_name': 'not found'})
-        self.assertEqual(status, 404)
-
-        status, body = self.put('/merchants/', {'merchant_name': 'not found'})
-        self.assertEqual(status, 404)
+        for merchant_id in ['0', '2', 'test', 'null', '']:
+            status, body = self.put('/merchants/%s' % merchant_id, {'merchant_name': 'not found'})
+            self.assertEqual(status, 404)
 
     # DELETE /merchants/<merchant_id>
 
@@ -405,26 +387,89 @@ class TestMerchant(base.BaseTestCase):
     def test_delete_merchant_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        status, body = self.delete('/merchants/0')
-        self.assertEqual(status, 404)
-
-        status, body = self.delete('/merchants/2')
-        self.assertEqual(status, 404)
-
-        status, body = self.delete('/merchants/test')
-        self.assertEqual(status, 404)
-
-        status, body = self.delete('/merchants/null')
-        self.assertEqual(status, 404)
-
-        status, body = self.delete('/merchants/')
-        self.assertEqual(status, 404)
+        for merchant_id in ['0', '2', 'test', 'null', '']:
+            status, body = self.delete('/merchants/%s' % merchant_id)
+            self.assertEqual(status, 404)
 
     # GET /merchants/<merchant_id>/managers
+
+    def test_get_merchant_managers_list_empty(self):
+        merchant = self.create_merchant(self.get_merchant())
+
+        status, body = self.get('/merchants/%s/managers' % merchant.id)
+
+        self.assertEqual(status, 200)
+        self.assertIn('managers', body)
+        self.assertListEqual(body['managers'], [])
+
+    def test_get_merchant_managers_list_all(self):
+        merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        managers_num = 10
+        for mi in range(managers_num):
+            manager = self.get_manager()
+            self.create_manager(manager, merchant_id, username='user' + str(mi))
+
+        status, body = self.get('/merchants/%s/managers' % merchant_id)
+
+        self.assertEqual(status, 200)
+        self.assertIn('managers', body)
+        self.assertEqual(len(body['managers']), managers_num)
+
+    def test_get_merchant_managers_list_valid_structure(self):
+        merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        managers_num = 10
+        for mi in range(managers_num):
+            manager = self.get_manager()
+            self.create_manager(manager, merchant_id, username='user' + str(mi))
+
+        status, body = self.get('/merchants/%s/managers' % merchant_id)
+        self.assertEqual(status, 200)
+
+        for manager in body['managers']:
+            self.assertIn('id', manager)
+            self.assertIn('user', manager)
+
+            self.assertIsInstance(manager.pop('id'), int)
+            self.assertIsInstance(manager.pop('user'), dict)
+
+            self.assertDictEqual(manager, {})
+
+    def test_get_merchant_managers_not_found(self):
+        self.create_merchant(self.get_merchant())
+
+        for merchant_id in ['0', '2', 'test', 'null', '']:
+            status, body = self.get('/merchants/%s/managers' % merchant_id)
+            self.assertEqual(status, 404)
 
     # POST /merchants/<merchant_id>/managers
 
     # GET /merchants/<merchant_id>/stores
+
+    def test_get_merchant_stores_list_empty(self):
+        merchant = self.create_merchant(self.get_merchant())
+
+        status, body = self.get('/merchants/%s/stores' % merchant.id)
+
+        self.assertEqual(status, 200)
+        self.assertIn('stores', body)
+        self.assertListEqual(body['stores'], [])
+
+    def test_get_merchant_stores_list_all(self):
+        # TODO: continue
+        pass
+
+    def test_get_merchant_stores_list_valid_structure(self):
+        # TODO: continue
+        pass
+
+    def test_get_merchant_stores_not_found(self):
+        self.create_merchant(self.get_merchant())
+
+        for merchant_id in ['0', '2', 'test', 'null', '']:
+            status, body = self.get('/merchants/%s/stores' % merchant_id)
+            self.assertEqual(status, 404)
 
     # POST /merchants/<merchant_id>/stores
 

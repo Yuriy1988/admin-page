@@ -193,7 +193,6 @@ class TestUser(base.BaseTestCase):
         }
 
         status, body = self.put('/merchants/%s' % merchant.id, {'user': user})
-        print(body)
         self.assertEqual(status, 200)
         self.assertEqual(body['user'], user)
 

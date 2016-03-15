@@ -41,7 +41,7 @@ class BaseModel(db.Model):
             raise AttributeError('Can not check exists ')
 
         pk_field_name = primary_key_fields[0].name
-        return cls.unique(pk_field_name, primary_key)
+        return not cls.unique(pk_field_name, primary_key)
 
     @classmethod
     def create(cls, data, add_to_db=True):
