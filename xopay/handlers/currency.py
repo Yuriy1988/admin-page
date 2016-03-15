@@ -56,9 +56,12 @@ def currency_history():
 @app.route('/api/admin/dev/currency/update', methods=['POST'])
 def currency_update():
     """ Handler for currency daemon to update information about currency. """
+    data_json = request.get_json()
+    if not data_json or 'update' not in data_json:
+        raise ValidationError(message='Wrong JSON or update field missing')
 
     schema = CurrencySchema(many=True)
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(data_json['update'])
     if errors:
         raise ValidationError(errors=errors)
 
