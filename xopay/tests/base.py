@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import random
 import string
 import json
@@ -5,7 +7,7 @@ from copy import deepcopy
 from flask.ext.testing import TestCase
 
 from xopay import app, db as app_db
-from xopay.models import User, Merchant, Manager, Store
+from xopay.models import User, Merchant, Manager, Store, MerchantContract
 
 __author__ = 'Kostel Serhii'
 
@@ -65,6 +67,14 @@ class BaseTestCase(TestCase):
         "logo": "http://logo.store.ju",
         "show_logo": True,
         "store_settings": _store_settings
+    }
+    _merchant_contract = {
+        "commission_fixed": Decimal('0.1'),
+        "commission_pct": Decimal('2.0'),
+        "active": True,
+        "currency": "USD",
+        "filter": "*",
+        "contract_doc_url": ""
     }
 
     def setUp(self):
@@ -151,6 +161,15 @@ class BaseTestCase(TestCase):
         self.db.commit()
 
         return merchant_model
+
+    def create_merchant_contract(self, contract_dict, merchant_id, active=True, currency="USD"):
+        contract_dict["merchant_id"] = merchant_id
+        contract_dict["active"] = active
+        contract_dict["currency"] = currency
+        contract_model = MerchantContract.create(contract_dict)
+        self.db.commit()
+
+        return contract_model
 
     def create_manager(self, manager_dict, merchant_id, username=None):
         manager_dict['merchant_id'] = merchant_id
