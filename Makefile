@@ -60,6 +60,9 @@ db_update:
 	./manage.py db migrate
 	./manage.py db upgrade
 
+db_revert:
+	./manage.py db downgrade
+
 db_create: db_psql_create db_update
 
 

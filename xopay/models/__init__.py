@@ -1,5 +1,6 @@
 from . import enum
 from .currency import Currency
+from .contracts import MerchantContract, BankContract
 from .merchant import Merchant, MerchantAccount, MerchantInfo
 from .manager import Manager
 from .payment_system import PaymentSystem
