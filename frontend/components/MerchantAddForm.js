@@ -9,12 +9,20 @@ import MerchantModel from '../models/merchant'
 import CurrencySelect from '../components/CurrencySelect'
 import {redirect} from '../actions/redirect'
 import {DictionaryActions} from '../actions/index'
+import {changeHandlerMixin} from '../mixins/index'
 
-class MerchantAddForm extends Component {
+@changeHandlerMixin
+class MerchantForm extends Component {
     constructor(props) {
         super(props);
-        this._onMerchantChange = this._onMerchantChange.bind(this);
-        this._onMerchantCChange = this._onMerchantCChange.bind(this);
+
+
+        this.onChange = this.changeHandler(this);
+        this.changeMerchant = this.onChange("merchant");
+        this.changeMerchantInfo = this.changeMerchant("merchant_info");
+        this.changeMerchantAccount = this.changeMerchant("merchant_account");
+        this.changeMerchantUser = this.changeMerchant("user");
+
         this._onCreate = this._onCreate.bind(this);
 
         this.state = {
@@ -28,39 +36,7 @@ class MerchantAddForm extends Component {
         create(this.state.merchant);
     }
 
-    _onMerchantChange(field, name) {
-        return ((e) => {
-            let { value } = e.target;
-            const { merchant } = this.state;
-            let newMerchant = Object.assign({}, merchant);
 
-            value = (value === "") ? null : value;
-
-            if (!!name) {
-                newMerchant[field] = Object.assign({}, merchant[field], {[name]: value});
-            } else {
-                newMerchant[field] = value;
-            }
-            this.setState({merchant: newMerchant});
-
-        }).bind(this);
-    }
-
-    _onMerchantCChange(field, name) {
-        return ((e) => {
-            const { checked } = e.target;
-            const { merchant } = this.state;
-            let newMerchant = Object.assign({}, merchant);
-
-            if (!!name) {
-                newMerchant[field] = Object.assign({}, merchant[field], {[name]: checked});
-            } else {
-                newMerchant[field] = checked;
-            }
-            this.setState({merchant: newMerchant});
-            console.log(newMerchant);
-        }).bind(this);
-    }
     componentDidMount() {
         const {loadNotifications, loadCurrencies} = this.props;
         loadCurrencies();
@@ -68,9 +44,10 @@ class MerchantAddForm extends Component {
     }
 
     render() {
-        const onChange = this._onMerchantChange;
-        const onCChange = this._onMerchantCChange;
+
         const onCreate = this._onCreate;
+
+        const {changeMerchant,changeMerchantInfo,changeMerchantAccount,changeMerchantUser} = this;
 
         const {merchant} = this.state;
         const {merchantCreate, redirect, createCError} = this.props;
@@ -106,7 +83,7 @@ class MerchantAddForm extends Component {
                                 <label htmlFor="name">Merchant name</label>
                                 <Field error={errors.merchant_name}>
                                     <input type="text" className="form-control" id="name"
-                                           onChange={onChange("merchant_name")}
+                                           onChange={changeMerchant("merchant_name")}
                                            value={merchant.merchant_name}
                                            placeholder="Please, insert merchant name"/>
                                 </Field>
@@ -123,7 +100,7 @@ class MerchantAddForm extends Component {
                                             <label htmlFor="directorName">Chairman</label>
                                             <input type="text" className="form-control " id="directorName"
                                                    name="director_name"
-                                                   onChange={onChange("merchant_info","director_name")}
+                                                   onChange={changeMerchantInfo("director_name")}
                                                    value={merchant.merchant_info.director_name}
                                                    placeholder="Director name"/>
                                         </Field>
@@ -131,7 +108,7 @@ class MerchantAddForm extends Component {
                                         <Field error={errors.merchant_info.address}>
                                             <label htmlFor="address">Address</label>
                                             <input type="text" className="form-control" id="address"
-                                                   onChange={onChange("merchant_info","address")}
+                                                   onChange={changeMerchantInfo("address")}
                                                    value={merchant.merchant_info.address}
                                                    placeholder="Address"/>
                                         </Field>
@@ -150,7 +127,7 @@ class MerchantAddForm extends Component {
                                         <Field error={errors.merchant_account.checking_account}>
                                             <label htmlFor="checkingAccount">Checking Account</label>
                                             <input type="text" className="form-control" id="checkingAccount"
-                                                   onChange={onChange("merchant_account","checking_account")}
+                                                   onChange={changeMerchantAccount("checking_account")}
                                                    value={merchant.merchant_account.checking_account}
                                                    placeholder="Checking Account"/>
                                         </Field>
@@ -158,7 +135,7 @@ class MerchantAddForm extends Component {
                                         <Field error={errors.merchant_account.mfo}>
                                             <label htmlFor="mfo">MFO</label>
                                             <input type="text" className="form-control" id="mfo"
-                                                   onChange={onChange("merchant_account","mfo")}
+                                                   onChange={changeMerchantAccount("mfo")}
                                                    value={merchant.merchant_account.mfo}
                                                    placeholder="MFO"/>
                                         </Field>
@@ -166,7 +143,7 @@ class MerchantAddForm extends Component {
                                         <Field error={errors.merchant_account.okpo}>
                                             <label htmlFor="okpo">OKPO</label>
                                             <input type="text" className="form-control" id="okpo"
-                                                   onChange={onChange("merchant_account","okpo")}
+                                                   onChange={changeMerchantAccount("okpo")}
                                                    value={merchant.merchant_account.okpo}
                                                    placeholder="OKPO"/>
                                         </Field>
@@ -176,15 +153,15 @@ class MerchantAddForm extends Component {
                                             <label htmlFor="bankName">Bank Name</label>
                                             <input type="text" className="form-control" id="bankName"
                                                    placeholder="Bank Name"
-                                                   onChange={onChange("merchant_account","bank_name")}
+                                                   onChange={changeMerchantAccount("bank_name")}
                                                    value={merchant.merchant_account.bank_name}/>
                                         </Field>
 
                                         <Field error={errors.merchant_account.currency}>
                                             <label htmlFor="currency">Currency</label>
                                             <CurrencySelect id="currency"
-                                                    onChange={onChange("merchant_account","currency")}
-                                                    value={merchant.merchant_account.currency} />
+                                                            onChange={changeMerchantAccount("currency")}
+                                                            value={merchant.merchant_account.currency}/>
                                         </Field>
                                     </div>
                                 </div>
@@ -199,7 +176,7 @@ class MerchantAddForm extends Component {
                                         <Field error={errors.user.username}>
                                             <label htmlFor="userName">Username (login)</label>
                                             <input type="text" className="form-control" id="userName"
-                                                   onChange={onChange("user","username")}
+                                                   onChange={changeMerchantUser("username")}
                                                    value={merchant.user.username}
                                                    placeholder="Username"/>
                                         </Field>
@@ -208,7 +185,7 @@ class MerchantAddForm extends Component {
                                             <label htmlFor="firstName">First name</label>
                                             <input type="text" className="form-control" id="firstName"
                                                    placeholder="First name"
-                                                   onChange={onChange("user","first_name")}
+                                                   onChange={changeMerchantUser("first_name")}
                                                    value={merchant.user.first_name}/>
                                         </Field>
 
@@ -216,28 +193,28 @@ class MerchantAddForm extends Component {
                                             <label htmlFor="firstName">Last name</label>
                                             <input type="text" className="form-control" id="lastName"
                                                    placeholder="Last name"
-                                                   onChange={onChange("user","last_name")}
+                                                   onChange={changeMerchantUser("last_name")}
                                                    value={merchant.user.last_name}/>
                                         </Field>
 
                                         <Field error={errors.user.email}>
                                             <label htmlFor="email">Email</label>
                                             <input type="text" className="form-control" id="email" placeholder="Email"
-                                                   onChange={onChange("user","email")}
+                                                   onChange={changeMerchantUser("email")}
                                                    value={merchant.user.email}/>
                                         </Field>
 
                                         <Field error={errors.user.phone}>
                                             <label htmlFor="phone">Phone</label>
                                             <input type="text" className="form-control" id="phone" placeholder="Phone"
-                                                   onChange={onChange("user","phone")}
+                                                   onChange={changeMerchantUser("phone")}
                                                    value={merchant.user.phone}/>
                                         </Field>
 
                                         <Field error={errors.user.notify}>
                                             <label htmlFor="notify">Notification</label>
                                             <select className="form-control" id="notify"
-                                                    onChange={onChange("user","notify")}
+                                                    onChange={changeMerchantUser("notify")}
                                                     value={merchant.user.notify}>
                                                 <option value="null">Disabled</option>
                                                 <option value="EMAIL">Email</option>
@@ -249,7 +226,7 @@ class MerchantAddForm extends Component {
                                             <div className="checkbox">
                                                 <label >
                                                     <input type="checkbox" id="enabled"
-                                                           onChange={onCChange("user","enabled")}
+                                                           onChange={changeMerchantUser("enabled")}
                                                            checked={merchant.user.enabled}/>
                                                     Enabled
                                                 </label>
@@ -291,4 +268,4 @@ export default connect(
         loadNotifications: DictionaryActions.loadNotifications,
         loadCurrencies: DictionaryActions.loadCurrencies
     }
-)(MerchantAddForm);
+)(MerchantForm);

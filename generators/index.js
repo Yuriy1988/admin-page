@@ -12,8 +12,16 @@ const Requester = require('./lib/requester');
 const _ = require('lodash');
 
 
+
 const defaultArgv = require("./arg_parser.json").defaultArgv;
 var argv = argumentParser.parse("./arg_parser.json", process);
+
+for(var k in argv) {
+    if(argv[k] === null) {
+        delete argv[k];
+    }
+}
+
 argv = Object.assign({}, defaultArgv, argv);
 
 

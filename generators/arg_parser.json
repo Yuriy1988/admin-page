@@ -25,7 +25,9 @@
     }
   ],
   "defaults": {
-    "help": true
+    "help": true,
+    "count": "1",
+    "logs": false
   },
 
   "defaultArgv": {

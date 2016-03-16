@@ -1,10 +1,63 @@
-export default class StoreModel {
-    constructor(store) {
-        this._store = store || {};
+import {decamelizeKeys as decamelize} from 'humps'
+import { merge } from 'lodash'
+
+export class StoreSettingsModel {
+    constructor(settings) {
+        this._settings = decamelize(settings) || {};
+
     }
 
-    static createStore() {
+    static create() {
         return {
+            "sign_algorithm": "MD5",
+            "sign_key": null,
+            "succeed_url": null,
+            "failure_url": null,
+            "commission_pct": null
+        };
+    }
+
+    static createErrors() {
+        return {
+            "sign_algorithm": null,
+            "sign_key": null,
+            "succeed_url": null,
+            "failure_url": null,
+            "commission_pct": null
+        };
+    }
+
+    get signAlgorithm() {
+        return this._settings.sign_algorithm;
+    }
+
+    get signKey() {
+        return this._settings.sign_key;
+    }
+
+    get succeedUrl() {
+        return this._settings.succeed_url;
+    }
+
+    get failureUrl() {
+        return this._settings.failure_url;
+    }
+
+    get commissionPct() {
+        return this._settings.commission_pct;
+    }
+}
+
+window.d = decamelize;
+
+
+export default class StoreModel {
+    constructor(store) {
+        this._store = decamelize(store) || {};
+    }
+
+    static createStore(store) {
+        const initStore = {
             "store_name": null,
             "store_identifier": null,
             "store_url": null,
@@ -19,6 +72,7 @@ export default class StoreModel {
                 "commission_pct": null
             }
         };
+        return merge(initStore, decamelize(store));
     }
 
 
@@ -41,10 +95,7 @@ export default class StoreModel {
     }
 
     get settings() {
-        if (typeof this._store.storeSettings != 'undefined') {
-            return this._store.storeSettings;
-        }
-        return {}
+        return new StoreSettingsModel(this._store.store_settings);
     }
 
     get id() {
@@ -64,18 +115,18 @@ export default class StoreModel {
     }
 
     get showLogo() {
-        return this._store.showLogo;
+        return this._store.show_logo;
     }
 
     get storeIdentifier() {
-        return this._store.storeIdentifier;
+        return this._store.store_identifier;
     }
 
     get storeName() {
-        return this._store.storeName;
+        return this._store.store_name;
     }
 
     get storeUrl() {
-        return this._store.storeUrl;
+        return this._store.store_url;
     }
 }

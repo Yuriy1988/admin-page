@@ -17,6 +17,7 @@ import MerchantPage     from './components/MerchantPage'
 
 import StoresPage       from './containers/stores/StoresPage'
 import StoreAddPage     from './containers/stores/StoreAddPage'
+import StoreEditPage     from './containers/stores/StoreEditPage'
 import StoreListPage    from './containers/stores/StoreListPage'
 import StorePage        from './containers/stores/StorePage'
 import StoreStatPage    from './containers/stores/StoreStatPage'
@@ -79,6 +80,8 @@ class Routes {
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                     <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)} component={StorePage}/>
                                     <Route path="stat" component={StoreStatPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                    <Route path="edit" component={StoreEditPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 </Route>
                             </Route>

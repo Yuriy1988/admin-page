@@ -84,6 +84,15 @@ const pagination = combineReducers({
         ],
         cError: StoresActions.STORES_CREATE_CERROR
     }),
+    storeEdit: paginate({
+        mapActionToKey: action => "store",
+        types: [
+            StoresActions.STORE_EDIT_REQUEST,
+            StoresActions.STORE_EDIT_SUCCESS,
+            StoresActions.STORE_EDIT_FAILURE
+        ],
+        cError: StoresActions.STORE_EDIT_CERROR
+    }),
     store: paginate({
         mapActionToKey: action => "store",
         types: [

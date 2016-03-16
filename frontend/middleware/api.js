@@ -55,11 +55,25 @@ function callApi(endpoint, body) {
     return fetch(fullUrl, options)
         .then(
             response => {
-                return response;//response.json().then(json => ({json, response}))
+                return response.json().then(
+                    json => ({json, response}),
+                    errorParse => {
+                        const errorObj = {
+                            code: 1,
+                            message: errorParse.message,
+                            serverError: {
+                                errors: {},
+                                message: "",
+                                status_code: 0
+                            }
+                        };
+                        return Promise.reject(errorObj);
+                    }
+                )
             },
             requestError => {
                 const errorObj = {
-                    code: 1,
+                    code: 2,
                     message: requestError.message,
                     serverError: {
                         errors: {},
@@ -69,20 +83,21 @@ function callApi(endpoint, body) {
                 };
                 return Promise.reject(errorObj);
             }
-        )
-        .then(
-            (response) => {
+        ).then(
+            ({json, response}) => {
                 if (response.ok) {
-                    return response.json()
+                    let camelizedJson = camelizeKeys(json);
+
+                    if (!!schema) {
+                        camelizedJson = normalize(camelizedJson, schema);
+                    }
+
+                    return Object.assign({}, camelizedJson)
                 } else {
                     const errorObj = {
                         code: response.status,
                         message: response.statusText,
-                        serverError: {
-                            errors: {},
-                            message: "",
-                            status_code: 0
-                        }
+                        serverError: json.error
                     };
 
                     return Promise.reject(errorObj);
@@ -103,26 +118,7 @@ function callApi(endpoint, body) {
 
                 return Promise.reject(errorObj);
             }
-        ).then(
-            json => {
-                let camelizedJson = camelizeKeys(json);
-
-                if (!!schema) {
-                    camelizedJson = normalize(camelizedJson, schema);
-                }
-
-                return Object.assign({}, camelizedJson)
-            },
-            error => {
-                if (!error.code) {
-                    return {
-                        result: {}
-                    }
-                } else {
-                    return Promise.reject(error)
-                }
-            }
-        );
+        )
 }
 
 

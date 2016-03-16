@@ -44,35 +44,34 @@ class StorePage extends Component {
 
         return (
             <div>
+                <h1 className="page-header">
+                    {storeInfo.storeName}
+                    <div className="box-tools btn-toolbar pull-right">
+                        <Link className="btn btn-sm btn-primary"
+                              to={`/admin/administrator/stores/${storeInfo.id}/edit`}><i
+                            className="fa fa-edit"/>&nbsp;Edit</Link>
+                        <Link className="btn btn-sm btn-success"
+                              to={`/admin/administrator/stores/${storeInfo.id}/stat`}><i
+                            className="fa fa-pie-chart"/>&nbsp;Statistic</Link>
+                    </div>
+                </h1>
+
                 {
-                    (!!storeInfo.logo) ?
+                    (!!storeInfo.logo && false) ?
                         <div className="box">
                             <div className="box-body">
-                                <img  height="86px" src={storeInfo.logo}/>
+                                <img height="86px" src={storeInfo.logo}/>
                             </div>
                             <LoadingOverlay loading={storePagination.isFetching}/>
                         </div> : null
                 }
 
-                <div className="box">
-                    <div className="box-header with-border">
-                        <h3 className="box-title">
-                            {storeInfo.storeName}
-                        </h3>
-                        <div className="box-tools pull-right">
-                            <Link className="btn btn-sm btn-success"
-                                  to={`/admin/administrator/stores/${storeInfo.id}/stat`}><i
-                                className="fa fa-pie-chart"/> Statistic</Link>
-                        </div>
-                    </div>
-                    <LoadingOverlay loading={storePagination.isFetching}/>
-                </div>
                 <div className="row">
                     <div className="col-sm-6">
                         <div className="box">
                             <div className="box-header with-border">
                                 <h3 className="box-title">
-                                    Store information
+                                    Main information
                                 </h3>
                             </div>
                             <div className="box-body">

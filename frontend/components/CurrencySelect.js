@@ -10,8 +10,8 @@ export default class CurrencySelect extends Component {
             <select className="form-control" {...this.props} >
                 {children}
                 {
-                    currencies.map((item)=> {
-                        return <option value={item}>{item}</option>
+                    currencies.map((item, i)=> {
+                        return <option key={i} value={item}>{item}</option>
                     })
                 }
             </select>

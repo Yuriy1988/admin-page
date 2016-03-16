@@ -82,7 +82,7 @@ class MerchantList extends Component {
                     </div>
 
                 </div>
-                <div className="box-body">
+                <div className="box-body no-padding">
 
                     {
                         (!!merchantPagination.error) ?

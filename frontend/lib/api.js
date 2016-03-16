@@ -19,6 +19,7 @@ const storesListSchema = {stores: arrayOf(storesSchema)};
 export const STORES_LIST = (merchantId) => ({path: `merchants/${merchantId}/stores`, method: "GET", schema: storesListSchema});
 export const STORES_CREATE = (merchantId) => ({path: `merchants/${merchantId}/stores`, method: "POST", schema: storesSchema});
 export const STORE_GET = (storeId) => ({path: `stores/${storeId}`, method: "GET", schema: storesSchema});
+export const STORE_EDIT = (storeId) => ({path: `stores/${storeId}`, method: "PUT", schema: storesSchema});
 
 
 /**

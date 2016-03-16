@@ -96,7 +96,7 @@ class StoreListPage extends Component {
                         </Link>
                     </div>
                 </div>
-                <div className="box-body">
+                <div className="box-body no-padding">
                     {(!!storesPagination.error) ?
                         <Alert type={TYPE_ERROR}
                                handleClose={loadStoresCE}>

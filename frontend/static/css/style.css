@@ -71,6 +71,14 @@ html, body, .wrapper, .components {
 .content-wrapper{
     padding-bottom: 60px;
 }*/
+hr, .mv {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.mp-0 {
+    margin:0;
+    padding:0;
+}
 
 .sidebar-toggle {
     cursor: pointer;

@@ -65,6 +65,10 @@ db_revert:
 
 db_create: db_psql_create db_update
 
+db_dummy:
+	node ./generators/index.js --target merchant --count 10
+	node ./generators/index.js --target store --count 3 --mid 1..10
+
 
 # ----- Virtualenv -----
 
