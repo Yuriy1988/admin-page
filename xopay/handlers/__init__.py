@@ -1,4 +1,5 @@
 from . import constants
+from . import contracts
 from . import currency
 from . import manager
 from . import merchant
