@@ -7,8 +7,7 @@ from xopay.models import enum
 __author__ = 'Omelchenko Daniel'
 
 
-class MerchantContractSchema(base.BaseSchema):
-
+class AbstractContractSchema(base.BaseSchema):
     id = fields.Int(dump_only=True)
     commission_fixed = fields.Decimal(required=True)
     commission_pct = fields.Decimal(required=True, validate=Range(min=-100, max=100))
@@ -18,16 +17,12 @@ class MerchantContractSchema(base.BaseSchema):
     contract_doc_url = fields.Str()
 
 
-class BankContractSchema(base.BaseSchema):
+class MerchantContractSchema(AbstractContractSchema):
+    pass
 
-    id = fields.Int(dump_only=True)
+
+class BankContractSchema(AbstractContractSchema):
     contractor_name = fields.Str(required=True)
-    commission_fixed = fields.Decimal(required=True)
-    commission_pct = fields.Decimal(required=True, validate=Range(min=-100, max=100))
-    active = fields.Boolean(default=False)
-    currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
-    filter = fields.Str(default="*")
-    contract_doc_url = fields.Str()
 
 
 class ContractRequestSchema(base.BaseSchema):
