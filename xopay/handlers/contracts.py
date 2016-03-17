@@ -8,14 +8,13 @@ from xopay.schemas import MerchantContractSchema, BankContractSchema, ContractRe
 
 @app.route('/api/admin/dev/merchants/<int:merchant_id>/contracts', methods=['GET'])
 def merchant_contracts_list(merchant_id):
-    request_schema = ContractRequestSchema()
-    data, errors = request_schema.load(request.args)
-
-    if errors:
-        raise ValidationError(errors=errors)
-
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
+
+    request_schema = ContractRequestSchema()
+    data, errors = request_schema.load(request.args)
+    if errors:
+        raise ValidationError(errors=errors)
 
     query = MerchantContract.query.filter_by(merchant_id=merchant_id)
     if 'active' in data:
@@ -88,14 +87,14 @@ def delete_merchant_contract(contract_id):
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>/contracts', methods=['GET'])
 def bank_contracts_list(paysys_id):
+    if not PaymentSystem.exists(paysys_id):
+        raise NotFoundError()
+
     request_schema = ContractRequestSchema()
     data, errors = request_schema.load(request.args)
 
     if errors:
         raise ValidationError(errors=errors)
-
-    if not PaymentSystem.exists(paysys_id):
-        raise NotFoundError()
 
     query = BankContract.query.filter_by(payment_system_id=paysys_id)
     if 'active' in data:
