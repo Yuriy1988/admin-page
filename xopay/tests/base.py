@@ -69,8 +69,8 @@ class BaseTestCase(TestCase):
         "store_settings": _store_settings
     }
     _merchant_contract = {
-        "commission_fixed": Decimal('0.1'),
-        "commission_pct": Decimal('2.0'),
+        "commission_fixed": '0.1',
+        "commission_pct": '2.0',
         "active": True,
         "currency": "USD",
         "filter": "*",
@@ -163,6 +163,7 @@ class BaseTestCase(TestCase):
         return merchant_model
 
     def create_merchant_contract(self, contract_dict, merchant_id, active=True, currency="USD"):
+        contract_dict = deepcopy(contract_dict)
         contract_dict["merchant_id"] = merchant_id
         contract_dict["active"] = active
         contract_dict["currency"] = currency

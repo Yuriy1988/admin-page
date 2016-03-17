@@ -10,8 +10,8 @@ __author__ = 'Omelchenko Daniel'
 class MerchantContractSchema(base.BaseSchema):
 
     id = fields.Int(dump_only=True)
-    commission_fixed = fields.Decimal(required=True, places=7, rounding=2)
-    commission_pct = fields.Decimal(required=True, places=4, rounding=2, validate=Range(min=-100, max=100))
+    commission_fixed = fields.Decimal(required=True)
+    commission_pct = fields.Decimal(required=True, validate=Range(min=-100, max=100))
     active = fields.Boolean(default=False)
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     filter = fields.Str(default="*")
