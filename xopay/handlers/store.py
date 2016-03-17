@@ -2,10 +2,40 @@ from flask import request, jsonify, Response
 
 from xopay import app, db
 from xopay.errors import NotFoundError, ValidationError
-from xopay.models import Store
+from xopay.models import Merchant, Store
 from xopay.schemas import StoreSchema
 
 __author__ = 'Kostel Serhii'
+
+
+@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['GET'])
+def merchant_stores_list(merchant_id):
+    if not Merchant.exists(merchant_id):
+        raise NotFoundError()
+
+    stores = Store.query.filter_by(merchant_id=merchant_id).all()
+
+    schema = StoreSchema(many=True)
+    result = schema.dump(stores)
+    return jsonify(stores=result.data)
+
+
+@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['POST'])
+def merchant_stores_create(merchant_id):
+    if not Merchant.exists(merchant_id):
+        raise NotFoundError()
+
+    schema = StoreSchema()
+    data, errors = schema.load(request.get_json())
+    if errors:
+        raise ValidationError(errors=errors)
+
+    data['merchant_id'] = merchant_id
+    store = Store.create(data)
+    db.session.commit()
+
+    result = schema.dump(store)
+    return jsonify(result.data)
 
 
 @app.route('/api/admin/dev/stores/<int:store_id>', methods=['GET'])

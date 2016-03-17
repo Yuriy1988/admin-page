@@ -2,8 +2,8 @@ from flask import request, jsonify, Response
 
 from xopay import app, db
 from xopay.errors import NotFoundError, ValidationError
-from xopay.models import Merchant, Manager, Store
-from xopay.schemas import MerchantSchema, ManagerSchema, StoreSchema
+from xopay.models import Merchant
+from xopay.schemas import MerchantSchema
 
 __author__ = 'Kostel Serhii'
 
@@ -69,61 +69,3 @@ def merchant_delete(merchant_id):
 
     db.session.commit()
     return Response(status=200)
-
-
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/managers', methods=['GET'])
-def merchant_managers_list(merchant_id):
-    merchant = Merchant.query.get(merchant_id)
-    if not merchant:
-        raise NotFoundError()
-
-    schema = ManagerSchema(many=True)
-    result = schema.dump(merchant.managers)
-    return jsonify(managers=result.data)
-
-
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/managers', methods=['POST'])
-def merchant_manager_create(merchant_id):
-    if not Merchant.exists(merchant_id):
-        raise NotFoundError()
-
-    schema = ManagerSchema()
-    data, errors = schema.load(request.get_json())
-    if errors:
-        raise ValidationError(errors=errors)
-
-    data['merchant_id'] = merchant_id
-    manager = Manager.create(data)
-    db.session.commit()
-
-    result = schema.dump(manager)
-    return jsonify(result.data)
-
-
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['GET'])
-def merchant_stores_list(merchant_id):
-    merchant = Merchant.query.get(merchant_id)
-    if not merchant:
-        raise NotFoundError()
-
-    schema = StoreSchema(many=True)
-    result = schema.dump(merchant.stores)
-    return jsonify(stores=result.data)
-
-
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['POST'])
-def merchant_stores_create(merchant_id):
-    if not Merchant.exists(merchant_id):
-        raise NotFoundError()
-
-    schema = StoreSchema()
-    data, errors = schema.load(request.get_json())
-    if errors:
-        raise ValidationError(errors=errors)
-
-    data['merchant_id'] = merchant_id
-    store = Store.create(data)
-    db.session.commit()
-
-    result = schema.dump(store)
-    return jsonify(result.data)
