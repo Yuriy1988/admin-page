@@ -6,14 +6,30 @@ __author__ = 'Kostel Serhii'
 
 
 def _first_level_dict(obj, data):
-    return dict((key, value) for key, value in data.items() if hasattr(obj, key) and not isinstance(value, dict)) \
-        if data else dict()
+    if not data:
+        return dict()
+    return dict((key, value) for key, value in data.items() if hasattr(obj, key) and not isinstance(value, (dict, list)))
 
 
 class BaseModel(db.Model):
     """ Base model for all models """
 
     __abstract__ = True
+
+    @classmethod
+    def get_pk_field_name(cls):
+        """
+        Get primary key from model.
+        Work ONLY with single primary key!, else raise exception.
+        :return: primary key field name
+        """
+        primary_key_fields = inspect(cls).primary_key
+        if len(primary_key_fields) == 0:
+            raise AttributeError('Primary key field not fount')
+        if len(primary_key_fields) > 1:
+            raise AttributeError('Got more than one primary key')
+
+        return primary_key_fields[0].name
 
     @classmethod
     def unique(cls, field_name, checked_value):
@@ -34,13 +50,7 @@ class BaseModel(db.Model):
         :param primary_key: checked primary key value
         :return: boolean value exists or not (True/False)
         """
-        primary_key_fields = inspect(cls).primary_key
-        if len(primary_key_fields) == 0:
-            raise AttributeError('Primary key field not fount')
-        if len(primary_key_fields) > 1:
-            raise AttributeError('Can not check exists ')
-
-        pk_field_name = primary_key_fields[0].name
+        pk_field_name = cls.get_pk_field_name()
         return not cls.unique(pk_field_name, primary_key)
 
     @classmethod

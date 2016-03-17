@@ -29,4 +29,4 @@ class StoreSchema(base.BaseSchema):
     logo = fields.Url(allow_none=True)
     show_logo = fields.Bool(default=False)
 
-    store_settings = fields.Nested(StoreSettingsSchema, required=True)
+    store_settings = fields.Nested(StoreSettingsSchema(), required=True)

@@ -27,6 +27,7 @@ class MerchantSchema(base.BaseSchema):
     id = fields.Int(dump_only=True)
     merchant_name = fields.Str(required=True, validate=(Length(min=3, max=32), base.Unique(Merchant, 'merchant_name')))
 
-    merchant_account = fields.Nested(MerchantAccountSchema, required=True)
-    merchant_info = fields.Nested(MerchantInfoSchema, allow_none=True)
-    user = fields.Nested(user.UserSchema, required=True)
+    # for partial_nested schema must be class instance
+    merchant_account = fields.Nested(MerchantAccountSchema(), required=True)
+    merchant_info = fields.Nested(MerchantInfoSchema(), allow_none=True)
+    user = fields.Nested(user.UserSchema(), required=True)
