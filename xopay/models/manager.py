@@ -13,7 +13,10 @@ class Manager(base.BaseModel):
     id = db.Column(db.Integer, primary_key=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('manager', uselist=False, lazy='joined'))
+    user = db.relationship('User',
+                           backref=db.backref('manager', uselist=False, lazy='joined'),
+                           cascade='all, delete-orphan',
+                           single_parent=True)
 
     merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
 
