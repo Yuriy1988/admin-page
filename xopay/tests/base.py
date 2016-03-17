@@ -5,9 +5,8 @@ import string
 import json
 from copy import deepcopy
 from flask.ext.testing import TestCase
-
 from xopay import app, db as app_db
-from xopay.models import User, Merchant, Manager, Store, MerchantContract
+from xopay.models import User, Merchant, Manager, Store, MerchantContract, BankContract, enum, PaymentSystem
 
 __author__ = 'Kostel Serhii'
 
@@ -75,6 +74,22 @@ class BaseTestCase(TestCase):
         "currency": "USD",
         "filter": "*",
         "contract_doc_url": ""
+    }
+    _bank_contract = {
+        "contractor_name": "Alpha Bank",
+        "commission_fixed": '0.1',
+        "commission_pct": '2.0',
+        "active": True,
+        "currency": "USD",
+        "filter": "*",
+        "contract_doc_url": ""
+    }
+    _payment_system = {
+        "paysys_id": enum.PAYMENT_SYSTEMS_ID_ENUM[2],
+        "paysys_name": "Visa/Mastercard",
+        "paysys_login": "xopay_test",
+        "paysys_password": "0xJtwe76GDSAFknui8we45unohyDKUFSGku",
+        "active": True,
     }
 
     def setUp(self):
@@ -171,6 +186,22 @@ class BaseTestCase(TestCase):
         self.db.commit()
 
         return contract_model
+
+    def create_bank_contract(self, contract_dict, paysys_id, active=True, currency="USD"):
+        contract_dict = deepcopy(contract_dict)
+        contract_dict["payment_system_id"] = paysys_id
+        contract_dict["active"] = active
+        contract_dict["currency"] = currency
+        contract_model = BankContract.create(contract_dict)
+        self.db.commit()
+
+        return contract_model
+
+    def create_payment_system(self, paysys_dict):
+        paysys_dict = deepcopy(paysys_dict)
+        paysys_model = PaymentSystem.create(paysys_dict)
+        self.db.commit()
+        return paysys_model
 
     def create_manager(self, manager_dict, merchant_id, username=None):
         manager_dict['merchant_id'] = merchant_id
