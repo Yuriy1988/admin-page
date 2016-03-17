@@ -4,6 +4,30 @@ from marshmallow.validate import Validator as _Validator, Regexp
 __author__ = 'Kostel Serhii'
 
 
+def deep_diff(initial, origin):
+    """
+    Return dict object, that is different between object and origin.
+    Do NOT get diff of the list objects! Just return them.
+    :param initial: initial dict for deference
+    :param origin: original dict, that will be subtracted from initial
+    :return: difference dict between initial and origin
+    """
+    if not origin:
+        return initial
+
+    flat = lambda obj: not isinstance(obj[1], (dict, list))
+    initial_flat_pairs, origin_flat_pairs = filter(flat, initial.items()), filter(flat, origin.items())
+    initial_dict_pairs = filter(lambda obj: isinstance(obj[1], dict), initial.items())
+    initial_list_pairs = filter(lambda obj: isinstance(obj[1], list), initial.items())
+
+    recurse_dict_pairs = ((key, deep_diff(value, origin.get(key, {}))) for key, value in initial_dict_pairs)
+
+    diff = dict((set(initial_flat_pairs) - set(origin_flat_pairs)))
+    diff.update(dict(filter(lambda obj: bool(obj[1]), recurse_dict_pairs)))
+    diff.update(dict(initial_list_pairs))
+    return diff
+
+
 class BaseSchema(_Schema):
 
     def __init__(self, *args, **kwargs):
@@ -22,6 +46,20 @@ class BaseSchema(_Schema):
     def validate_not_none(self, data):
         if data is None:
             raise ValidationError('Content-Type header missing')
+
+    def load(self, data, origin_model=None, **kwargs):
+        """
+        Serialize and validate data json.
+        :param data: dict to deserialize
+        :param origin_model: model instance of the origin object. If specified, load only changed values.
+        :return: UnmarshalResult
+        """
+        if origin_model:
+            # get serialized origin dict from model
+            origin = self.dump(origin_model).data
+            data = deep_diff(data, origin)
+
+        return super().load(data, **kwargs)
 
 
 # Validators
@@ -85,3 +123,38 @@ class Login(Regexp):
         regex = kwargs.pop('regex', self.default_regex)
         error = kwargs.pop('error', self.default_message)
         super().__init__(regex, error=error, **kwargs)
+
+
+if __name__ == '__main__':
+    from copy import deepcopy
+
+    # flat
+    o = dict(zip('abcdef', range(6)))
+
+    i = deepcopy(o)
+    print(deep_diff(i, {}))
+
+    i = deepcopy(o)
+    print(deep_diff(i, o))
+
+    i = deepcopy(o)
+    i.update({'a': 99, 'f': 100})
+    print(deep_diff(i, o))
+
+    # nested
+    o['a'] = dict(zip('abcdef', range(6)))
+
+    i = deepcopy(o)
+    print(deep_diff(i, o))
+
+    i = deepcopy(o)
+    i['b'] = 84
+    i['a']['a'] = 42
+    i['a']['f'] = 21
+    print(deep_diff(i, o))
+
+    # with list
+    o['e'] = list(range(5))
+    i = deepcopy(o)
+    i['b'] = 84
+    print(deep_diff(i, o))

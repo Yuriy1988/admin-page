@@ -57,7 +57,7 @@ def store_update(store_id):
         raise NotFoundError()
 
     schema = StoreSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(), origin_model=store)
     if errors:
         raise ValidationError(errors=errors)
 

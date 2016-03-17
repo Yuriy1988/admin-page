@@ -50,7 +50,7 @@ def merchant_update(merchant_id):
         raise NotFoundError()
 
     schema = MerchantSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(), origin_model=merchant)
     if errors:
         raise ValidationError(errors=errors)
 
