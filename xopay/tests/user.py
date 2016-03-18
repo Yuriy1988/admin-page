@@ -1,5 +1,3 @@
-import unittest
-
 from xopay.tests import base
 from xopay.models import User
 
@@ -27,7 +25,6 @@ class TestUser(base.BaseTestCase):
         merchant['user']['last_name'] = None
         merchant['user']['email'] = None
         del merchant['user']['phone']
-        del merchant['user']['notify']
 
         status, body = self.post('/merchants', merchant)
         self.assertEqual(status, 200)
@@ -38,7 +35,6 @@ class TestUser(base.BaseTestCase):
         self.assertIsNone(user['last_name'])
         self.assertIsNone(user['email'])
         self.assertIsNone(user['phone'])
-        self.assertIsNone(user['notify'])
 
     def test_post_merchant_user_created(self):
         merchant = self.get_merchant()
@@ -78,7 +74,7 @@ class TestUser(base.BaseTestCase):
 
     def test_post_merchant_user_missing_required_fields(self):
         merchant = self.get_merchant()
-        merchant['user'] = {'username': None, 'enabled': None}
+        merchant['user'] = {'username': None, 'enabled': None, 'notify': None}
 
         status, body = self.post('/merchants', merchant)
         self.assertEqual(status, 400)
@@ -164,7 +160,6 @@ class TestUser(base.BaseTestCase):
         merchant['user']['last_name'] = None
         merchant['user']['email'] = None
         del merchant['user']['phone']
-        del merchant['user']['notify']
 
         merchant_model = self.create_merchant(merchant, merchant_name='merchant_name')
 
@@ -177,7 +172,6 @@ class TestUser(base.BaseTestCase):
         self.assertIsNone(user['last_name'])
         self.assertIsNone(user['email'])
         self.assertIsNone(user['phone'])
-        self.assertIsNone(user['notify'])
 
     # PUT /merchants/<merchant_id> (user update, when merchant updated)
 
@@ -187,66 +181,63 @@ class TestUser(base.BaseTestCase):
             "first_name": "test",
             "last_name": "test",
             "email": "test@some.to.go",
-            "phone": "101122334455",
+            "phone": "380771234567",
             "notify": 'EMAIL',
             "enabled": False
         }
 
         status, body = self.put('/merchants/%s' % merchant.id, {'user': user})
         self.assertEqual(status, 200)
-        self.assertEqual(body['user'], user)
+        self.assertDictContainsSubset(user, body['user'])
 
-        user = User.query.get(merchant.user.id)
-        self.assertEqual(user.first_name, 'test')
-        self.assertEqual(user.last_name, 'test')
-        self.assertEqual(user.email, 'test@some.to.go')
-        self.assertEqual(user.phone, '001122334455')
-        self.assertEqual(user.notify, 'EMAIL')
-        self.assertEqual(user.enabled, False)
+        user_model = User.query.get(merchant.user.id)
+        self.assertEqual(user_model.first_name, user['first_name'])
+        self.assertEqual(user_model.last_name, user['last_name'])
+        self.assertEqual(user_model.email, user['email'])
+        self.assertEqual(user_model.phone, user['phone'])
+        self.assertEqual(user_model.notify, user['notify'])
+        self.assertEqual(user_model.enabled, user['enabled'])
 
-    def test_put_merchant_user_not_update(self):
-        merchant = self.create_merchant(self.get_merchant(), merchant_name='merchant_name')
-        user = {
-            "first_name": None,
-            "last_name": None,
-            "email": None,
-            "phone": None,
-            "enabled": None
-        }
-
-        status, body = self.put('/merchants/%s' % merchant.id, {'user': user})
-        self.assertEqual(status, 400)
-        errors = body['error']['errors']
-        self.assertIn('user', errors)
-        self.assertSetEqual(set(errors['user'].keys()), set(user.keys()))
-
-    def test_put_merchant_user_update_username_create_new_user(self):
+    def test_put_merchant_user_update_username(self):
         merchant = self.create_merchant(self.get_merchant(), merchant_name='merchant_name')
         user = User.query.filter_by(username='new_user').first()
         self.assertIsNone(user)
 
         status, body = self.put('/merchants/%s' % merchant.id, {'user': {'username': 'new_user'}})
         self.assertEqual(status, 200)
-        self.assertNotEqual(body['user']['id'], merchant.user.id)
+        self.assertEqual(body['user']['id'], merchant.user.id)
 
-        new_user = User.query.filter_by(username='new_user').first()
-        self.assertIsNotNone(new_user)
-
-        status, body = self.get('/merchants/%s' % merchant.id)
-        self.assertEqual(status, 200)
-        self.assertEqual(body['user']['id'], new_user.id)
-
-    def test_put_merchant_user_update_username_old_user_deleted(self):
-        merchant = self.create_merchant(self.get_merchant(), merchant_name='merchant_name', username='old_user')
-        user = User.query.filter_by(username='old_user').first()
+        user = User.query.get(merchant.user.id)
         self.assertIsNotNone(user)
+        self.assertEqual(user.username, 'new_user')
 
-        status, body = self.put('/merchants/%s' % merchant.id, {'user': {'username': 'new_user'}})
+    def test_put_merchant_update_unique_username_with_the_same_value(self):
+        merchant = self.get_merchant()
+        username = 'Bob Dilan'
+        merchant_model = self.create_merchant(merchant, username=username)
+
+        status, body = self.put('/merchants/%s' % merchant_model.id, {'user': {'username': username}})
         self.assertEqual(status, 200)
-        self.assertNotEqual(body['user']['id'], merchant.user.id)
+        self.assertEqual(body['user']['username'], username)
 
-        old_user = User.query.filter_by(username='old_user').first()
-        self.assertIsNone(old_user)
+    def test_put_merchant_user_update_single_value(self):
+        merchant = self.get_merchant()
+        merchant['user']['enabled'] = False
+        merchant = self.create_merchant(merchant)
+
+        status, body = self.put('/merchants/%s' % merchant.id, {'user': {"enabled": True}})
+        self.assertEqual(status, 200)
+        self.assertTrue(body['user']['enabled'])
+
+    def test_put_merchant_user_not_update(self):
+        merchant = self.create_merchant(self.get_merchant(), merchant_name='merchant_name')
+        user = {"username": None, "enabled": None, "notify": None}
+
+        status, body = self.put('/merchants/%s' % merchant.id, {'user': user})
+        self.assertEqual(status, 400)
+        errors = body['error']['errors']
+        self.assertIn('user', errors)
+        self.assertSetEqual(set(errors['user'].keys()), set(user.keys()))
 
     # DELETE /merchants/<merchant_id> (user delete, when merchant deleted)
 
@@ -260,8 +251,3 @@ class TestUser(base.BaseTestCase):
 
         user_model = User.query.get(user_id)
         self.assertIsNone(user_model)
-
-
-if __name__ == '__main__':
-
-    unittest.main()

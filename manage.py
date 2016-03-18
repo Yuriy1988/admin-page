@@ -1,16 +1,30 @@
 #!venv/bin/python
 
+import os
+import unittest
 import flask_script as script
 import flask_migrate as migrate
 
 from xopay import app, db
 from xopay.models import *
 
+__author__ = 'Kostel Serhii'
 
-migration = migrate.Migrate(app, db)
 manager = script.Manager(app)
+
+
+# tests
+@manager.command
+def tests():
+    tests_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'xopay', 'tests')
+    suite = unittest.TestLoader().discover(tests_path, pattern='*.py')
+    unittest.TextTestRunner().run(suite)
+
+
+# db migrations
+migration = migrate.Migrate(app, db)
 manager.add_command('db', migrate.MigrateCommand)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     manager.run()

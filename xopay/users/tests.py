@@ -4,22 +4,22 @@ from flask.ext.login import current_user
 
 from xopay import app, db
 from xopay.models import User
-from xopay.testing import BaseTestCase
+# from xopay.testing import BaseTestCase
 
 
-class UserTest(BaseTestCase):
-
-    def test_user_login(self):
-        with self.client:
-            a = app.app_ctx_globals_class()
-            response = self.login(username=self.user['username'], password='wrong')
-            self.assertFalse(g.user.is_authenticated)
-            response = self.login(username='wrong', password='wrong')
-            self.assertFalse(g.user.is_authenticated)
-            response = self.login(**self.user)
-            self.assertTrue(g.user.is_authenticated)
-            response = self.logout()
-            self.assertFalse(g.user.is_authenticated)
+# class UserTest(BaseTestCase):
+#
+#     def test_user_login(self):
+#         with self.client:
+#             a = app.app_ctx_globals_class()
+#             response = self.login(username=self.user['username'], password='wrong')
+#             self.assertFalse(g.user.is_authenticated)
+#             response = self.login(username='wrong', password='wrong')
+#             self.assertFalse(g.user.is_authenticated)
+#             response = self.login(**self.user)
+#             self.assertTrue(g.user.is_authenticated)
+#             response = self.logout()
+#             self.assertFalse(g.user.is_authenticated)
 
 
 if __name__ == '__main__':
