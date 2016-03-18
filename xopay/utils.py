@@ -4,13 +4,13 @@ import decimal
 from flask import json
 
 
-class MyJSONEncoder(json.JSONEncoder):
+class XOPayJSONEncoder(json.JSONEncoder):
 
     def default(self, obj):
         if isinstance(obj, decimal.Decimal):
             # Convert decimal instances to strings.
             return str(obj)
-        return super(MyJSONEncoder, self).default(obj)
+        return super(XOPayJSONEncoder, self).default(obj)
 
 
 def prettify(obj, depth=10):
