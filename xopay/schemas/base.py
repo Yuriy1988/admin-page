@@ -45,8 +45,8 @@ class BaseSchema(_Schema):
 
     @validates_schema
     def validate_not_none(self, data):
-        if data is None:
-            raise ValidationError('Content-Type header missing')
+        if not data:
+            raise ValidationError('Wrong request body or Content-Type header missing')
 
     def load(self, data, origin_model=None, **kwargs):
         """

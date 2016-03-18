@@ -15,7 +15,7 @@ def merchant_stores_list(merchant_id):
 
     stores = Store.query.filter_by(merchant_id=merchant_id).all()
 
-    schema = StoreSchema(many=True)
+    schema = StoreSchema(many=True, exclude=('store_settings',))
     result = schema.dump(stores)
     return jsonify(stores=result.data)
 
@@ -38,7 +38,7 @@ def merchant_stores_create(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/stores/<int:store_id>', methods=['GET'])
+@app.route('/api/admin/dev/stores/<store_id>', methods=['GET'])
 def store_detail(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -50,7 +50,7 @@ def store_detail(store_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/stores/<int:store_id>', methods=['PUT'])
+@app.route('/api/admin/dev/stores/<store_id>', methods=['PUT'])
 def store_update(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -68,7 +68,7 @@ def store_update(store_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/stores/<int:store_id>', methods=['DELETE'])
+@app.route('/api/admin/dev/stores/<store_id>', methods=['DELETE'])
 def store_delete(store_id):
     delete_count = Store.query.filter_by(id=store_id).delete()
     if delete_count == 0:

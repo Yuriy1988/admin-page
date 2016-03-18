@@ -2,7 +2,7 @@ from flask import request, jsonify
 
 from xopay import app
 from xopay.errors import ValidationError
-from xopay.models import User, Store, StoreSettings, Merchant
+from xopay.models import User, Merchant
 
 __author__ = 'Kostel Serhii'
 
@@ -27,8 +27,3 @@ def unique_user():
 @app.route('/api/admin/dev/unique/merchants', methods=['GET'])
 def unique_merchant():
     return _unique_checker({'merchant_name': Merchant})
-
-
-@app.route('/api/admin/dev/unique/stores', methods=['GET'])
-def unique_store():
-    return _unique_checker({'store_identifier': Store, 'sign_key': StoreSettings})
