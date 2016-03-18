@@ -15,7 +15,7 @@ def merchant_stores_list(merchant_id):
 
     stores = Store.query.filter_by(merchant_id=merchant_id).all()
 
-    schema = StoreSchema(many=True, exclude=('store_settings',))
+    schema = StoreSchema(many=True, exclude=('merchant_id', 'store_settings',))
     result = schema.dump(stores)
     return jsonify(stores=result.data)
 

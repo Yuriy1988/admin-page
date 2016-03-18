@@ -27,4 +27,6 @@ class StoreSchema(base.BaseSchema):
     logo = fields.Url(allow_none=True)
     show_logo = fields.Bool(default=False)
 
+    merchant_id = fields.Int(dump_only=True)
+
     store_settings = fields.Nested(StoreSettingsSchema(), required=True)
