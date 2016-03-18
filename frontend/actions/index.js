@@ -12,3 +12,5 @@ import * as DictionaryActions from './dictionary'
 export {DictionaryActions}
 import * as CurrenciesActions from './currencies'
 export {CurrenciesActions}
+import * as PaginationActions from './pagination'
+export {PaginationActions}

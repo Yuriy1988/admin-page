@@ -24,7 +24,7 @@ class MerchantForm extends Component {
 
         this.state = {
             merchant: MerchantModel.create(props.initMerchant)
-        }
+        };
     }
 
     componentDidMount() {

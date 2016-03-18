@@ -62,6 +62,13 @@ export function getById(merchantId) {
         }
     }
 }
+export function getByIdLazy(merchantId) {
+    return (dispatch, getState) => {
+        if (!getState().entities.merchants[merchantId]) {
+            return dispatch(getById(merchantId))
+        }
+    }
+}
 
 
 import {MERCHANT_EDIT} from '../lib/api'

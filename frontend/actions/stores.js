@@ -63,7 +63,13 @@ export function getById(storeId) {
         }
     }
 }
-
+export function getByIdLazy(storeId) {
+    return (dispatch, getState) => {
+        if (!getState().entities.stores[storeId]) {
+            return dispatch(getById(storeId))
+        }
+    }
+}
 
 import { STORE_EDIT } from '../lib/api'
 export const STORE_EDIT_REQUEST = 'STORE_EDIT_REQUEST';

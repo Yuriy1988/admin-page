@@ -7,11 +7,10 @@ export const REDIRECTTO_PREV_PAGE = "_back_";
  * @param cleanPagination Boolean [default false] is need clear pagination
  * @returns action which redirect to the page
  */
-export function redirect(redirectTo, cleanPagination = false) {
+export function redirect(redirectTo) {
     return {
         type: REDIRECT_TYPE,
-        redirectTo,
-        cleanPagination
+        redirectTo
     }
 }
 /**

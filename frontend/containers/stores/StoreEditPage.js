@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import { RedirectActions, StoreActions } from '../../actions/index'
+import { RedirectActions, StoreActions, PaginationActions } from '../../actions/index'
 
 import StoreForm from '../../components/forms/StoreForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
@@ -18,6 +18,20 @@ class StoreEditPage extends Component {
         this.loadData();
     }
 
+    componentWillReceiveProps(props) {
+        const { editRequest, redirect, clearPagination} = props;
+
+        if (!!editRequest.result) {
+            redirect(`/admin/administrator/stores/${editRequest.result}`); //TODO add redirect
+            clearPagination("storeEdit"); //TODO constant
+        }
+    }
+
+    componentWillUnmount() {
+        const { clearPagination } = this.props;
+        clearPagination("storeEdit"); //TODO constant
+    }
+
     loadData() {
         const { loadStore } = this.props;
         const { storeId } = this.props.params;
@@ -31,13 +45,10 @@ class StoreEditPage extends Component {
     }
 
     render() {
-        const { editRequest, editCE, redirect } = this.props;
+        const { editRequest, editCE } = this.props;
         const { getRequest, loadStoreCE } = this.props;
         const { stores } = this.props;
 
-        if (!!editRequest.result) {
-            redirect(`/admin/administrator/stores/${editRequest.result}`, true);
-        }
 
         let errors = {};
         try {
@@ -95,6 +106,8 @@ export default connect(
         cancel: RedirectActions.back,
         redirect: RedirectActions.redirect,
         edit: StoreActions.editById,
-        editCE: StoreActions.editByIdCError
+        editCE: StoreActions.editByIdCError,
+
+        clearPagination: PaginationActions.clear
     }
 )(StoreEditPage)

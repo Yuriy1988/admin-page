@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import { RedirectActions, StoreActions } from '../../actions/index'
+import { RedirectActions, StoreActions, PaginationActions } from '../../actions/index'
 
 import StoreForm from '../../components/forms/StoreForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
@@ -21,12 +21,21 @@ class StoreAddPage extends Component {
         create(merchantId, store);
     }
 
+    componentWillReceiveProps(props) {
+        const { createRequest, clearPagination, redirect } = props;
+        if (!!createRequest.result) {
+            redirect(`/admin/administrator/stores/${createRequest.result}`);
+            clearPagination("storeCreate"); // TODO const
+        }
+    }
+
+    componentWillUnmount() {
+        const { clearPagination } = this.props;
+        clearPagination("storeCreate");
+    }
+
     render() {
         const { createRequest, createCE, redirect } = this.props;
-
-        if (!!createRequest.result) {
-            redirect(`/admin/administrator/stores/${createRequest.result}`, true);
-        }
 
         let errors = {};
         try {
@@ -69,6 +78,7 @@ export default connect(
         cancel: RedirectActions.back,
         create: StoreActions.create,
         redirect: RedirectActions.redirect,
-        createCE: StoreActions.createCError
+        createCE: StoreActions.createCError,
+        clearPagination: PaginationActions.clear
     }
 )(StoreAddPage)

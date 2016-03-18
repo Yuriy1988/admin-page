@@ -11,6 +11,7 @@ class StoresPage extends Component {
 
         return (
             <div>
+                {/*<i className="fa fa-shopping-cart"/>*/}
                 {children}
             </div>
         )

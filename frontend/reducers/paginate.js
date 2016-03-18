@@ -1,9 +1,9 @@
 import merge from 'lodash/merge'
 import union from 'lodash/union'
-import {CLEAR_PAGINATION} from '../actions/pagination'
+import { PaginationActions } from '../actions/index'
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
-export default function paginate({ types, mapActionToKey, cError, entity}) {
+export default function paginate({ types, mapActionToKey, cError, entity, paginationId}) {
     if (!Array.isArray(types) || types.length !== 3) {
         throw new Error('Expected types to be an array of three elements.')
     }
@@ -76,8 +76,15 @@ export default function paginate({ types, mapActionToKey, cError, entity}) {
                     error: action.error,
                     success: false
                 });
-            case CLEAR_PAGINATION:
-                return initState;
+            case PaginationActions.CLEAR_PAGINATION:
+                if (paginationId == PaginationActions.ALL_PAGINATIONS) {
+                    return initState;
+                }
+                if (typeof paginationId !== "undefined" && action.paginationId === paginationId) {
+                    return initState;
+                } else {
+                    return state;
+                }
             default:
                 return state
         }

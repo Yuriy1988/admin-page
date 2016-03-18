@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import { RedirectActions, MerchantActions } from '../../actions/index'
+import { RedirectActions, MerchantActions, PaginationActions} from '../../actions/index'
 
 import MerchantForm from '../../components/forms/MerchantForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
@@ -19,11 +19,17 @@ class MerchantEditPage extends Component {
     }
 
     componentWillReceiveProps(props) {
-        const { editRequest, redirect } = props;
+        const { editRequest, redirect, clearPagination } = props;
 
         if (!!editRequest.result) {
-            redirect(`/admin/administrator/merchants/${editRequest.result}`, true);
+            redirect(`/admin/administrator/merchants/${editRequest.result}`);
+            clearPagination("merchantEdit"); //TODO constant
         }
+    }
+
+    componentWillUnmount() {
+        const { clearPagination } = this.props;
+        clearPagination("merchantEdit"); //TODO constant
     }
 
     loadData() {
@@ -100,6 +106,8 @@ export default connect(
         cancel: RedirectActions.back,
         redirect: RedirectActions.redirect,
         edit: MerchantActions.editById,
-        editCE: MerchantActions.editByIdCError
+        editCE: MerchantActions.editByIdCError,
+
+        clearPagination:PaginationActions.clear
     }
 )(MerchantEditPage)

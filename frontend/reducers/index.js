@@ -30,6 +30,7 @@ const pagination = combineReducers({
     merchants: paginate({
         mapActionToKey: action => "merchants",
         entity: "merchants",
+        paginationId: "merchants",
         types: [
             MerchantActions.MERCHANTS_LIST_REQUEST,
             MerchantActions.MERCHANTS_LIST_SUCCESS,
@@ -39,6 +40,7 @@ const pagination = combineReducers({
     }),
     merchant: paginate({
         mapActionToKey: action => "merchant",
+        paginationId: "merchant",
         types: [
             MerchantActions.MERCHANT_GET_REQUEST,
             MerchantActions.MERCHANT_GET_SUCCESS,
@@ -48,6 +50,7 @@ const pagination = combineReducers({
     }),
     merchantCreate: paginate({
         mapActionToKey: action => "merchant",
+        paginationId: "merchantCreate",
         types: [
             MerchantActions.MERCHANT_CREATE_REQUEST,
             MerchantActions.MERCHANT_CREATE_SUCCESS,
@@ -57,6 +60,7 @@ const pagination = combineReducers({
     }),
     merchantDelete: paginate({
         mapActionToKey: action => "merchants",
+        paginationId: "merchantDelete",
         types: [
             MerchantActions.MERCHANT_DELETE_REQUEST,
             MerchantActions.MERCHANT_DELETE_SUCCESS,
@@ -66,6 +70,7 @@ const pagination = combineReducers({
     }),
     merchantEdit: paginate({
         mapActionToKey: action => "merchant",
+        paginationId: "merchantEdit",
         types: [
             MerchantActions.MERCHANT_EDIT_REQUEST,
             MerchantActions.MERCHANT_EDIT_SUCCESS,
@@ -76,6 +81,7 @@ const pagination = combineReducers({
 //Stores
     stores: paginate({
         mapActionToKey: action => "stores",
+        paginationId: "stores",
         entity: "stores",
         types: [
             StoresActions.STORES_LIST_REQUEST,
@@ -86,6 +92,7 @@ const pagination = combineReducers({
     }),
     storeCreate: paginate({
         mapActionToKey: action => "store",
+        paginationId: "storeCreate",
         types: [
             StoresActions.STORES_CREATE_REQUEST,
             StoresActions.STORES_CREATE_SUCCESS,
@@ -95,6 +102,7 @@ const pagination = combineReducers({
     }),
     storeEdit: paginate({
         mapActionToKey: action => "store",
+        paginationId: "storeEdit",
         types: [
             StoresActions.STORE_EDIT_REQUEST,
             StoresActions.STORE_EDIT_SUCCESS,
@@ -104,6 +112,7 @@ const pagination = combineReducers({
     }),
     store: paginate({
         mapActionToKey: action => "store",
+        paginationId: "store",
         types: [
             StoresActions.STORE_GET_REQUEST,
             StoresActions.STORE_GET_SUCCESS,
@@ -114,6 +123,7 @@ const pagination = combineReducers({
     //currencies
     currencyHistory: paginate({
         mapActionToKey: action => "history",
+        paginationId: "currencyHistory",
         types: [
             CurrenciesActions.CURRENCY_HISTORY_REQUEST,
             CurrenciesActions.CURRENCY_HISTORY_SUCCESS,
