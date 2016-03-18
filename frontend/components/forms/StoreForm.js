@@ -5,7 +5,6 @@ import { merge } from 'lodash'
 import {RedirectActions, StoreActions, DictionaryActions} from '../../actions/index'
 import StoreModel from '../../models/store'
 import Field from '../../components/Field'
-import Alert, {TYPE_ERROR} from '../../components/Alert'
 import {changeHandlerMixin} from '../../mixins/index'
 
 @changeHandlerMixin
@@ -21,11 +20,10 @@ class StoreForm extends Component {
         this.changeStoreSettings = this.changeStore("store_settings");
 
         this.state = {
-            store: StoreModel.createStore(props.initStore)
+            store: StoreModel.create(props.initStore)
         };
 
     }
-
 
     componentDidMount() {
         const {loadAlgorithms} = this.props;
@@ -43,8 +41,8 @@ class StoreForm extends Component {
     render() {
         const { cancel } = this.props;
         const { signAlgorithms } = this.props;
-        let { store } = this.state;
 
+        let { store } = this.state;
         store = new StoreModel(store);
 
         const onCreate = this._onCreate;

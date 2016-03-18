@@ -8,6 +8,7 @@ const merchantListSchema = {merchants: arrayOf(merchantSchema)};
 export const MERCHANT_LIST = {path: "merchants", method: "GET", schema: merchantListSchema};
 export const MERCHANT_CREATE = {path: "merchants", method: "POST", schema: merchantSchema};
 export const MERCHANT_GET = (merchantId) => ({path: `merchants/${merchantId}`, method: "GET", schema: merchantSchema});
+export const MERCHANT_EDIT= (merchantId) => ({path: `merchants/${merchantId}`, method: "PUT", schema: merchantSchema});
 export const MERCHANT_DELETE = (merchantId) => ({path: `merchants/${merchantId}`, method: "DELETE", schema: merchantSchema});
 
 

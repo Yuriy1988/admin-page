@@ -48,7 +48,14 @@ if (config.DEV_SERVER == true) {
 
         if (req.url.substr(0, 10) === '/api/admin') {
             setTimeout(function () {
-                proxy.web(req, res, {target: 'http://localhost:7128'});
+                proxy.web(req, res, {target: 'http://localhost:7128'}, function(e) {
+                    console.warn("[SERVER_BACKEND] ERROR ", e);
+                    res.status(500);
+                    res.send({error:{
+                        message: "Backend server not found. Try to restart it",
+                        status_code: 500
+                    }});
+                });
             }, apiDelay);
 
         } else {

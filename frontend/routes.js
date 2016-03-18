@@ -11,13 +11,16 @@ import AdminPage        from './containers/AdminPage'
 import SelectRolePage   from './containers/SelectRolePage'
 import NotificationsPage       from './containers/pages/NotificationsPage'
 import Merchants        from './containers/pages/Merchants'
-import MerchantAddForm  from './components/MerchantAddForm'
+
 import MerchantList     from './components/MerchantList'
 import MerchantPage     from './components/MerchantPage'
 
+import MerchantAddPage  from './containers/merchants/MerchantAddPage'
+import MerchantEditPage  from './containers/merchants/MerchantEditPage'
+
 import StoresPage       from './containers/stores/StoresPage'
 import StoreAddPage     from './containers/stores/StoreAddPage'
-import StoreEditPage     from './containers/stores/StoreEditPage'
+import StoreEditPage    from './containers/stores/StoreEditPage'
 import StoreListPage    from './containers/stores/StoreListPage'
 import StorePage        from './containers/stores/StorePage'
 import StoreStatPage    from './containers/stores/StoreStatPage'
@@ -58,20 +61,23 @@ class Routes {
 
                             <Route path="merchants" component={Merchants}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                                <Route path="add" component={MerchantAddForm}
+                                <Route path="add" component={MerchantAddPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 <Route path="list" component={MerchantList}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                                <Route path=":merchantId" component={MerchantPage}
+                                <Route path=":merchantId" /*component={MerchantPage}*/
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)} component={StoreListPage}/>
+                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)} component={MerchantPage}/>
                                     <Route path="stores" component={StoresPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                        <IndexRoute component={StoreListPage}
+                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                         <Route path="add" component={StoreAddPage}
                                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                                        <Route path="list" component={StoreListPage}
-                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
                                     </Route>
+                                    <Route path="edit" component={MerchantEditPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 </Route>
                             </Route>
                             <Route path="stores" component={StoresPage}

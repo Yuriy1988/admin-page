@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 //import Content from '../components/Content'
 import SideBarProvider from '../containers/SideBarProvider'
 
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -19,8 +20,8 @@ class App extends Component {
         return (
             <SideBarProvider>
                 <Header isLoged={false}/>
-                {children}
 
+                    {children}
                 <Footer />
             </SideBarProvider>
         )

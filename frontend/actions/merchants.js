@@ -64,6 +64,28 @@ export function getById(merchantId) {
 }
 
 
+import {MERCHANT_EDIT} from '../lib/api'
+export const MERCHANT_EDIT_REQUEST = 'MERCHANT_EDIT_REQUEST';
+export const MERCHANT_EDIT_SUCCESS = 'MERCHANT_EDIT_SUCCESS';
+export const MERCHANT_EDIT_FAILURE = 'MERCHANT_EDIT_FAILURE';
+export const MERCHANT_EDIT_CERROR = 'MERCHANT_EDIT_CERROR';
+export function editByIdCError() {
+    return {
+        type: MERCHANT_EDIT_CERROR
+    }
+}
+export function editById(merchantId, merchant) {
+    return {
+        [CALL_API]: {
+            types: [MERCHANT_EDIT_REQUEST, MERCHANT_EDIT_SUCCESS, MERCHANT_EDIT_FAILURE],
+            cError: MERCHANT_GET_CERROR,
+            endpoint: MERCHANT_EDIT(merchantId),
+            body: merchant
+        }
+    }
+}
+
+
 import {MERCHANT_DELETE} from '../lib/api'
 export const MERCHANT_DELETE_REQUEST = 'MERCHANT_DELETE_REQUEST';
 export const MERCHANT_DELETE_SUCCESS = 'MERCHANT_DELETE_SUCCESS';

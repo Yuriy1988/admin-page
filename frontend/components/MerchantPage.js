@@ -32,7 +32,7 @@ class MerchantPage extends Component {
         const {merchantId} = props.params;
 
         if (merchantId !== prevMerchantId) {
-            const {loadMerchant, loadStores} = props;
+            const { loadMerchant, loadStores } = props;
             loadMerchant(merchantId);
         }
     }
@@ -52,9 +52,13 @@ class MerchantPage extends Component {
 
                 <h1 className="page-header">
                     {merchantInfo.merchantName}
-                    <div className="box-tools pull-right">
+                    <div className="box-tools pull-right btn-toolbar">
 
-                        <Link className="btn btn-sm btn-success"
+                        <Link className="btn btn-sm btn-primary"
+                              to={`/admin/administrator/merchants/${merchantInfo.id}/stores`}>
+                            <i className="fa fa-shopping-cart"/>&nbsp;Stores
+                        </Link>
+                        <Link className="btn btn-sm btn-primary"
                               to={`/admin/administrator/merchants/${merchantInfo.id}/edit`}>
                             <i className="fa fa-edit"/> Edit
                         </Link>

@@ -64,6 +64,15 @@ const pagination = combineReducers({
         ],
         cError: MerchantActions.MERCHANT_DELETE_CERROR
     }),
+    merchantEdit: paginate({
+        mapActionToKey: action => "merchant",
+        types: [
+            MerchantActions.MERCHANT_EDIT_REQUEST,
+            MerchantActions.MERCHANT_EDIT_SUCCESS,
+            MerchantActions.MERCHANT_EDIT_FAILURE
+        ],
+        cError: MerchantActions.MERCHANT_EDIT_CERROR
+    }),
 //Stores
     stores: paginate({
         mapActionToKey: action => "stores",
