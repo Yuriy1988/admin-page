@@ -17,12 +17,34 @@ class TestStore(base.BaseTestCase):
         self.assertListEqual(body['stores'], [])
 
     def test_get_merchant_stores_list_all(self):
-        # TODO: continue
-        pass
+        merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        stores_num = 10
+        for si in range(stores_num):
+            store = self.get_store()
+            self.create_store(store, merchant_id)
+
+        status, body = self.get('/merchants/%s/stores' % merchant_id)
+
+        self.assertEqual(status, 200)
+        self.assertIn('stores', body)
+        self.assertEqual(len(body['stores']), stores_num)
 
     def test_get_merchant_stores_list_valid_structure(self):
-        # TODO: continue
-        pass
+        merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        stores_num = 10
+        for si in range(stores_num):
+            store = self.get_store()
+            self.create_store(store, merchant_id)
+
+        status, body = self.get('/merchants/%s/stores' % merchant_id)
+        self.assertEqual(status, 200)
+
+        store_list_keys = {"id", "store_name", "store_url", "category", "description", "logo", "show_logo"}
+        for store in body['stores']:
+            self.assertSetEqual(set(store.keys()), store_list_keys)
+            self.assertIsInstance(store['id'], str)
 
     def test_get_merchant_stores_not_found(self):
         self.create_merchant(self.get_merchant())

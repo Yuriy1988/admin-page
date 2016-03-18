@@ -51,7 +51,6 @@ class BaseTestCase(TestCase):
     }
     _store_settings = {
         "sign_algorithm": "SHA1",
-        "sign_key": "1234567890",
         "succeed_url": "http://good.ron",
         "failure_url": "http://bad.boy",
         "commission_pct": "1.423"
@@ -59,7 +58,6 @@ class BaseTestCase(TestCase):
     _store = {
         "store_name": "Test Store",
         "store_url": "http://store.platform.ju",
-        "store_identifier": "R2D2C3PO",
 
         "category": None,
         "description": "Краткое описание магазина",
@@ -212,10 +210,8 @@ class BaseTestCase(TestCase):
 
         return manager_model
 
-    def create_store(self, store_dict, merchant_id, store_identifier=None, sign_key=None):
+    def create_store(self, store_dict, merchant_id):
         store_dict['merchant_id'] = merchant_id
-        store_dict['store_identifier'] = store_identifier or "store" + self.rand_str()
-        store_dict['store_settings']['sign_key'] = sign_key or self.rand_str(32)
 
         store_model = Store.create(store_dict)
         self.db.commit()
