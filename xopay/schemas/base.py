@@ -1,3 +1,4 @@
+from itertools import chain
 from marshmallow import Schema as _Schema, fields, ValidationError, validates_schema
 from marshmallow.validate import Validator as _Validator, Regexp
 
@@ -16,15 +17,15 @@ def deep_diff(initial, origin):
         return initial
 
     flat = lambda obj: not isinstance(obj[1], (dict, list))
-    initial_flat_pairs, origin_flat_pairs = filter(flat, initial.items()), filter(flat, origin.items())
+    initial_flat_pairs, origin_flat_pairs = set(filter(flat, initial.items())), set(filter(flat, origin.items()))
     initial_dict_pairs = filter(lambda obj: isinstance(obj[1], dict), initial.items())
     initial_list_pairs = filter(lambda obj: isinstance(obj[1], list), initial.items())
 
     recurse_dict_pairs = ((key, deep_diff(value, origin.get(key, {}))) for key, value in initial_dict_pairs)
 
-    diff = dict((set(initial_flat_pairs) - set(origin_flat_pairs)))
-    diff.update(dict(filter(lambda obj: bool(obj[1]), recurse_dict_pairs)))
-    diff.update(dict(initial_list_pairs))
+    diff = dict(chain(initial_flat_pairs - origin_flat_pairs,
+                      filter(lambda obj: bool(obj[1]), recurse_dict_pairs),
+                      initial_list_pairs))
     return diff
 
 
@@ -151,6 +152,18 @@ if __name__ == '__main__':
     i['b'] = 84
     i['a']['a'] = 42
     i['a']['f'] = 21
+    print(deep_diff(i, o))
+
+    # deep nested
+    o['a']['a'] = dict(zip('abcdef', range(6)))
+
+    i = deepcopy(o)
+    print(deep_diff(i, o))
+
+    i = deepcopy(o)
+    i['b'] = 84
+    i['a']['d'] = 42
+    i['a']['a']['e'] = 123
     print(deep_diff(i, o))
 
     # with list
