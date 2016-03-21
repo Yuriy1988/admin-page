@@ -260,6 +260,20 @@ class TestBankContracts(base.BaseTestCase):
         self.assertEqual(status, 200, msg=body.get('error', ''))
         self.assertDictEqual(body, bank_contract)
 
+    def test_post_contracts(self):
+        payment_system = self.create_payment_system(self._payment_system)
+        bank_contract = deepcopy(self._bank_contract)
+
+        status, body = self.post('/payment_systems/{paysys_id}/contracts'.format(
+            paysys_id=payment_system.paysys_id
+        ), bank_contract)
+        self.assertEqual(status, 200, msg=body.get('error', ''))
+
+        status, body = self.post('/payment_systems/{paysys_id}/contracts'.format(
+            paysys_id=payment_system.paysys_id
+        ), bank_contract)
+        self.assertEqual(status, 200, msg=body.get('error', ''))
+
     # GET /paysys_contracts/{paysys_contract_id}
 
     def test_get_contract_not_found(self):

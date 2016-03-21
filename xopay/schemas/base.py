@@ -44,8 +44,8 @@ class BaseSchema(_Schema):
                 setattr(field.nested, 'partial', True)
 
     @validates_schema
-    def validate_not_none(self, data):
-        if not data:
+    def validate_not_blank(self, data):
+        if data is None or not str(data):
             raise ValidationError('Wrong request body or Content-Type header missing')
 
     def load(self, data, origin_model=None, **kwargs):

@@ -22,3 +22,7 @@ def prettify(obj, depth=10):
     string = io.StringIO()
     pprint.pprint(obj, depth=depth, stream=string)
     return str(string.getvalue())
+
+
+def url_with_parameters(url, **parameters):
+    return url + "?" + "&".join(map(lambda x: "{}={}".format(*x), parameters.items()))

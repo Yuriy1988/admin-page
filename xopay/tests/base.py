@@ -1,3 +1,4 @@
+from datetime import datetime
 from decimal import Decimal
 
 import random
@@ -6,7 +7,7 @@ import json
 from copy import deepcopy
 from flask.ext.testing import TestCase
 from xopay import app, db as app_db
-from xopay.models import User, Merchant, Manager, Store, MerchantContract, BankContract, enum, PaymentSystem
+from xopay.models import User, Merchant, Manager, Store, MerchantContract, BankContract, enum, PaymentSystem, Currency
 
 __author__ = 'Kostel Serhii'
 
@@ -89,6 +90,12 @@ class BaseTestCase(TestCase):
         "paysys_password": "0xJtwe76GDSAFknui8we45unohyDKUFSGku",
         "active": True,
     }
+    _currency_record = {
+        "from_currency": "USD",
+        "to_currency": "UAH",
+        "rate": "27.5",
+        "commit_time": "2016-01-01T00:00:00+00:00"
+    }
 
     def setUp(self):
         """ Setup before test case """
@@ -144,7 +151,7 @@ class BaseTestCase(TestCase):
 
     def delete(self, url):
         response = self.client.delete(self.api_base + url)
-        return response.status_code, response.json if response.status_code >=400 else None
+        return response.status_code, response.json if response.status_code >= 400 else None
 
     def get_user(self):
         return deepcopy(self._user)
@@ -217,6 +224,15 @@ class BaseTestCase(TestCase):
         self.db.commit()
 
         return store_model
+
+    def create_currency_record(self, currency_dict, **custom_args):
+        currency_dict = deepcopy(currency_dict)
+        for key, value in custom_args.items():
+            currency_dict[key] = value
+        currency_model = Currency.create(currency_dict)
+        self.db.commit()
+
+        return currency_model
 
     def login(self, username, password):
         data = dict(username=username, password=password)

@@ -9,10 +9,9 @@ __author__ = 'Omelchenko Daniel'
 
 class CurrencySchema(base.BaseSchema):
 
-    id = fields.Int(dump_only=True)
     from_currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     to_currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
-    rate = fields.Number(required=True)
+    rate = fields.Decimal(required=True)
     commit_time = fields.DateTime(dump_only=True)
 
 
