@@ -1,3 +1,4 @@
+import uuid
 from copy import deepcopy
 
 from xopay import db
@@ -10,15 +11,15 @@ class Manager(base.BaseModel):
 
     __tablename__ = 'manager'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User',
                            backref=db.backref('manager', uselist=False, lazy='joined'),
                            cascade='all, delete-orphan',
                            single_parent=True)
 
-    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
 
     def __init__(self, user, merchant_id):
         self.user = user

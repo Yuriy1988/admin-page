@@ -9,7 +9,7 @@ __author__ = 'Kostel Serhii'
 
 class UserSchema(base.BaseSchema):
 
-    id = fields.Int(dump_only=True)
+    id = fields.Str(dump_only=True)
     username = fields.Str(required=True, validate=(Length(min=3, max=80), base.Login(), base.Unique(User, 'username')))
 
     first_name = fields.Str(allow_none=True, validate=Length(min=2, max=80))

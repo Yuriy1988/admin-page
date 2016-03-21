@@ -2,7 +2,6 @@ import os
 import uuid
 import binascii
 from copy import deepcopy
-from sqlalchemy.dialects.postgresql import UUID
 
 from xopay import db
 from xopay.models import base, enum
@@ -46,7 +45,7 @@ class Store(base.BaseModel):
 
     __tablename__ = 'store'
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
     store_name = db.Column(db.String(32), nullable=False)
     store_url = db.Column(db.String(255), nullable=False)
 
@@ -58,7 +57,7 @@ class Store(base.BaseModel):
     store_settings_id = db.Column(db.Integer, db.ForeignKey('store_settings.id'), nullable=False)
     store_settings = db.relationship('StoreSettings', backref=db.backref('store', uselist=False, lazy='joined'))
 
-    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
 
     def __init__(self, store_name, store_url, store_settings, merchant_id,
                  category=None, description=None, logo=None, show_logo=False):

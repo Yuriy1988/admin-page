@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
 
@@ -16,7 +17,7 @@ class User(base.BaseModel):
 
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
     username = db.Column(db.String(80), nullable=False, unique=True, index=True)
     _password_hash = db.Column('password_hash', db.String(255), nullable=False)
 

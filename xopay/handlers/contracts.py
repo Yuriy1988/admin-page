@@ -6,7 +6,7 @@ from xopay.models import Merchant, MerchantContract, BankContract, PaymentSystem
 from xopay.schemas import MerchantContractSchema, BankContractSchema, ContractRequestSchema
 
 
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/contracts', methods=['GET'])
+@app.route('/api/admin/dev/merchants/<merchant_id>/contracts', methods=['GET'])
 def merchant_contracts_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -29,7 +29,7 @@ def merchant_contracts_list(merchant_id):
     return jsonify(contracts=result.data)
 
 
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/contracts', methods=['POST'])
+@app.route('/api/admin/dev/merchants/<merchant_id>/contracts', methods=['POST'])
 def create_merchant_contract(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -65,7 +65,7 @@ def update_merchant_contract(contract_id):
         raise NotFoundError()
 
     schema = MerchantContractSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(), origin_model=contract)
     if errors:
         raise ValidationError(errors=errors)
 

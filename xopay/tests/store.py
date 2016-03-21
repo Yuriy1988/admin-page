@@ -49,7 +49,7 @@ class TestStore(base.BaseTestCase):
     def test_get_merchant_stores_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        for merchant_id in ['0', '2', 'test', 'null', '']:
+        for merchant_id in ['00000000-1111-2222-3333-444444444444', '0', '1', 'test', 'null', '']:
             status, body = self.get('/merchants/%s/stores' % merchant_id)
             self.assertEqual(status, 404)
 

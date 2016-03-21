@@ -29,7 +29,7 @@ class MerchantContract(AbstractContract):
 
     __tablename__ = 'merchant_contract'
 
-    merchant_id = db.Column(db.Integer, db.ForeignKey('merchant.id'), nullable=False)
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
 
     def __init__(self, commission_fixed, commission_pct, merchant_id, currency, contract_doc_url,
                  active=True, filter="*"):

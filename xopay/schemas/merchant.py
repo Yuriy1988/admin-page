@@ -24,7 +24,7 @@ class MerchantInfoSchema(base.BaseSchema):
 
 class MerchantSchema(base.BaseSchema):
 
-    id = fields.Int(dump_only=True)
+    id = fields.Str(dump_only=True)
     merchant_name = fields.Str(required=True, validate=(Length(min=3, max=32), base.Unique(Merchant, 'merchant_name')))
 
     # for partial_nested schema must be class instance

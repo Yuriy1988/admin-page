@@ -42,7 +42,7 @@ class TestMerchant(base.BaseTestCase):
             self.assertIn('id', merchant)
             self.assertIn('merchant_name', merchant)
 
-            self.assertIsInstance(merchant.pop('id'), int)
+            self.assertIsInstance(merchant.pop('id'), str)
             self.assertIsInstance(merchant.pop('merchant_name'), str)
 
             self.assertDictEqual(merchant, {})
@@ -104,7 +104,7 @@ class TestMerchant(base.BaseTestCase):
 
     def test_post_merchant_id_readonly(self):
         merchant = self.get_merchant()
-        merchant['id'] = 27
+        merchant['id'] = '00000000-1111-2222-3333-444444444444'
 
         status, body = self.post('/merchants', merchant)
         self.assertEqual(status, 200)
@@ -208,17 +208,17 @@ class TestMerchant(base.BaseTestCase):
         merchant_model_1 = self.create_merchant(merchant, merchant_name='apple', username='jobs')
         merchant_model_2 = self.create_merchant(merchant, merchant_name='linux', username='torvalds')
 
-        status, body = self.get('/merchants/{merchant_id}'.format(merchant_id=merchant_model_1.id))
+        status, body = self.get('/merchants/%s' % merchant_model_1.id)
         self.assertEqual(status, 200)
 
-        status, body = self.get('/merchants/{merchant_id}'.format(merchant_id=merchant_model_2.id))
+        status, body = self.get('/merchants/%s' % merchant_model_2.id)
         self.assertEqual(status, 200)
 
     def test_get_merchant_full_valid_response(self):
         merchant = self.get_merchant()
         merchant_model = self.create_merchant(merchant, merchant_name='apple', username='jobs')
 
-        status, body = self.get('/merchants/{merchant_id}'.format(merchant_id=merchant_model.id))
+        status, body = self.get('/merchants/%s' % merchant_model.id)
         self.assertEqual(status, 200)
 
         self.assertIn('id', body)
@@ -233,7 +233,7 @@ class TestMerchant(base.BaseTestCase):
         del merchant['merchant_info']
         merchant_model = self.create_merchant(merchant, merchant_name='who', username='someone')
 
-        status, body = self.get('/merchants/{merchant_id}'.format(merchant_id=merchant_model.id))
+        status, body = self.get('/merchants/%s' % merchant_model.id)
         self.assertEqual(status, 200)
 
         self.assertIn('id', body)
@@ -246,7 +246,7 @@ class TestMerchant(base.BaseTestCase):
     def test_get_merchant_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        for merchant_id in ['0', '2', 'test', 'null', '']:
+        for merchant_id in ['0', '00000000-1111-2222-3333-444444444444', '1', '2', 'test', 'null', '']:
             status, body = self.get('/merchants/%s' % merchant_id)
             self.assertEqual(status, 404)
 
@@ -275,9 +275,9 @@ class TestMerchant(base.BaseTestCase):
     def test_put_merchant_id_field_read_only(self):
         merchant = self.create_merchant(self.get_merchant())
 
-        status, body = self.put('/merchants/%s' % merchant.id, {'id': 69})
+        status, body = self.put('/merchants/%s' % merchant.id, {'id': '00000000-1111-2222-3333-444444444444'})
         self.assertEqual(status, 200)
-        self.assertEqual(body['id'], merchant.id)
+        self.assertEqual(body['id'], str(merchant.id))
 
     def test_put_merchant_update_merchant_info_single_filed(self):
         merchant_model = self.create_merchant(self.get_merchant())
@@ -385,7 +385,7 @@ class TestMerchant(base.BaseTestCase):
     def test_put_merchant_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        for merchant_id in ['0', '2', 'test', 'null', '']:
+        for merchant_id in ['00000000-1111-2222-3333-444444444444', '0', '1', '2', 'test', 'null', '']:
             status, body = self.put('/merchants/%s' % merchant_id, {'merchant_name': 'not found'})
             self.assertEqual(status, 404)
 
@@ -420,6 +420,6 @@ class TestMerchant(base.BaseTestCase):
     def test_delete_merchant_not_found(self):
         self.create_merchant(self.get_merchant())
 
-        for merchant_id in ['0', '2', 'test', 'null', '']:
+        for merchant_id in ['00000000-1111-2222-3333-444444444444', '0', '1', '2', 'test', 'null', '']:
             status, body = self.delete('/merchants/%s' % merchant_id)
             self.assertEqual(status, 404)

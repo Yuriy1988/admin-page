@@ -18,7 +18,7 @@ class StoreSettingsSchema(base.BaseSchema):
 
 class StoreSchema(base.BaseSchema):
 
-    id = fields.UUID(dump_only=True)
+    id = fields.Str(dump_only=True)
     store_name = fields.Str(required=True, validate=Length(min=3, max=32))
     store_url = fields.Url(required=True)
 
@@ -27,6 +27,6 @@ class StoreSchema(base.BaseSchema):
     logo = fields.Url(allow_none=True)
     show_logo = fields.Bool(default=False)
 
-    merchant_id = fields.Int(dump_only=True)
+    merchant_id = fields.Str(dump_only=True)
 
     store_settings = fields.Nested(StoreSettingsSchema(), required=True)

@@ -8,7 +8,7 @@ from xopay.schemas import StoreSchema
 __author__ = 'Kostel Serhii'
 
 
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['GET'])
+@app.route('/api/admin/dev/merchants/<merchant_id>/stores', methods=['GET'])
 def merchant_stores_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -20,7 +20,7 @@ def merchant_stores_list(merchant_id):
     return jsonify(stores=result.data)
 
 
-@app.route('/api/admin/dev/merchants/<int:merchant_id>/stores', methods=['POST'])
+@app.route('/api/admin/dev/merchants/<merchant_id>/stores', methods=['POST'])
 def merchant_stores_create(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
