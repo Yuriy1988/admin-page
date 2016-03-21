@@ -165,6 +165,12 @@ class BaseTestCase(TestCase):
     def get_store(self):
         return deepcopy(self._store)
 
+    def get_bank_contract(self):
+        return deepcopy(self._bank_contract)
+
+    def get_merchant_contract(self):
+        return deepcopy(self._merchant_contract)
+
     def create_user(self, user_dict, username=None):
         user_dict['username'] = username or "user" + self.rand_str()
 
