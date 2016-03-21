@@ -56,7 +56,7 @@ class MerchantList extends Component {
                         </Link>
                     </td>
                     <td >
-                        <div className="btn-toolbar">
+                        <div className="btn-toolbar pull-right">
                             <Link className="btn btn-sm btn-primary"
                                   to={`/admin/administrator/merchants/${merchants[merchantId].id}/edit`}>
                                 <i className="fa fa-edit"/> Edit

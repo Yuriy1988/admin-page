@@ -100,7 +100,7 @@ hr, .mv {
 }
 
 
-
+/**** CHART *****/
 .animated{
     transition: 0.15s ease all;
     cursor: pointer;
@@ -110,6 +110,11 @@ hr, .mv {
     z-index:1000;
     -webkit-filter: drop-shadow( -5px -5px 15px #000 );
     filter: drop-shadow( -5px -5px 15px #000 );
+}
+/***END CHART *****/
+
+.contract-filter {
+    /*font-size: 16pt;*/
 }
 /*
 @media (min-width: 768px) {

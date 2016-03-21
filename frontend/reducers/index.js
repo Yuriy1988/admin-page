@@ -1,7 +1,4 @@
-import * as ActionTypes from '../actions'
-import * as MerchantActions from '../actions/merchants'
-import * as StoresActions from '../actions/stores'
-import {CurrenciesActions} from '../actions/index'
+import {CurrenciesActions, MerchantActions, StoreActions, MerchantContractActions } from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
@@ -30,7 +27,7 @@ const pagination = combineReducers({
     merchants: paginate({
         mapActionToKey: action => "merchants",
         entity: "merchants",
-        paginationId: "merchants",
+        paginationId: "merchantList",
         types: [
             MerchantActions.MERCHANTS_LIST_REQUEST,
             MerchantActions.MERCHANTS_LIST_SUCCESS,
@@ -40,7 +37,7 @@ const pagination = combineReducers({
     }),
     merchant: paginate({
         mapActionToKey: action => "merchant",
-        paginationId: "merchant",
+        paginationId: "merchantGet",
         types: [
             MerchantActions.MERCHANT_GET_REQUEST,
             MerchantActions.MERCHANT_GET_SUCCESS,
@@ -78,47 +75,89 @@ const pagination = combineReducers({
         ],
         cError: MerchantActions.MERCHANT_EDIT_CERROR
     }),
+    //MerchatnContracts
+    merchantContractList: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "merchantContractList",
+        entity: "merchantContracts",
+        types: [
+            MerchantContractActions.MERCHANT_CONTRACT_LIST_REQUEST,
+            MerchantContractActions.MERCHANT_CONTRACT_LIST_SUCCESS,
+            MerchantContractActions.MERCHANT_CONTRACT_LIST_FAILURE
+        ],
+        cError: MerchantContractActions.MERCHANT_CONTRACT_LIST_CERROR
+    }),
+    merchantContractEdit: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "merchantContractEdit",
+        types: [
+            MerchantContractActions.MERCHANT_CONTRACT_EDIT_REQUEST,
+            MerchantContractActions.MERCHANT_CONTRACT_EDIT_SUCCESS,
+            MerchantContractActions.MERCHANT_CONTRACT_EDIT_FAILURE
+        ],
+        cError: MerchantContractActions.MERCHANT_CONTRACT_EDIT_CERROR
+    }),
+    merchantContractGet: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "merchantContractGet",
+        types: [
+            MerchantContractActions.MERCHANT_CONTRACT_GET_REQUEST,
+            MerchantContractActions.MERCHANT_CONTRACT_GET_SUCCESS,
+            MerchantContractActions.MERCHANT_CONTRACT_GET_FAILURE
+        ],
+        cError: MerchantContractActions.MERCHANT_CONTRACT_GET_CERROR
+    }),
+    merchantContractCreate: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "merchantContractCreate",
+        types: [
+            MerchantContractActions.MERCHANT_CONTRACT_CREATE_REQUEST,
+            MerchantContractActions.MERCHANT_CONTRACT_CREATE_SUCCESS,
+            MerchantContractActions.MERCHANT_CONTRACT_CREATE_FAILURE
+        ],
+        cError: MerchantContractActions.MERCHANT_CONTRACT_CREATE_CERROR
+    }),
 //Stores
     stores: paginate({
         mapActionToKey: action => "stores",
-        paginationId: "stores",
+        paginationId: "storeList",
         entity: "stores",
         types: [
-            StoresActions.STORES_LIST_REQUEST,
-            StoresActions.STORES_LIST_SUCCESS,
-            StoresActions.STORES_LIST_FAILURE
+            StoreActions.STORES_LIST_REQUEST,
+            StoreActions.STORES_LIST_SUCCESS,
+            StoreActions.STORES_LIST_FAILURE
         ],
-        cError: StoresActions.STORES_LIST_CERROR
+        cError: StoreActions.STORES_LIST_CERROR
     }),
     storeCreate: paginate({
         mapActionToKey: action => "store",
         paginationId: "storeCreate",
         types: [
-            StoresActions.STORES_CREATE_REQUEST,
-            StoresActions.STORES_CREATE_SUCCESS,
-            StoresActions.STORES_CREATE_FAILURE
+            StoreActions.STORES_CREATE_REQUEST,
+            StoreActions.STORES_CREATE_SUCCESS,
+            StoreActions.STORES_CREATE_FAILURE
         ],
-        cError: StoresActions.STORES_CREATE_CERROR
+        cError: StoreActions.STORES_CREATE_CERROR
     }),
     storeEdit: paginate({
         mapActionToKey: action => "store",
         paginationId: "storeEdit",
         types: [
-            StoresActions.STORE_EDIT_REQUEST,
-            StoresActions.STORE_EDIT_SUCCESS,
-            StoresActions.STORE_EDIT_FAILURE
+            StoreActions.STORE_EDIT_REQUEST,
+            StoreActions.STORE_EDIT_SUCCESS,
+            StoreActions.STORE_EDIT_FAILURE
         ],
-        cError: StoresActions.STORE_EDIT_CERROR
+        cError: StoreActions.STORE_EDIT_CERROR
     }),
     store: paginate({
         mapActionToKey: action => "store",
-        paginationId: "store",
+        paginationId: "storeGet",
         types: [
-            StoresActions.STORE_GET_REQUEST,
-            StoresActions.STORE_GET_SUCCESS,
-            StoresActions.STORE_GET_FAILURE
+            StoreActions.STORE_GET_REQUEST,
+            StoreActions.STORE_GET_SUCCESS,
+            StoreActions.STORE_GET_FAILURE
         ],
-        cError: StoresActions.STORE_GET_CERROR
+        cError: StoreActions.STORE_GET_CERROR
     }),
     //currencies
     currencyHistory: paginate({

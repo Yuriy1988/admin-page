@@ -42,7 +42,7 @@ class StoreListPage extends Component {
                     <tr key="header">
                         <th width="5%">#</th>
                         <th>Name</th>
-                        <th width="125px">Actions</th>
+                        <th width="160px">Actions</th>
                     </tr>
                     {items}
                     </tbody>
@@ -51,9 +51,10 @@ class StoreListPage extends Component {
         ) : <p>No items</p>;
     }
 
-    handleDelete(e) {
+    handleDelete(storeId) {
+        const { deleteStore } = this.props;
         if (confirm("Are you sure you want to delete store?")) {
-            alert("deleted");
+            deleteStore(storeId);
         }
     }
 
@@ -71,14 +72,15 @@ class StoreListPage extends Component {
                         </Link>
                     </td>
                     <td >
-                        <div className="btn-toolbar">
+                        <div className="btn-toolbar pull-right">
                             <Link className="btn btn-sm btn-primary"
                                   to={`/admin/administrator/stores/${storeId}/edit`}>
-                                Edit
+                                <i className="fa fa-edit"/>&nbsp;Edit
                             </Link>
-                            <a className="btn btn-sm btn-danger" onClick={this.handleDelete}>
-                                Delete
-                            </a>
+                            <button className="btn btn-sm btn-danger"
+                                    onClick={this.handleDelete.bind(this, stores[storeId].id)}>
+                                <i className="fa fa-trash"/>&nbsp;Delete
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -119,6 +121,7 @@ export default connect(
     {
         loadStores: StoresActions.getList,
         loadStoresCE: StoresActions.getListCError,
+        deleteStore: StoresActions.deleteById
     }
 )(StoreListPage)
 

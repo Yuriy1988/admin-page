@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 import { MerchantActions } from '../../actions/index';
-import Alert, {TYPE_ERROR} from '../../components/Alert';
+import Alert, { TYPE_ERROR } from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
+
+import Transition from '../../containers/Transition';
 
 import MerchantModel from '../../models/merchant'
 
@@ -20,7 +22,7 @@ class MerchantPage extends Component {
     }
 
     componentWillReceiveProps(props) {
-        const {merchantId} = this.props.params;
+        const { merchantId } = this.props.params;
         MerchantPage.loadData(props, merchantId);
     }
 
@@ -28,43 +30,48 @@ class MerchantPage extends Component {
         const {merchantId} = props.params;
 
         if (merchantId !== prevMerchantId) {
-            const { loadMerchant, loadStores } = props;
+            const { loadMerchant } = props;
             loadMerchant(merchantId);
         }
     }
 
+    handleClick(e) {
+        e.preventDefault();
+        console.log("Delete");
+    }
 
     render() {
+        const { merchantId } = this.props.params;
+        const { merchants, children } = this.props;
 
-        const {merchants, merchantPagination, loadMerchantCE} = this.props;
-        const {children} = this.props;
-
-        const merchantInfo = new MerchantModel(merchants[merchantPagination.result]);
+        const merchantInfo = new MerchantModel(merchants[merchantId]);
 
         return (
             <div>
-
                 <h1 className="page-header">
                     <i className="fa fa-briefcase"/> {merchantInfo.merchantName}
                     <div className="box-tools pull-right btn-toolbar">
 
-                        <Link className="btn btn-sm btn-primary"
+                        <Link className="btn btn-sm btn-warning"
                               to={`/admin/administrator/merchants/${merchantInfo.id}/stores`}>
                             <i className="fa fa-shopping-cart"/>&nbsp;Stores
+                        </Link>
+                        <Link className="btn btn-sm btn-warning"
+                              to={`/admin/administrator/merchants/${merchantInfo.id}/contracts`}>
+                            <i className="fa fa-file-text-o"/>&nbsp;Contracts
                         </Link>
                         <Link className="btn btn-sm btn-primary"
                               to={`/admin/administrator/merchants/${merchantInfo.id}/edit`}>
                             <i className="fa fa-edit"/>&nbsp;Edit
                         </Link>
+                        {/*<Link className="btn btn-sm btn-danger"
+                         onClick={this.handleClick}
+                         to={`/admin/administrator/merchants/${merchantInfo.id}/edit`}>
+                         <i className="fa fa-trash"/>&nbsp;Delete
+                         </Link>*/}
                     </div>
                 </h1>
-
-                {(!!merchantPagination.error) ?
-                    <Alert type={TYPE_ERROR}
-                           handleClose={loadMerchantCE}>{merchantPagination.error.message}</Alert> : null}
-
-
-                {children}
+                <Transition>{children}</Transition>
             </div>
         )
     }

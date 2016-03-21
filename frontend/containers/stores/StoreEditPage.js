@@ -22,14 +22,16 @@ class StoreEditPage extends Component {
         const { editRequest, redirect, clearPagination} = props;
 
         if (!!editRequest.result) {
-            redirect(`/admin/administrator/stores/${editRequest.result}`); //TODO add redirect
+            redirect(`/admin/administrator/stores/${editRequest.result}`);
             clearPagination("storeEdit"); //TODO constant
+            clearPagination("storeGet"); //TODO constant
         }
     }
 
     componentWillUnmount() {
         const { clearPagination } = this.props;
         clearPagination("storeEdit"); //TODO constant
+        clearPagination("storeGet"); //TODO constant
     }
 
     loadData() {

@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import {DictionaryActions} from '../actions/index'
 
 export default class CurrencySelect extends Component {
+    componentDidMount() {
+        this.props.loadCurrenies();
+    }
+
     render() {
         const { currencies, children } = this.props;
 

@@ -21,6 +21,19 @@ export const STORES_LIST = (merchantId) => ({path: `merchants/${merchantId}/stor
 export const STORES_CREATE = (merchantId) => ({path: `merchants/${merchantId}/stores`, method: "POST", schema: storesSchema});
 export const STORE_GET = (storeId) => ({path: `stores/${storeId}`, method: "GET", schema: storesSchema});
 export const STORE_EDIT = (storeId) => ({path: `stores/${storeId}`, method: "PUT", schema: storesSchema});
+export const STORE_DELETE = (storeId) => ({path: `stores/${storeId}`, method: "DELETE", schema: storesSchema});
+
+
+/**
+ * MERCHANT_CONTRACTS
+ */
+const merchantContractSchema = new Schema('merchantContracts');
+const merchantContractListSchema = {contracts: arrayOf(merchantContractSchema)};
+export const MERCHANT_CONTRACT_LIST = (merchantId) => ({path: `merchants/${merchantId}/contracts`, method: "GET", schema: merchantContractListSchema});
+export const MERCHANT_CONTRACT_CREATE = (merchantId) => ({path: `merchants/${merchantId}/contracts`, method: "POST", schema: merchantContractSchema});
+export const MERCHANT_CONTRACT_EDIT = (merchantContractId) => ({path: `merchant_contracts/${merchantContractId}`, method: "PUT", schema: merchantContractSchema});
+export const MERCHANT_CONTRACT_GET = (merchantContractId) => ({path: `/merchant_contracts/${merchantContractId}`, method: "GET", schema: merchantContractSchema});
+export const MERCHANT_CONTRACT_DELETE = (merchantContractId) => ({path: `merchant_contracts/${merchantContractId}`, method: "DELETE", schema: merchantContractSchema});
 
 
 /**

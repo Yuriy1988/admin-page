@@ -1,6 +1,8 @@
 import { CALL_API } from '../middleware/api'
 
-
+/**
+ * List of stores
+ */
 import { STORES_LIST } from '../lib/api'
 export const STORES_LIST_REQUEST = 'STORES_LIST_REQUEST';
 export const STORES_LIST_SUCCESS = 'STORES_LIST_SUCCESS';
@@ -21,7 +23,9 @@ export function getList(merchantId) {
     }
 }
 
-
+/**
+ * Creating store
+ */
 import { STORES_CREATE } from '../lib/api'
 export const STORES_CREATE_REQUEST = 'STORES_CREATE_REQUEST';
 export const STORES_CREATE_SUCCESS = 'STORES_CREATE_SUCCESS';
@@ -43,7 +47,9 @@ export function create(merchantId, store) {
     }
 }
 
-
+/**
+ * Getting store
+ */
 import { STORE_GET } from '../lib/api'
 export const STORE_GET_REQUEST = 'STORE_GET_REQUEST';
 export const STORE_GET_SUCCESS = 'STORE_GET_SUCCESS';
@@ -71,6 +77,10 @@ export function getByIdLazy(storeId) {
     }
 }
 
+
+/**
+ * Updating store
+ */
 import { STORE_EDIT } from '../lib/api'
 export const STORE_EDIT_REQUEST = 'STORE_EDIT_REQUEST';
 export const STORE_EDIT_SUCCESS = 'STORE_EDIT_SUCCESS';
@@ -91,3 +101,34 @@ export function editById(storeId, store) {
         }
     }
 }
+
+
+/**
+ * Deleting store
+ */
+import { STORE_DELETE } from '../lib/api'
+export const STORE_DELETE_REQUEST = 'STORE_DELETE_REQUEST';
+export const STORE_DELETE_SUCCESS = 'STORE_DELETE_SUCCESS';
+export const STORE_DELETE_FAILURE = 'STORE_DELETE_FAILURE';
+export const STORE_DELETE_CERROR = 'STORE_DELETE_CERROR';
+export function deleteByIdCError() {
+    return {
+        type: STORE_DELETE_CERROR
+    }
+}
+export function deleteById(storeId) {
+    return {
+        [CALL_API]: {
+            types: [STORE_DELETE_REQUEST, {
+                type: STORE_DELETE_SUCCESS,
+                deleteObject: {
+                    entity: "stores",
+                    id: storeId
+                }
+            }, STORE_DELETE_FAILURE],
+            cError: STORE_DELETE_CERROR,
+            endpoint: STORE_DELETE(storeId)
+        }
+    }
+}
+

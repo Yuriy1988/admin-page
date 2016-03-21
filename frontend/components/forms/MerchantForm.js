@@ -37,6 +37,7 @@ class MerchantForm extends Component {
         e.preventDefault();
         const { onSubmit } = this.props;
         const { merchant } = this.state;
+
         onSubmit(merchant);
     }
 
@@ -178,9 +179,13 @@ class MerchantForm extends Component {
 
                         <Field error={errors.user.phone}>
                             <label htmlFor="phone">Phone</label>
-                            <input type="text" className="form-control" id="phone" placeholder="Phone"
-                                   onChange={changeMerchantUser("phone")}
-                                   value={merchant.user.phone}/>
+                            <div className="input-group">
+                                <span className="input-group-addon">+</span>
+                                <input type="text" className="form-control" id="phone" placeholder="380991234567"
+                                       onChange={changeMerchantUser("phone")}
+                                       value={merchant.user.phone}/>
+                            </div>
+
                         </Field>
 
                         <Field error={errors.user.notify}>

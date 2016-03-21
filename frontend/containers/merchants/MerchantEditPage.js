@@ -24,12 +24,14 @@ class MerchantEditPage extends Component {
         if (!!editRequest.result) {
             redirect(`/admin/administrator/merchants/${editRequest.result}`);
             clearPagination("merchantEdit"); //TODO constant
+            clearPagination("merchantGet"); //TODO constant
         }
     }
 
     componentWillUnmount() {
         const { clearPagination } = this.props;
         clearPagination("merchantEdit"); //TODO constant
+        clearPagination("merchantGet"); //TODO constant
     }
 
     loadData() {

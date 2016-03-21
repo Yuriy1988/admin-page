@@ -2,7 +2,6 @@ import { decamelizeKeys as decamelize } from 'humps'
 import { merge } from 'lodash'
 import deep from 'deep-diff'
 
-window.deep = deep;
 
 export default class MerchantModel {
     constructor(data) {
@@ -124,7 +123,7 @@ export class UserModel {
         return this._data.first_name;
     }
 
-    get last_name() {
+    get lastName() {
         return this._data.last_name;
     }
 

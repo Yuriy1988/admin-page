@@ -55,9 +55,12 @@ function callApi(endpoint, body) {
     return fetch(fullUrl, options)
         .then(
             response => {
+                console.log("try parse");
                 return response.json().then(
                     json => ({json, response}),
                     errorParse => {
+                        console.log("err parse");
+
                         const errorObj = {
                             code: 1,
                             message: errorParse.message,
@@ -67,11 +70,12 @@ function callApi(endpoint, body) {
                                 status_code: 0
                             }
                         };
-                        return Promise.reject(errorObj);
+                        return {json: {}, response};
                     }
                 )
             },
             requestError => {
+                console.log("req err");
                 const errorObj = {
                     code: 2,
                     message: requestError.message,

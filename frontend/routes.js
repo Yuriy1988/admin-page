@@ -26,7 +26,14 @@ import StoreListPage    from './containers/stores/StoreListPage'
 import StorePage        from './containers/stores/StorePage'
 import StoreStatPage    from './containers/stores/StoreStatPage'
 
-import CurrenciesPage   from './containers/pages/CurrenciesPage'
+import MerchantContractsPage       from './containers/merchantContracts/MerchantContractsPage' //Container
+import MerchantContractAddPage     from './containers/merchantContracts/MerchantContractAddPage'
+import MerchantContractEditPage    from './containers/merchantContracts/MerchantContractEditPage'
+import MerchantContractListPage    from './containers/merchantContracts/MerchantContractListPage'
+import MerchantContractPage        from './containers/merchantContracts/MerchantContractPage'
+import MerchantContractStatPage    from './containers/merchantContracts/MerchantContractStatPage'
+
+import CurrenciesPage   from './containers/pages/CurrenciesPage';
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -52,13 +59,14 @@ class Routes {
 
                     <Route path="/admin/access_denied" component={ErrorPage} status={403}/>
 
-                    <Route path="/admin" >
+                    <Route path="/admin">
                         <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
 
                         <Route path="administrator" component={AdminPage}
                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                             <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                            <Route path="notifications" component={NotificationsPage} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                            <Route path="notifications" component={NotificationsPage}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
 
                             <Route path="merchants" component={Merchants}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
@@ -68,14 +76,26 @@ class Routes {
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 <Route path=":merchantId" component={MerchantPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)} component={MerchantInfoPage}/>
+                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                                component={MerchantInfoPage}/>
                                     <Route path="stores" component={StoresPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                         <IndexRoute component={StoreListPage}
-                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                         <Route path="add" component={StoreAddPage}
                                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-
+                                    </Route>
+                                    <Route path="contracts" component={MerchantContractsPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                        <IndexRoute component={MerchantContractListPage}
+                                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                        <Route path="add" component={MerchantContractAddPage}
+                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                        <Route path=":merchantContractId"
+                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                            <Route path="edit" component={MerchantContractEditPage}
+                                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                        </Route>
                                     </Route>
                                     <Route path="edit" component={MerchantEditPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
@@ -91,7 +111,8 @@ class Routes {
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 </Route>
                             </Route>
-                            <Route path="currencies" component={CurrenciesPage} onEnter={this.requireRole(ROLE.ADMINISTRATOR)} />
+                            <Route path="currencies" component={CurrenciesPage}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                             {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
                         </Route>
 

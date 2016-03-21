@@ -1,5 +1,7 @@
 import * as MerchantActions from './merchants'
 export {MerchantActions}
+import * as MerchantContractActions from './merchantContracts'
+export {MerchantContractActions}
 import * as StoreActions from './stores'
 export {StoreActions}
 import * as SideBarActions from './sideBar'
