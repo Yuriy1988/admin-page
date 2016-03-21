@@ -5,23 +5,23 @@ from marshmallow.validate import Validator as _Validator, Regexp
 __author__ = 'Kostel Serhii'
 
 
-def deep_diff(initial, origin):
+def deep_diff(new, previous):
     """
     Return dict object, that is different between object and origin.
     Do NOT get diff of the list objects! Just return them.
-    :param initial: initial dict for deference
-    :param origin: original dict, that will be subtracted from initial
+    :param new: initial dict for deference
+    :param previous: original dict, that will be subtracted from initial
     :return: difference dict between initial and origin
     """
-    if not origin:
-        return initial
+    if not previous:
+        return new
 
     flat = lambda obj: not isinstance(obj[1], (dict, list))
-    initial_flat_pairs, origin_flat_pairs = set(filter(flat, initial.items())), set(filter(flat, origin.items()))
-    initial_dict_pairs = filter(lambda obj: isinstance(obj[1], dict), initial.items())
-    initial_list_pairs = filter(lambda obj: isinstance(obj[1], list), initial.items())
+    initial_flat_pairs, origin_flat_pairs = set(filter(flat, new.items())), set(filter(flat, previous.items()))
+    initial_dict_pairs = filter(lambda obj: isinstance(obj[1], dict), new.items())
+    initial_list_pairs = filter(lambda obj: isinstance(obj[1], list), new.items())
 
-    recurse_dict_pairs = ((key, deep_diff(value, origin.get(key, {}))) for key, value in initial_dict_pairs)
+    recurse_dict_pairs = ((key, deep_diff(value, previous.get(key, {}))) for key, value in initial_dict_pairs)
 
     diff = dict(chain(initial_flat_pairs - origin_flat_pairs,
                       filter(lambda obj: bool(obj[1]), recurse_dict_pairs),
@@ -124,50 +124,3 @@ class Login(Regexp):
         regex = kwargs.pop('regex', self.default_regex)
         error = kwargs.pop('error', self.default_message)
         super().__init__(regex, error=error, **kwargs)
-
-
-if __name__ == '__main__':
-    from copy import deepcopy
-
-    # flat
-    o = dict(zip('abcdef', range(6)))
-
-    i = deepcopy(o)
-    print(deep_diff(i, {}))
-
-    i = deepcopy(o)
-    print(deep_diff(i, o))
-
-    i = deepcopy(o)
-    i.update({'a': 99, 'f': 100})
-    print(deep_diff(i, o))
-
-    # nested
-    o['a'] = dict(zip('abcdef', range(6)))
-
-    i = deepcopy(o)
-    print(deep_diff(i, o))
-
-    i = deepcopy(o)
-    i['b'] = 84
-    i['a']['a'] = 42
-    i['a']['f'] = 21
-    print(deep_diff(i, o))
-
-    # deep nested
-    o['a']['a'] = dict(zip('abcdef', range(6)))
-
-    i = deepcopy(o)
-    print(deep_diff(i, o))
-
-    i = deepcopy(o)
-    i['b'] = 84
-    i['a']['d'] = 42
-    i['a']['a']['e'] = 123
-    print(deep_diff(i, o))
-
-    # with list
-    o['e'] = list(range(5))
-    i = deepcopy(o)
-    i['b'] = 84
-    print(deep_diff(i, o))
