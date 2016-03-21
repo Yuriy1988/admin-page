@@ -11,10 +11,10 @@ class AbstractContractSchema(base.BaseSchema):
     id = fields.Int(dump_only=True)
     commission_fixed = fields.Decimal(required=True)
     commission_pct = fields.Decimal(required=True, validate=Range(min=-100, max=100))
-    active = fields.Boolean(default=False)
+    contract_doc_url = fields.Url(required=True)
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
+    active = fields.Boolean(default=False)
     filter = fields.Str(default="*")
-    contract_doc_url = fields.Str()
 
 
 class MerchantContractSchema(AbstractContractSchema):
@@ -26,6 +26,5 @@ class BankContractSchema(AbstractContractSchema):
 
 
 class ContractRequestSchema(base.BaseSchema):
-
     active = fields.Boolean(allow_none=True)
     currency = fields.Str(allow_none=True, validate=OneOf(enum.CURRENCY_ENUM))
