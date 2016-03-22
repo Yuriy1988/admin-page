@@ -87,6 +87,7 @@ def delete_merchant_contract(contract_id):
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>/contracts', methods=['GET'])
 def bank_contracts_list(paysys_id):
+    paysys_id = paysys_id.upper()
     if not PaymentSystem.exists(paysys_id):
         raise NotFoundError()
 
@@ -111,6 +112,7 @@ def bank_contracts_list(paysys_id):
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>/contracts', methods=['POST'])
 def create_bank_contract(paysys_id):
+    paysys_id = paysys_id.upper()
     if not PaymentSystem.exists(paysys_id):
         raise NotFoundError()
 

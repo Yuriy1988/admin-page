@@ -1,25 +1,29 @@
-from datetime import datetime
-from decimal import Decimal
-
+import io
+import pprint
 import random
 import string
-import json
 from copy import deepcopy
+from flask import json
 from flask.ext.testing import TestCase
+
 from xopay import app, db as app_db
-from xopay.models import User, Merchant, Manager, Store, MerchantContract, BankContract, enum, PaymentSystem, Currency
+from xopay.models import Merchant, Manager, Store, enum, PaymentSystem, Currency
 
 __author__ = 'Kostel Serhii'
 
 
-class BaseTestCase(TestCase):
+def prettify(obj, depth=10):
+    """"
+    Return formatted string representation of Python object.
+    :param obj: python object.
+    :param depth: depth of recursive iteration of python object structure.
+    """
+    string = io.StringIO()
+    pprint.pprint(obj, depth=depth, stream=string)
+    return str(string.getvalue())
 
-    # If database is missing, run shell command: make db_test_create
-    SQLALCHEMY_DATABASE_URI = "postgresql://xopadmintest:test123@localhost/xopadmintestdb"
 
-    api_base = '/api/admin/dev'
-
-    # defaults
+class TestDefaults:
 
     _user = {
         "username": "mustbeunique",
@@ -66,36 +70,28 @@ class BaseTestCase(TestCase):
         "show_logo": True,
         "store_settings": _store_settings
     }
-    _merchant_contract = {
-        "commission_fixed": '0.1',
-        "commission_pct": '2.0',
-        "active": True,
-        "currency": "USD",
-        "filter": "*",
-        "contract_doc_url": ""
-    }
-    _bank_contract = {
-        "contractor_name": "Alpha Bank",
-        "commission_fixed": '0.1',
-        "commission_pct": '2.0',
-        "active": True,
-        "currency": "USD",
-        "filter": "*",
-        "contract_doc_url": ""
-    }
-    _payment_system = {
-        "paysys_id": enum.PAYMENT_SYSTEMS_ID_ENUM[2],
-        "paysys_name": "Visa/Mastercard",
-        "paysys_login": "xopay_test",
-        "paysys_password": "0xJtwe76GDSAFknui8we45unohyDKUFSGku",
-        "active": True,
-    }
-    _currency_record = {
-        "from_currency": "USD",
-        "to_currency": "UAH",
-        "rate": "27.5",
-        "commit_time": "2016-01-01T00:00:00+00:00"
-    }
+
+    def get_user(self):
+        return self._user.copy()
+
+    def get_merchant(self):
+        return deepcopy(self._merchant)
+
+    def get_manager(self):
+        return deepcopy(self._manager)
+
+    def get_store(self):
+        return deepcopy(self._store)
+
+
+class BaseTestCase(TestCase, TestDefaults):
+
+    # If database is missing, run shell command: make db_test_create
+    SQLALCHEMY_DATABASE_URI = "postgresql://xopadmintest:test123@localhost/xopadmintestdb"
+
+    api_base = '/api/admin/dev'
+
+    # defaults
 
     def setUp(self):
         """ Setup before test case """
@@ -135,8 +131,8 @@ class BaseTestCase(TestCase):
         a_zA_Z0_9 = string.ascii_letters + string.digits
         return ''.join((random.choice(a_zA_Z0_9) for i in range(str_len)))
 
-    def get(self, url):
-        response = self.client.get(self.api_base + url)
+    def get(self, url, query_args=None):
+        response = self.client.get(self.api_base + url, query_string=query_args or {})
         return response.status_code, response.json
 
     def put(self, url, body):
@@ -147,37 +143,11 @@ class BaseTestCase(TestCase):
     def post(self, url, body):
         headers = {"Content-Type": "application/json"}
         response = self.client.post(self.api_base + url, data=json.dumps(body), headers=headers)
-        return response.status_code, response.json
+        return response.status_code, response.json if response.mimetype == 'application/json' else response.data
 
     def delete(self, url):
         response = self.client.delete(self.api_base + url)
         return response.status_code, response.json if response.status_code >= 400 else None
-
-    def get_user(self):
-        return deepcopy(self._user)
-
-    def get_merchant(self):
-        return deepcopy(self._merchant)
-
-    def get_manager(self):
-        return deepcopy(self._manager)
-
-    def get_store(self):
-        return deepcopy(self._store)
-
-    def get_bank_contract(self):
-        return deepcopy(self._bank_contract)
-
-    def get_merchant_contract(self):
-        return deepcopy(self._merchant_contract)
-
-    def create_user(self, user_dict, username=None):
-        user_dict['username'] = username or "user" + self.rand_str()
-
-        user_model = User.create(user_dict)
-        self.db.commit()
-
-        return user_model
 
     def create_merchant(self, merchant_dict, merchant_name=None, username=None):
         merchant_dict['merchant_name'] = merchant_name or "merchant" + self.rand_str()
@@ -187,32 +157,6 @@ class BaseTestCase(TestCase):
         self.db.commit()
 
         return merchant_model
-
-    def create_merchant_contract(self, contract_dict, merchant_id, active=True, currency="USD"):
-        contract_dict = deepcopy(contract_dict)
-        contract_dict["merchant_id"] = merchant_id
-        contract_dict["active"] = active
-        contract_dict["currency"] = currency
-        contract_model = MerchantContract.create(contract_dict)
-        self.db.commit()
-
-        return contract_model
-
-    def create_bank_contract(self, contract_dict, paysys_id, active=True, currency="USD"):
-        contract_dict = deepcopy(contract_dict)
-        contract_dict["payment_system_id"] = paysys_id
-        contract_dict["active"] = active
-        contract_dict["currency"] = currency
-        contract_model = BankContract.create(contract_dict)
-        self.db.commit()
-
-        return contract_model
-
-    def create_payment_system(self, paysys_dict):
-        paysys_dict = deepcopy(paysys_dict)
-        paysys_model = PaymentSystem.create(paysys_dict)
-        self.db.commit()
-        return paysys_model
 
     def create_manager(self, manager_dict, merchant_id, username=None):
         manager_dict['merchant_id'] = merchant_id
@@ -231,14 +175,20 @@ class BaseTestCase(TestCase):
 
         return store_model
 
-    def create_currency_record(self, currency_dict, **custom_args):
-        currency_dict = deepcopy(currency_dict)
-        for key, value in custom_args.items():
-            currency_dict[key] = value
-        currency_model = Currency.create(currency_dict)
+    def create_payment_systems(self):
+        ps_id = enum.PAYMENT_SYSTEMS_ID_ENUM[2]
+        paysys = {
+            "paysys_id": ps_id,
+            "paysys_name": ps_id.lower().replace('_', ' '),
+            "paysys_login": "xopay_test",
+            "paysys_password": "0xJtwe76GDSAFknui8we45unohyDKUFSGku",
+            "active": True,
+        }
+
+        paysys_model = PaymentSystem.create(paysys)
         self.db.commit()
 
-        return currency_model
+        return paysys_model
 
     def login(self, username, password):
         data = dict(username=username, password=password)

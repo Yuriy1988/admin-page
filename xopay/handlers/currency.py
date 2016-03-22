@@ -80,4 +80,4 @@ def currency_update():
 
     db.session.commit()
 
-    return jsonify({})
+    return Response(response='', status=200)
