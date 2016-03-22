@@ -70,13 +70,13 @@ class StoreForm extends Component {
                                    value={store.storeName}
                                    placeholder="Example Shop"/>
                         </Field>
-                        <Field error={errors.store_identifier}>
+                        {/*<Field error={errors.store_identifier}>
                             <label htmlFor="storeIdentifier">Store identifier</label>
                             <input type="text" className="form-control " id="storeIdentifier"
                                    onChange={bindStore("store_identifier")}
                                    value={store.storeIdentifier}
                                    placeholder="as8d78ys87"/>
-                        </Field>
+                        </Field>*/}
                         <Field error={errors.store_url}>
                             <label htmlFor="storeUrl">Store URL</label>
                             <input type="text" className="form-control " id="storeUrl"
@@ -142,13 +142,13 @@ class StoreForm extends Component {
                             </select>
                         </Field>
 
-                        <Field error={errors.store_settings.sign_key}>
+                        {/*<Field error={errors.store_settings.sign_key}>
                             <label htmlFor="signKey">Sign key</label>
                             <input type="text" className="form-control " id="signKey"
                                    onChange={bindStoreSettings("sign_key")}
                                    value={store.settings.signKey}
                                    placeholder="4kh3289y432h3io2489238h"/>
-                        </Field>
+                        </Field>*/}
 
                         <Field error={errors.store_settings.succeed_url}>
                             <label htmlFor="succeed_url">Success Url</label>
