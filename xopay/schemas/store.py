@@ -13,7 +13,7 @@ class StoreSettingsSchema(base.BaseSchema):
     sign_key = fields.Str(dump_only=True)
     succeed_url = fields.Url(required=True)
     failure_url = fields.Url(required=True)
-    commission_pct = fields.Float(places=4, rounding=2, required=True, validate=Range(min=0, max=100))
+    commission_pct = fields.Decimal(required=True, validate=Range(min=0, max=100))
 
 
 class StoreSchema(base.BaseSchema):

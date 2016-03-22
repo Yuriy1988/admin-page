@@ -7,7 +7,7 @@ from flask import json
 from flask.ext.testing import TestCase
 
 from xopay import app, db as app_db
-from xopay.models import Merchant, Manager, Store, enum, PaymentSystem, Currency
+from xopay.models import Merchant, Manager, Store, enum, PaymentSystem
 
 __author__ = 'Kostel Serhii'
 

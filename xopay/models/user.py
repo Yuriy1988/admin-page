@@ -1,4 +1,5 @@
 import uuid
+import pytz
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
 
@@ -30,8 +31,7 @@ class User(base.BaseModel):
 
     enabled = db.Column(db.Boolean, nullable=False, default=False)
 
-    # FIXME: add timezone
-    created = db.Column(db.DateTime, default=datetime.now())
+    created = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(tz=pytz.utc))
 
     def __init__(self, username, password='', enabled=False,
                  first_name=None, last_name=None, email=None, phone=None, notify=None):

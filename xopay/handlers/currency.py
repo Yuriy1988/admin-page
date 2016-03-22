@@ -1,3 +1,4 @@
+import pytz
 from datetime import datetime, timedelta
 from flask import jsonify, request, Response
 
@@ -65,7 +66,7 @@ def currency_update():
     if errors:
         raise ValidationError(errors=errors)
 
-    commit_time = datetime.utcnow()
+    commit_time = datetime.now(tz=pytz.utc)
     curr_pair_set = set()
 
     for curr in data:

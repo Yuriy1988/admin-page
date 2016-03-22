@@ -12,7 +12,7 @@ class Currency(base.BaseModel):
     from_currency = db.Column(db.Enum(*enum.CURRENCY_ENUM, name='enum_currency'), nullable=False)
     to_currency = db.Column(db.Enum(*enum.CURRENCY_ENUM, name='enum_currency'), nullable=False)
     rate = db.Column(db.Numeric, nullable=False)
-    commit_time = db.Column(db.DateTime, nullable=False)
+    commit_time = db.Column(db.DateTime(timezone=True), nullable=False)
 
     def __init__(self, from_currency, to_currency, rate, commit_time):
         self.from_currency = from_currency

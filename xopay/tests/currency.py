@@ -1,4 +1,5 @@
 import pytz
+import iso8601
 from datetime import datetime, timedelta
 from decimal import Decimal
 from itertools import permutations
@@ -67,6 +68,18 @@ class TestCurrency(base.BaseTestCase):
 
         self.assertEqual(status, 200, msg=body)
         self.assertEqual(len(body["current"]), count)
+
+    def test_get_current_valid_structure(self):
+        self.create_currency_records()
+        status, body = self.get("/currency/current")
+
+        self.assertEqual(status, 200, msg=body)
+
+        currency = body['current'][0]
+        self.assertSetEqual(set(currency.keys()), set(self._currency.keys()))
+        self.assertEqual(currency["commit_time"], self._currency["commit_time"])
+        datetime_with_tz = iso8601.parse_date(currency["commit_time"])
+        self.assertTrue(datetime_with_tz.tzinfo)
 
     def test_get_current_multi_filtering(self):
         count = 10
