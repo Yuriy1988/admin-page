@@ -10,7 +10,7 @@ test_job:
     - make test
   only:
     - master
-  cash:
+  cache:
     paths:
       - venv/
 
