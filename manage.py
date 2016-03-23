@@ -18,7 +18,7 @@ manager = script.Manager(app)
 def test():
     tests_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'xopay', 'tests')
     suite = unittest.TestLoader().discover(tests_path, pattern='*.py')
-    unittest.TextTestRunner().run(suite)
+    unittest.TextTestRunner(verbosity=2).run(suite)
 
 
 # db migrations

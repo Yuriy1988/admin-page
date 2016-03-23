@@ -1,6 +1,3 @@
-before_script:
-  - make venv_install
-
 stages:
   - test
   - build
@@ -9,9 +6,13 @@ stages:
 test_job:
   stage: test
   script:
+    - make venv_install
     - make test
   only:
     - master
+  cash:
+    paths:
+      - venv/
 
 build_job:
   stage: build
