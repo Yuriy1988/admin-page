@@ -1,5 +1,4 @@
 before_script:
-  - make install
   - make venv_install
   - make db_test_create
   - bash -c "cd frontend && make install"
