@@ -9,6 +9,7 @@ DB_TEST_PASSWORD=test123
 
 # ========== Linux ==========
 
+
 # ----- Install -----
 
 install_python35_repo:
@@ -78,6 +79,12 @@ venv_install:
 
 venv_update:
 	bash -c "source venv/bin/activate && pip install -r requirements.txt"
+
+
+# ----- Test -----
+
+test: venv_update
+	./manage.py test
 
 
 # ========== MacOS ==========
