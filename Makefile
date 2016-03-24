@@ -83,8 +83,13 @@ venv_update:
 
 # ----- Test -----
 
-test: venv_update
+test:
 	./manage.py test
+
+
+# ----- Run Server -----
+run:
+	./manage.py runserver
 
 
 # ========== MacOS ==========

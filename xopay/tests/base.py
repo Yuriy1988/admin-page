@@ -11,6 +11,9 @@ from xopay.models import Merchant, Manager, Store, enum, PaymentSystem
 
 __author__ = 'Kostel Serhii'
 
+# If database is missing, run shell command: make db_test_create
+SQLALCHEMY_DATABASE_URI = "postgresql://xopadmintest:test123@localhost/xopadmintestdb"
+
 
 def prettify(obj, depth=10):
     """"
@@ -18,9 +21,9 @@ def prettify(obj, depth=10):
     :param obj: python object.
     :param depth: depth of recursive iteration of python object structure.
     """
-    string = io.StringIO()
-    pprint.pprint(obj, depth=depth, stream=string)
-    return str(string.getvalue())
+    string_io = io.StringIO()
+    pprint.pprint(obj, depth=depth, stream=string_io)
+    return str(string_io.getvalue())
 
 
 class TestDefaults:
@@ -86,9 +89,6 @@ class TestDefaults:
 
 class BaseTestCase(TestCase, TestDefaults):
 
-    # If database is missing, run shell command: make db_test_create
-    SQLALCHEMY_DATABASE_URI = "postgresql://xopadmintest:test123@localhost/xopadmintestdb"
-
     api_base = '/api/admin/dev'
 
     # defaults
@@ -120,7 +120,7 @@ class BaseTestCase(TestCase, TestDefaults):
         app.config['DEBUG'] = True
         app.config['TESTING'] = True
         app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = self.SQLALCHEMY_DATABASE_URI
+        app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 
     @staticmethod
     def rand_int(a=0, b=100):
