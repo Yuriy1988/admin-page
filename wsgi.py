@@ -11,5 +11,5 @@ logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0,"/var/www/xopay/admin")
 
 #TODO: add production config
-from xopay import app as application
+from api import app as application
 application.secret_key = 'Add your secret key'

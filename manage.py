@@ -1,12 +1,10 @@
 #!venv/bin/python
-
 import os
 import unittest
 import flask_script as script
 import flask_migrate as migrate
 
-from xopay import app, db
-from xopay.models import *
+from api import app, db
 
 __author__ = 'Kostel Serhii'
 
@@ -19,7 +17,7 @@ manager.add_command('runserver', server)
 
 # test
 def test():
-    tests_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'xopay', 'tests')
+    tests_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'api', 'tests')
     suite = unittest.TestLoader().discover(tests_path, pattern='*.py')
     unittest.TextTestRunner(verbosity=2).run(suite)
 
