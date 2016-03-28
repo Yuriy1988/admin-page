@@ -7,7 +7,7 @@ const initial_user = (DEV_MODE ) ? {
     login: "vladik7244",
     mainPage: "/admin/administrator",
     roles: ["ROLE_ADMINISTRATOR"],
-    token: "fhajk8f9ahskfas9fyasfs890a"
+    token: localStorage.getItem("user_token")
 } : {
 };
 
@@ -16,6 +16,7 @@ export default function user(state = initial_user, action) {
 
     if (type === UserActions.USER_LOGIN) {
         if (action.login === 'test' && action.password === "test") {
+            localStorage.setItem("user_token", "fhajk8f9ahskfas9fyasfs890a");
             return {
                 name: "Vlad",
                 login: action.login,
@@ -31,6 +32,7 @@ export default function user(state = initial_user, action) {
     }
 
     if (type === UserActions.USER_LOGOUT) {
+        localStorage.removeItem("user_token");
         return {};
     }
 
