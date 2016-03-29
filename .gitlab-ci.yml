@@ -1,29 +1,21 @@
 stages:
   - test
-  - build
-  - deploy
+  - deploy_demo
 
-test_job:
+test_task:
   stage: test
   script:
-    - make venv_install
     - make test
   only:
     - master
   cache:
     paths:
       - venv/
+      - frontend/node_modules/
 
-build_job:
-  stage: build
+deploy_demo_task:
+  stage: deploy_demo
   script:
-    - echo "Create build"
-  only:
-    - master
-
-deploy_dev_job:
-  stage: deploy
-  script:
-    - echo "Make deploy"
+    - fab setenv:demo update
   only:
     - master

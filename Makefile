@@ -82,7 +82,7 @@ build_static:
 
 # ----- Setup -----
 
-setup: install venv_init db_init
+setup: install venv_init db_create
 
 
 # ----- Update -----
@@ -94,6 +94,15 @@ update: venv_init db_update
 
 test: venv_init
 	./manage.py test
+
+
+# ----- Demo Server -----
+
+setup_demo:
+	fab setenv:demo setup
+
+deploy:
+	fab setenv:demo update
 
 
 # ----- Run Server -----
