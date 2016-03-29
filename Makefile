@@ -76,7 +76,6 @@ venv_init:
 # ----- Build static -----
 
 build_static:
-	if [ ! -d "frontend/node_modules" ]; then bash -c "cd frontend && make install"; fi;
 	bash -c "cd frontend && make build"
 
 
