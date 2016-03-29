@@ -122,7 +122,6 @@ def setup():
         run('make setup')
 
     # supervisor
-    supervisor_conf = 'server/xopay-admin.conf.templ'
     sudo('apt-get install -y supervisor')
     put('server/xopay-admin.conf.templ', '/etc/supervisor/conf.d/', use_sudo=True)
     with cd('/etc/supervisor/conf.d/'):
