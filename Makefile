@@ -7,8 +7,7 @@ DB_PASSWORD=UC4EhhQ6HkwNn7qK
 DB_TEST_NAME=xopadmintestdb
 DB_TEST_USER=xopadmintest
 DB_TEST_PASSWORD=test123
-
-
+	
 # ========== Linux ==========
 
 
