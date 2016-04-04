@@ -33,9 +33,20 @@ env.build_dir = 'dist'
 env.colorize_errors = True
 env.hosts = list(hosts.values())
 
+env.server_port = 7128
+
+
+def create_config(config_file, template_file, **config_kwargs):
+    with open(template_file) as tf, open(config_file, 'w') as cf:
+        config_kwargs.update(env)
+        config = tf.read().format(**config_kwargs)
+        cf.write(config)
+    tf.close()
+    cf.close()
+
 
 def deploy():
-    build_name = 'xopay-admin-{timestamp}.tar.gz'.format(timestamp=datetime.now().strftime("%Y-%m-%d_%H.%M.%S"))
+    build_name = 'xopay-admin-{timestamp}.tar.gz'.format(timestamp=datetime.now().strftime("%Y-%m-%d-%H.%M.%S"))
     build_path = os.path.join(env.build_dir, build_name)
 
     # create build
@@ -100,19 +111,48 @@ def push_key(key_file='~/.ssh/id_rsa.pub'):
 
 # ----- Install -----
 
+def setup_supervisor():
+    sudo('apt-get install -y supervisor')
+
+    config_file = '/tmp/xopay-admin.conf'
+    create_config(config_file, 'server/xopay-admin.conf.supervisor.templ')
+
+    put(config_file, '/etc/supervisor/conf.d/', use_sudo=True)
+    local('rm {config}'.format(config=config_file))
+
+    sudo('supervisorctl reread')
+    sudo('supervisorctl update')
+
+
+def setup_nginx():
+    sudo('apt-get install -y nginx')
+
+    config_file = '/tmp/xopay-admin.conf'
+    create_config(config_file, 'server/xopay-admin.conf.nginx.templ')
+
+    put(config_file, '/etc/nginx/sites-available/', use_sudo=True)
+    local('rm {config}'.format(config=config_file))
+
+    sudo('cd /etc/nginx/sites-enabled/ && ln -s -f ../sites-available/xopay-admin.conf')
+    sudo('service nginx restart')
+
+
 @task
 def setup():
+    # add current user to www-data group
+    sudo('usermod -a -G www-data $USER')
+
     # create project structure
     base_deploy_dir = os.path.dirname(env.deploy_dir)
     sudo('mkdir -p {base_deploy_dir}'.format(base_deploy_dir=base_deploy_dir))
-    sudo('chown -R "{user}" {base_deploy_dir}'.format(user=env.user, base_deploy_dir=base_deploy_dir))
+    sudo('chown -R "{user}:www-data" {base_deploy_dir}'.format(user=env.user, base_deploy_dir=base_deploy_dir))
     sudo('chmod 2750 {base_deploy_dir}'.format(base_deploy_dir=base_deploy_dir))
 
     # create log structure
     base_log_dir = os.path.dirname(env.log_dir)
     sudo('mkdir -p {base_log_dir}'.format(base_log_dir=base_log_dir))
-    sudo('chown -R "{user}" {base_log_dir}'.format(user=env.user, base_log_dir=base_log_dir))
-    sudo('chmod 2640 {base_log_dir}'.format(base_log_dir=base_log_dir))
+    sudo('chown -R "{user}:www-data" {base_log_dir}'.format(user=env.user, base_log_dir=base_log_dir))
+    sudo('chmod 2660 {base_log_dir}'.format(base_log_dir=base_log_dir))
 
     # deploy
     deploy()
@@ -122,14 +162,10 @@ def setup():
         run('make setup')
 
     # supervisor
-    sudo('apt-get install -y supervisor')
-    put('server/xopay-admin.conf.templ', '/etc/supervisor/conf.d/', use_sudo=True)
-    with cd('/etc/supervisor/conf.d/'):
-        sudo('mv xopay-admin.conf.templ xopay-admin.conf')
-        # fill template
-        sudo("sed 's/$user/{user}/g' -i xopay-admin.conf".format(user=env.user))
-    sudo('supervisorctl reread')
-    sudo('supervisorctl update')
+    setup_supervisor()
+
+    # nginx
+    setup_nginx()
 
     # start
     start()

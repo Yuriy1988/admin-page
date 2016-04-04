@@ -1,0 +1,7 @@
+[program:xopay-admin]
+command = /var/www/xopay/admin/venv/bin/gunicorn api:app --bind 127.0.0.1:{server_port} --workers=8 --reload
+directory = /var/www/xopay/admin
+user = {user}
+autostart=true
+autorestart=true
+redirect_stderr=true

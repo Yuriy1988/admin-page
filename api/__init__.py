@@ -20,5 +20,8 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-import api.admin_page
 import api.handlers
+
+if app.config['DEBUG']:
+    # enable only in debug mode. In production use nginx/apache for this purpose
+    import api.admin_page

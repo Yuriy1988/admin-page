@@ -12,7 +12,6 @@ def admin_page(path=None):
     :param path: any valid url (used in frontend routing system)
     :return: index html page
     """
-    # TODO: enable this only in debug mode. In production use apache for this purpose
     return app.send_static_file('index.html')
 
 
