@@ -3,8 +3,7 @@ import os
 DEBUG = True
 
 BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
-FRONTEND_FOLDER = os.path.join(BASE_FOLDER, 'frontend')
-STATIC_FOLDER = os.path.join(FRONTEND_FOLDER, 'static')
+STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
 # Define the database
 SQLALCHEMY_DATABASE_URI = 'postgresql://xopadmin:UC4EhhQ6HkwNn7qK@localhost/xopadmindb'
