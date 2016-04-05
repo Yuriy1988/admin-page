@@ -27,7 +27,7 @@ path_to_exclude = [
 ]
 
 env.deploy_dir = '/var/www/xopay/admin'
-env.log_dir = '/var/log/xopay/admin'
+env.log_dir = '/var/log/xopay'
 env.supervisor_task = 'xopay-admin'
 env.build_dir = 'dist'
 env.colorize_errors = True
