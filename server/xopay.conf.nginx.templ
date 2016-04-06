@@ -4,6 +4,12 @@ server {{
 
     set $WEB_ROOT /var/www/xopay;
 
+    location /favicon.ico {
+        alias /var/www/xopay/admin/frontend/static/admin/favicon.ico;
+        expires max;
+        access_log off;
+    }
+
     location /static/admin/ {{
         rewrite ^/static/admin/(.*)$ /$1  break;
         root   $WEB_ROOT/admin/frontend/static;
