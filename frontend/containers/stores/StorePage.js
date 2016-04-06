@@ -127,10 +127,10 @@ class StorePage extends Component {
                                         <b>Succeed Url</b>
                                         <p className="text-muted pull-right">{storeInfo.settings.succeedUrl}</p>
                                     </li>
-                                    <li className="list-group-item">
+                                    {/*<li className="list-group-item">
                                         <strong>Sign Key</strong>
                                         <p className="text-muted pull-right">{storeInfo.settings.signKey}</p>
-                                    </li>
+                                    </li>*/}
                                     <li className="list-group-item">
                                         <strong>Sign Algorithm</strong>
                                         <p className="text-muted pull-right">{storeInfo.settings.signAlgorithm}</p>

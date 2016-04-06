@@ -6,7 +6,7 @@
     "build": "rm -f ./static/admin/js/app.js && DEV_SERVER=false DEV_MODE=false node server.js",
     "dev": "npm run flask & DEV_SERVER=true DEV_MODE=true node server.js ",
     "dev-single": "DEV_SERVER=true DEV_MODE=true node server.js ",
-    "flask": "cd .. && ./run.py && cd frontend",
+    "flask": "cd .. && DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.5/lib: ./manage.py runserver && cd frontend",
     "dev-py": "DEV_SERVER=false DEV_MODE=true node server.js",
     "test": "DEV_SERVER=false DEV_MODE=false DEV_TEST=true node server.js && node ./test_build/tests.js"
   },

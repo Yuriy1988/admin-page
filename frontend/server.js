@@ -2,8 +2,6 @@ var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 var config = require('./webpack.config');
-var httpProxy = require('http-proxy');
-
 
 var app = new (require('express'))();
 var fs = require('fs');
@@ -41,43 +39,6 @@ if (config.DEV_MODE == true) {
 
 
 if (config.DEV_SERVER == true) {
-
-    var proxy = httpProxy.createProxyServer({});
-
-    app.use(function (req, res) {
-
-        if (req.url.substr(0, 10) === '/api/admin') {
-            setTimeout(function () {
-                proxy.web(req, res, {target: 'http://localhost:7128'}, function(e) {
-                    console.warn("[SERVER_BACKEND] ERROR ", e);
-                    res.status(500);
-                    res.send({error:{
-                        message: "Backend server not found. Try to restart it",
-                        status_code: 500
-                    }});
-                });
-            }, apiDelay);
-
-        } else {
-            //if (req.url.substr(0,5)==);
-            console.log("[SERVER] <-- ", req.url);
-
-            const fileName = __dirname + req.url;
-
-            console.log("[FILE] = ", fileName);
-
-            fs.stat(fileName, (err, stats) => {
-
-                if (!err && stats.isFile()) {
-                    console.log("[SERVER] --> ", fileName);
-                    res.sendFile(fileName);
-                } else {
-                    console.log("[SERVER] --> INDEX.HTML");
-                    res.sendFile(__dirname + '/static/admin/index.html');
-                }
-            });
-        }
-    });
 
     app.listen(port, function (error) {
         if (error) {
