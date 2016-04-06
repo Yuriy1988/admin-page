@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {Link} from 'react-router'
 
-import { StoreActions } from '../../actions/index';
+import {StoreActions} from '../../actions/index';
 
 import Alert, {TYPE_ERROR} from '../../components/Alert';
 import Boolean from '../../components/Boolean';
@@ -90,10 +90,10 @@ class StorePage extends Component {
                                     </li>
                                     <li className="list-group-item">
                                         <strong>Store identifier</strong>
-                                        <p className="text-muted pull-right">{storeInfo.storeIdentifier}</p>
+                                        <p className="text-muted pull-right">{storeInfo.id}</p>
                                     </li>
                                     <li className="list-group-item">
-                                        <strong>Store front</strong>
+                                        <strong>Store home page</strong>
                                         <a className="pull-right btn-success btn btn-xs"
                                            target="_blank"
                                            href={storeInfo.storeUrl}>
@@ -128,9 +128,9 @@ class StorePage extends Component {
                                         <p className="text-muted pull-right">{storeInfo.settings.succeedUrl}</p>
                                     </li>
                                     {/*<li className="list-group-item">
-                                        <strong>Sign Key</strong>
-                                        <p className="text-muted pull-right">{storeInfo.settings.signKey}</p>
-                                    </li>*/}
+                                     <strong>Sign Key</strong>
+                                     <p className="text-muted pull-right">{storeInfo.settings.signKey}</p>
+                                     </li>*/}
                                     <li className="list-group-item">
                                         <strong>Sign Algorithm</strong>
                                         <p className="text-muted pull-right">{storeInfo.settings.signAlgorithm}</p>

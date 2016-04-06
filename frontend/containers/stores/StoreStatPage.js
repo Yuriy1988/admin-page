@@ -4,8 +4,7 @@ import { Link } from 'react-router'
 
 import { StoreActions } from '../../actions/index';
 
-import Alert, {TYPE_ERROR} from '../../components/Alert';
-import Boolean from '../../components/Boolean';
+
 import LoadingOverlay from '../../components/LoadingOverlay';
 
 import StoreModel from '../../models/store'

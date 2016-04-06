@@ -78,7 +78,7 @@ class StoreForm extends Component {
                                    placeholder="as8d78ys87"/>
                         </Field>*/}
                         <Field error={errors.store_url}>
-                            <label htmlFor="storeUrl">Store URL</label>
+                            <label htmlFor="storeUrl">Store home page URL</label>
                             <input type="text" className="form-control " id="storeUrl"
                                    onChange={bindStore("store_url")}
                                    value={store.storeUrl}
@@ -100,7 +100,7 @@ class StoreForm extends Component {
                                     <input type="text" className="form-control " id="logo"
                                            onChange={bindStore("logo")}
                                            value={store.logo}
-                                           placeholder="www.example.com/logo.jpg"/>
+                                           placeholder="http://www.example.com/logo.jpg"/>
                                 </div>
                                 <div className="col-sm-5">
                                     <div >
