@@ -144,15 +144,14 @@ def setup():
 
     # create project structure
     base_deploy_dir = os.path.dirname(env.deploy_dir)
-    sudo('mkdir -p {base_deploy_dir}'.format(base_deploy_dir=base_deploy_dir))
+    sudo('mkdir -p {deploy_dir}'.format(**env))
     sudo('chown -R "{user}:www-data" {base_deploy_dir}'.format(user=env.user, base_deploy_dir=base_deploy_dir))
     sudo('chmod 2750 {base_deploy_dir}'.format(base_deploy_dir=base_deploy_dir))
 
     # create log structure
-    base_log_dir = os.path.dirname(env.log_dir)
-    sudo('mkdir -p {base_log_dir}'.format(base_log_dir=base_log_dir))
-    sudo('chown -R "{user}:www-data" {base_log_dir}'.format(user=env.user, base_log_dir=base_log_dir))
-    sudo('chmod 2660 {base_log_dir}'.format(base_log_dir=base_log_dir))
+    sudo('mkdir -p {log_dir}'.format(**env))
+    sudo('chown -R "{user}:www-data" {log_dir}'.format(**env))
+    sudo('chmod 2660 {log_dir}'.format(**env))
 
     # deploy
     deploy()

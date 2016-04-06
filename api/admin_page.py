@@ -12,7 +12,7 @@ def admin_page(path=None):
     :param path: any valid url (used in frontend routing system)
     :return: index html page
     """
-    return app.send_static_file('index.html')
+    return app.send_static_file('admin/index.html')
 
 
 @app.route('/')

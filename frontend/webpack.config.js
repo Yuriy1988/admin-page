@@ -15,9 +15,9 @@ var config = {
         './index'
     ],
     output: {
-        path: path.join(__dirname, 'static/js'),
+        path: path.join(__dirname, 'static/admin/js'),
         filename: 'app.js',
-        publicPath: '/static/js/'
+        publicPath: '/static/admin/js/'
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),

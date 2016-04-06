@@ -73,7 +73,7 @@ if (config.DEV_SERVER == true) {
                     res.sendFile(fileName);
                 } else {
                     console.log("[SERVER] --> INDEX.HTML");
-                    res.sendFile(__dirname + '/static/index.html');
+                    res.sendFile(__dirname + '/static/admin/index.html');
                 }
             });
         }
