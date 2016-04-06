@@ -33,7 +33,11 @@ env.build_dir = 'dist'
 env.colorize_errors = True
 env.hosts = list(hosts.values())
 
-env.server_port = 7128
+env.admin_port = 7128
+env.client_port = 7254
+# In demo server nginx behind apache
+# env.nginx_port = 80
+env.nginx_port = 42828
 
 
 def create_config(config_file, template_file, **config_kwargs):
@@ -123,17 +127,17 @@ def setup_supervisor():
     sudo('supervisorctl reread')
     sudo('supervisorctl update')
 
-
+@task
 def setup_nginx():
     sudo('apt-get install -y nginx')
 
-    config_file = '/tmp/xopay-admin.conf'
-    create_config(config_file, 'server/xopay-admin.conf.nginx.templ')
+    config_file = '/tmp/xopay.conf'
+    create_config(config_file, 'server/xopay.conf.nginx.templ')
 
     put(config_file, '/etc/nginx/sites-available/', use_sudo=True)
     local('rm {config}'.format(config=config_file))
 
-    sudo('cd /etc/nginx/sites-enabled/ && ln -s -f ../sites-available/xopay-admin.conf')
+    sudo('cd /etc/nginx/sites-enabled/ && ln -s -f ../sites-available/xopay.conf')
     sudo('service nginx restart')
 
 
