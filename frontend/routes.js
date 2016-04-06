@@ -1,39 +1,36 @@
-import React            from 'react'
-import { Route, IndexRoute } from 'react-router'
-import App              from './containers/App'
+import React                 from 'react'
+import { Route, IndexRoute } from 'react-router' //React
 
+import App               from './containers/App'
+import ErrorPage         from './containers/ErrorPage'
+import LoginPage         from './containers/LoginPage'
+import TestPage          from './containers/TestPage'
+import AdminPage         from './containers/AdminPage'
+import SelectRolePage    from './containers/SelectRolePage'
+import NotificationsPage from './containers/pages/NotificationsPage' //Containers
 
-import ErrorPage        from './containers/ErrorPage'
-
-import LoginPage        from './containers/LoginPage'
-import TestPage         from './containers/TestPage'
-import AdminPage        from './containers/AdminPage'
-import SelectRolePage   from './containers/SelectRolePage'
-import NotificationsPage       from './containers/pages/NotificationsPage'
-import Merchants        from './containers/pages/Merchants'
-
+import MerchantsPage    from './containers/merchants/MerchantsPage'
 import MerchantList     from './components/MerchantList'
-
 import MerchantPage     from './containers/merchants/MerchantPage'
 import MerchantInfoPage from './containers/merchants/MerchantInfoPage'
 import MerchantAddPage  from './containers/merchants/MerchantAddPage'
-import MerchantEditPage from './containers/merchants/MerchantEditPage'
+import MerchantEditPage from './containers/merchants/MerchantEditPage' //Merchants
 
-import StoresPage       from './containers/stores/StoresPage' //Container
+import StoresPage       from './containers/stores/StoresPage' 
 import StoreAddPage     from './containers/stores/StoreAddPage'
 import StoreEditPage    from './containers/stores/StoreEditPage'
 import StoreListPage    from './containers/stores/StoreListPage'
 import StorePage        from './containers/stores/StorePage'
-import StoreStatPage    from './containers/stores/StoreStatPage'
+import StoreStatPage    from './containers/stores/StoreStatPage' //Stores
 
-import MerchantContractsPage       from './containers/merchantContracts/MerchantContractsPage' //Container
+import MerchantContractsPage       from './containers/merchantContracts/MerchantContractsPage'
 import MerchantContractAddPage     from './containers/merchantContracts/MerchantContractAddPage'
 import MerchantContractEditPage    from './containers/merchantContracts/MerchantContractEditPage'
 import MerchantContractListPage    from './containers/merchantContracts/MerchantContractListPage'
 import MerchantContractPage        from './containers/merchantContracts/MerchantContractPage'
-import MerchantContractStatPage    from './containers/merchantContracts/MerchantContractStatPage'
+import MerchantContractStatPage    from './containers/merchantContracts/MerchantContractStatPage' //Merchant contracts
 
-import CurrenciesPage   from './containers/pages/CurrenciesPage';
+import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -68,7 +65,7 @@ class Routes {
                             <Route path="notifications" component={NotificationsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
 
-                            <Route path="merchants" component={Merchants}
+                            <Route path="merchants" component={MerchantsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                 <Route path="add" component={MerchantAddPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
@@ -162,7 +159,6 @@ class Routes {
             cb();
         }).bind(this);
     }
-
 }
 
 
