@@ -2,22 +2,23 @@ server {{
     listen       {nginx_port};
     server_name  {host};
 
-    set $WEB_ROOT /var/www/xopay;
+    set $ADMIN_FRONT /var/www/xopay/admin/frontend;
+    set $CLIENT_FRONT /var/www/xopay/client/frontend;
 
-    location /favicon.ico {
-        alias /var/www/xopay/admin/frontend/static/admin/favicon.ico;
+    location /favicon.ico {{
+        root $ADMIN_FRONT/static/admin;
         expires max;
         access_log off;
-    }
+    }}
 
     location /static/admin/ {{
-        rewrite ^/static/admin/(.*)$ /$1  break;
-        root   $WEB_ROOT/admin/frontend/static;
+        root   $ADMIN_FRONT;
+        access_log off;
     }}
 
     location /admin {{
         rewrite ^/admin(.*)$ /index.html  break;
-        root $WEB_ROOT/admin/frontend/static;
+        root $ADMIN_FRONT/static/admin;
     }}
 
     location /api/admin/ {{
@@ -32,11 +33,11 @@ server {{
     }}
 
     location /static/client/ {{
-        rewrite ^/static/client/(.*)$ /$1  break;
-        root   $WEB_ROOT/client/frontend/static;
+        root   $CLIENT_FRONT;
+        access_log off;
     }}
 
-    location /api/client {{
+    location /api/client/ {{
         proxy_pass_header Server;
         proxy_set_header Host $http_host;
         proxy_redirect off;
@@ -44,11 +45,11 @@ server {{
         proxy_set_header X-Scheme $scheme;
         proxy_connect_timeout 10;
         proxy_read_timeout 10;
-        proxy_pass http://127.0.0.1:{client_port}/api/client;
+        proxy_pass http://127.0.0.1:{client_port}/api/client/;
     }}
 
     location / {{
         rewrite ^/?$ /home.html  break;
-        root $WEB_ROOT/client/frontend/static;
+        root $CLIENT_FRONT/static/client;
     }}
 }}
