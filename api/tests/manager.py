@@ -86,10 +86,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # Getting new manager using GET API request:
-        manager_status, manager_body = self.get('/managers/{manager_id}'.format(manager_id=body["id"]))
+        manager_status, manager_body = self.get('/managers/%s' % body["id"])
 
         self.assertEqual(status, 200)
         self.assertIn("id", manager_body)
@@ -111,10 +111,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # Getting new manager using GET API request:
-        manager_status, manager_body = self.get('/managers/{manager_id}'.format(manager_id=body["id"]))
+        manager_status, manager_body = self.get('/managers/%s' % body["id"])
 
         self.assertEqual(status, 200)
         self.assertIsInstance(manager_body.pop("id"), str)
@@ -128,7 +128,7 @@ class TestManager(base.BaseTestCase):
         manager['user']['id'] = '69'
         manager['merchant_id'] = '42'
 
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant.id), manager)
+        status, body = self.post('/merchants/%s/managers' % merchant.id, manager)
 
         self.assertEqual(status, 200)
         self.assertNotEqual(body['id'], manager['id'])
@@ -146,10 +146,10 @@ class TestManager(base.BaseTestCase):
     def test_post_wrong_json(self):
         merchant = self.create_merchant(self.get_merchant())
 
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant.id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant.id, None)
         self.assertEqual(status, 400)
 
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant.id), '{"wrong": json ]')
+        status, body = self.post('/merchants/%s/managers' % merchant.id, '{"wrong": json ]')
         self.assertEqual(status, 400)
 
     def test_post_invalid_json_user_is_none(self):
@@ -163,10 +163,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': None}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers'% merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -181,10 +181,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -200,10 +200,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -221,10 +221,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -240,10 +240,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -259,10 +259,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -280,10 +280,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -299,10 +299,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -318,10 +318,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -339,10 +339,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -358,10 +358,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -377,10 +377,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -396,10 +396,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -415,10 +415,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -434,10 +434,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -453,10 +453,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -472,10 +472,10 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': 'user'}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         # creating a manager:
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), None)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, None)
 
         self.assertEqual(status, 400)
 
@@ -490,7 +490,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.put('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.put('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 405)
 
@@ -499,7 +499,7 @@ class TestManager(base.BaseTestCase):
     def test_get_manager_full_valid_response(self):
         manager = self.create_manager(self.get_manager())
 
-        status, body = self.get('/managers/{manager_id}'.format(manager_id=manager.id))
+        status, body = self.get('/managers/%s' % manager.id)
 
         self.assertEqual(status, 200)
         self.assertIn('id', body)
@@ -523,13 +523,13 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
         # getting a created manager:
-        for id in body['id']+str(range(10)):
-            manager_status, manager_body = self.get('/managers/{manager_id}'.format(manager_id=id))
+        for manager_id in body['id']+str(range(10)):
+            manager_status, manager_body = self.get('/managers/%s' % manager_id)
 
             self.assertEqual(manager_status, 404)
 
@@ -546,7 +546,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -554,7 +554,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['username'] = 'Abdula'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -575,7 +575,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -583,7 +583,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['first_name'] = 'Abdula'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -604,7 +604,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -612,7 +612,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['last_name'] = 'Abdula'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -633,7 +633,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -641,7 +641,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['email'] = 'abdula@gmail.com'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -662,7 +662,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -670,7 +670,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['phone'] = '1231231231'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -691,7 +691,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -699,7 +699,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['notify'] = 'PHONE'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -720,7 +720,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -728,7 +728,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['enabled'] = False
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 200)
@@ -741,15 +741,15 @@ class TestManager(base.BaseTestCase):
     def test_put_manager_update_read_only_fields_not_saved(self):
         manager = self.create_manager(self.get_manager())
 
-        status, body = self.put('/managers/{manager_id}'.format(manager_id=manager.id), {'id': 'test'})
+        status, body = self.put('/managers/%s' % manager.id, {'id': 'test'})
         self.assertEqual(status, 200)
         self.assertNotEqual(body['id'], 'test')
 
-        status, body = self.put('/managers/{manager_id}'.format(manager_id=manager.id), {'merchant_id': 'test'})
+        status, body = self.put('/managers/%s' % manager.id, {'merchant_id': 'test'})
         self.assertEqual(status, 200)
         self.assertNotEqual(body['merchant_id'], 'test')
 
-        status, body = self.put('/managers/{manager_id}'.format(manager_id=manager.id), {'user': {'id': 'test'}})
+        status, body = self.put('/managers/%s' % manager.id, {'user': {'id': 'test'}})
         self.assertEqual(status, 200)
         self.assertNotEqual(body['user']['id'], 'test')
 
@@ -766,7 +766,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -778,7 +778,7 @@ class TestManager(base.BaseTestCase):
             new_manager['id'] = body['id']
             new_manager['user']['username'] = value
 
-            manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+            manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                     new_manager)
 
             self.assertEqual(manager_status, 400)
@@ -794,7 +794,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -807,7 +807,7 @@ class TestManager(base.BaseTestCase):
             new_manager['id'] = body['id']
             new_manager['user']['first_name'] = value
 
-            manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+            manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                     new_manager)
 
             self.assertEqual(manager_status, 400)
@@ -823,7 +823,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -836,7 +836,7 @@ class TestManager(base.BaseTestCase):
             new_manager['id'] = body['id']
             new_manager['user']['last_name'] = value
 
-            manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+            manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                     new_manager)
 
             self.assertEqual(manager_status, 400)
@@ -852,7 +852,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -860,7 +860,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['email'] = '11111111111111'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 400)
@@ -876,7 +876,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -884,7 +884,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['phone'] = 'asdsadd'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 400)
@@ -900,7 +900,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -908,7 +908,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['notify'] = 'asdadaE'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 400)
@@ -924,7 +924,7 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
@@ -932,7 +932,7 @@ class TestManager(base.BaseTestCase):
         new_manager['id'] = body['id']
         new_manager['user']['enabled'] = 'asdsa'
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_status, 400)
@@ -948,14 +948,14 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers' % merchant_id, data)
 
         self.assertEqual(status, 200)
 
         new_manager = self.get_manager()
         new_manager['id'] = 11111
 
-        manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=body["id"]),
+        manager_status, manager_body = self.put('/managers/%s' % body["id"],
                                                 new_manager)
 
         self.assertEqual(manager_body["id"], body["id"])
@@ -975,15 +975,15 @@ class TestManager(base.BaseTestCase):
 
         # creating a manager:
         data = {'user': user}
-        status, body = self.post('/merchants/{merchant_id}/managers'.format(merchant_id=merchant_id), data)
+        status, body = self.post('/merchants/%s/managers'% merchant_id, data)
 
         self.assertEqual(status, 200)
 
         new_manager = self.get_manager()
         new_manager['id'] = body["id"]
 
-        for id in body["id"]+str(range(10)):
+        for manager_id in body["id"]+str(range(10)):
 
-            manager_status, manager_body = self.put('/managers/{manager_id}'.format(manager_id=id), new_manager)
+            manager_status, manager_body = self.put('/managers/%s' % manager_id, new_manager)
 
             self.assertEqual(manager_status, 404)
