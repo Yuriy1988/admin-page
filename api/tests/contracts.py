@@ -1,5 +1,5 @@
 from api.tests import base
-from api.models import enum, MerchantContract, BankContract
+from api.models import enum, MerchantContract, PaySysContract
 
 __author__ = 'Daniel Omelchenko'
 
@@ -172,7 +172,7 @@ class TestPaySysContracts(base.BaseTestCase):
         contract.update(contract_kwargs)
         contract["payment_system_id"] = pay_sys_id
 
-        contract_models = [BankContract.create(contract) for _ in range(count)]
+        contract_models = [PaySysContract.create(contract) for _ in range(count)]
         self.db.commit()
 
         contracts = []

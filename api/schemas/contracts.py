@@ -21,7 +21,7 @@ class MerchantContractSchema(AbstractContractSchema):
     pass
 
 
-class BankContractSchema(AbstractContractSchema):
+class PaySysContractSchema(AbstractContractSchema):
     contractor_name = fields.Str(required=True)
 
 

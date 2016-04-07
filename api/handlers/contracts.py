@@ -2,8 +2,8 @@ from flask import request, jsonify, Response
 
 from api import app, db
 from api.errors import NotFoundError, ValidationError
-from api.models import Merchant, MerchantContract, BankContract, PaymentSystem
-from api.schemas import MerchantContractSchema, BankContractSchema, ContractRequestSchema
+from api.models import Merchant, MerchantContract, PaySysContract, PaymentSystem
+from api.schemas import MerchantContractSchema, PaySysContractSchema, ContractRequestSchema
 
 
 @app.route('/api/admin/dev/merchants/<merchant_id>/contracts', methods=['GET'])
@@ -86,7 +86,7 @@ def delete_merchant_contract(contract_id):
 
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>/contracts', methods=['GET'])
-def bank_contracts_list(paysys_id):
+def paysys_contracts_list(paysys_id):
     paysys_id = paysys_id.upper()
     if not PaymentSystem.exists(paysys_id):
         raise NotFoundError()
@@ -97,7 +97,7 @@ def bank_contracts_list(paysys_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    query = BankContract.query.filter_by(payment_system_id=paysys_id)
+    query = PaySysContract.query.filter_by(payment_system_id=paysys_id)
     if 'active' in data:
         query = query.filter_by(active=data['active'])
     if 'currency' in data:
@@ -105,24 +105,24 @@ def bank_contracts_list(paysys_id):
 
     contracts = query.all()
 
-    schema = BankContractSchema(many=True)
+    schema = PaySysContractSchema(many=True)
     result = schema.dump(contracts)
     return jsonify(contracts=result.data)
 
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>/contracts', methods=['POST'])
-def create_bank_contract(paysys_id):
+def create_paysys_contract(paysys_id):
     paysys_id = paysys_id.upper()
     if not PaymentSystem.exists(paysys_id):
         raise NotFoundError()
 
-    schema = BankContractSchema()
+    schema = PaySysContractSchema()
     data, errors = schema.load(request.get_json())
     if errors:
         raise ValidationError(errors=errors)
 
     data['payment_system_id'] = paysys_id
-    contract = BankContract.create(data)
+    contract = PaySysContract.create(data)
     db.session.commit()
 
     result = schema.dump(contract)
@@ -130,23 +130,23 @@ def create_bank_contract(paysys_id):
 
 
 @app.route('/api/admin/dev/paysys_contracts/<paysys_contract_id>', methods=['GET'])
-def bank_contract(paysys_contract_id):
-    contract = BankContract.query.get(paysys_contract_id)
+def paysys_contract(paysys_contract_id):
+    contract = PaySysContract.query.get(paysys_contract_id)
     if not contract:
         raise NotFoundError()
 
-    schema = BankContractSchema(many=False)
+    schema = PaySysContractSchema(many=False)
     result = schema.dump(contract)
     return jsonify(result.data)
 
 
 @app.route('/api/admin/dev/paysys_contracts/<paysys_contract_id>', methods=['PUT'])
-def update_bank_contract(paysys_contract_id):
-    contract = BankContract.query.get(paysys_contract_id)
+def update_paysys_contract(paysys_contract_id):
+    contract = PaySysContract.query.get(paysys_contract_id)
     if not contract:
         raise NotFoundError()
 
-    schema = BankContractSchema(partial=True, partial_nested=True)
+    schema = PaySysContractSchema(partial=True, partial_nested=True)
     data, errors = schema.load(request.get_json())
     if errors:
         raise ValidationError(errors=errors)
@@ -159,9 +159,9 @@ def update_bank_contract(paysys_contract_id):
 
 
 @app.route('/api/admin/dev/paysys_contracts/<paysys_contract_id>', methods=['DELETE'])
-def delete_bank_contract(paysys_contract_id):
-    if not BankContract.exists(paysys_contract_id):
+def delete_paysys_contract(paysys_contract_id):
+    if not PaySysContract.exists(paysys_contract_id):
         raise NotFoundError()
 
-    BankContract.query.filter_by(id=paysys_contract_id).delete()
+    PaySysContract.query.filter_by(id=paysys_contract_id).delete()
     return Response(status=200)

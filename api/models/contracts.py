@@ -40,9 +40,9 @@ class MerchantContract(AbstractContract):
         return '<Merchant contract %r>'.format(self.id)
 
 
-class BankContract(AbstractContract):
+class PaySysContract(AbstractContract):
 
-    __tablename__ = 'bank_contract'
+    __tablename__ = 'paysys_contract'
 
     contractor_name = db.Column(db.String(255))
     payment_system_id = db.Column(db.Enum(*enum.PAYMENT_SYSTEMS_ID_ENUM, name='enum_payment_system_id'),
@@ -55,4 +55,4 @@ class BankContract(AbstractContract):
         self.contractor_name = contractor_name
 
     def __repr__(self):
-        return '<Bank contract %r>'.format(self.id)
+        return '<PaySys contract %r>'.format(self.id)
