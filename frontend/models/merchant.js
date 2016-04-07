@@ -1,7 +1,5 @@
-import { decamelizeKeys as decamelize } from 'humps'
-import { merge } from 'lodash'
-import deep from 'deep-diff'
-
+import {decamelizeKeys as decamelize} from 'humps'
+import {merge} from 'lodash'
 
 export default class MerchantModel {
     constructor(data) {

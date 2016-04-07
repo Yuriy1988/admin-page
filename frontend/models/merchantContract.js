@@ -1,6 +1,5 @@
-import { decamelizeKeys as decamelize } from 'humps'
-import { merge } from 'lodash'
-
+import {decamelizeKeys as decamelize} from 'humps'
+import {merge} from 'lodash'
 
 export default class MerchantContractModel {
     constructor(store) {

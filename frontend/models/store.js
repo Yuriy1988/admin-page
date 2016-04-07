@@ -1,6 +1,5 @@
 import {decamelizeKeys as decamelize} from 'humps'
-import { merge } from 'lodash'
-
+import {merge} from 'lodash'
 
 export default class StoreModel {
     constructor(store) {
@@ -36,7 +35,7 @@ export default class StoreModel {
             "description": null,
             "logo": null,
             "show_logo": null,
-            "store_settings":  StoreSettingsModel.createErrors()
+            "store_settings": StoreSettingsModel.createErrors()
         };
     }
 
@@ -78,13 +77,11 @@ export default class StoreModel {
 }
 
 
-
 export class StoreSettingsModel {
     constructor(settings) {
         this._settings = decamelize(settings) || {};
 
     }
-
 
 
     static create(dataProp = {}) {

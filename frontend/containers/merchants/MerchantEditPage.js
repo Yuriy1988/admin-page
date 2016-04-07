@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Link} from 'react-router'
 
-import { RedirectActions, MerchantActions, PaginationActions} from '../../actions/index'
+import {RedirectActions, MerchantActions, PaginationActions} from '../../actions/index'
 
 import MerchantForm from '../../components/forms/MerchantForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
-import Alert, { TYPE_ERROR } from '../../components/Alert'
+import Alert, {TYPE_ERROR} from '../../components/Alert'
 
 class MerchantEditPage extends Component {
 
@@ -14,12 +14,14 @@ class MerchantEditPage extends Component {
         super(props);
         this.onEdit = this.onEdit.bind(this);
         this.loadData = this.loadData.bind(this);
+    }
 
+    componentDidMount() {
         this.loadData();
     }
 
     componentWillReceiveProps(props) {
-        const { editRequest, redirect, clearPagination } = props;
+        const {editRequest, redirect, clearPagination} = props;
 
         if (!!editRequest.result) {
             redirect(`/admin/administrator/merchants/${editRequest.result}`);
@@ -29,27 +31,27 @@ class MerchantEditPage extends Component {
     }
 
     componentWillUnmount() {
-        const { clearPagination } = this.props;
+        const {clearPagination} = this.props;
         clearPagination("merchantEdit"); //TODO constant
         clearPagination("merchantGet"); //TODO constant
     }
 
     loadData() {
-        const { loadMerchant } = this.props;
-        const { merchantId } = this.props.params;
+        const {loadMerchant} = this.props;
+        const {merchantId} = this.props.params;
         loadMerchant(merchantId);
     }
 
     onEdit(merchant) {
-        const { edit } = this.props;
-        const { merchantId } = this.props.params;
+        const {edit} = this.props;
+        const {merchantId} = this.props.params;
         edit(merchantId, merchant);
     }
 
     render() {
-        const { editRequest, editCE } = this.props;
-        const { getRequest, loadMerchantCE } = this.props;
-        const { merchants } = this.props;
+        const {editRequest, editCE} = this.props;
+        const {getRequest, loadMerchantCE} = this.props;
+        const {merchants} = this.props;
 
 
         let errors = {};
@@ -76,7 +78,8 @@ class MerchantEditPage extends Component {
             }
         }
 
-        const merchantForm = (merchant) ? <MerchantForm onSubmit={this.onEdit} errors={errors} initMerchant={merchant}/> : null;
+        const merchantForm = (merchant) ?
+            <MerchantForm onSubmit={this.onEdit} errors={errors} initMerchant={merchant}/> : null;
         return (
             <div>
                 <Alert type={TYPE_ERROR} handleClose={editCE}>{errorEdit}</Alert>
@@ -110,6 +113,6 @@ export default connect(
         edit: MerchantActions.editById,
         editCE: MerchantActions.editByIdCError,
 
-        clearPagination:PaginationActions.clear
+        clearPagination: PaginationActions.clear
     }
 )(MerchantEditPage)

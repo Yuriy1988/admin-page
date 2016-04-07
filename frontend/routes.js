@@ -1,5 +1,5 @@
 import React                 from 'react'
-import { Route, IndexRoute } from 'react-router' //React
+import {Route, IndexRoute} from 'react-router' //React
 
 import App               from './containers/App'
 import ErrorPage         from './containers/ErrorPage'
@@ -16,7 +16,7 @@ import MerchantInfoPage from './containers/merchants/MerchantInfoPage'
 import MerchantAddPage  from './containers/merchants/MerchantAddPage'
 import MerchantEditPage from './containers/merchants/MerchantEditPage' //Merchants
 
-import StoresPage       from './containers/stores/StoresPage' 
+import StoresPage       from './containers/stores/StoresPage'
 import StoreAddPage     from './containers/stores/StoreAddPage'
 import StoreEditPage    from './containers/stores/StoreEditPage'
 import StoreListPage    from './containers/stores/StoreListPage'
@@ -29,6 +29,10 @@ import MerchantContractEditPage    from './containers/merchantContracts/Merchant
 import MerchantContractListPage    from './containers/merchantContracts/MerchantContractListPage'
 import MerchantContractPage        from './containers/merchantContracts/MerchantContractPage'
 import MerchantContractStatPage    from './containers/merchantContracts/MerchantContractStatPage' //Merchant contracts
+
+import PaySystemListPage       from './containers/paySystems/PaySystemListPage'
+import PaySystemEditPage       from './containers/paySystems/PaySystemEditPage'
+import PaySystemPage       from './containers/paySystems/PaySystemPage' //PaySystems
 
 import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 
@@ -110,6 +114,13 @@ class Routes {
                             </Route>
                             <Route path="currencies" component={CurrenciesPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
+                            <Route path="paysys" component={PaySystemPage}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                            component={PaySystemListPage}/>
+                            </Route>
+
                             {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
                         </Route>
 
@@ -122,7 +133,7 @@ class Routes {
     }
 
     redirectToMain(nextState, replace, cb) {
-        const { user } = this.store.getState();
+        const {user} = this.store.getState();
 
         if (!user.token) {
             replace('/admin/login');
@@ -137,7 +148,7 @@ class Routes {
 
     requireRole(role) {
         return ((nextState, replace, cb) => {
-            const { user } = this.store.getState();
+            const {user} = this.store.getState();
             let accessDenied = true;
 
             if (!!user) {

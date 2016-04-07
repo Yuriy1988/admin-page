@@ -1,14 +1,28 @@
-import {CurrenciesActions, MerchantActions, StoreActions, MerchantContractActions } from '../actions/index'
+import {
+    CurrenciesActions,
+    MerchantActions,
+    StoreActions,
+    MerchantContractActions,
+    PaySystemsActions
+} from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
 import dictionary from './dictionary'
 import sideBar from './sideBar'
-import { routeReducer } from 'react-router-redux'
-import { combineReducers } from 'redux'
+import {routeReducer} from 'react-router-redux'
+import {combineReducers} from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
-function entities(state = {merchants: {}, stores: {}}, action) {
+function entities(state = {
+    merchants: {}, stores: {}, paySystems: {
+        VISA_MASTER: {
+            id: "VISA_MASTER",
+            paysys_name: "Visa",
+            active: false
+        }
+    }
+}, action) {
     if (!!action.response && !!action.response.entities) {
         return merge({}, state, action.response.entities);
     }
@@ -23,6 +37,19 @@ function entities(state = {merchants: {}, stores: {}}, action) {
 
 // Updates the pagination data for different actions.
 const pagination = combineReducers({
+//PaySystems
+    paySystemsList: paginate({
+        mapActionToKey: action => "paySystems",
+        //entity: "paySystems",
+        init: ["VISA_MASTER"],
+        paginationId: "paySystemsList",
+        types: [
+            PaySystemsActions.PAYSYSTEMS_LIST_REQUEST,
+            PaySystemsActions.PAYSYSTEMS_LIST_SUCCESS,
+            PaySystemsActions.PAYSYSTEMS_LIST_FAILURE
+        ],
+        cError: PaySystemsActions.PAYSYSTEMS_LIST_CERROR
+    }),
 //Merchants
     merchants: paginate({
         mapActionToKey: action => "merchants",

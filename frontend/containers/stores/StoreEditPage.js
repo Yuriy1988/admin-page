@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Link} from 'react-router'
 
-import { RedirectActions, StoreActions, PaginationActions } from '../../actions/index'
+import {RedirectActions, StoreActions, PaginationActions} from '../../actions/index'
 
 import StoreForm from '../../components/forms/StoreForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
-import Alert, { TYPE_ERROR } from '../../components/Alert'
+import Alert, {TYPE_ERROR} from '../../components/Alert'
 
 class StoreEditPage extends Component {
 
@@ -14,12 +14,14 @@ class StoreEditPage extends Component {
         super(props);
         this.onEdit = this.onEdit.bind(this);
         this.loadData = this.loadData.bind(this);
+    }
 
+    componentDidMount() {
         this.loadData();
     }
 
     componentWillReceiveProps(props) {
-        const { editRequest, redirect, clearPagination} = props;
+        const {editRequest, redirect, clearPagination} = props;
 
         if (!!editRequest.result) {
             redirect(`/admin/administrator/stores/${editRequest.result}`);
@@ -29,27 +31,27 @@ class StoreEditPage extends Component {
     }
 
     componentWillUnmount() {
-        const { clearPagination } = this.props;
+        const {clearPagination} = this.props;
         clearPagination("storeEdit"); //TODO constant
         clearPagination("storeGet"); //TODO constant
     }
 
     loadData() {
-        const { loadStore } = this.props;
-        const { storeId } = this.props.params;
+        const {loadStore} = this.props;
+        const {storeId} = this.props.params;
         loadStore(storeId);
     }
 
     onEdit(store) {
-        const { edit } = this.props;
-        const { storeId } = this.props.params;
+        const {edit} = this.props;
+        const {storeId} = this.props.params;
         edit(storeId, store);
     }
 
     render() {
-        const { editRequest, editCE } = this.props;
-        const { getRequest, loadStoreCE } = this.props;
-        const { stores } = this.props;
+        const {editRequest, editCE} = this.props;
+        const {getRequest, loadStoreCE} = this.props;
+        const {stores} = this.props;
 
 
         let errors = {};

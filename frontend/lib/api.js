@@ -11,6 +11,14 @@ export const MERCHANT_GET = (merchantId) => ({path: `merchants/${merchantId}`, m
 export const MERCHANT_EDIT= (merchantId) => ({path: `merchants/${merchantId}`, method: "PUT", schema: merchantSchema});
 export const MERCHANT_DELETE = (merchantId) => ({path: `merchants/${merchantId}`, method: "DELETE", schema: merchantSchema});
 
+/**
+ * PAYSYSTEMS
+ */
+const paySystemSchema = new Schema('paySystems');
+const paySystemListSchema = {payment_systems: arrayOf(paySystemSchema)};
+export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema};
+export const PAYSYSTEM_GET = (paySysId) => ({path: `payment_systems/${paySysId}`, method: "GET", schema: paySystemSchema});
+export const PAYSYSTEM_EDIT= (paySysId, data) => ({path: `payment_systems/${paySysId}`, method: "PUT", schema: paySystemSchema});
 
 /**
  * STORES
