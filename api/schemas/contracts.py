@@ -18,10 +18,11 @@ class AbstractContractSchema(base.BaseSchema):
 
 
 class MerchantContractSchema(AbstractContractSchema):
-    pass
+    merchant_id = fields.Str(dump_only=True)
 
 
 class PaySysContractSchema(AbstractContractSchema):
+    paysys_id = fields.Str(dump_only=True)
     contractor_name = fields.Str(required=True)
 
 

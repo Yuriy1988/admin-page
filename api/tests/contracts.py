@@ -29,7 +29,6 @@ class TestMerchantContracts(base.BaseTestCase):
         for cm in contract_models:
             contract_result = contract.copy()
             contract_result['id'] = cm.id
-            contract_result.pop('merchant_id')
             contracts.append(contract_result)
 
         return contracts
@@ -83,21 +82,35 @@ class TestMerchantContracts(base.BaseTestCase):
 
     # POST /merchants/{merchant_id}/contracts
 
-    def test_post_contract(self):
+    def test_post_contract_success(self):
         merchant = self.create_merchant(self._merchant)
 
         merchant_contract = self._merchant_contract.copy()
         status, body = self.post('/merchants/%s/contracts' % merchant.id, merchant_contract)
 
-        self.assertEqual(status, 200, msg=body)
-
         merchant_contract["id"] = body.get('id')
+        merchant_contract["merchant_id"] = merchant.id
+
+        self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, merchant_contract)
 
         status, body = self.get('/merchant_contracts/%s' % merchant_contract["id"])
         
         self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, merchant_contract)
+
+    def test_post_contract_read_only_fields_not_set(self):
+        merchant = self.create_merchant(self._merchant)
+
+        merchant_contract = self._merchant_contract.copy()
+        merchant_contract['id'] = 77
+        merchant_contract['merchant_id'] = "test"
+
+        status, body = self.post('/merchants/%s/contracts' % merchant.id, merchant_contract)
+
+        self.assertEqual(status, 200, msg=body)
+        self.assertNotEqual(body['id'], merchant_contract['id'])
+        self.assertNotEqual(body['merchant_id'], merchant_contract['merchant_id'])
 
     # GET /merchant_contracts/{merchant_contract_id}
 
@@ -129,6 +142,18 @@ class TestMerchantContracts(base.BaseTestCase):
 
         self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, contract)
+
+    def test_put_contract_read_only_fields_not_update(self):
+        merchant = self.create_merchant(self._merchant)
+        contract = self.create_merchant_contracts(merchant.id)[0]
+
+        status, body = self.put('/merchant_contracts/%s' % contract['id'], {'id': 777})
+        self.assertEqual(status, 200, msg=body)
+        self.assertNotEqual(body['id'], 777)
+
+        status, body = self.put('/merchant_contracts/%s' % contract['id'], {'merchant_id': 'test555'})
+        self.assertEqual(status, 200, msg=body)
+        self.assertNotEqual(body['merchant_id'], 'test555')
 
     def test_put_not_found_contract(self):
         status, body = self.put('/merchant_contracts/1', {})
@@ -170,7 +195,7 @@ class TestPaySysContracts(base.BaseTestCase):
     def create_pay_sys_contracts(self, pay_sys_id, count=1, **contract_kwargs):
         contract = self._pay_sys_contract.copy()
         contract.update(contract_kwargs)
-        contract["payment_system_id"] = pay_sys_id
+        contract["paysys_id"] = pay_sys_id
 
         contract_models = [PaySysContract.create(contract) for _ in range(count)]
         self.db.commit()
@@ -179,7 +204,6 @@ class TestPaySysContracts(base.BaseTestCase):
         for cm in contract_models:
             contract_result = contract.copy()
             contract_result['id'] = cm.id
-            contract_result.pop('payment_system_id')
             contracts.append(contract_result)
 
         return contracts
@@ -234,20 +258,34 @@ class TestPaySysContracts(base.BaseTestCase):
 
     # POST /payment_systems/{paysys_id}/contracts
 
-    def test_post_contracts(self):
+    def test_post_contract_success(self):
         payment_system = self.create_payment_systems()
         contract = self._pay_sys_contract.copy()
 
         status, body = self.post('/payment_systems/%s/contracts' % payment_system.paysys_id.lower(), contract)
 
-        self.assertEqual(status, 200, msg=body)
-
         contract["id"] = body.get('id')
+        contract["paysys_id"] = payment_system.paysys_id
+
+        self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, contract)
 
         status, body = self.get('/paysys_contracts/%s' % contract["id"])
         self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, contract)
+
+    def test_post_contract_read_only_fields_not_set(self):
+        payment_system = self.create_payment_systems()
+
+        contract = self._pay_sys_contract.copy()
+        contract['id'] = 77
+        contract['paysys_id'] = "test"
+
+        status, body = self.post('/payment_systems/%s/contracts' % payment_system.paysys_id.lower(), contract)
+
+        self.assertEqual(status, 200, msg=body)
+        self.assertNotEqual(body['id'], contract['id'])
+        self.assertNotEqual(body['paysys_id'], contract['paysys_id'])
 
     # GET /paysys_contracts/{paysys_contract_id}
 
@@ -280,6 +318,18 @@ class TestPaySysContracts(base.BaseTestCase):
 
         self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, contract)
+
+    def test_put_contract_read_only_fields_not_update(self):
+        payment_system = self.create_payment_systems()
+        contract = self.create_pay_sys_contracts(payment_system.paysys_id)[0]
+
+        status, body = self.put('/paysys_contracts/%s' % contract['id'], {'id': 785})
+        self.assertEqual(status, 200, msg=body)
+        self.assertNotEqual(body['id'], 785)
+
+        status, body = self.put('/paysys_contracts/%s' % contract['id'], {'paysys_id': "test"})
+        self.assertEqual(status, 200, msg=body)
+        self.assertNotEqual(body['paysys_id'], 'test')
 
     def test_put_not_found_contract(self):
         status, body = self.put('/paysys_contracts/%s' % 1, {})

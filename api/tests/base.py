@@ -80,9 +80,6 @@ class TestDefaults:
     def get_merchant(self):
         return deepcopy(self._merchant)
 
-    def get_manager(self):
-        return deepcopy(self._manager)
-
     def get_store(self):
         return deepcopy(self._store)
 
@@ -157,15 +154,6 @@ class BaseTestCase(TestCase, TestDefaults):
         self.db.commit()
 
         return merchant_model
-
-    def create_manager(self, manager_dict, merchant_id, username=None):
-        manager_dict['merchant_id'] = merchant_id
-        manager_dict['user']['username'] = username or "user" + self.rand_str()
-
-        manager_model = Manager.create(manager_dict)
-        self.db.commit()
-
-        return manager_model
 
     def create_store(self, store_dict, merchant_id):
         store_dict['merchant_id'] = merchant_id

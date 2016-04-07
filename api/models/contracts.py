@@ -31,7 +31,7 @@ class MerchantContract(AbstractContract):
 
     merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
 
-    def __init__(self, commission_fixed, commission_pct, merchant_id, currency, contract_doc_url,
+    def __init__(self, merchant_id, commission_fixed, commission_pct, currency, contract_doc_url,
                  active=True, filter="*"):
         super().__init__(commission_fixed, commission_pct, currency, contract_doc_url, active, filter)
         self.merchant_id = merchant_id
@@ -45,13 +45,13 @@ class PaySysContract(AbstractContract):
     __tablename__ = 'paysys_contract'
 
     contractor_name = db.Column(db.String(255))
-    payment_system_id = db.Column(db.Enum(*enum.PAYMENT_SYSTEMS_ID_ENUM, name='enum_payment_system_id'),
+    paysys_id = db.Column(db.Enum(*enum.PAYMENT_SYSTEMS_ID_ENUM, name='enum_payment_system_id'),
                                   db.ForeignKey('payment_systems.paysys_id'), nullable=False)
 
-    def __init__(self, commission_fixed, commission_pct, contractor_name, payment_system_id, currency, contract_doc_url,
+    def __init__(self, paysys_id, commission_fixed, commission_pct, contractor_name, currency, contract_doc_url,
                  active=True, filter="*"):
         super().__init__(commission_fixed, commission_pct, currency, contract_doc_url, active, filter)
-        self.payment_system_id = payment_system_id
+        self.paysys_id = paysys_id
         self.contractor_name = contractor_name
 
     def __repr__(self):

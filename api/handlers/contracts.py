@@ -97,7 +97,7 @@ def paysys_contracts_list(paysys_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    query = PaySysContract.query.filter_by(payment_system_id=paysys_id)
+    query = PaySysContract.query.filter_by(paysys_id=paysys_id)
     if 'active' in data:
         query = query.filter_by(active=data['active'])
     if 'currency' in data:
@@ -121,7 +121,7 @@ def create_paysys_contract(paysys_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    data['payment_system_id'] = paysys_id
+    data['paysys_id'] = paysys_id
     contract = PaySysContract.create(data)
     db.session.commit()
 
