@@ -192,6 +192,8 @@ class TestPaySysContracts(base.BaseTestCase):
         "filter": "*",
     }
 
+    paysys_id = 'VISA_MASTER'
+
     def create_pay_sys_contracts(self, pay_sys_id, count=1, **contract_kwargs):
         contract = self._pay_sys_contract.copy()
         contract.update(contract_kwargs)
@@ -211,34 +213,37 @@ class TestPaySysContracts(base.BaseTestCase):
     # GET /payment_systems/{paysys_id}/contracts
 
     def test_get_contracts_list_empty(self):
-        payment_system = self.create_payment_systems()
-        status, body = self.get('/payment_systems/%s/contracts' % payment_system.paysys_id.lower())
+        status, body = self.get('/payment_systems/%s/contracts' % self.paysys_id)
 
         self.assertEqual(status, 200, msg=body)
         self.assertListEqual(body['contracts'], [])
 
-    def test_get_paysys_not_found(self):
-        status, body = self.get('/payment_systems/%s/contracts' % enum.PAYMENT_SYSTEMS_ID_ENUM[0])
+    def test_get_contract_url_case_insensitive(self):
+        status, body = self.get('/payment_systems/%s/contracts' % self.paysys_id.lower())
+        self.assertEqual(status, 200, msg=body)
 
+        status, body = self.get('/payment_systems/%s/contracts' % self.paysys_id.upper())
+        self.assertEqual(status, 200, msg=body)
+
+    def test_get_paysys_not_found(self):
+        status, body = self.get('/payment_systems/%s/contracts' % 'PIASTRES')
         self.assertEqual(status, 404, msg=body)
 
     def test_get_contract_list(self):
-        payment_system = self.create_payment_systems()
-        expected_contracts = self.create_pay_sys_contracts(payment_system.paysys_id)
+        expected_contracts = self.create_pay_sys_contracts(self.paysys_id)
 
-        status, body = self.get('/payment_systems/%s/contracts' % payment_system.paysys_id.lower())
+        status, body = self.get('/payment_systems/%s/contracts' % self.paysys_id)
 
         self.assertEqual(status, 200, msg=body)
         for i, j in zip(body['contracts'], expected_contracts):
             self.assertDictEqual(i, j)
 
     def test_get_contract_list_filtering(self):
-        payment_system = self.create_payment_systems()
-        self.create_pay_sys_contracts(payment_system.paysys_id, active=False, count=3)
-        self.create_pay_sys_contracts(payment_system.paysys_id, currency='UAH', count=3)
-        expected_contracts = self.create_pay_sys_contracts(payment_system.paysys_id, count=3)
+        self.create_pay_sys_contracts(self.paysys_id, active=False, count=3)
+        self.create_pay_sys_contracts(self.paysys_id, currency='UAH', count=3)
+        expected_contracts = self.create_pay_sys_contracts(self.paysys_id, count=3)
 
-        status, body = self.get('/payment_systems/%s/contracts' % payment_system.paysys_id.lower(),
+        status, body = self.get('/payment_systems/%s/contracts' % self.paysys_id,
                                 query_args={"currency": "USD", "active": True})
 
         self.assertEqual(status, 200, msg=body)
@@ -246,11 +251,10 @@ class TestPaySysContracts(base.BaseTestCase):
             self.assertDictEqual(i, j)
 
     def test_get_contract_empty_list_filtering(self):
-        payment_system = self.create_payment_systems()
-        self.create_pay_sys_contracts(payment_system.paysys_id, active=False, count=3)
-        self.create_pay_sys_contracts(payment_system.paysys_id, currency='UAH', count=3)
+        self.create_pay_sys_contracts(self.paysys_id, active=False, count=3)
+        self.create_pay_sys_contracts(self.paysys_id, currency='UAH', count=3)
 
-        status, body = self.get('/payment_systems/%s/contracts' % payment_system.paysys_id.lower(),
+        status, body = self.get('/payment_systems/%s/contracts' % self.paysys_id,
                                 query_args={"currency": "USD", "active": True})
 
         self.assertEqual(status, 200, msg=body)
@@ -259,13 +263,13 @@ class TestPaySysContracts(base.BaseTestCase):
     # POST /payment_systems/{paysys_id}/contracts
 
     def test_post_contract_success(self):
-        payment_system = self.create_payment_systems()
+        self.activate_payment_system(self.paysys_id)
         contract = self._pay_sys_contract.copy()
 
-        status, body = self.post('/payment_systems/%s/contracts' % payment_system.paysys_id.lower(), contract)
+        status, body = self.post('/payment_systems/%s/contracts' % self.paysys_id, contract)
 
         contract["id"] = body.get('id')
-        contract["paysys_id"] = payment_system.paysys_id
+        contract["paysys_id"] = self.paysys_id
 
         self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, contract)
@@ -274,18 +278,38 @@ class TestPaySysContracts(base.BaseTestCase):
         self.assertEqual(status, 200, msg=body)
         self.assertDictEqual(body, contract)
 
-    def test_post_contract_read_only_fields_not_set(self):
-        payment_system = self.create_payment_systems()
+    def test_post_contract_url_case_insensitive(self):
+        self.activate_payment_system(self.paysys_id)
+        contract = self._pay_sys_contract.copy()
 
+        status, body = self.post('/payment_systems/%s/contracts' % self.paysys_id.lower(), contract)
+        self.assertEqual(status, 200, msg=body)
+
+        status, body = self.post('/payment_systems/%s/contracts' % self.paysys_id.upper(), contract)
+        self.assertEqual(status, 200, msg=body)
+
+    def test_post_contract_read_only_fields_not_set(self):
+        self.activate_payment_system(self.paysys_id)
         contract = self._pay_sys_contract.copy()
         contract['id'] = 77
         contract['paysys_id'] = "test"
 
-        status, body = self.post('/payment_systems/%s/contracts' % payment_system.paysys_id.lower(), contract)
+        status, body = self.post('/payment_systems/%s/contracts' % self.paysys_id, contract)
 
         self.assertEqual(status, 200, msg=body)
         self.assertNotEqual(body['id'], contract['id'])
         self.assertNotEqual(body['paysys_id'], contract['paysys_id'])
+
+    def test_post_contract_forbidden_if_paysys_not_active(self):
+        contract = self._pay_sys_contract.copy()
+        status, body = self.post('/payment_systems/%s/contracts' % self.paysys_id, contract)
+        self.assertEqual(status, 403)
+
+    def test_post_contract_not_created_paysys(self):
+        contract = self._pay_sys_contract.copy()
+
+        status, body = self.post('/payment_systems/%s/contracts' % 'PAY_ME', contract)
+        self.assertEqual(status, 404)
 
     # GET /paysys_contracts/{paysys_contract_id}
 
@@ -295,8 +319,7 @@ class TestPaySysContracts(base.BaseTestCase):
         self.assertEqual(status, 404, msg=body)
 
     def test_get_contract(self):
-        payment_system = self.create_payment_systems()
-        contract = self.create_pay_sys_contracts(payment_system.paysys_id)[0]
+        contract = self.create_pay_sys_contracts(self.paysys_id)[0]
 
         status, body = self.get('/paysys_contracts/%s' % contract['id'])
 
@@ -307,8 +330,7 @@ class TestPaySysContracts(base.BaseTestCase):
     # PUT /paysys_contracts/{paysys_contract_id}
 
     def test_put_contract(self):
-        payment_system = self.create_payment_systems()
-        contract = self.create_pay_sys_contracts(payment_system.paysys_id)[0]
+        contract = self.create_pay_sys_contracts(self.paysys_id)[0]
 
         pay_sys_contract_update = {"commission_fixed": "3.5", "active": False}
 
@@ -320,8 +342,7 @@ class TestPaySysContracts(base.BaseTestCase):
         self.assertDictEqual(body, contract)
 
     def test_put_contract_read_only_fields_not_update(self):
-        payment_system = self.create_payment_systems()
-        contract = self.create_pay_sys_contracts(payment_system.paysys_id)[0]
+        contract = self.create_pay_sys_contracts(self.paysys_id)[0]
 
         status, body = self.put('/paysys_contracts/%s' % contract['id'], {'id': 785})
         self.assertEqual(status, 200, msg=body)
@@ -338,8 +359,7 @@ class TestPaySysContracts(base.BaseTestCase):
     # DELETE /paysys_contracts/{paysys_contract_id}
 
     def test_delete_contract(self):
-        payment_system = self.create_payment_systems()
-        contract = self.create_pay_sys_contracts(payment_system.paysys_id)[0]
+        contract = self.create_pay_sys_contracts(self.paysys_id)[0]
 
         status, body = self.delete('/paysys_contracts/%s' % contract['id'])
         self.assertEqual(status, 200)

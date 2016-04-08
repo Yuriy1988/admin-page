@@ -7,7 +7,8 @@ from flask import json
 from flask.ext.testing import TestCase
 
 from api import app, db as app_db
-from api.models import Merchant, Manager, Store, enum, PaymentSystem
+from api.models import Merchant, Store, PaymentSystem
+from api.models.payment_system import init_payment_systems
 
 __author__ = 'Kostel Serhii'
 
@@ -96,6 +97,8 @@ class BaseTestCase(TestCase, TestDefaults):
         app_db.drop_all()
         app_db.create_all()
 
+        init_payment_systems()
+
     def tearDown(self):
         """ Teardown after test case """
         self.db.remove()
@@ -163,20 +166,16 @@ class BaseTestCase(TestCase, TestDefaults):
 
         return store_model
 
-    def create_payment_systems(self):
-        ps_id = enum.PAYMENT_SYSTEMS_ID_ENUM[2]
-        paysys = {
-            "paysys_id": ps_id,
-            "paysys_name": ps_id.lower().replace('_', ' '),
+    def activate_payment_system(self, paysys_id):
+        paysys_update = {
             "paysys_login": "xopay_test",
-            "paysys_password": "0xJtwe76GDSAFknui8we45unohyDKUFSGku",
             "active": True,
         }
 
-        paysys_model = PaymentSystem.create(paysys)
+        paysys_model = PaymentSystem.query.get(paysys_id)
+        paysys_model.update(paysys_update)
+        paysys_model.set_password("0xJtwe76GDSAFknui8we45unohyDKUFSGku")
         self.db.commit()
-
-        return paysys_model
 
     def login(self, username, password):
         data = dict(username=username, password=password)

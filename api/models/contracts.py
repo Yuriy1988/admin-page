@@ -45,8 +45,7 @@ class PaySysContract(AbstractContract):
     __tablename__ = 'paysys_contract'
 
     contractor_name = db.Column(db.String(255))
-    paysys_id = db.Column(db.Enum(*enum.PAYMENT_SYSTEMS_ID_ENUM, name='enum_payment_system_id'),
-                                  db.ForeignKey('payment_systems.paysys_id'), nullable=False)
+    paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id'), nullable=False)
 
     def __init__(self, paysys_id, commission_fixed, commission_pct, contractor_name, currency, contract_doc_url,
                  active=True, filter="*"):

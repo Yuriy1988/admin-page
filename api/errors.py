@@ -86,6 +86,13 @@ class ValidationError(BaseApiError):
 
 
 @_handle_api_error
+class ForbiddenError(BaseApiError):
+
+    default_status_code = 403
+    default_message = 'Forbidden'
+
+
+@_handle_api_error
 class NotFoundError(BaseApiError):
 
     default_status_code = 404

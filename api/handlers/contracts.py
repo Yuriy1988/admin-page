@@ -1,7 +1,7 @@
 from flask import request, jsonify, Response
 
 from api import app, db
-from api.errors import NotFoundError, ValidationError
+from api.errors import NotFoundError, ValidationError, ForbiddenError
 from api.models import Merchant, MerchantContract, PaySysContract, PaymentSystem
 from api.schemas import MerchantContractSchema, PaySysContractSchema, ContractRequestSchema
 
@@ -113,8 +113,14 @@ def paysys_contracts_list(paysys_id):
 @app.route('/api/admin/dev/payment_systems/<paysys_id>/contracts', methods=['POST'])
 def create_paysys_contract(paysys_id):
     paysys_id = paysys_id.upper()
-    if not PaymentSystem.exists(paysys_id):
+
+    payment_system = PaymentSystem.query.get(paysys_id)
+
+    if not payment_system:
         raise NotFoundError()
+
+    if not payment_system.is_allowed_to_use():
+        raise ForbiddenError('Payment system is not allowed to use')
 
     schema = PaySysContractSchema()
     data, errors = schema.load(request.get_json())
