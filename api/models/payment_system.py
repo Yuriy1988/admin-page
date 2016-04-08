@@ -26,8 +26,7 @@ class PaymentSystem(base.BaseModel):
         self.active = active
 
         self.paysys_login = paysys_login
-        if paysys_password is not None:
-            self.set_password(paysys_password)
+        self.set_password(paysys_password)
 
     def __repr__(self):
         return '<PaymentSystem %r>' % self.paysys_id
@@ -36,7 +35,10 @@ class PaymentSystem(base.BaseModel):
         return self.active and self.paysys_login is not None and self._paysys_password_hash is not None
 
     def set_password(self, password):
-        self._paysys_password_hash = pwd_context.encrypt(password)
+        if password is None:
+            self._paysys_password_hash = None
+        else:
+            self._paysys_password_hash = pwd_context.encrypt(password)
 
     def check_password(self, password):
         return pwd_context.verify(password, self._paysys_password_hash)
@@ -46,6 +48,15 @@ class PaymentSystem(base.BaseModel):
         paysys_id_values = db.session.query(cls.id).\
             filter(cls.active == True, cls.paysys_login != None, cls._paysys_password_hash != None).all()
         return set(ps[0] for ps in paysys_id_values)
+
+    def update(self, data, add_to_db=True):
+        data = data.copy()
+
+        if 'paysys_password' in data:
+            paysys_password = data.pop('paysys_password', None)
+            self.set_password(paysys_password)
+
+        super(PaymentSystem, self).update(data)
 
 
 def init_payment_systems():
