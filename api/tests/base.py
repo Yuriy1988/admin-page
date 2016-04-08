@@ -167,13 +167,8 @@ class BaseTestCase(TestCase, TestDefaults):
         return store_model
 
     def activate_payment_system(self, paysys_id):
-        paysys_update = {
-            "paysys_login": "xopay_test",
-            "active": True,
-        }
-
         paysys_model = PaymentSystem.query.get(paysys_id)
-        paysys_model.update(paysys_update)
+        paysys_model.update({"paysys_login": "xopay_test", "active": True})
         paysys_model.set_password("0xJtwe76GDSAFknui8we45unohyDKUFSGku")
         self.db.commit()
 

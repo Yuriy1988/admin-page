@@ -43,9 +43,9 @@ class PaymentSystem(base.BaseModel):
 
     @classmethod
     def allowed_paysys_id(cls):
-        paysys_id_list = db.session.query(cls.id).\
-            filter(cls.active==True, cls.paysys_login != None, cls._paysys_password_hash != None).all()
-        return [ps[0] for ps in paysys_id_list]
+        paysys_id_values = db.session.query(cls.id).\
+            filter(cls.active == True, cls.paysys_login != None, cls._paysys_password_hash != None).all()
+        return set(ps[0] for ps in paysys_id_values)
 
 
 def init_payment_systems():
