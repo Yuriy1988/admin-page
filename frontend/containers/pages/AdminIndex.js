@@ -10,7 +10,7 @@ export default class AdminIndex extends Component {
         return (
             <div>
                 <h1 className="page-header">XOPay Administrator panel</h1>
-                <h3>Welcome</h3>
+                <h4><i className="fa fa-money" /> Welcome</h4>
             </div>
         )
     }
