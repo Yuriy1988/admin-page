@@ -1,4 +1,5 @@
 from marshmallow import fields
+from marshmallow.validate import Length
 
 from api.schemas import base
 
@@ -14,6 +15,6 @@ class PaymentSystemSchema(base.BaseSchema):
 
 class PaymentSystemUpdateSchema(base.BaseSchema):
 
-    paysys_login = fields.Str(required=False)
-    paysys_password = fields.Str(required=False)
-    active = fields.Boolean(required=False)
+    paysys_login = fields.Str(allow_none=False, validate=(Length(min=3, max=255)))
+    paysys_password = fields.Str(allow_none=False, validate=(Length(min=8, max=255)))
+    active = fields.Boolean(allow_none=False)

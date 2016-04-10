@@ -23,6 +23,7 @@ def payment_system_list():
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>', methods=['GET'])
 def payment_system_detail(paysys_id):
+    paysys_id = paysys_id.upper()
     payment_system = PaymentSystem.query.get(paysys_id)
     if not payment_system:
         raise NotFoundError()
@@ -35,6 +36,7 @@ def payment_system_detail(paysys_id):
 
 @app.route('/api/admin/dev/payment_systems/<paysys_id>', methods=['PUT'])
 def payment_system_update(paysys_id):
+    paysys_id = paysys_id.upper()
     payment_system = PaymentSystem.query.get(paysys_id)
     if not payment_system:
         raise NotFoundError()
