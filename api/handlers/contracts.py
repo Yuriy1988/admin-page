@@ -120,9 +120,6 @@ def create_paysys_contract(paysys_id):
     if not payment_system:
         raise NotFoundError()
 
-    if not payment_system.is_allowed_to_use():
-        raise ForbiddenError('Payment system is not allowed to use')
-
     schema = PaySysContractSchema()
     data, errors = schema.load(request.get_json())
     if errors:
