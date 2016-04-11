@@ -40,14 +40,25 @@ const merchantContractListSchema = {contracts: arrayOf(merchantContractSchema)};
 export const MERCHANT_CONTRACT_LIST = (merchantId) => ({path: `merchants/${merchantId}/contracts`, method: "GET", schema: merchantContractListSchema});
 export const MERCHANT_CONTRACT_CREATE = (merchantId) => ({path: `merchants/${merchantId}/contracts`, method: "POST", schema: merchantContractSchema});
 export const MERCHANT_CONTRACT_EDIT = (merchantContractId) => ({path: `merchant_contracts/${merchantContractId}`, method: "PUT", schema: merchantContractSchema});
-export const MERCHANT_CONTRACT_GET = (merchantContractId) => ({path: `/merchant_contracts/${merchantContractId}`, method: "GET", schema: merchantContractSchema});
+export const MERCHANT_CONTRACT_GET = (merchantContractId) => ({path: `merchant_contracts/${merchantContractId}`, method: "GET", schema: merchantContractSchema});
 export const MERCHANT_CONTRACT_DELETE = (merchantContractId) => ({path: `merchant_contracts/${merchantContractId}`, method: "DELETE", schema: merchantContractSchema});
+
+
+/**
+ * PAYSYSTEM_CONTRACTS
+ */
+const paysystemContractSchema = new Schema('paysysContracts');
+const paysystemContractListSchema = {contracts: arrayOf(paysystemContractSchema)};
+export const PAYSYSTEM_CONTRACT_LIST = (paysysId) => ({path: `payment_systems/${paysysId}/contracts`, method: "GET", schema: paysystemContractListSchema});
+export const PAYSYSTEM_CONTRACT_CREATE = (paysysId) => ({path: `payment_systems/${paysysId}/contracts`, method: "POST", schema: paysystemContractSchema});
+export const PAYSYSTEM_CONTRACT_EDIT = (paysysContractId) => ({path: `paysys_contracts/${paysysContractId}`, method: "PUT", schema: paysystemContractSchema});
+export const PAYSYSTEM_CONTRACT_GET = (paysysContractId) => ({path: `paysys_contracts/${paysysContractId}`, method: "GET", schema: paysystemContractSchema});
+export const PAYSYSTEM_CONTRACT_DELETE = (paysysContractId) => ({path: `paysys_contracts/${paysysContractId}`, method: "DELETE", schema: paysystemContractSchema});
 
 
 /**
  * DICTIONARY
  */
-
 export const DICT_SIGN_ALGORITHM = {path: "constants/sign_algorithm", method: "GET" };
 export const DICT_CURRENCY = {path: "constants/currency", method: "GET" };
 export const DICT_NOTIFY = {path: "constants/notify", method: "GET" };

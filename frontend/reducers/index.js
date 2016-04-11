@@ -3,7 +3,9 @@ import {
     MerchantActions,
     StoreActions,
     MerchantContractActions,
-    PaySystemsActions
+    PaySystemsContractsActions,
+    PaySystemsActions,
+    
 } from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
@@ -64,6 +66,48 @@ const pagination = combineReducers({
             PaySystemsActions.PAYSYSTEM_GET_FAILURE
         ],
         cError: PaySystemsActions.PAYSYSTEM_GET_CERROR
+    }),
+    //PaySystem contracts
+    paysystemContractList: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "paysystemContractList",
+        entity: "paysystemContracts",
+        types: [
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_LIST_REQUEST,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_LIST_SUCCESS,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_LIST_FAILURE
+        ],
+        cError: PaySystemsContractsActions.PAYSYSTEM_CONTRACT_LIST_CERROR
+    }),
+    paysystemContractEdit: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "paysystemContractEdit",
+        types: [
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_EDIT_REQUEST,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_EDIT_SUCCESS,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_EDIT_FAILURE
+        ],
+        cError: PaySystemsContractsActions.PAYSYSTEM_CONTRACT_EDIT_CERROR
+    }),
+    paysystemContractGet: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "paysystemContractGet",
+        types: [
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_GET_REQUEST,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_GET_SUCCESS,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_GET_FAILURE
+        ],
+        cError: PaySystemsContractsActions.PAYSYSTEM_CONTRACT_GET_CERROR
+    }),
+    paysystemContractCreate: paginate({
+        mapActionToKey: action => "contracts",
+        paginationId: "paysystemContractCreate",
+        types: [
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_CREATE_REQUEST,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_CREATE_SUCCESS,
+            PaySystemsContractsActions.PAYSYSTEM_CONTRACT_CREATE_FAILURE
+        ],
+        cError: PaySystemsContractsActions.PAYSYSTEM_CONTRACT_CREATE_CERROR
     }),
 //Merchants
     merchants: paginate({

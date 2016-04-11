@@ -27,3 +27,6 @@ export {_PaginationActions as PaginationActions}
 
 import * as _PaySystemsActions from './paySystems';
 export {_PaySystemsActions as PaySystemsActions}
+
+import * as _PaySystemContractsActions from './paysystemContracts';
+export {_PaySystemContractsActions as PaySystemsContractsActions}

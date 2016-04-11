@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Link} from 'react-router'
 
-import { RedirectActions, MerchantContractActions, PaginationActions } from '../../actions/index'
+import {RedirectActions, MerchantContractActions, PaginationActions} from '../../actions/index'
 
 import MerchantContractForm from '../../components/forms/MerchantContractForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
-import Alert, { TYPE_ERROR } from '../../components/Alert'
+import Alert, {TYPE_ERROR} from '../../components/Alert'
 
 class MerchantContractEditPage extends Component {
 
@@ -14,12 +14,14 @@ class MerchantContractEditPage extends Component {
         super(props);
         this.onEdit = this.onEdit.bind(this);
         this.loadData = this.loadData.bind(this);
+    }
 
+    componentDidMount() {
         this.loadData();
     }
 
     componentWillReceiveProps(props) {
-        const { editRequest, back, clearPagination} = props;
+        const {editRequest, back, clearPagination} = props;
 
         if (!!editRequest.result) {
             //redirect(`/admin/administrator/${editRequest.result}`); TODO REDIRECT
@@ -30,33 +32,33 @@ class MerchantContractEditPage extends Component {
     }
 
     componentWillMount() {
-        const { clearPagination } = this.props;
+        const {clearPagination} = this.props;
         clearPagination("merchantContractEdit"); //TODO constant
         clearPagination("merchantContractGet"); //TODO constant
     }
 
     componentWillUnmount() {
-        const { clearPagination } = this.props;
+        const {clearPagination} = this.props;
         clearPagination("merchantContractEdit"); //TODO constant
         clearPagination("merchantContractGet"); //TODO constant
     }
 
     loadData() {
-        const { loadMerchantContract } = this.props;
-        const { merchantContractId } = this.props.params;
+        const {loadMerchantContract} = this.props;
+        const {merchantContractId} = this.props.params;
         loadMerchantContract(merchantContractId);
     }
 
     onEdit(contract) {
-        const { edit } = this.props;
-        const { merchantContractId } = this.props.params;
+        const {edit} = this.props;
+        const {merchantContractId} = this.props.params;
         edit(merchantContractId, contract);
     }
 
     render() {
-        const { editRequest, editCE } = this.props;
-        const { getRequest, loadStoreCE } = this.props;
-        const { merchantContracts } = this.props;
+        const {editRequest, editCE} = this.props;
+        const {getRequest, loadStoreCE} = this.props;
+        const {merchantContracts} = this.props;
 
 
         let errors = {};

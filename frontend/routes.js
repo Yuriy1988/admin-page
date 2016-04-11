@@ -27,12 +27,15 @@ import MerchantContractsPage       from './containers/merchantContracts/Merchant
 import MerchantContractAddPage     from './containers/merchantContracts/MerchantContractAddPage'
 import MerchantContractEditPage    from './containers/merchantContracts/MerchantContractEditPage'
 import MerchantContractListPage    from './containers/merchantContracts/MerchantContractListPage'
-import MerchantContractPage        from './containers/merchantContracts/MerchantContractPage'
-import MerchantContractStatPage    from './containers/merchantContracts/MerchantContractStatPage' //Merchant contracts
 
 import PaySystemListPage       from './containers/paySystems/PaySystemListPage'
 import PaySystemEditPage       from './containers/paySystems/PaySystemEditPage'
 import PaySystemPage       from './containers/paySystems/PaySystemPage' //PaySystems
+
+import PaySysContractsPage       from './containers/paysystemContracts/PaySystemContractsPage'
+import PaySysContractAddPage     from './containers/paysystemContracts/PaySystemContractAddPage'
+import PaySysContractEditPage    from './containers/paysystemContracts/PaySystemContractEditPage'
+import PaySysContractListPage    from './containers/paysystemContracts/PaySystemContractListPage'
 
 import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 
@@ -122,7 +125,19 @@ class Routes {
                                 <Route path=":paysysId" onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                     <Route path="edit" component={PaySystemEditPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                    <Route path="contracts" onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                           component={PaySysContractsPage}>
+                                        <IndexRoute component={PaySysContractListPage}
+                                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                        <Route path="add" component={PaySysContractAddPage}
+                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                        <Route path=":paysysContractId" onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                            <Route path="edit" component={PaySysContractEditPage}
+                                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                        </Route>
+                                    </Route>
                                 </Route>
+
                             </Route>
 
                             {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}

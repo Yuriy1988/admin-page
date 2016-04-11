@@ -36,7 +36,7 @@ class PaySystemListPage extends Component {
                         <th width="5%">#</th>
                         <th>Name</th>
                         <th>Active</th>
-                        <th width="160px">Actions</th>
+                        <th width="240px">Actions</th>
                     </tr>
                     {items}
                     </tbody>
@@ -76,6 +76,10 @@ class PaySystemListPage extends Component {
                                 <Link className="btn btn-sm btn-primary"
                                       to={`/admin/administrator/paysys/${paySysId}/edit`}>
                                     <i className="fa fa-edit"/> Edit
+                                </Link>
+                                <Link className="btn btn-sm btn-primary"
+                                      to={`/admin/administrator/paysys/${paySysId}/contracts`}>
+                                    <i className="fa fa-file-text-o"/> Contracts
                                 </Link>
                             </div>
                         </td>
