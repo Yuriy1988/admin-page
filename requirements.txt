@@ -1,6 +1,7 @@
 gunicorn
 pytz
 iso8601
+blinker==1.4
 psycopg2==2.6.1
 sqlalchemy==1.0.11
 passlib==1.6.5

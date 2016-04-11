@@ -96,24 +96,6 @@ def store_payment_systems_list(store_id):
     return jsonify(store_paysys=result.data)
 
 
-@app.route('/api/admin/dev/stores/<store_id>/store_paysys', methods=['POST'])
-def store_payment_system_create(store_id):
-    if not Store.exists(store_id):
-        raise NotFoundError()
-
-    schema = StorePaySysSchema()
-    data, errors = schema.load(request.get_json())
-    if errors:
-        raise ValidationError(errors=errors)
-
-    data['store_id'] = store_id
-    store_paysys = StorePaySys.create(data)
-    db.session.commit()
-
-    result = schema.dump(store_paysys)
-    return jsonify(result.data)
-
-
 @app.route('/api/admin/dev/store_paysys/<store_paysys_id>', methods=['PUT'])
 def store_payment_system_update(store_paysys_id):
     store_paysys = StorePaySys.query.get(store_paysys_id)
@@ -132,5 +114,6 @@ def store_payment_system_update(store_paysys_id):
     store_paysys.update(data)
     db.session.commit()
 
+    schema = StorePaySysSchema()
     result = schema.dump(store_paysys)
     return jsonify(result.data)

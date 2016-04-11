@@ -36,5 +36,5 @@ class StorePaySysSchema(base.BaseSchema):
 
     id = fields.Str(dump_only=True)
     store_id = fields.Str(dump_only=True)
-    paysys_id = fields.Str(required=True, validate=base.AllowedPaySysId())
+    paysys_id = fields.Str(dump_only=True)
     allowed = fields.Boolean(default=False)

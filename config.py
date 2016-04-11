@@ -7,7 +7,7 @@ STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
 # Define the database
 SQLALCHEMY_DATABASE_URI = 'postgresql://xopadmin:UC4EhhQ6HkwNn7qK@localhost/xopadmindb'
-SQLALCHEMY_TRACK_MODIFICATIONS = False      # flask-sql signaling not used now
+SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 CSRF_ENABLED = True
 CSRF_SESSION_KEY = "mhe=d4#2xvb1348j%m+sn0d8ssdbjv18yi+f_w#&yd!+&4ic4)"
