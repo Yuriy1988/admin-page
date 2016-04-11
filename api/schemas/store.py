@@ -30,3 +30,11 @@ class StoreSchema(base.BaseSchema):
     merchant_id = fields.Str(dump_only=True)
 
     store_settings = fields.Nested(StoreSettingsSchema(), required=True)
+
+
+class StorePaySysSchema(base.BaseSchema):
+
+    id = fields.Str(dump_only=True)
+    store_id = fields.Str(dump_only=True)
+    paysys_id = fields.Str(required=True, validate=base.AllowedPaySysId())
+    allowed = fields.Boolean(default=False)

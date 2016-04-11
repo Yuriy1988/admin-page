@@ -90,3 +90,21 @@ class Store(base.BaseModel):
         self.store_settings.update(store_settings_data)
 
         super(Store, self).update(data)
+
+
+class StorePaySys(base.BaseModel):
+
+    __tablename__ = 'store_paysys'
+
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    store_id = db.Column(db.String, db.ForeignKey('store.id'), nullable=False)
+    paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id'), nullable=False)
+    allowed = db.Column(db.Boolean, default=False)
+
+    def __init__(self, store_id, paysys_id, allowed=False):
+        self.store_id = store_id
+        self.paysys_id = paysys_id
+        self.allowed = allowed
+
+    def __repr__(self):
+        return '<Store Payment System %r>' % self.id

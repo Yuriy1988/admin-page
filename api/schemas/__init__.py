@@ -3,7 +3,7 @@ from .currency import CurrencySchema, CurrencyRequestSchema
 from .manager import ManagerSchema
 from .merchant import MerchantSchema, MerchantAccountSchema, MerchantInfoSchema
 from .payment_system import PaymentSystemSchema, PaymentSystemUpdateSchema
-from .store import StoreSchema, StoreSettingsSchema
+from .store import StoreSchema, StoreSettingsSchema, StorePaySysSchema
 from .user import UserSchema
 
 __author__ = 'Kostel Serhii'

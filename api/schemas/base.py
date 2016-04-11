@@ -2,6 +2,8 @@ from itertools import chain
 from marshmallow import Schema as _Schema, fields, ValidationError, validates_schema
 from marshmallow.validate import Validator as _Validator, Regexp
 
+from api.models import PaymentSystem
+
 __author__ = 'Kostel Serhii'
 
 
@@ -124,3 +126,22 @@ class Login(Regexp):
         regex = kwargs.pop('regex', self.default_regex)
         error = kwargs.pop('error', self.default_message)
         super().__init__(regex, error=error, **kwargs)
+
+
+class AllowedPaySysId(_Validator):
+    """
+    Validator which succeeds if the paysys_id passed to it is allowed to use.
+    """
+    message = 'Payment system {paysys_id} is not allowed to use.'
+
+    def __init__(self, error=None):
+        self.error = error
+
+    def _format_error(self, value, message):
+        return (self.error or message).format(paysys_id=value)
+
+    def __call__(self, value):
+        if value not in PaymentSystem.allowed_paysys_id():
+            raise ValidationError(self._format_error(value, self.message))
+
+        return value

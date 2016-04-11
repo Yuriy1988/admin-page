@@ -31,24 +31,6 @@ class PaymentSystem(base.BaseModel):
     def __repr__(self):
         return '<PaymentSystem %r>' % self.paysys_id
 
-    def is_allowed_to_use(self):
-        return self.active and self.paysys_login is not None and self._paysys_password_hash is not None
-
-    def set_password(self, password):
-        if password is None:
-            self._paysys_password_hash = None
-        else:
-            self._paysys_password_hash = pwd_context.encrypt(password)
-
-    def check_password(self, password):
-        return pwd_context.verify(password, self._paysys_password_hash)
-
-    @classmethod
-    def allowed_paysys_id(cls):
-        paysys_id_values = db.session.query(cls.id).\
-            filter(cls.active == True, cls.paysys_login != None, cls._paysys_password_hash != None).all()
-        return set(ps[0] for ps in paysys_id_values)
-
     def update(self, data, add_to_db=True):
         data = data.copy()
 
@@ -57,6 +39,29 @@ class PaymentSystem(base.BaseModel):
             self.set_password(paysys_password)
 
         super(PaymentSystem, self).update(data)
+
+    def is_allowed_to_use(self):
+        return self.active and self.paysys_login is not None and self._paysys_password_hash is not None
+
+    def set_password(self, password):
+        self._paysys_password_hash = pwd_context.encrypt(password) if password is not None else None
+
+    def check_password(self, password):
+        return pwd_context.verify(password, self._paysys_password_hash)
+
+    @classmethod
+    def filter_allowed(cls, query):
+        return query.filter(cls.active == True, cls.paysys_login != None, cls._paysys_password_hash != None)
+
+    @classmethod
+    def allowed_paysys_id(cls):
+        """
+        Payment system is alowed to use only
+        if active=True and login, password specified
+        :return set allowed paysys_id
+        """
+        paysys_id_values = cls.filter_allowed(db.session.query(cls.id)).all()
+        return set(ps[0] for ps in paysys_id_values)
 
 
 def init_payment_systems():

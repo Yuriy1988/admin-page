@@ -2,11 +2,13 @@ from flask import request, jsonify, Response
 
 from api import app, db
 from api.errors import NotFoundError, ValidationError
-from api.models import Merchant, Store
-from api.schemas import StoreSchema
+from api.models import Merchant, Store, StorePaySys, PaymentSystem
+from api.schemas import StoreSchema, StorePaySysSchema
 
 __author__ = 'Kostel Serhii'
 
+
+# Store
 
 @app.route('/api/admin/dev/merchants/<merchant_id>/stores', methods=['GET'])
 def merchant_stores_list(merchant_id):
@@ -76,3 +78,59 @@ def store_delete(store_id):
 
     db.session.commit()
     return Response(status=200)
+
+
+# Store Payment System
+
+@app.route('/api/admin/dev/stores/<store_id>/store_paysys', methods=['GET'])
+def store_payment_systems_list(store_id):
+    if not Store.exists(store_id):
+        raise NotFoundError()
+
+    query = StorePaySys.query.filter_by(store_id=store_id)
+    query = PaymentSystem.filter_allowed(query.join(PaymentSystem))
+    store_paysys = query.all()
+
+    schema = StorePaySysSchema(many=True)
+    result = schema.dump(store_paysys)
+    return jsonify(store_paysys=result.data)
+
+
+@app.route('/api/admin/dev/stores/<store_id>/store_paysys', methods=['POST'])
+def store_payment_system_create(store_id):
+    if not Store.exists(store_id):
+        raise NotFoundError()
+
+    schema = StorePaySysSchema()
+    data, errors = schema.load(request.get_json())
+    if errors:
+        raise ValidationError(errors=errors)
+
+    data['store_id'] = store_id
+    store_paysys = StorePaySys.create(data)
+    db.session.commit()
+
+    result = schema.dump(store_paysys)
+    return jsonify(result.data)
+
+
+@app.route('/api/admin/dev/store_paysys/<store_paysys_id>', methods=['PUT'])
+def store_payment_system_update(store_paysys_id):
+    store_paysys = StorePaySys.query.get(store_paysys_id)
+    if not store_paysys:
+        raise NotFoundError()
+
+    if store_paysys.paysys_id not in PaymentSystem.allowed_paysys_id():
+        raise ValidationError(
+            'Payment system {paysys_id} is not allowed to use.'.format(paysys_id=store_paysys.paysys_id))
+
+    schema = StorePaySysSchema(partial=True, exclude=('paysys_id',))
+    data, errors = schema.load(request.get_json(), origin_model=store_paysys)
+    if errors:
+        raise ValidationError(errors=errors)
+
+    store_paysys.update(data)
+    db.session.commit()
+
+    result = schema.dump(store_paysys)
+    return jsonify(result.data)
