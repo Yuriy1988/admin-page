@@ -15,13 +15,7 @@ import {combineReducers} from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
 function entities(state = {
-    merchants: {}, stores: {}, paySystems: {
-        VISA_MASTER: {
-            id: "VISA_MASTER",
-            paysys_name: "Visa",
-            active: false
-        }
-    }
+    merchants: {}, stores: {}, paySystems: {}
 }, action) {
     if (!!action.response && !!action.response.entities) {
         return merge({}, state, action.response.entities);
@@ -41,7 +35,6 @@ const pagination = combineReducers({
     paySystemsList: paginate({
         mapActionToKey: action => "paySystems",
         //entity: "paySystems",
-        init: ["VISA_MASTER"],
         paginationId: "paySystemsList",
         types: [
             PaySystemsActions.PAYSYSTEMS_LIST_REQUEST,
@@ -49,6 +42,28 @@ const pagination = combineReducers({
             PaySystemsActions.PAYSYSTEMS_LIST_FAILURE
         ],
         cError: PaySystemsActions.PAYSYSTEMS_LIST_CERROR
+    }),
+    paySystemEdit: paginate({
+        mapActionToKey: action => "paySystems",
+        //entity: "paySystems",
+        paginationId: "paySystemEdit",
+        types: [
+            PaySystemsActions.PAYSYSTEM_EDIT_REQUEST,
+            PaySystemsActions.PAYSYSTEM_EDIT_SUCCESS,
+            PaySystemsActions.PAYSYSTEM_EDIT_FAILURE
+        ],
+        cError: PaySystemsActions.PAYSYSTEM_EDIT_CERROR
+    }),
+    paySystemGet: paginate({
+        mapActionToKey: action => "paySystems",
+        //entity: "paySystems",
+        paginationId: "paySystemGet",
+        types: [
+            PaySystemsActions.PAYSYSTEM_GET_REQUEST,
+            PaySystemsActions.PAYSYSTEM_GET_SUCCESS,
+            PaySystemsActions.PAYSYSTEM_GET_FAILURE
+        ],
+        cError: PaySystemsActions.PAYSYSTEM_GET_CERROR
     }),
 //Merchants
     merchants: paginate({

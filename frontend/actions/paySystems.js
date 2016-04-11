@@ -65,7 +65,7 @@ export const PAYSYSTEM_EDIT_FAILURE = 'PAYSYSTEM_EDIT_FAILURE';
 export const PAYSYSTEM_EDIT_CERROR = 'PAYSYSTEM_EDIT_CERROR';
 export function editByIdCError() {
     return {
-        type: PAYSYSTEM_GET_CERROR
+        type: PAYSYSTEM_EDIT_CERROR
     }
 }
 export function editById(paySysId, data) {
@@ -78,3 +78,16 @@ export function editById(paySysId, data) {
         }
     }
 }
+
+
+////CUSTOM ACTIONS
+
+export function disable(paySysId) {
+    return editById(paySysId, {active: false});
+}
+
+export function enable(paySysId) {
+    return editById(paySysId, {active: true});
+}
+
+

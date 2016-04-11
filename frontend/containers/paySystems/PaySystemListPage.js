@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
 
-import {PaySystemsActions} from '../../actions/index';
+import {PaySystemsActions, PaginationActions} from '../../actions/index';
 import Alert, {TYPE_ERROR} from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import Boolean from '../../components/Boolean';
@@ -21,6 +21,10 @@ class PaySystemListPage extends Component {
         loadPaySystems();
     }
 
+    componentWillUnmount() {
+        const {clearPagination} = this.props;
+        clearPagination("paySystemEdit"); //TODO constant
+    }
 
     static renderList(items) {
         // const preRender = items.map((value, i) => (value));
@@ -31,6 +35,7 @@ class PaySystemListPage extends Component {
                     <tr key="header">
                         <th width="5%">#</th>
                         <th>Name</th>
+                        <th>Active</th>
                         <th width="160px">Actions</th>
                     </tr>
                     {items}
@@ -40,35 +45,45 @@ class PaySystemListPage extends Component {
         ) : <p>No items</p>;
     }
 
+    handleToggle(contract) {
+        const {enable, disable} = this.props;
+        if (contract.active) {
+            disable(contract.id);
+        } else {
+            enable(contract.id);
+        }
+    }
 
     render() {
-        const {loadPaySystemsCE, paySystems, paySystemsList} = this.props;
-
-
-        const list = PaySystemListPage.renderList(paySystemsList.ids.map((paySysId, i) => {
-            return (
-                <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>
-                        <Link to={`/admin/administrator/paysys/${paySysId}`}>
-                            {JSON.stringify(paySystems[paySysId])}
-                        </Link>
-                    </td>
-                    {/*<td >
-                        <div className="btn-toolbar pull-right">
-                            <Link className="btn btn-sm btn-primary"
-                                  to={`/admin/administrator/stores/${storeId}/edit`}>
-                                <i className="fa fa-edit"/>&nbsp;Edit
-                            </Link>
-                            <button className="btn btn-sm btn-danger"
-                                    onClick={this.handleDelete.bind(this, stores[storeId].id)}>
-                                <i className="fa fa-trash"/>&nbsp;Delete
-                            </button>
-                        </div>
-                    </td>*/}
-                </tr>
-            );
-        }));
+        const {loadPaySystemsCE, paySystems, paySystemsList, editRequest, editRequestCE} = this.props;
+        let list = [];
+        try {
+            list = PaySystemListPage.renderList(paySystemsList.result.paymentSystems.map((paySysId, i) => {
+                const paySys = paySystems[paySysId];
+                return (
+                    <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{paySys.paysysName}</td>
+                        <td>
+                            <Boolean value={paySys.active}/>
+                        </td>
+                        <td >
+                            <div className="btn-toolbar pull-right">
+                                <button className={"btn btn-sm btn-"+((paySys.active) ? "danger" : "success")}
+                                        onClick={this.handleToggle.bind(this, paySys)}>
+                                    <i className="fa fa-power-off"/>&nbsp;{(paySys.active) ? "Disable" : "Enable"}
+                                </button>
+                                <Link className="btn btn-sm btn-primary"
+                                      to={`/admin/administrator/paysys/${paySysId}/edit`}>
+                                    <i className="fa fa-edit"/> Edit
+                                </Link>
+                            </div>
+                        </td>
+                    </tr>
+                );
+            }));
+        } catch (e) {
+        }
 
         return (
             <div className="box">
@@ -80,6 +95,11 @@ class PaySystemListPage extends Component {
                         <Alert type={TYPE_ERROR}
                                handleClose={loadPaySystemsCE}>
                             {paySystemsList.error.message}
+                        </Alert> : null}
+                    {(!!editRequest.error) ?
+                        <Alert type={TYPE_ERROR}
+                               handleClose={editRequestCE}>
+                            {editRequest.error.serverError.errors.active}
                         </Alert> : null}
                     {list}
                 </div>
@@ -93,12 +113,20 @@ class PaySystemListPage extends Component {
 export default connect(
     (state)=>({
         paySystems: state.entities.paySystems,
-        paySystemsList: state.pagination.paySystemsList
+        paySystemsList: state.pagination.paySystemsList,
+        editRequest: state.pagination.paySystemEdit
+
     }),
     {
         loadPaySystems: PaySystemsActions.getList,
-        loadPaySystemsCE: PaySystemsActions.getListCError
-        //deleteStore: StoresActions.deleteById
+        loadPaySystemsCE: PaySystemsActions.getListCError,
+
+        editRequestCE: PaySystemsActions.editByIdCError,
+
+        enable: PaySystemsActions.enable,
+        disable: PaySystemsActions.disable,
+
+        clearPagination: PaginationActions.clear
     }
 )(PaySystemListPage)
 

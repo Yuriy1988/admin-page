@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {DictionaryActions} from '../actions/index'
 
 export default class CurrencySelect extends Component {
@@ -8,7 +8,7 @@ export default class CurrencySelect extends Component {
     }
 
     render() {
-        const { currencies, children } = this.props;
+        const {currencies, children} = this.props;
 
         return (
             <select className="form-control" {...this.props} >

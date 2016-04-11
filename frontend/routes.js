@@ -119,6 +119,10 @@ class Routes {
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                 <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
                                             component={PaySystemListPage}/>
+                                <Route path=":paysysId" onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                    <Route path="edit" component={PaySystemEditPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                </Route>
                             </Route>
 
                             {/*<Route path="*" component={NotFoundPage} status={404} onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}

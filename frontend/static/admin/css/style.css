@@ -99,6 +99,10 @@ hr, .mv {
     animation-duration: 0.7s !important;
 }
 
+.content-wrapper {
+    min-height: 1000px;
+}
+
 
 /**** CHART *****/
 .animated{

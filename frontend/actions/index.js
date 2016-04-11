@@ -1,29 +1,29 @@
-import * as MerchantActions from './merchants'
-export {MerchantActions}
+import * as _MerchantActions from './merchants'
+export {_MerchantActions as MerchantActions}
 
-import * as MerchantContractActions from './merchantContracts'
-export {MerchantContractActions}
+import * as _MerchantContractActions from './merchantContracts'
+export {_MerchantContractActions as MerchantContractActions}
 
-import * as StoreActions from './stores'
-export {StoreActions}
+import * as _StoreActions from './stores'
+export {_StoreActions as StoreActions}
 
-import * as SideBarActions from './sideBar'
-export {SideBarActions}
+import * as _SideBarActions from './sideBar'
+export {_SideBarActions as SideBarActions}
 
-import * as UserActions from './user'
-export {UserActions}
+import * as _UserActions from './user'
+export {_UserActions as UserActions}
 
-import * as RedirectActions from './redirect'
-export {RedirectActions}
+import * as _RedirectActions from './redirect'
+export {_RedirectActions as RedirectActions}
 
-import * as DictionaryActions from './dictionary'
-export {DictionaryActions}
+import * as _DictionaryActions from './dictionary'
+export {_DictionaryActions as DictionaryActions}
 
-import * as CurrenciesActions from './currencies'
-export {CurrenciesActions}
+import * as _CurrenciesActions from './currencies'
+export {_CurrenciesActions as CurrenciesActions}
 
-import * as PaginationActions from './pagination'
-export {PaginationActions}
+import * as _PaginationActions from './pagination'
+export {_PaginationActions as PaginationActions}
 
-import * as PaySystemsActions from './paySystems';
-export {PaySystemsActions}
+import * as _PaySystemsActions from './paySystems';
+export {_PaySystemsActions as PaySystemsActions}
