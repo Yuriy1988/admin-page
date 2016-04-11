@@ -300,11 +300,6 @@ class TestPaySysContracts(base.BaseTestCase):
         self.assertNotEqual(body['id'], contract['id'])
         self.assertNotEqual(body['paysys_id'], contract['paysys_id'])
 
-    def test_post_contract_forbidden_if_paysys_not_active(self):
-        contract = self._pay_sys_contract.copy()
-        status, body = self.post('/payment_systems/%s/contracts' % self.paysys_id, contract)
-        self.assertEqual(status, 403)
-
     def test_post_contract_not_created_paysys(self):
         contract = self._pay_sys_contract.copy()
 
