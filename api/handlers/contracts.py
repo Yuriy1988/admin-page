@@ -22,7 +22,7 @@ def merchant_contracts_list(merchant_id):
     if 'currency' in data:
         query = query.filter_by(currency=data['currency'])
 
-    contracts = query.all()
+    contracts = query.order_by('id').all()
 
     schema = MerchantContractSchema(many=True)
     result = schema.dump(contracts)
@@ -104,7 +104,7 @@ def paysys_contracts_list(paysys_id):
     if 'currency' in data:
         query = query.filter_by(currency=data['currency'])
 
-    contracts = query.all()
+    contracts = query.order_by('id').all()
 
     schema = PaySysContractSchema(many=True)
     result = schema.dump(contracts)

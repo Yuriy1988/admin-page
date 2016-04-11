@@ -26,9 +26,10 @@ def currency_current():
     last_commit = Currency.request_last_commit_time()
     if last_commit:
         query = query.filter_by(commit_time=last_commit)
+    currency = query.all()
 
     schema = CurrencySchema(many=True)
-    result = schema.dump(query.all())
+    result = schema.dump(currency)
     return jsonify(current=result.data)
 
 
