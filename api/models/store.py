@@ -127,7 +127,8 @@ def on_store_created(sender, changes):
     paysys_id_list = db.session.query(PaymentSystem.id).all()
     for store in created_stores:
         for paysys_id, in paysys_id_list:
-            print('Add payment systems %s to store %s' % (paysys_id, store.id))
+            # TODO: add logs here
+            # print('Add payment systems %s to store %s' % (paysys_id, store.id))
             sps = StorePaySys(store.id, paysys_id, allowed=False)
             db.session.add(sps)
 
