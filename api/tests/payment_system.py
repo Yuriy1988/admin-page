@@ -204,18 +204,3 @@ class TestPaymentSystem(base.BaseTestCase):
         for paysys_id in ['MY_PAYMENT', 'test', 'null', '']:
             status, body = self.put('/payment_systems/%s' % paysys_id, {'active': True})
             self.assertEqual(status, 404)
-
-
-'''
-Изменить информацию о платежной системе
-> PUT /api/admin/{version}/payment_systems/{paysys_id}
-{
-	paysys_login: string			// логин для платежной системы
-	paysys_password: string		// пароль для платежной системы
-	active: boolean			// система активна или нет. Платежную систему нельзя активировать до тех пор, пока не заполнены поля paysys_login и paysys_password. При удалении одного из полей (пустое значение) система автоматически становится неактивной.
-}
-< 200 OK $Paysys
-< 401 Unauthorized
-< 403 Forbidden
-< 404 Not Found
-'''

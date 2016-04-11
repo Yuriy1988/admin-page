@@ -47,9 +47,9 @@ def create_merchant_contract(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchant_contracts/<int:contract_id>', methods=['GET'])
-def merchant_contract(contract_id):
-    contract = MerchantContract.query.get(contract_id)
+@app.route('/api/admin/dev/merchant_contracts/<int:merchant_contract_id>', methods=['GET'])
+def merchant_contract(merchant_contract_id):
+    contract = MerchantContract.query.get(merchant_contract_id)
     if not contract:
         raise NotFoundError()
 
@@ -58,9 +58,9 @@ def merchant_contract(contract_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchant_contracts/<int:contract_id>', methods=['PUT'])
-def update_merchant_contract(contract_id):
-    contract = MerchantContract.query.get(contract_id)
+@app.route('/api/admin/dev/merchant_contracts/<int:merchant_contract_id>', methods=['PUT'])
+def update_merchant_contract(merchant_contract_id):
+    contract = MerchantContract.query.get(merchant_contract_id)
     if not contract:
         raise NotFoundError()
 
@@ -76,12 +76,13 @@ def update_merchant_contract(contract_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchant_contracts/<int:contract_id>', methods=['DELETE'])
-def delete_merchant_contract(contract_id):
-    if not MerchantContract.exists(contract_id):
+@app.route('/api/admin/dev/merchant_contracts/<int:merchant_contract_id>', methods=['DELETE'])
+def delete_merchant_contract(merchant_contract_id):
+    delete_count = MerchantContract.query.filter_by(id=merchant_contract_id).delete()
+    if delete_count == 0:
         raise NotFoundError()
 
-    MerchantContract.query.filter_by(id=contract_id).delete()
+    db.session.commit()
     return Response(status=200)
 
 
@@ -152,7 +153,7 @@ def update_paysys_contract(paysys_contract_id):
     if not contract:
         raise NotFoundError()
 
-    schema = PaySysContractSchema(partial=True, partial_nested=True)
+    schema = PaySysContractSchema(partial=True)
     data, errors = schema.load(request.get_json())
     if errors:
         raise ValidationError(errors=errors)
@@ -166,8 +167,9 @@ def update_paysys_contract(paysys_contract_id):
 
 @app.route('/api/admin/dev/paysys_contracts/<paysys_contract_id>', methods=['DELETE'])
 def delete_paysys_contract(paysys_contract_id):
-    if not PaySysContract.exists(paysys_contract_id):
+    delete_count = PaySysContract.query.filter_by(id=paysys_contract_id).delete()
+    if delete_count == 0:
         raise NotFoundError()
 
-    PaySysContract.query.filter_by(id=paysys_contract_id).delete()
+    db.session.commit()
     return Response(status=200)

@@ -364,6 +364,9 @@ class TestPaySysContracts(base.BaseTestCase):
         status, body = self.delete('/paysys_contracts/%s' % contract['id'])
         self.assertEqual(status, 200)
 
+        contract_model = PaySysContract.query.get(contract['id'])
+        self.assertIsNone(contract_model)
+
         status, body = self.get('/paysys_contracts/%s' % contract['id'])
         self.assertEqual(status, 404)
 

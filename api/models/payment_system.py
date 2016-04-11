@@ -29,7 +29,7 @@ class PaymentSystem(base.BaseModel):
         self.set_password(paysys_password)
 
     def __repr__(self):
-        return '<PaymentSystem %r>' % self.paysys_id
+        return '<PaymentSystem %r>' % self.id
 
     def update(self, data, add_to_db=True):
         data = data.copy()
