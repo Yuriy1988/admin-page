@@ -1,6 +1,6 @@
 from flask import request, jsonify, Response
 
-from api import app, db
+from api import app, db, utils
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant, Store, StorePaySys, PaymentSystem
 from api.schemas import StoreSchema, StorePaySysSchema
@@ -78,6 +78,22 @@ def store_delete(store_id):
 
     db.session.commit()
     return Response(status=200)
+
+
+@app.route('/api/admin/dev/stores/<store_id>/upload/logo', methods=['POST'])
+def store_upload_logo(store_id):
+    store = Store.query.get(store_id)
+    if not store:
+        raise NotFoundError()
+
+    file_url = utils.upload_media_file(allowed_extensions={'png', 'jpg', 'jpeg', 'gif'}, upload_subdir='store/logo')
+    if store.logo:
+        utils.remove_media_file(store.logo)
+
+    store.logo = file_url
+    db.session.commit()
+
+    return jsonify(logo=store.logo)
 
 
 # Store Payment System

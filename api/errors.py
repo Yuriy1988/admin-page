@@ -117,6 +117,11 @@ def error_method_not_allowed(error):
     return _handle_default_error(error, 405)
 
 
+@app.errorhandler(413)
+def page_not_found(error):
+    return _handle_default_error(error, 413)
+
+
 @app.errorhandler(500)
 def error_internal_server_error(error):
     return _handle_default_error(error, 500, with_traceback=True)
