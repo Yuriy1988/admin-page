@@ -10,6 +10,7 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 
 import StoreModel from '../../models/store'
 
+import StorePaySysComponent from './StorePaySysComponent'
 
 class StorePage extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class StorePage extends Component {
     render() {
 
         const {stores, storePagination, loadStoreCE, children} = this.props;
-
+        const {storeId} = this.props.params;
         const storeInfo = new StoreModel(stores[storePagination.result]);
 
         return (
@@ -142,6 +143,7 @@ class StorePage extends Component {
                     </div>
                 </div>
 
+                <StorePaySysComponent storeId={storeId}/>
                 {(!!storePagination.error) ?
                     <Alert type={TYPE_ERROR}
                            handleClose={loadStoreCE}>{storePagination.error.message}</Alert> : null}

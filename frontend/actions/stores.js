@@ -1,9 +1,9 @@
-import { CALL_API } from '../middleware/api'
+import {CALL_API} from '../middleware/api'
 
 /**
  * List of stores
  */
-import { STORES_LIST } from '../lib/api'
+import {STORES_LIST} from '../lib/api'
 export const STORES_LIST_REQUEST = 'STORES_LIST_REQUEST';
 export const STORES_LIST_SUCCESS = 'STORES_LIST_SUCCESS';
 export const STORES_LIST_FAILURE = 'STORES_LIST_FAILURE';
@@ -26,7 +26,7 @@ export function getList(merchantId) {
 /**
  * Creating store
  */
-import { STORES_CREATE } from '../lib/api'
+import {STORES_CREATE} from '../lib/api'
 export const STORES_CREATE_REQUEST = 'STORES_CREATE_REQUEST';
 export const STORES_CREATE_SUCCESS = 'STORES_CREATE_SUCCESS';
 export const STORES_CREATE_FAILURE = 'STORES_CREATE_FAILURE';
@@ -50,7 +50,7 @@ export function create(merchantId, store) {
 /**
  * Getting store
  */
-import { STORE_GET } from '../lib/api'
+import {STORE_GET} from '../lib/api'
 export const STORE_GET_REQUEST = 'STORE_GET_REQUEST';
 export const STORE_GET_SUCCESS = 'STORE_GET_SUCCESS';
 export const STORE_GET_FAILURE = 'STORE_GET_FAILURE';
@@ -81,7 +81,7 @@ export function getByIdLazy(storeId) {
 /**
  * Updating store
  */
-import { STORE_EDIT } from '../lib/api'
+import {STORE_EDIT} from '../lib/api'
 export const STORE_EDIT_REQUEST = 'STORE_EDIT_REQUEST';
 export const STORE_EDIT_SUCCESS = 'STORE_EDIT_SUCCESS';
 export const STORE_EDIT_FAILURE = 'STORE_EDIT_FAILURE';
@@ -106,7 +106,7 @@ export function editById(storeId, store) {
 /**
  * Deleting store
  */
-import { STORE_DELETE } from '../lib/api'
+import {STORE_DELETE} from '../lib/api'
 export const STORE_DELETE_REQUEST = 'STORE_DELETE_REQUEST';
 export const STORE_DELETE_SUCCESS = 'STORE_DELETE_SUCCESS';
 export const STORE_DELETE_FAILURE = 'STORE_DELETE_FAILURE';
@@ -132,3 +132,58 @@ export function deleteById(storeId) {
     }
 }
 
+/**
+ * Store payment systems list
+ */
+import {STORE_PAYSYS_LIST} from '../lib/api'
+export const STORE_PAYSYS_LIST_REQUEST = 'STORE_PAYSYS_LIST_REQUEST';
+export const STORE_PAYSYS_LIST_SUCCESS = 'STORE_PAYSYS_LIST_SUCCESS';
+export const STORE_PAYSYS_LIST_FAILURE = 'STORE_PAYSYS_LIST_FAILURE';
+export const STORE_PAYSYS_LIST_CERROR = 'STORE_PAYSYS_LIST_CERROR';
+export function getPaymentSystemsCE() {
+    return {
+        type: STORE_PAYSYS_LIST_CERROR
+    }
+}
+export function getPaymentSystems(storeId) {
+    return {
+        [CALL_API]: {
+            types: [STORE_PAYSYS_LIST_REQUEST, STORE_PAYSYS_LIST_SUCCESS, STORE_PAYSYS_LIST_FAILURE],
+            cError: STORE_DELETE_CERROR,
+            endpoint: STORE_PAYSYS_LIST(storeId)
+        }
+    }
+}
+
+
+import {STORE_PAYSYS_UPDATE} from '../lib/api'
+export const STORE_PAYSYS_UPDATE_REQUEST = 'STORE_PAYSYS_UPDATE_REQUEST';
+export const STORE_PAYSYS_UPDATE_SUCCESS = 'STORE_PAYSYS_UPDATE_SUCCESS';
+export const STORE_PAYSYS_UPDATE_FAILURE = 'STORE_PAYSYS_UPDATE_FAILURE';
+export const STORE_PAYSYS_UPDATE_CERROR = 'STORE_PAYSYS_UPDATE_CERROR';
+export function updatePaymentSystemsCE() {
+    return {
+        type: STORE_PAYSYS_UPDATE_CERROR
+    }
+}
+export function updatePaymentSystems(storePaysysId, data) {
+    return {
+        [CALL_API]: {
+            types: [STORE_PAYSYS_UPDATE_REQUEST, STORE_PAYSYS_UPDATE_SUCCESS, STORE_PAYSYS_UPDATE_FAILURE],
+            cError: STORE_DELETE_CERROR,
+            endpoint: STORE_PAYSYS_UPDATE(storePaysysId),
+            body: data
+        }
+    }
+}
+
+export function activatePaySys(storePaysysId) {
+    return updatePaymentSystems(storePaysysId, {
+        allowed: true
+    })
+}
+export function deactivatePaySys(storePaysysId) {
+    return updatePaymentSystems(storePaysysId, {
+        allowed: false
+    })
+}

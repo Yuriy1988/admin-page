@@ -63,7 +63,7 @@ export const DICT_SIGN_ALGORITHM = {path: "constants/sign_algorithm", method: "G
 export const DICT_CURRENCY = {path: "constants/currency", method: "GET" };
 export const DICT_NOTIFY = {path: "constants/notify", method: "GET" };
 export const DICT_CATEGORY = {path: "constants/category", method: "GET" };
-export const DICT_PAYSYS_ID = {path: "constants/paysys_id", method: "GET" };
+export const DICT_PAYSYS_ID = {path: "payment_systems/allowed/paysys_id", method: "GET" };
 
 
 /**
@@ -73,6 +73,14 @@ const currencySchema = new Schema('currency');
 const currenciesSchema = {history: arrayOf(currencySchema)};
 export const CURRENCY_HISTORY = {path: "currency/history", method: "GET", schema: currenciesSchema}; //?from_currency=USD&to_currency=UAH&from_date=2016-04-01&till_date=2016-04-08
 
+
+/**
+ * Store payment systems
+ */
+const storePaySysSchema = new Schema('storePaySys');
+const storePaySysSchemaList = {storePaysys: arrayOf(storePaySysSchema)};
+export const STORE_PAYSYS_LIST = (storeId) => ({path: `stores/${storeId}/store_paysys`, method: "GET", schema: storePaySysSchemaList});
+export const STORE_PAYSYS_UPDATE = (storePaysysId) => ({path: `store_paysys/${storePaysysId}`, method: "PUT", schema: storePaySysSchema});
 
 /**
  * Sign algorithm

@@ -5,7 +5,7 @@ import {
     MerchantContractActions,
     PaySystemsContractsActions,
     PaySystemsActions,
-    
+
 } from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
@@ -17,7 +17,13 @@ import {combineReducers} from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
 function entities(state = {
-    merchants: {}, stores: {}, paySystems: {}
+    merchants: {},
+    stores: {},
+    paySystems: {},
+    merchantContracts: {},
+    paysysContracts: {},
+    currency: {},
+    storePaySys: {}
 }, action) {
     if (!!action.response && !!action.response.entities) {
         return merge({}, state, action.response.entities);
@@ -244,6 +250,27 @@ const pagination = combineReducers({
             StoreActions.STORE_GET_FAILURE
         ],
         cError: StoreActions.STORE_GET_CERROR
+    }),
+    //StorePaysys
+    storePaysysGet: paginate({
+        mapActionToKey: action => "store",
+        paginationId: "storePaysysGet",
+        types: [
+            StoreActions.STORE_PAYSYS_LIST_REQUEST,
+            StoreActions.STORE_PAYSYS_LIST_SUCCESS,
+            StoreActions.STORE_PAYSYS_LIST_FAILURE
+        ],
+        cError: StoreActions.STORE_PAYSYS_LIST_CERROR
+    }),
+    storePaysysUpdate: paginate({
+        mapActionToKey: action => "store",
+        paginationId: "storePaysysUpdate",
+        types: [
+            StoreActions.STORE_PAYSYS_UPDATE_REQUEST,
+            StoreActions.STORE_PAYSYS_UPDATE_SUCCESS,
+            StoreActions.STORE_PAYSYS_UPDATE_FAILURE
+        ],
+        cError: StoreActions.STORE_PAYSYS_UPDATE_CERROR
     }),
     //currencies
     currencyHistory: paginate({
