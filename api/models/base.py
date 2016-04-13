@@ -1,6 +1,8 @@
+from collections import defaultdict
 from sqlalchemy.inspection import inspect
+from flask_sqlalchemy import before_models_committed, models_committed
 
-from api import db
+from api import app, db
 
 __author__ = 'Kostel Serhii'
 
@@ -78,3 +80,62 @@ class BaseModel(db.Model):
             setattr(self, key, value)
         if data and add_to_db:
             db.session.add(self)
+
+
+class _EventHandler:
+    """
+    Class that handel sqlalchemy events.
+    """
+    _subscribers_store_mapper = {
+        'before': defaultdict(list),
+        'after': defaultdict(list)
+    }
+
+    @classmethod
+    def _committed(cls, changes, subscribers_store):
+        for model_instance, operation in changes:
+            subscribers = subscribers_store.get((model_instance.__class__.__name__, operation))
+            if subscribers is not None:
+                for subscribe_func in subscribers:
+                    subscribe_func(model_instance)
+
+    @classmethod
+    def before_committed(cls, sender, changes):
+        cls._committed(changes, cls._subscribers_store_mapper.get('before'))
+
+    @classmethod
+    def after_committed(cls, sender, changes):
+        cls._committed(changes, cls._subscribers_store_mapper.get('after'))
+
+    @classmethod
+    def register(cls, model_class, event_type, subscribe_func):
+        committed_status, _, operation = event_type.partition('_')
+        subscribers_store = cls._subscribers_store_mapper.get(committed_status)
+        if subscribers_store is not None:
+            subscribers_store[(model_class.__name__, operation)].append(subscribe_func)
+
+before_models_committed.connect(_EventHandler.before_committed, sender=app)
+models_committed.connect(_EventHandler.after_committed, sender=app)
+
+
+def on_model_event(model_class, event_type):
+    """
+    On database event decorator.
+    Subscribe function with database model class to specified event.
+    Parameter "event_type" is combination of before/after prefix
+    and insert/update/delete suffix connect by "_" symbol.
+    Prefix:
+      - before - before_commit
+      - after - after_commit
+    Suffix:
+      - insert - create model
+      - update - update model
+      - delete - delete model
+
+    :param object model_class: database class model
+    :param str event_type: event type (e.g. before_insert, after_delete)
+    """
+    def register_event_subscribe_func(func):
+        _EventHandler.register(model_class, event_type, func)
+        return func
+    return register_event_subscribe_func

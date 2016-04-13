@@ -2,9 +2,8 @@ import os
 import uuid
 import binascii
 from copy import deepcopy
-from flask_sqlalchemy import before_models_committed
 
-from api import app, db
+from api import db
 from api.models import base, enum, PaymentSystem
 
 __author__ = 'Kostel Serhii'
@@ -116,24 +115,11 @@ class StorePaySys(base.BaseModel):
 
 # TODO: remove logo file when Store removed
 
-
-def on_store_created(sender, changes):
-    """
-    Connect all payment systems to store on create.
-
-    :param sender: sender
-    :param changes: list with models and change status
-    """
-    created_stores = [store for store, change in changes if change == 'insert' and isinstance(store, Store)]
-    if not created_stores:
-        return
-
+@base.on_model_event(Store, 'before_insert')
+def create_store_paysys(store):
+    """ Create store paysys when store created. """
     paysys_id_list = db.session.query(PaymentSystem.id).all()
-    for store in created_stores:
-        for paysys_id, in paysys_id_list:
-            # TODO: add logs here
-            # print('Add payment systems %s to store %s' % (paysys_id, store.id))
-            sps = StorePaySys(store.id, paysys_id, allowed=False)
-            db.session.add(sps)
-
-before_models_committed.connect(on_store_created, sender=app)
+    for paysys_id, in paysys_id_list:
+        print('Add payment systems %s to store %s' % (paysys_id, store.id))
+        sps = StorePaySys(store.id, paysys_id, allowed=False)
+        db.session.add(sps)
