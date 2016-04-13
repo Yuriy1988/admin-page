@@ -2,23 +2,33 @@ server {{
     listen       {nginx_port};
     server_name  {host};
 
-    set $ADMIN_FRONT /var/www/xopay/admin/frontend;
-    set $CLIENT_FRONT /var/www/xopay/client/frontend;
+	set $XOPAY_BASE /var/www/xopay
+
+	set $ADMIN_BASE $XOPAY_BASE/admin
+    set $ADMIN_STATIC $ADMIN_BASE/frontend/static/admin;
+
+    set $CLIENT_BASE $XOPAY_BASE/client
+    set $CLIENT_STATIC $CLIENT_BASE/frontend/static/client;
 
     location /favicon.ico {{
-        root $ADMIN_FRONT/static/admin;
+        root $ADMIN_STATIC;
         expires max;
         access_log off;
     }}
 
     location /static/admin/ {{
-        root   $ADMIN_FRONT;
+        root   $ADMIN_BASE/frontend;
+        access_log off;
+    }}
+
+    location /media/admin/ {{
+        root   $ADMIN_BASE;
         access_log off;
     }}
 
     location /admin {{
         rewrite ^/admin(.*)$ /index.html  break;
-        root $ADMIN_FRONT/static/admin;
+        root $ADMIN_STATIC;
     }}
 
     location /api/admin/ {{
@@ -33,7 +43,7 @@ server {{
     }}
 
     location /static/client/ {{
-        root   $CLIENT_FRONT;
+        root   $CLIENT_BASE/frontend;
         access_log off;
     }}
 
@@ -61,6 +71,6 @@ server {{
 
     location / {{
         rewrite ^/?$ /home.html  break;
-        root $CLIENT_FRONT/static/client;
+        root $CLIENT_STATIC;
     }}
 }}

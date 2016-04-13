@@ -7,8 +7,8 @@ STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
 # Upload
 MAX_CONTENT_LENGTH = 4 * 1024 * 1024
-UPLOAD_BASE_FOLDER = os.path.join(STATIC_FOLDER, 'admin', 'media')
-UPLOAD_BASE_URL = '/static/admin/media'
+MEDIA_BASE_FOLDER = os.path.join(BASE_FOLDER, 'media', 'admin')
+MEDIA_BASE_URL = '/media/admin'
 
 # Define the database
 SQLALCHEMY_DATABASE_URI = 'postgresql://xopadmin:UC4EhhQ6HkwNn7qK@localhost/xopadmindb'
