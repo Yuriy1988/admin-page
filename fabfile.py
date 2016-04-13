@@ -74,9 +74,6 @@ def deploy():
         run('tar --extract --verbose --file {build_name}'.format(build_name=build_name))
         run('rm {build_name}'.format(build_name=build_name))
 
-    # restart
-    restart()
-
 
 # ----- Set Environment -----
 
@@ -134,6 +131,7 @@ def setup_supervisor():
     sudo('supervisorctl reread')
     sudo('supervisorctl update')
 
+
 @task
 def setup_nginx():
     sudo('apt-get install -y nginx')
@@ -188,6 +186,7 @@ def update():
     deploy()
     with cd(env.deploy_dir):
         run('make update')
+    restart()
 
 
 # ----- Control supervisor -----
