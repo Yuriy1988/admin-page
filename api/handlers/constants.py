@@ -25,3 +25,7 @@ def constant_sign_algorithm():
 def constant_category():
     return jsonify(category=enum.STORE_CATEGORY_ENUM)
 
+
+@app.route('/api/admin/dev/constants/payment_interface', methods=['GET'])
+def constant_payment_interface():
+    return jsonify(category=enum.PAYMENT_INTERFACE_ENUM)

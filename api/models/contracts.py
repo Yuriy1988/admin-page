@@ -45,6 +45,8 @@ class PaySysContract(AbstractContract):
     __tablename__ = 'paysys_contract'
 
     contractor_name = db.Column(db.String(255))
+    # TODO: add payment interface in model, schema, tests
+    # payment_interface = db.Column(db.Enum(*enum.CURRENCY_ENUM, name='payment_interface'), nullable=False)
     paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id'), nullable=False)
 
     def __init__(self, paysys_id, commission_fixed, commission_pct, contractor_name, currency, contract_doc_url,
