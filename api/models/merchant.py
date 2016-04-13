@@ -18,6 +18,8 @@ class MerchantAccount(base.BaseModel):
     mfo = db.Column(db.String(6), nullable=False)
     okpo = db.Column(db.String(8), nullable=False)
 
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'), nullable=False)
+
     def __init__(self, bank_name, checking_account, currency, mfo, okpo):
         self.bank_name = bank_name
         self.checking_account = checking_account
@@ -36,6 +38,8 @@ class MerchantInfo(base.BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(320))
     director_name = db.Column(db.String(100))
+
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, address=None, director_name=None):
         self.address = address
@@ -59,23 +63,9 @@ class Merchant(base.BaseModel):
     id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
     merchant_name = db.Column(db.String(32), nullable=False, unique=True)
 
-    merchant_account_id = db.Column(db.Integer, db.ForeignKey('merchant_account.id'), nullable=False)
-    merchant_account = db.relationship('MerchantAccount',
-                                       backref=db.backref('merchant', uselist=False, lazy='joined'),
-                                       cascade='all, delete-orphan',
-                                       single_parent=True)
-
-    merchant_info_id = db.Column(db.Integer, db.ForeignKey('merchant_info.id'), nullable=False)
-    merchant_info = db.relationship('MerchantInfo',
-                                    backref=db.backref('merchant', uselist=False, lazy='joined'),
-                                    cascade='all, delete-orphan',
-                                    single_parent=True)
-
-    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User',
-                           backref=db.backref('merchant', uselist=False, lazy='joined'),
-                           cascade='all, delete-orphan',
-                           single_parent=True)
+    merchant_account = db.relationship('MerchantAccount', backref='merchant', uselist=False, lazy='joined')
+    merchant_info = db.relationship('MerchantInfo', backref='merchant', uselist=False, lazy='joined')
+    user = db.relationship('User', backref='merchant', uselist=False, lazy='joined')
 
     managers = db.relationship('Manager', backref="merchant")
     stores = db.relationship('Store', backref="merchant")

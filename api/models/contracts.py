@@ -55,3 +55,6 @@ class PaySysContract(AbstractContract):
 
     def __repr__(self):
         return '<PaySys contract %r>'.format(self.id)
+
+
+# TODO: remove contracts when model removed

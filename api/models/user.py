@@ -33,6 +33,9 @@ class User(base.BaseModel):
 
     created = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(tz=pytz.utc))
 
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'))
+    manager_id = db.Column(db.String, db.ForeignKey('manager.id', ondelete='CASCADE'))
+
     def __init__(self, username, password='', enabled=False,
                  first_name=None, last_name=None, email=None, phone=None, notify=None):
         self.username = username

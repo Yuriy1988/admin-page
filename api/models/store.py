@@ -32,6 +32,8 @@ class StoreSettings(base.BaseModel):
     failure_url = db.Column(db.String(255), nullable=False)
     commission_pct = db.Column(db.Numeric, nullable=False)
 
+    store_id = db.Column(db.String, db.ForeignKey('store.id', ondelete='CASCADE'), nullable=False)
+
     def __init__(self, sign_algorithm, succeed_url, failure_url, commission_pct):
         self.sign_algorithm = sign_algorithm
         self.succeed_url = succeed_url
@@ -55,10 +57,9 @@ class Store(base.BaseModel):
     logo = db.Column(db.String(255))
     show_logo = db.Column(db.Boolean, default=False)
 
-    store_settings_id = db.Column(db.Integer, db.ForeignKey('store_settings.id'), nullable=False)
-    store_settings = db.relationship('StoreSettings', backref=db.backref('store', uselist=False, lazy='joined'))
+    store_settings = db.relationship('StoreSettings', backref='store', uselist=False, lazy='joined')
 
-    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, store_name, store_url, store_settings, merchant_id,
                  category=None, description=None, logo=None, show_logo=False):
@@ -98,8 +99,8 @@ class StorePaySys(base.BaseModel):
     __tablename__ = 'store_paysys'
 
     id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    store_id = db.Column(db.String, db.ForeignKey('store.id'), nullable=False)
-    paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id'), nullable=False)
+    store_id = db.Column(db.String, db.ForeignKey('store.id', ondelete='CASCADE'), nullable=False)
+    paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id', ondelete='CASCADE'), nullable=False)
     allowed = db.Column(db.Boolean, default=False)
     # unique together
     __table_args__ = (db.UniqueConstraint('store_id', 'paysys_id', name='_store_paysys_unique'),)
@@ -111,6 +112,9 @@ class StorePaySys(base.BaseModel):
 
     def __repr__(self):
         return '<Store Payment System %r>' % self.id
+
+
+# TODO: remove logo file when Store removed
 
 
 def on_store_created(sender, changes):

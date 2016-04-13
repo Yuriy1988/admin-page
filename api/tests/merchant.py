@@ -1,7 +1,5 @@
-import unittest
-
 from api.tests import base
-from api.models import Merchant, MerchantAccount, MerchantInfo
+from api.models import Merchant, MerchantAccount, MerchantInfo, MerchantContract
 
 __author__ = 'Kostel Serhii'
 
@@ -398,7 +396,6 @@ class TestMerchant(base.BaseTestCase):
         status, body = self.delete('/merchants/%s' % merchant_id)
         self.assertEqual(status, 200)
 
-    @unittest.skip("Repair delete orphan!")
     def test_delete_merchant_child_models(self):
         merchant = self.create_merchant(self.get_merchant())
         merchant_id = merchant.id
@@ -416,6 +413,9 @@ class TestMerchant(base.BaseTestCase):
 
         deleted_merchant_info_model = MerchantInfo.query.get(merchant_info_id)
         self.assertIsNone(deleted_merchant_info_model)
+
+        deleted_merchant_contracts = MerchantContract.query.filter_by(merchant_id=merchant_id).all()
+        self.assertListEqual(deleted_merchant_contracts, [])
 
     def test_delete_merchant_not_found(self):
         self.create_merchant(self.get_merchant())

@@ -1,5 +1,3 @@
-import unittest
-
 from api.tests import base
 from api.models import User
 
@@ -243,7 +241,6 @@ class TestUser(base.BaseTestCase):
 
     # DELETE /merchants/<merchant_id> (user delete, when merchant deleted)
 
-    @unittest.skip("Repair delete orphan!")
     def test_delete_merchant_user_deleted(self):
         merchant_model = self.create_merchant(self.get_merchant())
         merchant_id = merchant_model.id

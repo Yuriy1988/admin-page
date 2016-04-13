@@ -1,5 +1,5 @@
 from api.tests import base
-from api.models import StorePaySys, PaymentSystem
+from api import models
 
 __author__ = 'Kostel Serhii'
 
@@ -62,6 +62,24 @@ class TestStore(base.BaseTestCase):
 
     # DELETE /stores/<store_id>
 
+    # TODO: add more delete tests
+
+    def test_delete_store(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        store_id = store.id
+        store_settings_id = store.store_settings.id
+
+        status, body = self.delete('/stores/%s' % store_id)
+        self.assertEqual(status, 200)
+
+        deleted_store = models.Store.query.get(store_id)
+        deleted_store_settings = models.StoreSettings.query.get(store_settings_id)
+        deleted_store_paysys = models.StorePaySys.query.filter_by(store_id=store_id).all()
+        self.assertIsNone(deleted_store)
+        self.assertIsNone(deleted_store_settings)
+        self.assertListEqual(deleted_store_paysys, [])
+
 
 class TestStorePaySys(base.BaseTestCase):
 
@@ -82,7 +100,7 @@ class TestStorePaySys(base.BaseTestCase):
 
     def _store_paysys(self, paysys_id='VISA_MASTER'):
         self.activate_payment_system(paysys_id)
-        store_paysys = StorePaySys.query.filter_by(store_id=self.store_id, paysys_id=paysys_id).first()
+        store_paysys = models.StorePaySys.query.filter_by(store_id=self.store_id, paysys_id=paysys_id).first()
         return store_paysys
 
     # GET /stores/<store_id>/store_paysys
@@ -92,8 +110,8 @@ class TestStorePaySys(base.BaseTestCase):
         store_dict['store_name'] = 'New store'
         store = self.create_store(store_dict, self.merchant_id)
 
-        paysys = PaymentSystem.query.all()
-        store_paysys = StorePaySys.query.filter_by(store_id=store.id).all()
+        paysys = models.PaymentSystem.query.all()
+        store_paysys = models.StorePaySys.query.filter_by(store_id=store.id).all()
 
         self.assertEqual(len(store_paysys), len(paysys))
         self.assertSetEqual(set(st.paysys_id for st in store_paysys), set(ps.id for ps in paysys))
@@ -158,13 +176,13 @@ class TestStorePaySys(base.BaseTestCase):
         self.assertDictEqual(body, {})
 
     def test_put_store_paysys_update_activated_paysys_only(self):
-        store_paysys = StorePaySys.query.filter_by(store_id=self.store_id, paysys_id='VISA_MASTER').first()
+        store_paysys = models.StorePaySys.query.filter_by(store_id=self.store_id, paysys_id='VISA_MASTER').first()
         self.assertFalse(store_paysys.allowed)
 
         status, body = self.put('/store_paysys/%s' % store_paysys.id, {'allowed': True})
         self.assertEqual(status, 400)
 
-        store_paysys = StorePaySys.query.filter_by(store_id=self.store_id, paysys_id='VISA_MASTER').first()
+        store_paysys = models.StorePaySys.query.filter_by(store_id=self.store_id, paysys_id='VISA_MASTER').first()
         self.assertFalse(store_paysys.allowed)
 
     def test_put_store_paysys_not_update_read_only_fields(self):
