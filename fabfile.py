@@ -74,6 +74,9 @@ def deploy():
         run('tar --extract --verbose --file {build_name}'.format(build_name=build_name))
         run('rm {build_name}'.format(build_name=build_name))
 
+    # restart
+    restart()
+
 
 # ----- Set Environment -----
 
@@ -117,6 +120,10 @@ def push_key(key_file='~/.ssh/id_rsa.pub'):
 
 def setup_supervisor():
     sudo('apt-get install -y supervisor')
+
+    # To run supervisorctl without root (sudo) do:
+    # 1. add chown=$USER:$USER into [unix_http_server] section in /etc/supervisor/supervisord.conf
+    # 2. sudo service supervisor restart
 
     config_file = '/tmp/xopay-admin.conf'
     create_config(config_file, 'server/xopay-admin.conf.supervisor.templ')
@@ -187,24 +194,23 @@ def update():
 
 @task
 def start():
-    sudo('supervisorctl start {supervisor_task}'.format(**env))
+    run('supervisorctl start {supervisor_task}'.format(**env))
     status()
 
 
 @task
 def stop():
-    sudo('supervisorctl stop {supervisor_task}'.format(**env))
+    run('supervisorctl stop {supervisor_task}'.format(**env))
     status()
 
 
 @task
 def restart():
-    sudo('supervisorctl restart {supervisor_task}'.format(**env))
+    run('supervisorctl restart {supervisor_task}'.format(**env))
     status()
 
 
 @task
 def status():
-    sudo("supervisorctl status")
-
+    run("supervisorctl status")
 
