@@ -1,4 +1,4 @@
-from api import db
+from api import db, utils
 from api.models import base, enum
 
 __author__ = 'Omelchenko Daniel'
@@ -40,6 +40,11 @@ class MerchantContract(AbstractContract):
         return '<Merchant contract %r>'.format(self.id)
 
 
+@base.on_model_event(MerchantContract, 'after_delete')
+def delete_contract_doc_url_media_file(merchant_contract):
+    utils.remove_media_file(merchant_contract.contract_doc_url)
+
+
 class PaySysContract(AbstractContract):
 
     __tablename__ = 'paysys_contract'
@@ -59,4 +64,6 @@ class PaySysContract(AbstractContract):
         return '<PaySys contract %r>'.format(self.id)
 
 
-# TODO: remove contracts when model removed
+@base.on_model_event(PaySysContract, 'after_delete')
+def delete_contract_doc_url_media_file(paysys_contract):
+    utils.remove_media_file(paysys_contract.contract_doc_url)

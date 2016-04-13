@@ -3,7 +3,7 @@ import uuid
 import binascii
 from copy import deepcopy
 
-from api import db
+from api import db, utils
 from api.models import base, enum, PaymentSystem
 
 __author__ = 'Kostel Serhii'
@@ -113,13 +113,19 @@ class StorePaySys(base.BaseModel):
         return '<Store Payment System %r>' % self.id
 
 
-# TODO: remove logo file when Store removed
-
 @base.on_model_event(Store, 'before_insert')
 def create_store_paysys(store):
-    """ Create store paysys when store created. """
+    """
+    Create store paysys when store created.
+    """
     paysys_id_list = db.session.query(PaymentSystem.id).all()
+
     for paysys_id, in paysys_id_list:
-        print('Add payment systems %s to store %s' % (paysys_id, store.id))
+        # print('Add payment systems %s to store %s' % (paysys_id, store.id))
         sps = StorePaySys(store.id, paysys_id, allowed=False)
         db.session.add(sps)
+
+
+@base.on_model_event(Store, 'after_delete')
+def delete_logo_media_file(store):
+    utils.remove_media_file(store.logo)

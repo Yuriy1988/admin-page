@@ -28,14 +28,14 @@ def upload_media_file(allowed_extensions, upload_subdir):
         err_msg = 'File extension must be one of: {extensions}'.format(extensions=', '.join(allowed_extensions))
         raise ValidationError(err_msg)
 
-    upload_file_dir = os.path.join(app.config['UPLOAD_BASE_FOLDER'], upload_subdir)
+    upload_file_dir = os.path.join(app.config['MEDIA_BASE_FOLDER'], upload_subdir)
     os.makedirs(upload_file_dir, exist_ok=True)
 
     new_filename = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(64)) + extension
     upload_file_path = os.path.join(upload_file_dir, new_filename)
     file.save(upload_file_path)
 
-    media_link_url = upload_file_path.replace(app.config['UPLOAD_BASE_FOLDER'], app.config['UPLOAD_BASE_URL'])
+    media_link_url = upload_file_path.replace(app.config['MEDIA_BASE_FOLDER'], app.config['MEDIA_BASE_URL'])
     return media_link_url
 
 
@@ -46,10 +46,10 @@ def remove_media_file(media_link_url):
     :param media_link_url: local media file url
     :return True/False - removed or not
     """
-    if not media_link_url.startswith(app.config['UPLOAD_BASE_URL']):
+    if not media_link_url.startswith(app.config['MEDIA_BASE_URL']):
         return False
 
-    media_file_path = media_link_url.replace(app.config['UPLOAD_BASE_URL'], app.config['UPLOAD_BASE_FOLDER'])
+    media_file_path = media_link_url.replace(app.config['MEDIA_BASE_URL'], app.config['MEDIA_BASE_FOLDER'])
     try:
         os.remove(media_file_path)
     except OSError:
