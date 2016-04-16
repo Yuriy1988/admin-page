@@ -7,7 +7,8 @@ DB_PASSWORD=UC4EhhQ6HkwNn7qK
 DB_TEST_NAME=xopadmintestdb
 DB_TEST_USER=xopadmintest
 DB_TEST_PASSWORD=test123
-	
+
+
 # ========== Linux ==========
 
 
@@ -112,7 +113,7 @@ runserver:
 
 # ========== MacOS ==========
 
-db_install_mac:
+mac_db_install:
 	brew install postgresql
 	sudo PATH=$PATH:/usr/pgsql-9.5.1/bin/ pip install psycopg2
 	sudo -u postgres psql -c "CREATE USER $(DB_USER) WITH PASSWORD '$(DB_PASSWORD)'"
