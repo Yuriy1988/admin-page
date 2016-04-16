@@ -2,12 +2,12 @@ server {{
     listen       {nginx_port};
     server_name  {host};
 
-	set $XOPAY_BASE /var/www/xopay
+    set $XOPAY_BASE /var/www/xopay;
 
-	set $ADMIN_BASE $XOPAY_BASE/admin
+    set $ADMIN_BASE $XOPAY_BASE/admin;
     set $ADMIN_STATIC $ADMIN_BASE/frontend/static/admin;
 
-    set $CLIENT_BASE $XOPAY_BASE/client
+    set $CLIENT_BASE $XOPAY_BASE/client;
     set $CLIENT_STATIC $CLIENT_BASE/frontend/static/client;
 
     location /static/admin/ {{
