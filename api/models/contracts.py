@@ -29,7 +29,7 @@ class MerchantContract(AbstractContract):
 
     __tablename__ = 'merchant_contract'
 
-    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, merchant_id, commission_fixed, commission_pct, currency, contract_doc_url,
                  active=True, filter="*"):
@@ -52,7 +52,7 @@ class PaySysContract(AbstractContract):
     contractor_name = db.Column(db.String(255))
     # TODO: add payment interface in model, schema, tests
     # payment_interface = db.Column(db.Enum(*enum.CURRENCY_ENUM, name='payment_interface'), nullable=False)
-    paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id'), nullable=False)
+    paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, paysys_id, commission_fixed, commission_pct, contractor_name, currency, contract_doc_url,
                  active=True, filter="*"):

@@ -54,7 +54,7 @@ class Merchant(base.BaseModel):
     Merchant model.
     Has One-To-One connection to MerchantAccount, MerchantInfo and User models.
     Use 'joined' connection, that load current model and one-to-one models in a single request.
-    Use 'cascade delete-orphan', that delete one-to-one models when current model deleted, or
+    Use ondelete='CASCADE', that delete one-to-one models when current model deleted, or
     one-to-one model lose his parent.
     """
 

@@ -15,7 +15,7 @@ class Manager(base.BaseModel):
 
     user = db.relationship('User', backref='manager', uselist=False, lazy='joined')
 
-    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id'), nullable=False)
+    merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, user, merchant_id):
         self.user = user
