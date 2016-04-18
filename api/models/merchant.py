@@ -1,4 +1,3 @@
-import uuid
 from copy import deepcopy
 
 from api import db
@@ -60,7 +59,7 @@ class Merchant(base.BaseModel):
 
     __tablename__ = 'merchant'
 
-    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String, primary_key=True, default=base.uuid_id)
     merchant_name = db.Column(db.String(32), nullable=False, unique=True)
 
     merchant_account = db.relationship('MerchantAccount', backref='merchant', uselist=False, lazy='joined')

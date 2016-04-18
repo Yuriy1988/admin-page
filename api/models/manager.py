@@ -1,4 +1,3 @@
-import uuid
 from copy import deepcopy
 
 from api import db
@@ -11,7 +10,7 @@ class Manager(base.BaseModel):
 
     __tablename__ = 'manager'
 
-    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String, primary_key=True, default=base.uuid_id)
 
     user = db.relationship('User', backref='manager', uselist=False, lazy='joined')
 

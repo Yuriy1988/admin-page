@@ -1,5 +1,4 @@
 import os
-import uuid
 import binascii
 from copy import deepcopy
 
@@ -47,7 +46,7 @@ class Store(base.BaseModel):
 
     __tablename__ = 'store'
 
-    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String, primary_key=True, default=base.uuid_id)
     store_name = db.Column(db.String(32), nullable=False)
     store_url = db.Column(db.String(255), nullable=False)
 
@@ -97,7 +96,7 @@ class StorePaySys(base.BaseModel):
 
     __tablename__ = 'store_paysys'
 
-    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String, primary_key=True, default=base.uuid_id)
     store_id = db.Column(db.String, db.ForeignKey('store.id', ondelete='CASCADE'), nullable=False)
     paysys_id = db.Column(db.String, db.ForeignKey('payment_systems.id', ondelete='CASCADE'), nullable=False)
     allowed = db.Column(db.Boolean, default=False)

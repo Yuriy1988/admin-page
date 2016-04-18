@@ -1,6 +1,3 @@
-import uuid
-import pytz
-from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
 
 from api import db
@@ -18,7 +15,7 @@ class User(base.BaseModel):
 
     __tablename__ = 'user'
 
-    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String, primary_key=True, default=base.uuid_id)
     username = db.Column(db.String(80), nullable=False, unique=True, index=True)
     _password_hash = db.Column('password_hash', db.String(255), nullable=False)
 
@@ -31,7 +28,7 @@ class User(base.BaseModel):
 
     enabled = db.Column(db.Boolean, nullable=False, default=False)
 
-    created = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(tz=pytz.utc))
+    created = db.Column(db.DateTime(timezone=True), server_default=base.now_dt)
 
     merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'))
     manager_id = db.Column(db.String, db.ForeignKey('manager.id', ondelete='CASCADE'))
