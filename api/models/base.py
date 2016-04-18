@@ -1,6 +1,5 @@
 import uuid
 import pytz
-from datetime import datetime
 from collections import defaultdict
 from sqlalchemy.inspection import inspect
 from flask_sqlalchemy import before_models_committed, models_committed
@@ -149,6 +148,5 @@ def on_model_event(model_class, event_type):
 def uuid_id():
     return str(uuid.uuid4())
 
-
-def now_dt():
-    return datetime.now(tz=pytz.utc)
+# use only as server_default=base.now_dt
+now_dt = db.func.now(tz=pytz.utc)
