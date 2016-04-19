@@ -1,4 +1,5 @@
 from copy import deepcopy
+from flask import json
 
 from api.tests import base
 from api.schemas.base import deep_diff
@@ -65,3 +66,29 @@ class TestDeepDiffFunction(base.BaseTestCase):
         new = deepcopy(previous)
         new['b'] = 84
         self.assertDictEqual(deep_diff(new, previous), {'b': 84, 'e': list(range(5))})
+
+
+class TestGetJson(base.BaseTestCase):
+
+    def test_content_type_missing(self):
+        response = self.client.post(self.api_base + '/merchants', data=json.dumps(self.get_merchant()))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.json)
+
+    def test_body_missing(self):
+        headers = {"Content-Type": "application/json"}
+
+        response = self.client.post(self.api_base + '/merchants', data=None, headers=headers)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.json)
+
+        response = self.client.post(self.api_base + '/merchants', data='', headers=headers)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.json)
+
+    def test_broken_json(self):
+        headers = {"Content-Type": "application/json"}
+
+        response = self.client.post(self.api_base + '/merchants', data='{"bad json": 69', headers=headers)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.json)
