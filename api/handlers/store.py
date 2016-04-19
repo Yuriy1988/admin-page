@@ -96,6 +96,11 @@ def store_upload_logo(store_id):
     return jsonify(logo=store.logo)
 
 
+@app.route('/api/admin/dev/stores/<store_id>/exists', methods=['GET'])
+def store_exists(store_id):
+    return jsonify(exists=Store.exists(store_id))
+
+
 # Store Payment System
 
 @app.route('/api/admin/dev/stores/<store_id>/store_paysys', methods=['GET'])

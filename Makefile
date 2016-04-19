@@ -47,6 +47,7 @@ db_create: db_psql_create db_test_create db_update
 
 db_remove:
 	rm -rf migrations
+	rm -rf media/admin/*
 	sudo -u postgres dropdb -e --if-exists $(DB_NAME)
 	sudo -u postgres dropuser -e --if-exists $(DB_USER)
 

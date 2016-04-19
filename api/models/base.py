@@ -12,7 +12,7 @@ __author__ = 'Kostel Serhii'
 def _first_level_dict(obj, data):
     if not data:
         return dict()
-    return dict((key, value) for key, value in data.items() if hasattr(obj, key) and not isinstance(value, (dict, list)))
+    return dict((key, value) for key, value in data.items() if hasattr(obj, key) and not isinstance(value, dict))
 
 
 class BaseModel(db.Model):
@@ -148,5 +148,5 @@ def on_model_event(model_class, event_type):
 def uuid_id():
     return str(uuid.uuid4())
 
-# use only as server_default=base.now_dt
+# use only as server_default=base.now_dt or onupdate=base.now_dt
 now_dt = db.func.now(tz=pytz.utc)
