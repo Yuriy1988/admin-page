@@ -80,6 +80,23 @@ class TestStore(base.BaseTestCase):
         self.assertIsNone(deleted_store_settings)
         self.assertListEqual(deleted_store_paysys, [])
 
+    # GET /stores/<store_id>/exists
+
+    def test_get_store_exists(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+
+        status, body = self.get('/stores/%s/exists' % store.id)
+
+        self.assertEqual(status, 200)
+        self.assertDictEqual(body, {'exists': True})
+
+    def test_get_store_not_exists(self):
+        status, body = self.get('/stores/%s/exists' % 'STORE_UP')
+
+        self.assertEqual(status, 200)
+        self.assertDictEqual(body, {'exists': False})
+
 
 class TestStorePaySys(base.BaseTestCase):
 
