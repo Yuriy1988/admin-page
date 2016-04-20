@@ -3,7 +3,7 @@ from flask import request, jsonify, Response
 from api import app, db, utils
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant, Store, StorePaySys, PaymentSystem
-from api.schemas import StoreSchema, StorePaySysSchema
+from api.schemas import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema
 
 __author__ = 'Kostel Serhii'
 
@@ -108,7 +108,14 @@ def store_payment_systems_list(store_id):
     if not Store.exists(store_id):
         raise NotFoundError()
 
+    request_schema = StorePaySysRequestSchema()
+    data, errors = request_schema.load(request.args)
+    if errors:
+        raise ValidationError(errors=errors)
+
     query = StorePaySys.query.filter_by(store_id=store_id)
+    if 'allowed' in data:
+        query = query.filter_by(allowed=data['allowed'])
     query = PaymentSystem.filter_allowed(query.join(PaymentSystem))
     store_paysys = query.all()
 

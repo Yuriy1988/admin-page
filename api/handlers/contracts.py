@@ -116,7 +116,6 @@ def payment_system_contracts_list(paysys_id):
 
     request_schema = ContractRequestSchema()
     data, errors = request_schema.load(request.args)
-
     if errors:
         raise ValidationError(errors=errors)
 

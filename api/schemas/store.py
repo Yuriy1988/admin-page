@@ -38,3 +38,8 @@ class StorePaySysSchema(base.BaseSchema):
     store_id = fields.Str(dump_only=True)
     paysys_id = fields.Str(dump_only=True)
     allowed = fields.Boolean(default=False)
+
+
+class StorePaySysRequestSchema(base.BaseSchema):
+
+    allowed = fields.Boolean(allow_none=True)

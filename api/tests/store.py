@@ -162,6 +162,34 @@ class TestStorePaySys(base.BaseTestCase):
             self.assertFalse(store_paysys.pop('allowed'))
             self.assertDictEqual(store_paysys, {})
 
+    def test_get_store_paysys_allowed_arg_filter(self):
+        self.activate_all_paysys()
+
+        status, body = self.get('/stores/%s/store_paysys' % self.store_id, query_args={'allowed': True})
+        self.assertEqual(status, 200)
+        self.assertListEqual(body['store_paysys'], [])
+
+        store_paysys = self._store_paysys('VISA_MASTER')
+        store_paysys.allowed = True
+        self.db.commit()
+
+        status, body = self.get('/stores/%s/store_paysys' % self.store_id, query_args={'allowed': True})
+        self.assertEqual(status, 200)
+        self.assertEqual(len(body['store_paysys']), 1)
+        self.assertEqual(body['store_paysys'][0]['paysys_id'], 'VISA_MASTER')
+
+        status, body = self.get('/stores/%s/store_paysys' % self.store_id, query_args={'allowed': False})
+        self.assertEqual(status, 200)
+        not_allowed_paysys_id = set(self.PAYSYS_ID)
+        not_allowed_paysys_id.remove('VISA_MASTER')
+        self.assertSetEqual(set(sps['paysys_id'] for sps in body['store_paysys']), not_allowed_paysys_id)
+
+    def test_get_store_paysys_allowed_arg_valid(self):
+        self.activate_all_paysys()
+
+        status, body = self.get('/stores/%s/store_paysys' % self.store_id, query_args={'allowed': 'NOT GOOD'})
+        self.assertEqual(status, 400)
+
     def test_get_store_paysys_not_found(self):
         for store_id in ['00000000-1111-2222-3333-444444444444', '0', '1', 'test', 'null', '']:
             status, body = self.get('/stores/%s/store_paysys' % store_id)
