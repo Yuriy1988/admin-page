@@ -73,8 +73,9 @@ def merchant_contract_update(merchant_contract_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    contract.update(data)
-    db.session.commit()
+    if data:
+        contract.update(data)
+        db.session.commit()
 
     result = schema.dump(contract)
     return jsonify(result.data)
@@ -176,8 +177,9 @@ def payment_system_contract_update(paysys_contract_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    contract.update(data)
-    db.session.commit()
+    if data:
+        contract.update(data)
+        db.session.commit()
 
     result = schema.dump(contract)
     return jsonify(result.data)

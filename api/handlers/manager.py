@@ -61,8 +61,9 @@ def manager_update(manager_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    manager.update(data)
-    db.session.commit()
+    if data:
+        manager.update(data)
+        db.session.commit()
 
     result = schema.dump(manager)
     return jsonify(result.data)

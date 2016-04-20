@@ -63,8 +63,9 @@ def store_update(store_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    store.update(data)
-    db.session.commit()
+    if data:
+        store.update(data)
+        db.session.commit()
 
     result = schema.dump(store)
     return jsonify(result.data)
@@ -139,8 +140,9 @@ def store_payment_system_update(store_paysys_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    store_paysys.update(data)
-    db.session.commit()
+    if data:
+        store_paysys.update(data)
+        db.session.commit()
 
     schema = StorePaySysSchema()
     result = schema.dump(store_paysys)

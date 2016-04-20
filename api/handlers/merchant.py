@@ -54,8 +54,9 @@ def merchant_update(merchant_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    merchant.update(data)
-    db.session.commit()
+    if data:
+        merchant.update(data)
+        db.session.commit()
 
     result = schema.dump(merchant)
     return jsonify(result.data)
