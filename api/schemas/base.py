@@ -15,7 +15,7 @@ def deep_diff(new, previous):
     :param previous: original dict, that will be subtracted from initial
     :return: difference dict between initial and origin
     """
-    if not previous:
+    if not previous or not isinstance(new, dict):
         return new
 
     flat = lambda obj: not isinstance(obj[1], (dict, list))
