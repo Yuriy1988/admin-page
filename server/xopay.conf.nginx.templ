@@ -1,6 +1,10 @@
 server {{
-    listen       {nginx_port};
+    listen       443 ssl;
     server_name  {host};
+
+	ssl          on;
+	ssl_certificate      /etc/ssl/certs/xopay.digitaloutlooks.com.crt;
+	ssl_certificate_key  /etc/ssl/private/xopay.digitaloutlooks.com.key;
 
     set $XOPAY_BASE /var/www/xopay;
 
