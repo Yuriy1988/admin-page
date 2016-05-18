@@ -13,6 +13,4 @@ flask-testing==0.4.2
 flask-migrate==1.8.0
 flask-script==2.0.5
 
-flask-wtf==0.12
-flask-login
 # apispec
