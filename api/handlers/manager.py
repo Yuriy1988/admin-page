@@ -1,6 +1,6 @@
 from flask import request, jsonify, Response
 
-from api import app, db
+from api import api_v1, db
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant, Manager
 from api.schemas import ManagerSchema
@@ -8,7 +8,7 @@ from api.schemas import ManagerSchema
 __author__ = 'Kostel Serhii'
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>/managers', methods=['GET'])
+@api_v1.route('/merchants/<merchant_id>/managers', methods=['GET'])
 def merchant_managers_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -20,7 +20,7 @@ def merchant_managers_list(merchant_id):
     return jsonify(managers=result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>/managers', methods=['POST'])
+@api_v1.route('/merchants/<merchant_id>/managers', methods=['POST'])
 def merchant_manager_create(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -38,7 +38,7 @@ def merchant_manager_create(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/managers/<manager_id>', methods=['GET'])
+@api_v1.route('/managers/<manager_id>', methods=['GET'])
 def manager_detail(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -50,7 +50,7 @@ def manager_detail(manager_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/managers/<manager_id>', methods=['PUT'])
+@api_v1.route('/managers/<manager_id>', methods=['PUT'])
 def manager_update(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -69,7 +69,7 @@ def manager_update(manager_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/managers/<manager_id>', methods=['DELETE'])
+@api_v1.route('/managers/<manager_id>', methods=['DELETE'])
 def manager_delete(manager_id):
     delete_count = Manager.query.filter_by(id=manager_id).delete()
     if delete_count == 0:

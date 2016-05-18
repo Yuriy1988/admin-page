@@ -5,6 +5,7 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 from uuid import uuid4
 from datetime import datetime
+from functools import wraps
 from flask import request
 
 from api import app
@@ -15,6 +16,55 @@ __author__ = 'Kostel Serhii'
 
 _log = logging.getLogger('auth')
 _redis_auth = redis.StrictRedis(db=1)
+
+
+# Auth decorator
+
+def _check_authorization(access_groups):
+    """
+    Check user authorisation and permissions.
+    Save information about token into Flask.g storage.
+    If access not allowed - raise api exceptions.
+    :param access_groups: user group or list of groups,
+            that has permissions to make request for current rule
+    """
+    print('Headers: %s', request.headers.get('Authorization'))
+    print('Enabled: %r', access_groups)
+
+
+def auth(access_groups=None):
+    """
+    A decorator that is used to check user authorization
+    for access groups only::
+
+        @auth
+        def index():
+            return 'Hi to All'
+
+        @auth('admin'):
+        def secret_code():
+            return 42
+
+        @auth(['admin', 'client'])
+        def registered_only():
+            return 'Hello User!'
+
+    :param access_groups: user group or list of groups,
+            that has permissions to make request for current rule.
+            If None - do not check permission.
+    """
+    def auth_decorator(handler_method):
+
+        @wraps(handler_method)
+        def _handle_with_auth(*args, **kwargs):
+
+            _check_authorization(access_groups)
+
+            return handler_method(*args, **kwargs)
+
+        return _handle_with_auth if access_groups is not None else handler_method
+
+    return auth_decorator
 
 
 # Session

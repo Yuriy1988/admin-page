@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from api import app
+from api import api_v1
 from api.errors import ValidationError
 from api.models import User, Merchant
 
@@ -19,11 +19,11 @@ def _unique_checker(field_models):
     raise ValidationError(message='Wrong request argument')
 
 
-@app.route('/api/admin/dev/unique/users', methods=['GET'])
+@api_v1.route('/unique/users', methods=['GET'])
 def unique_user():
     return _unique_checker({'username': User})
 
 
-@app.route('/api/admin/dev/unique/merchants', methods=['GET'])
+@api_v1.route('/unique/merchants', methods=['GET'])
 def unique_merchant():
     return _unique_checker({'merchant_name': Merchant})

@@ -1,6 +1,6 @@
 from flask import request, jsonify, Response
 
-from api import app, db
+from api import api_v1, db
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant
 from api.schemas import MerchantSchema
@@ -8,7 +8,7 @@ from api.schemas import MerchantSchema
 __author__ = 'Kostel Serhii'
 
 
-@app.route('/api/admin/dev/merchants', methods=['GET'])
+@api_v1.route('/merchants', methods=['GET'])
 def merchants_list():
     merchants = Merchant.query.all()
 
@@ -17,7 +17,7 @@ def merchants_list():
     return jsonify(merchants=result.data)
 
 
-@app.route('/api/admin/dev/merchants', methods=['POST'])
+@api_v1.route('/merchants', methods=['POST'])
 def merchant_create():
     schema = MerchantSchema()
     data, errors = schema.load(request.get_json())
@@ -31,7 +31,7 @@ def merchant_create():
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>', methods=['GET'])
+@api_v1.route('/merchants/<merchant_id>', methods=['GET'])
 def merchant_detail(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -43,7 +43,7 @@ def merchant_detail(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>', methods=['PUT'])
+@api_v1.route('/merchants/<merchant_id>', methods=['PUT'])
 def merchant_update(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -62,7 +62,7 @@ def merchant_update(merchant_id):
     return jsonify(result.data)
 
 
-@app.route('/api/admin/dev/merchants/<merchant_id>', methods=['DELETE'])
+@api_v1.route('/merchants/<merchant_id>', methods=['DELETE'])
 def merchant_delete(merchant_id):
     delete_count = Merchant.query.filter_by(id=merchant_id).delete()
     if delete_count == 0:

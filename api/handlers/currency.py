@@ -2,7 +2,7 @@ import pytz
 from datetime import datetime, timedelta
 from flask import jsonify, request, Response
 
-from api import app, db
+from api import api_v1, db
 from api.errors import ValidationError
 from api.models import Currency
 from api.schemas import CurrencySchema, CurrencyRequestSchema
@@ -10,7 +10,7 @@ from api.schemas import CurrencySchema, CurrencyRequestSchema
 __author__ = 'Omelchenko Daniel, Kostel Serhii'
 
 
-@app.route('/api/admin/dev/currency/current', methods=['GET'])
+@api_v1.route('/currency/current', methods=['GET'])
 def currency_current():
     request_schema = CurrencyRequestSchema()
     data, errors = request_schema.load(request.args)
@@ -33,7 +33,7 @@ def currency_current():
     return jsonify(current=result.data)
 
 
-@app.route('/api/admin/dev/currency/history', methods=['GET'])
+@api_v1.route('/currency/history', methods=['GET'])
 def currency_history():
     request_schema = CurrencyRequestSchema()
     data, errors = request_schema.load(request.args)
@@ -55,7 +55,7 @@ def currency_history():
     return jsonify(history=result.data)
 
 
-@app.route('/api/admin/dev/currency/update', methods=['POST'])
+@api_v1.route('/currency/update', methods=['POST'])
 def currency_update():
     """ Handler for currency daemon to update (add new record) information about currency. """
     data_json = request.get_json()
