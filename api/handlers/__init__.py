@@ -1,3 +1,4 @@
+from . import auth
 from . import constants
 from . import contracts
 from . import currency

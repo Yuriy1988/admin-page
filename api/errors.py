@@ -86,6 +86,13 @@ class ValidationError(BaseApiError):
 
 
 @_handle_api_error
+class UnauthorizedError(BaseApiError):
+
+    default_status_code = 401
+    default_message = 'Unauthorized'
+
+
+@_handle_api_error
 class ForbiddenError(BaseApiError):
 
     default_status_code = 403
@@ -97,6 +104,20 @@ class NotFoundError(BaseApiError):
 
     default_status_code = 404
     default_message = 'Not Found'
+
+
+@_handle_api_error
+class InternalServerError(BaseApiError):
+
+    default_status_code = 500
+    default_message = 'Internal Server Error'
+
+
+@_handle_api_error
+class ServiceUnavailableError(BaseApiError):
+
+    default_status_code = 503
+    default_message = 'Service Unavailable'
 
 
 # Default Errors
@@ -125,4 +146,3 @@ def page_not_found(error):
 @app.errorhandler(500)
 def error_internal_server_error(error):
     return _handle_default_error(error, 500, with_traceback=True)
-

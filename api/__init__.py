@@ -1,7 +1,6 @@
 import decimal
 from flask import Flask, json
 from flask_sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
 from werkzeug.contrib.fixers import ProxyFix
 
 from config import STATIC_FOLDER
@@ -25,10 +24,6 @@ class XOPayJSONEncoder(json.JSONEncoder):
         return super(XOPayJSONEncoder, self).default(obj)
 
 app.json_encoder = XOPayJSONEncoder
-
-lm = LoginManager()
-lm.init_app(app)
-lm.login_view = 'login'
 
 import api.handlers
 

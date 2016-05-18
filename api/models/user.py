@@ -59,3 +59,9 @@ class User(base.BaseModel):
 
     def is_enabled(self):
         return self.enabled
+
+    def get_full_name(self):
+        return ' '.join((self.first_name, self.last_name)).strip() or self.username
+
+    def get_groups(self):
+        return ['admin']

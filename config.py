@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 DEBUG = True
 
@@ -18,3 +19,10 @@ CSRF_ENABLED = True
 CSRF_SESSION_KEY = "mhe=d4#2xvb1348j%m+sn0d8ssdbjv18yi+f_w#&yd!+&4ic4)"
 
 SECRET_KEY = "ugGB0uH1cJTW=1L9Vs|8roMlFfFgsWD%NA|*WBpYQ3Uytr-6rImVk2Rp%BJ+"
+
+# TODO: generate AUTH_KEY for production and copy to every service
+AUTH_ALGORITHM = 'HS512'
+AUTH_KEY = 'PzYs2qLh}2$8uUJbBnWB800iYKe5xdYqItRNo7@38yW@tPDVAX}EV5V31*ZK78QS'
+
+AUTH_TOKEN_LIFE_TIME = timedelta(minutes=30)
+AUTH_SESSION_LIFE_TIME = timedelta(hours=24)
