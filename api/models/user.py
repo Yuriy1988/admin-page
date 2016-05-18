@@ -58,7 +58,7 @@ class User(base.BaseModel):
         return not self.check_password('')
 
     def is_enabled(self):
-        return self.enabled
+        return self.enabled and self.is_activated()
 
     def get_full_name(self):
         return ' '.join((self.first_name, self.last_name)).strip() or self.username

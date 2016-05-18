@@ -1,4 +1,4 @@
-from . import auth
+from . import auth_session
 from . import constants
 from . import contracts
 from . import currency
