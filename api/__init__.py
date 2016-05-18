@@ -1,5 +1,5 @@
 import decimal
-from flask import Flask, json
+from flask import Flask, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.contrib.fixers import ProxyFix
 
@@ -25,8 +25,25 @@ class XOPayJSONEncoder(json.JSONEncoder):
 
 app.json_encoder = XOPayJSONEncoder
 
+
 import api.handlers
+
 
 if app.config['DEBUG']:
     # enable only in debug mode. In production use nginx/apache for this purpose
-    import api.admin_page
+
+    @app.route('/admin/')
+    @app.route('/admin/<path:path>/')
+    def admin_page(path=None):
+        """
+        Return single page html for xopay admin
+        :param path: any valid url (used in frontend routing system)
+        :return: index html page
+        """
+        return app.send_static_file('admin/index.html')
+
+
+    @app.route('/')
+    def index():
+        """ Redirect from root to admin page """
+        return redirect(url_for('admin_page'))
