@@ -88,7 +88,10 @@ class Merchant(base.BaseModel):
 
         data['merchant_account'] = MerchantAccount.create(merchant_account_data)
         data['merchant_info'] = MerchantInfo.create(merchant_info_data)
-        data['user'] = user_model.User.create(user_data)
+
+        user = user_model.User.create(user_data)
+        user.add_to_group('merchant')
+        data['user'] = user
 
         merchant = super(Merchant, cls).create(data)
         return merchant

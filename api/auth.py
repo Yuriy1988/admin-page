@@ -136,7 +136,7 @@ def create_session(user_model):
     :param user_model:
     :return: dict with session information
     """
-    session_id = uuid4()
+    session_id = str(uuid4())
     session_life_time = app.config['AUTH_SESSION_LIFE_TIME']
 
     session_key = _get_key(session_id, user_model.id)
@@ -146,7 +146,7 @@ def create_session(user_model):
         user_id=user_model.id,
         user_name=user_model.get_full_name(),
         ip_addr=request.remote_addr,
-        groups=user_model.get_groups(),
+        groups=user_model.groups,
     )
 
     _log.info('Create session [%s]', session_key)

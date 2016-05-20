@@ -16,6 +16,8 @@ class TestUser(base.BaseTestCase):
         self.assertEqual(status, 200)
         self.assertIn('id', body['user'])
         body['user'].pop('id')
+        merchant['user']['groups'] = ['merchant']
+        merchant['user']['enabled'] = False     # password not set
         self.assertDictEqual(merchant['user'], body['user'])
 
     def test_post_merchant_user_partial_valid_response(self):
@@ -152,6 +154,7 @@ class TestUser(base.BaseTestCase):
 
         self.assertIn('id', body['user'])
         body['user'].pop('id')
+        merchant['user']['groups'] = ['merchant']
         self.assertDictEqual(merchant['user'], body['user'])
 
     def test_get_merchant_user_partial_valid_response(self):
@@ -251,3 +254,9 @@ class TestUser(base.BaseTestCase):
 
         user_model = User.query.get(user_id)
         self.assertIsNone(user_model)
+
+
+# TODO: add user enabled tests
+# TODO: empty group
+# TODO: not unique pair (user id, group)
+# TODO: group in response

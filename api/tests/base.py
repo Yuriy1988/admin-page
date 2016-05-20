@@ -156,6 +156,9 @@ class BaseTestCase(TestCase, TestDefaults):
         merchant_model = Merchant.create(merchant_dict)
         self.db.commit()
 
+        # Add password to make merchant enabled
+        merchant_model.user.set_password('password')
+
         return merchant_model
 
     def create_store(self, store_dict, merchant_id):

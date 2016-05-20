@@ -28,7 +28,9 @@ class Manager(base.BaseModel):
         data = deepcopy(data)
 
         user_data = data.pop('user', {})
-        data['user'] = user_model.User.create(user_data)
+        user = user_model.User.create(user_data)
+        user.add_to_group('manager')
+        data['user'] = user
 
         manager = super(Manager, cls).create(data)
         return manager

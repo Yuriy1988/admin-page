@@ -19,6 +19,9 @@ class TestManager(base.BaseTestCase):
         manager_model = Manager.create(manager_dict)
         self.db.commit()
 
+        # Add password to make manager enabled
+        manager_model.user.set_password('password')
+
         return manager_model
 
     # GET /merchants/<merchant_id>/managers

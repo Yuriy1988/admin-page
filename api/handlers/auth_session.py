@@ -22,7 +22,7 @@ def auth_login():
     if not user or not user.check_password(data['password']):
         raise api_err.UnauthorizedError('Wrong username or password')
 
-    if not user.is_enabled():
+    if not user.enabled:
         raise api_err.ForbiddenError('User is not enabled')
 
     session = auth.create_session(user)

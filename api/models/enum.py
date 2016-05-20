@@ -2,6 +2,7 @@
 
 __author__ = 'Kostel Serhii'
 
+USER_GROUP_ENUM = ('admin', 'system', 'merchant', 'manager')
 USER_NOTIFY_ENUM = ('EMAIL', 'PHONE', 'NONE')
 CURRENCY_ENUM = ('USD', 'RUB', 'UAH', 'EUR')
 SIGN_ALGORITHM_ENUM = ('MD5', 'SHA1',)
