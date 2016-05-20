@@ -26,3 +26,14 @@ AUTH_KEY = 'PzYs2qLh}2$8uUJbBnWB800iYKe5xdYqItRNo7@38yW@tPDVAX}EV5V31*ZK78QS'
 
 AUTH_TOKEN_LIFE_TIME = timedelta(minutes=30)
 AUTH_SESSION_LIFE_TIME = timedelta(hours=24)
+
+
+# Queue:
+QUEUE_HOST = '0.0.0.0'
+QUEUE_PORT = 5672
+QUEUE_USERNAME = 'xopay_rabbit'
+QUEUE_PASSWORD = '5lf01xiOFwyMLvQrkzz7'
+QUEUE_VIRTUAL_HOST = '/xopay'
+
+QUEUE_EMAIL='notify_email'
+QUEUE_SMS='notify_sms'

@@ -8,6 +8,7 @@ passlib==1.6.5
 marshmallow==2.6.0
 pyjwt==1.4.0
 redis==2.10.5
+pika==0.10.0
 
 flask==0.10.1
 flask-sqlalchemy==2.1
