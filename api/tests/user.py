@@ -25,7 +25,6 @@ class TestUser(base.BaseTestCase):
         merchant = self.get_merchant()
         merchant['user']['first_name'] = None
         merchant['user']['last_name'] = None
-        merchant['user']['email'] = None
         del merchant['user']['phone']
 
         status, body = self.post('/merchants', merchant)
@@ -35,7 +34,6 @@ class TestUser(base.BaseTestCase):
         self.assertIn('id', user)
         self.assertIsNone(user['first_name'])
         self.assertIsNone(user['last_name'])
-        self.assertIsNone(user['email'])
         self.assertIsNone(user['phone'])
 
     def test_post_merchant_user_created(self):
@@ -76,7 +74,7 @@ class TestUser(base.BaseTestCase):
 
     def test_post_merchant_user_missing_required_fields(self):
         merchant = self.get_merchant()
-        merchant['user'] = {'username': None, 'enabled': None, 'notify': None}
+        merchant['user'] = {'username': None, 'email': None, 'enabled': None, 'notify': None}
 
         status, body = self.post('/merchants', merchant)
         self.assertEqual(status, 400)
@@ -161,7 +159,6 @@ class TestUser(base.BaseTestCase):
         merchant = self.get_merchant()
         merchant['user']['first_name'] = None
         merchant['user']['last_name'] = None
-        merchant['user']['email'] = None
         del merchant['user']['phone']
 
         merchant_model = self.create_merchant(merchant, merchant_name='merchant_name')
@@ -173,7 +170,6 @@ class TestUser(base.BaseTestCase):
         self.assertIn('id', user)
         self.assertIsNone(user['first_name'])
         self.assertIsNone(user['last_name'])
-        self.assertIsNone(user['email'])
         self.assertIsNone(user['phone'])
 
     # PUT /merchants/<merchant_id> (user update, when merchant updated)

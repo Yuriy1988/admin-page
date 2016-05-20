@@ -137,7 +137,7 @@ class TestMerchant(base.BaseTestCase):
         merchant['merchant_name'] = None
         merchant['merchant_account'] = {"bank_name": None, "checking_account": None,
                                         "currency": None, "mfo": None, "okpo": None}
-        merchant['user'] = {'username': None, 'enabled': None}
+        merchant['user'] = {'username': None, 'email': None, 'enabled': None}
 
         status, body = self.post('/merchants', merchant)
         self.assertEqual(status, 400)

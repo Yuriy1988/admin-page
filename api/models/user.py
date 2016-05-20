@@ -1,6 +1,6 @@
 from passlib.apps import custom_app_context as pwd_context
 
-from api import db
+from api import db, auth
 from api.models import base, enum
 
 __author__ = 'Kostel Serhii'
@@ -45,13 +45,13 @@ class User(base.BaseModel):
     id = db.Column(db.String, primary_key=True, default=base.uuid_id)
     username = db.Column(db.String(80), nullable=False, unique=True, index=True)
     _password_hash = db.Column('password_hash', db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
 
     _groups = db.relationship('UserGroup', backref='user')
 
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
 
-    email = db.Column(db.String(255))
     phone = db.Column(db.String(16))
     notify = db.Column(db.Enum(*enum.USER_NOTIFY_ENUM, name='enum_user_notify'), nullable=False, default='NONE')
 
@@ -62,13 +62,14 @@ class User(base.BaseModel):
     merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'))
     manager_id = db.Column(db.String, db.ForeignKey('manager.id', ondelete='CASCADE'))
 
-    def __init__(self, username, password='', enabled=False,
-                 first_name=None, last_name=None, email=None, phone=None, notify=None):
+    def __init__(self, username, email, password='', enabled=False,
+                 first_name=None, last_name=None, phone=None, notify=None):
+        self.id = base.uuid_id()
         self.username = username
         self.set_password(password)
+        self.email = email
         self.first_name = first_name
         self.last_name = last_name
-        self.email = email
         self.phone = phone
         self.notify = notify
         self.enabled = enabled
@@ -77,6 +78,7 @@ class User(base.BaseModel):
         return '<User %r>' % self.username
 
     def set_password(self, password):
+        auth.remove_all_sessions(self.id)
         self._password_hash = pwd_context.encrypt(password)
 
     def check_password(self, password):
