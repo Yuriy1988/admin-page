@@ -17,6 +17,20 @@ _log = logging.getLogger('auth')
 _redis_auth = redis.StrictRedis(db=1)
 
 
+def _create_token(payload):
+    token = jwt.encode(payload, app.config['AUTH_KEY'], algorithm=app.config['AUTH_ALGORITHM'])
+    return token.decode('utf-8')
+
+
+def _datetime_to_timestamp(dt_obj):
+    """
+    Convert datetime object to UTC UNIX timestamp.
+    :param dt_obj: datetime object
+    :return int: UTC UNIX timestamp
+    """
+    return timegm(dt_obj.utctimetuple())
+
+
 # Auth decorator
 
 def _check_authorization(access_groups, verify=False):
@@ -54,23 +68,25 @@ def _check_authorization(access_groups, verify=False):
         _log.warning('Wrong token: %r', err)
         raise errors.UnauthorizedError('Wrong token')
 
-    session_exp = payload.get('session_exp', 0)
-    ip_addr = payload.get('ip_addr', '')
     groups = payload.get('groups', [])
     user_id = payload.get('user_id', '')
-
-    now = timegm(datetime.utcnow().utctimetuple())
-    if session_exp < now:
-        _log.debug('Session %s expired', payload.get('session_id'))
-        raise errors.UnauthorizedError('Session expired')
 
     if not (set(groups) & set(access_groups)):
         _log.warning('User %s not allowed to make such request. Need permissions: %r', user_id, access_groups)
         raise errors.ForbiddenError('Request forbidden for such role')
 
-    if ip_addr != request.remote_addr:
-        _log.warning('Wrong IP: %s. Token created for IP: %s', request.remote_addr, ip_addr)
-        raise errors.ForbiddenError('Request forbidden from another network')
+    if 'system' not in groups:
+        session_exp = payload.get('session_exp', 0)
+        ip_addr = payload.get('ip_addr', '')
+
+        now = _datetime_to_timestamp(datetime.utcnow())
+        if session_exp < now:
+            _log.debug('Session %s expired', payload.get('session_id'))
+            raise errors.UnauthorizedError('Session expired')
+
+        if ip_addr != request.remote_addr:
+            _log.warning('Wrong IP: %s. Token created for IP: %s', request.remote_addr, ip_addr)
+            raise errors.ForbiddenError('Request forbidden from another network')
 
     g.token = token
     g.user_id = user_id
@@ -118,12 +134,7 @@ def _get_key(session_id, user_id):
     return '%s:%s' % (session_id, user_id)
 
 
-def _create_token(payload):
-    token = jwt.encode(payload, app.config['AUTH_KEY'], algorithm=app.config['AUTH_ALGORITHM'])
-    return token.decode('utf-8')
-
-
-def _add_token(session):
+def _add_token_to_session(session):
     """
     Add 'exp' (expire time) and 'token' fields into session dict
     :param session: dict with session info to be updated
@@ -145,7 +156,7 @@ def create_session(user_model):
     session_key = _get_key(session_id, user_model.id)
     session = dict(
         session_id=session_id,
-        session_exp=timegm((datetime.utcnow() + session_life_time).utctimetuple()),
+        session_exp=_datetime_to_timestamp(datetime.utcnow() + session_life_time),
         user_id=user_model.id,
         user_name=user_model.get_full_name(),
         ip_addr=request.remote_addr,
@@ -159,7 +170,7 @@ def create_session(user_model):
         _log.error('Error save session [%s] in Redis', session_key)
         raise errors.ServiceUnavailableError('Error save authorization session')
 
-    _add_token(session)
+    _add_token_to_session(session)
 
     return session
 
@@ -215,10 +226,12 @@ def refresh_session(token):
         raise errors.UnauthorizedError('Authorization session not found')
 
     session = json.loads(session_value.decode())
-    _add_token(session)
+    _add_token_to_session(session)
 
     return session
 
+
+# Invite user token
 
 def generate_invite_token(user_id):
     """
@@ -239,7 +252,7 @@ def get_invite_user_id(token):
     :param token: invite JWT token
     :return: user_id or None
     """
-    # TODO: add token to blacklist (?)
+    # FIXME: add token to blacklist (?)
     try:
         payload = jwt.decode(token, app.config['AUTH_KEY'])
     except jwt_err.ExpiredSignatureError as err:
@@ -250,3 +263,18 @@ def get_invite_user_id(token):
         return None
 
     return payload.get('user_id')
+
+
+# System
+
+def get_system_token():
+    """
+    System token to communicate between internal services
+    :return: system JWT token
+    """
+    payload = dict(
+        exp=datetime.utcnow() + app.config['AUTH_TOKEN_LIFE_TIME'],
+        user_id='xopay.admin',
+        groups='system',
+    )
+    return _create_token(payload=payload)
