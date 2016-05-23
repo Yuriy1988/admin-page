@@ -1,5 +1,4 @@
 import redis
-import json
 import logging
 import jwt
 import jwt.exceptions as jwt_err
@@ -7,7 +6,7 @@ from calendar import timegm
 from uuid import uuid4
 from datetime import datetime
 from functools import wraps
-from flask import g, request
+from flask import g, request, json
 
 from api import app, errors
 
@@ -119,14 +118,18 @@ def _get_key(session_id, user_id):
     return '%s:%s' % (session_id, user_id)
 
 
+def _create_token(payload):
+    token = jwt.encode(payload, app.config['AUTH_KEY'], algorithm=app.config['AUTH_ALGORITHM'])
+    return token.decode('utf-8')
+
+
 def _add_token(session):
     """
     Add 'exp' (expire time) and 'token' fields into session dict
     :param session: dict with session info to be updated
     """
     session['exp'] = datetime.utcnow() + app.config['AUTH_TOKEN_LIFE_TIME']
-    token = jwt.encode(session, app.config['AUTH_KEY'], algorithm=app.config['AUTH_ALGORITHM'])
-    session['token'] = token
+    session['token'] = _create_token(payload=session)
 
 
 def create_session(user_model):
@@ -142,7 +145,7 @@ def create_session(user_model):
     session_key = _get_key(session_id, user_model.id)
     session = dict(
         session_id=session_id,
-        session_exp=datetime.utcnow() + session_life_time,
+        session_exp=timegm((datetime.utcnow() + session_life_time).utctimetuple()),
         user_id=user_model.id,
         user_name=user_model.get_full_name(),
         ip_addr=request.remote_addr,
@@ -151,7 +154,7 @@ def create_session(user_model):
 
     _log.info('Create session [%s]', session_key)
 
-    saved = _redis_auth.setex(session_key, session_life_time.total_seconds(), json.dumps(session))
+    saved = _redis_auth.setex(session_key, int(session_life_time.total_seconds()), json.dumps(session))
     if not saved:
         _log.error('Error save session [%s] in Redis', session_key)
         raise errors.ServiceUnavailableError('Error save authorization session')
@@ -227,7 +230,7 @@ def generate_invite_token(user_id):
         exp=datetime.utcnow() + app.config['AUTH_INVITE_LIFE_TIME'],
         user_id=user_id,
     )
-    return jwt.encode(payload, app.config['AUTH_KEY'], algorithm=app.config['AUTH_ALGORITHM'])
+    return _create_token(payload=payload)
 
 
 def get_invite_user_id(token):
@@ -236,6 +239,7 @@ def get_invite_user_id(token):
     :param token: invite JWT token
     :return: user_id or None
     """
+    # TODO: add token to blacklist (?)
     try:
         payload = jwt.decode(token, app.config['AUTH_KEY'])
     except jwt_err.ExpiredSignatureError as err:

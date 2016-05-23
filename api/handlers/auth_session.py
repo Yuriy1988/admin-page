@@ -8,7 +8,7 @@ __author__ = 'Kostel Serhii'
 # Authorization
 
 def _filter_dict(dict_obj, keys):
-    return {key: val for key, val in dict_obj if key in keys}
+    return {key: val for key, val in dict_obj.items() if key in keys}
 
 
 @api_v1.route('/authorization', methods=['POST'])
@@ -29,13 +29,13 @@ def auth_login():
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp', 'user_name', 'groups')))
 
 
-@api_v1.route('/authorization/token', methods=['DELETE'])
+@api_v1.route('/authorization/token', methods=['DELETE'], auth=['admin', 'system', 'merchant', 'manager'])
 def auth_logout():
     auth.remove_session(g.token)
     return Response(status=200)
 
 
-@api_v1.route('/authorization/token', methods=['GET'])
+@api_v1.route('/authorization/token', methods=['GET'], auth=['admin', 'system', 'merchant', 'manager'])
 def auth_refresh_token():
     session = auth.refresh_session(g.token)
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp')))
@@ -65,7 +65,7 @@ def user_create_password():
     return Response(status=200)
 
 
-@api_v1.route('/user/forgot_password', methods=['POST'])
+@api_v1.route('/user/forgot_password', methods=['POST'], auth=['admin', 'merchant', 'manager'])
 def user_forgot_password():
     schema = schemas.UserForgotPasswordSchema()
     data, errors = schema.load(request.get_json())
@@ -82,7 +82,7 @@ def user_forgot_password():
     return Response(status=200)
 
 
-@api_v1.route('/user/change_password', methods=['POST'], auth=['manager', 'merchant'])
+@api_v1.route('/user/change_password', methods=['POST'], auth=['admin', 'manager', 'merchant'])
 def user_change_password():
     schema = schemas.UserChangePasswordSchema()
     data, errors = schema.load(request.get_json())

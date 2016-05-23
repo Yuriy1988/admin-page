@@ -6,6 +6,7 @@ from flask_migrate import Migrate, MigrateCommand
 
 from api import app, db
 from api.models import payment_system as paysys, user
+from api.schemas import UserSchema, UserCreatePasswordSchema
 
 __author__ = 'Kostel Serhii'
 
@@ -37,19 +38,38 @@ def test():
 @manager.command
 def create_admin():
     """Create database administrator user model"""
-    username_and_email = input("Enter admin email (username):\n>>> ")
-    password = input("Enter admin password:\n>>> ")
+    for _ in range(3):
+        username = input('Enter admin username (default is "admin"):\n>>> ') or 'admin'
+        email = input('Enter admin email:\n>>> ')
 
-    admin_user = user.User(
-        username=username_and_email,
-        password=password,
-        email=username_and_email,
-        enabled=True,
-        notify='EMAIL'
-    )
+        input_user_data = dict(username=username, email=email, enabled=True, notify='EMAIL')
+        admin_user_data, errors = UserSchema().load(input_user_data)
+        if not errors: break
+
+        print('Create admin errors:\n', str(errors), '\nTry again!\n')
+    else:
+        print('Admin user was NOT created!')
+        return 1
+
+    for _ in range(3):
+        password = input("Enter admin password:\n>>> ")
+
+        password_data, errors = UserCreatePasswordSchema().load(dict(password=password))
+        if not errors: break
+
+        print('Create admin errors:\n', str(errors), '\nTry again!\n')
+    else:
+        print('Admin user was NOT created!')
+        return 1
+
+    admin_user_data['password'] = password_data['password']
+
+    admin_user = user.User(**admin_user_data)
     admin_user.add_to_group('admin')
     db.session.add(admin_user)
     db.session.commit()
+
+    return 0
 
 
 # create_payment_systems
