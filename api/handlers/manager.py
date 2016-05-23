@@ -8,7 +8,7 @@ from api.schemas import ManagerSchema
 __author__ = 'Kostel Serhii'
 
 
-@api_v1.route('/merchants/<merchant_id>/managers', methods=['GET'])
+@api_v1.route('/merchants/<merchant_id>/managers', methods=['GET'], auth=['admin'])
 def merchant_managers_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -20,7 +20,7 @@ def merchant_managers_list(merchant_id):
     return jsonify(managers=result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>/managers', methods=['POST'])
+@api_v1.route('/merchants/<merchant_id>/managers', methods=['POST'], auth=['admin'])
 def merchant_manager_create(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -41,7 +41,7 @@ def merchant_manager_create(merchant_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/managers/<manager_id>', methods=['GET'])
+@api_v1.route('/managers/<manager_id>', methods=['GET'], auth=['admin'])
 def manager_detail(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -53,7 +53,7 @@ def manager_detail(manager_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/managers/<manager_id>', methods=['PUT'])
+@api_v1.route('/managers/<manager_id>', methods=['PUT'], auth=['admin'])
 def manager_update(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -72,7 +72,7 @@ def manager_update(manager_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/managers/<manager_id>', methods=['DELETE'])
+@api_v1.route('/managers/<manager_id>', methods=['DELETE'], auth=['admin'])
 def manager_delete(manager_id):
     delete_count = Manager.query.filter_by(id=manager_id).delete()
     if delete_count == 0:

@@ -29,16 +29,16 @@ def auth_login():
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp', 'user_name', 'groups')))
 
 
-@api_v1.route('/authorization/token', methods=['DELETE'], auth=['admin', 'system', 'merchant', 'manager'])
-def auth_logout():
-    auth.remove_session(g.token)
-    return Response(status=200)
-
-
-@api_v1.route('/authorization/token', methods=['GET'], auth=['admin', 'system', 'merchant', 'manager'])
+@api_v1.route('/authorization/token', methods=['GET'], auth=['admin', 'merchant', 'manager'])
 def auth_refresh_token():
     session = auth.refresh_session(g.token)
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp')))
+
+
+@api_v1.route('/authorization/token', methods=['DELETE'], auth=['admin', 'merchant', 'manager'])
+def auth_logout():
+    auth.remove_session(g.token)
+    return Response(status=200)
 
 
 # Password
@@ -65,7 +65,7 @@ def user_create_password():
     return Response(status=200)
 
 
-@api_v1.route('/user/forgot_password', methods=['POST'], auth=['admin', 'merchant', 'manager'])
+@api_v1.route('/user/forgot_password', methods=['POST'])
 def user_forgot_password():
     schema = schemas.UserForgotPasswordSchema()
     data, errors = schema.load(request.get_json())

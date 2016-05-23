@@ -10,7 +10,7 @@ from api.schemas import CurrencySchema, CurrencyRequestSchema
 __author__ = 'Omelchenko Daniel, Kostel Serhii'
 
 
-@api_v1.route('/currency/current', methods=['GET'])
+@api_v1.route('/currency/current', methods=['GET'], auth=['admin'])
 def currency_current():
     request_schema = CurrencyRequestSchema()
     data, errors = request_schema.load(request.args)
@@ -33,7 +33,7 @@ def currency_current():
     return jsonify(current=result.data)
 
 
-@api_v1.route('/currency/history', methods=['GET'])
+@api_v1.route('/currency/history', methods=['GET'], auth=['admin'])
 def currency_history():
     request_schema = CurrencyRequestSchema()
     data, errors = request_schema.load(request.args)
@@ -55,7 +55,7 @@ def currency_history():
     return jsonify(history=result.data)
 
 
-@api_v1.route('/currency/update', methods=['POST'])
+@api_v1.route('/currency/update', methods=['POST'], auth=['system'])
 def currency_update():
     """ Handler for currency daemon to update (add new record) information about currency. """
     data_json = request.get_json()

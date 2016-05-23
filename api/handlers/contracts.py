@@ -10,7 +10,7 @@ __author__ = 'Kostel Serhii'
 
 # Merchant Contract
 
-@api_v1.route('/merchants/<merchant_id>/contracts', methods=['GET'])
+@api_v1.route('/merchants/<merchant_id>/contracts', methods=['GET'], auth=['admin'])
 def merchant_contracts_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -33,7 +33,7 @@ def merchant_contracts_list(merchant_id):
     return jsonify(contracts=result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>/contracts', methods=['POST'])
+@api_v1.route('/merchants/<merchant_id>/contracts', methods=['POST'], auth=['admin'])
 def merchant_contract_create(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -51,7 +51,7 @@ def merchant_contract_create(merchant_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['GET'])
+@api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['GET'], auth=['admin'])
 def merchant_contract_detail(merchant_contract_id):
     contract = MerchantContract.query.get(merchant_contract_id)
     if not contract:
@@ -62,7 +62,7 @@ def merchant_contract_detail(merchant_contract_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['PUT'])
+@api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['PUT'], auth=['admin'])
 def merchant_contract_update(merchant_contract_id):
     contract = MerchantContract.query.get(merchant_contract_id)
     if not contract:
@@ -81,7 +81,7 @@ def merchant_contract_update(merchant_contract_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['DELETE'])
+@api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['DELETE'], auth=['admin'])
 def merchant_contract_delete(merchant_contract_id):
     delete_count = MerchantContract.query.filter_by(id=merchant_contract_id).delete()
     if delete_count == 0:
@@ -91,7 +91,7 @@ def merchant_contract_delete(merchant_contract_id):
     return Response(status=200)
 
 
-@api_v1.route('/merchant_contract/<int:merchant_contract_id>/upload/contract_doc_url', methods=['POST'])
+@api_v1.route('/merchant_contract/<int:merchant_contract_id>/upload/contract_doc_url', methods=['POST'], auth=['admin'])
 def merchant_contract_upload_contract_doc_url(merchant_contract_id):
     merchant_contract = MerchantContract.query.get(merchant_contract_id)
     if not merchant_contract:
@@ -109,7 +109,7 @@ def merchant_contract_upload_contract_doc_url(merchant_contract_id):
 
 # Payment System Contract
 
-@api_v1.route('/payment_systems/<paysys_id>/contracts', methods=['GET'])
+@api_v1.route('/payment_systems/<paysys_id>/contracts', methods=['GET'], auth=['admin'])
 def payment_system_contracts_list(paysys_id):
     paysys_id = paysys_id.upper()
     if not PaymentSystem.exists(paysys_id):
@@ -133,7 +133,7 @@ def payment_system_contracts_list(paysys_id):
     return jsonify(contracts=result.data)
 
 
-@api_v1.route('/payment_systems/<paysys_id>/contracts', methods=['POST'])
+@api_v1.route('/payment_systems/<paysys_id>/contracts', methods=['POST'], auth=['admin'])
 def payment_system_contract_create(paysys_id):
     paysys_id = paysys_id.upper()
 
@@ -155,7 +155,7 @@ def payment_system_contract_create(paysys_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/paysys_contracts/<paysys_contract_id>', methods=['GET'])
+@api_v1.route('/paysys_contracts/<paysys_contract_id>', methods=['GET'], auth=['admin'])
 def payment_system_contract_detail(paysys_contract_id):
     contract = PaySysContract.query.get(paysys_contract_id)
     if not contract:
@@ -166,7 +166,7 @@ def payment_system_contract_detail(paysys_contract_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/paysys_contracts/<paysys_contract_id>', methods=['PUT'])
+@api_v1.route('/paysys_contracts/<paysys_contract_id>', methods=['PUT'], auth=['admin'])
 def payment_system_contract_update(paysys_contract_id):
     contract = PaySysContract.query.get(paysys_contract_id)
     if not contract:
@@ -185,7 +185,7 @@ def payment_system_contract_update(paysys_contract_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/paysys_contracts/<paysys_contract_id>', methods=['DELETE'])
+@api_v1.route('/paysys_contracts/<paysys_contract_id>', methods=['DELETE'], auth=['admin'])
 def payment_system_contract_delete(paysys_contract_id):
     delete_count = PaySysContract.query.filter_by(id=paysys_contract_id).delete()
     if delete_count == 0:
@@ -195,7 +195,7 @@ def payment_system_contract_delete(paysys_contract_id):
     return Response(status=200)
 
 
-@api_v1.route('/paysys_contract/<int:paysys_contract_id>/upload/contract_doc_url', methods=['POST'])
+@api_v1.route('/paysys_contract/<int:paysys_contract_id>/upload/contract_doc_url', methods=['POST'], auth=['admin'])
 def payment_system_contract_upload_contract_doc_url(paysys_contract_id):
     paysys_contract = PaySysContract.query.get(paysys_contract_id)
     if not paysys_contract:

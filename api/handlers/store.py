@@ -10,7 +10,7 @@ __author__ = 'Kostel Serhii'
 
 # Store
 
-@api_v1.route('/merchants/<merchant_id>/stores', methods=['GET'])
+@api_v1.route('/merchants/<merchant_id>/stores', methods=['GET'], auth=['admin'])
 def merchant_stores_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -22,7 +22,7 @@ def merchant_stores_list(merchant_id):
     return jsonify(stores=result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>/stores', methods=['POST'])
+@api_v1.route('/merchants/<merchant_id>/stores', methods=['POST'], auth=['admin'])
 def merchant_stores_create(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -40,7 +40,7 @@ def merchant_stores_create(merchant_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/stores/<store_id>', methods=['GET'])
+@api_v1.route('/stores/<store_id>', methods=['GET'], auth=['admin'])
 def store_detail(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -52,7 +52,7 @@ def store_detail(store_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/stores/<store_id>', methods=['PUT'])
+@api_v1.route('/stores/<store_id>', methods=['PUT'], auth=['admin'])
 def store_update(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -71,7 +71,7 @@ def store_update(store_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/stores/<store_id>', methods=['DELETE'])
+@api_v1.route('/stores/<store_id>', methods=['DELETE'], auth=['admin'])
 def store_delete(store_id):
     delete_count = Store.query.filter_by(id=store_id).delete()
     if delete_count == 0:
@@ -81,7 +81,7 @@ def store_delete(store_id):
     return Response(status=200)
 
 
-@api_v1.route('/stores/<store_id>/upload/logo', methods=['POST'])
+@api_v1.route('/stores/<store_id>/upload/logo', methods=['POST'], auth=['admin'])
 def store_upload_logo(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -97,14 +97,14 @@ def store_upload_logo(store_id):
     return jsonify(logo=store.logo)
 
 
-@api_v1.route('/stores/<store_id>/exists', methods=['GET'])
+@api_v1.route('/stores/<store_id>/exists', methods=['GET'], auth=['admin'])
 def store_exists(store_id):
     return jsonify(exists=Store.exists(store_id))
 
 
 # Store Payment System
 
-@api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'])
+@api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'], auth=['admin'])
 def store_payment_systems_list(store_id):
     if not Store.exists(store_id):
         raise NotFoundError()
@@ -125,7 +125,7 @@ def store_payment_systems_list(store_id):
     return jsonify(store_paysys=result.data)
 
 
-@api_v1.route('/store_paysys/<store_paysys_id>', methods=['PUT'])
+@api_v1.route('/store_paysys/<store_paysys_id>', methods=['PUT'], auth=['admin'])
 def store_payment_system_update(store_paysys_id):
     store_paysys = StorePaySys.query.get(store_paysys_id)
     if not store_paysys:

@@ -3,13 +3,14 @@ import pprint
 import random
 import string
 from copy import deepcopy
+from datetime import timedelta
 from unittest.mock import MagicMock
 from flask import json
 from flask.ext.testing import TestCase
 
-from api import app, db as app_db, utils
-from api.models import Merchant, Store, PaymentSystem
-from api.models.payment_system import init_payment_systems
+from api import app, db as app_db, utils, auth as api_auth
+from api.models import Merchant, Store, PaymentSystem, User
+from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME
 
 __author__ = 'Kostel Serhii'
 
@@ -29,6 +30,14 @@ def prettify(obj, depth=10):
 
 
 class TestDefaults:
+
+    _admin = {
+        'username': 'admin',
+        'password': 'test12345678',
+        'email': 'admin@xopay.do',
+        'enabled': True,
+        'notify': 'EMAIL'
+    }
 
     _user = {
         "username": "mustbeunique",
@@ -76,6 +85,9 @@ class TestDefaults:
         "store_settings": _store_settings
     }
 
+    def get_admin(self):
+        return self._admin.copy()
+
     def get_user(self):
         return self._user.copy()
 
@@ -98,13 +110,20 @@ class BaseTestCase(TestCase, TestDefaults):
         app_db.drop_all()
         app_db.create_all()
 
-        init_payment_systems()
+        self.token_storage = {}
+
+        self.create_admin()
+        self.create_payment_systems()
 
         # mock
         utils.push_to_queue = MagicMock(return_value=None)
 
     def tearDown(self):
         """ Teardown after test case """
+
+        for token in self.token_storage.values():
+            api_auth.remove_session(token)
+
         self.db.remove()
         app_db.session.close()
         app_db.drop_all()
@@ -126,6 +145,10 @@ class BaseTestCase(TestCase, TestDefaults):
         app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 
+        app.config['AUTH_TOKEN_LIFE_TIME'] = timedelta(minutes=15)
+        app.config['AUTH_SESSION_LIFE_TIME'] = timedelta(minutes=30)
+        app.config['AUTH_INVITE_LIFE_TIME'] = timedelta(minutes=30)
+
     @staticmethod
     def rand_int(a=0, b=100):
         return random.randint(a, b)
@@ -135,22 +158,67 @@ class BaseTestCase(TestCase, TestDefaults):
         a_zA_Z0_9 = string.ascii_letters + string.digits
         return ''.join((random.choice(a_zA_Z0_9) for i in range(str_len)))
 
-    def get(self, url, query_args=None):
-        response = self.client.get(self.api_base + url, query_string=query_args or {})
+    def create_admin(self):
+        admin_user = User(**self.get_admin())
+        admin_user.add_to_group('admin')
+        self.db.add(admin_user)
+        self.db.commit()
+
+    def create_payment_systems(self):
+        for ps_id, ps_name in zip(_PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME):
+            model = PaymentSystem(ps_id, ps_name)
+            self.db.add(model)
+        self.db.commit()
+
+    def _create_admin_token(self):
+        auth_body = {k: v for k, v in self.get_admin().items() if k in {'username', 'password'}}
+        headers = {"Content-Type": "application/json"}
+        response = self.client.post(self.api_base + '/authorization', data=json.dumps(auth_body), headers=headers)
+        return response.json['token']
+
+    def _create_system_token(self):
+        return api_auth.get_system_token()
+
+    def get_auth_token(self, auth_group):
+        if auth_group in self.token_storage:
+            return self.token_storage[auth_group]
+
+        token_map = {
+            'admin': self._create_admin_token,
+            'system': self._create_system_token,
+        }
+
+        token = None
+        token_creator = token_map.get(auth_group)
+        if token_creator:
+            token = token_creator()
+            self.token_storage[auth_group] = token
+
+        return token
+
+    def request(self, url, method='GET', data=None, auth=None, token=None, **options):
+        token = token or self.get_auth_token(auth)
+
+        headers = {"Content-Type": "application/json"}
+        if token:
+            headers["Authorization"] = "Bearer %s" % token
+
+        return self.client.open(self.api_base + url, method=method, data=data, headers=headers, **options)
+
+    def get(self, url, query_args=None, auth=None, token=None):
+        response = self.request(url, method='GET', auth=auth or 'admin', token=token, query_string=query_args or {})
         return response.status_code, response.json
 
-    def put(self, url, body):
-        headers = {"Content-Type": "application/json"}
-        response = self.client.put(self.api_base + url, data=json.dumps(body), headers=headers)
+    def put(self, url, body, auth=None, token=None):
+        response = self.request(url, method='PUT', data=json.dumps(body), auth=auth or 'admin', token=token)
         return response.status_code, response.json
 
-    def post(self, url, body):
-        headers = {"Content-Type": "application/json"}
-        response = self.client.post(self.api_base + url, data=json.dumps(body), headers=headers)
+    def post(self, url, body, auth=None, token=None):
+        response = self.request(url, method='POST', data=json.dumps(body), auth=auth or 'admin', token=token)
         return response.status_code, response.json if response.mimetype == 'application/json' else response.data
 
-    def delete(self, url):
-        response = self.client.delete(self.api_base + url)
+    def delete(self, url, auth=None, token=None):
+        response = self.request(url, method='DELETE', auth=auth or 'admin', token=token)
         return response.status_code, response.json if response.status_code >= 400 else None
 
     def create_merchant(self, merchant_dict, merchant_name=None, username=None):

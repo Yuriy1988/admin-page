@@ -70,7 +70,7 @@ def _send_notify(queue_name, body_json):
     :param queue_name: notification queue name
     :param dict body_json: notification body json
     """
-    app.logger.info("Send notification to [%s]: %r", queue_name,  body_json)
+    app.logger.info("Send notification to queue [%s]", queue_name)
     try:
         push_to_queue(queue_name, body_json)
     except Exception as err:

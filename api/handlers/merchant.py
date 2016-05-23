@@ -8,7 +8,7 @@ from api.schemas import MerchantSchema
 __author__ = 'Kostel Serhii'
 
 
-@api_v1.route('/merchants', methods=['GET'])
+@api_v1.route('/merchants', methods=['GET'], auth=['admin'])
 def merchants_list():
     merchants = Merchant.query.all()
 
@@ -17,7 +17,7 @@ def merchants_list():
     return jsonify(merchants=result.data)
 
 
-@api_v1.route('/merchants', methods=['POST'])
+@api_v1.route('/merchants', methods=['POST'], auth=['admin'])
 def merchant_create():
     schema = MerchantSchema()
     data, errors = schema.load(request.get_json())
@@ -34,7 +34,7 @@ def merchant_create():
     return jsonify(result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>', methods=['GET'])
+@api_v1.route('/merchants/<merchant_id>', methods=['GET'], auth=['admin'])
 def merchant_detail(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -46,7 +46,7 @@ def merchant_detail(merchant_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>', methods=['PUT'])
+@api_v1.route('/merchants/<merchant_id>', methods=['PUT'], auth=['admin'])
 def merchant_update(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
@@ -65,7 +65,7 @@ def merchant_update(merchant_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>', methods=['DELETE'])
+@api_v1.route('/merchants/<merchant_id>', methods=['DELETE'], auth=['admin'])
 def merchant_delete(merchant_id):
     delete_count = Merchant.query.filter_by(id=merchant_id).delete()
     if delete_count == 0:

@@ -233,20 +233,20 @@ class TestCurrency(base.BaseTestCase):
 
     def test_post_currency_empty_body(self):
         update_dict = {"update": []}
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 200, msg=body)
 
     def test_post_currency(self):
         update_dict = {"update": [self._currency]*4}
 
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 200, msg=body)
         self.assertEqual(len(Currency.query.all()), 1)
 
     def test_post_currency_rate(self):
         update_dict = {"update": [self._currency]}
 
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 200, msg=body)
         self.assertEqual(Currency.query.all()[0].rate, Decimal(self._currency["rate"]))
 
@@ -265,14 +265,14 @@ class TestCurrency(base.BaseTestCase):
                 }
             ]
         }
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 200, msg=body)
         self.assertEqual(len(Currency.query.all()), 2)
 
     def test_post_currency_incomplete_json(self):
         update_dict = {"update": [{"to_currency": "UAH"}]}
 
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 400)
         self.assertTrue('error' in body)
 
@@ -286,7 +286,7 @@ class TestCurrency(base.BaseTestCase):
                 }
             ]
         }
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 400)
         self.assertTrue('error' in body)
 
@@ -300,7 +300,7 @@ class TestCurrency(base.BaseTestCase):
                 }
             ]
         }
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 400)
         self.assertTrue('error' in body)
 
@@ -314,6 +314,6 @@ class TestCurrency(base.BaseTestCase):
                 }
             ]
         }
-        status, body = self.post("/currency/update", update_dict)
+        status, body = self.post("/currency/update", update_dict, auth='system')
         self.assertEqual(status, 400)
         self.assertTrue('error' in body)

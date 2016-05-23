@@ -186,7 +186,7 @@ def remove_session(token):
         _log.error('Try to remove wrong token: %r', err)
         raise errors.UnauthorizedError('Wrong token')
 
-    session_key = _get_key(payload['session_id'], payload['user_id'])
+    session_key = _get_key(payload.get('session_id'), payload.get('user_id'))
 
     _log.info('Remove session [%s]', session_key)
     _redis_auth.delete(session_key)
@@ -275,6 +275,6 @@ def get_system_token():
     payload = dict(
         exp=datetime.utcnow() + app.config['AUTH_TOKEN_LIFE_TIME'],
         user_id='xopay.admin',
-        groups='system',
+        groups=['system'],
     )
     return _create_token(payload=payload)
