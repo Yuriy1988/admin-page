@@ -39,5 +39,5 @@ QUEUE_USERNAME = 'xopay_rabbit'
 QUEUE_PASSWORD = '5lf01xiOFwyMLvQrkzz7'
 QUEUE_VIRTUAL_HOST = '/xopay'
 
-QUEUE_EMAIL='notify_email'
-QUEUE_SMS='notify_sms'
+QUEUE_EMAIL = 'notify_email'
+QUEUE_SMS = 'notify_sms'

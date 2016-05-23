@@ -24,7 +24,6 @@ class UserGroup(base.BaseModel):
     __table_args__ = (db.UniqueConstraint('group_name', 'user_id', name='_user_group_unique'),)
 
     def __init__(self, group_name):
-        # self.user_id = user_id
         self.group_name = group_name
 
     def __repr__(self):

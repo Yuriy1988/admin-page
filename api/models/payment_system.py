@@ -62,10 +62,3 @@ class PaymentSystem(base.BaseModel):
         """
         paysys_id_values = cls.filter_allowed(db.session.query(cls.id)).all()
         return set(ps[0] for ps in paysys_id_values)
-
-
-def init_payment_systems():
-    for ps_id, ps_name in zip(_PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME):
-        model = PaymentSystem(ps_id, ps_name)
-        db.session.add(model)
-    db.session.commit()

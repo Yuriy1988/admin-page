@@ -43,7 +43,8 @@ db_test_create:
 	sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $(DB_TEST_NAME) TO $(DB_TEST_USER)"
 
 db_create: db_psql_create db_test_create db_update
-	./manage.py init_paysys
+	./manage.py create_admin
+	./manage.py create_data
 
 db_remove:
 	rm -rf migrations
