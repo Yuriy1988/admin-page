@@ -109,4 +109,4 @@ class User(base.BaseModel):
         self._groups.query.filter_by(group_name=group_name).delete()
 
     def get_full_name(self):
-        return ' '.join((self.first_name, self.last_name)).strip() or self.username
+        return ' '.join(filter(None, (self.first_name, self.last_name))).strip() or self.username

@@ -215,3 +215,34 @@ def refresh_session(token):
     _add_token(session)
 
     return session
+
+
+def generate_invite_token(user_id):
+    """
+    Token for user invite and enable to set password
+    :param user_id: user identifier
+    :return invite JWT token
+    """
+    payload = dict(
+        exp=datetime.utcnow() + app.config['AUTH_INVITE_LIFE_TIME'],
+        user_id=user_id,
+    )
+    return jwt.encode(payload, app.config['AUTH_KEY'], algorithm=app.config['AUTH_ALGORITHM'])
+
+
+def get_invite_user_id(token):
+    """
+    Check invite token and return user id or None if not valid
+    :param token: invite JWT token
+    :return: user_id or None
+    """
+    try:
+        payload = jwt.decode(token, app.config['AUTH_KEY'])
+    except jwt_err.ExpiredSignatureError as err:
+        _log.debug('Invite token expired: %r', err)
+        return None
+    except jwt_err.InvalidTokenError as err:
+        _log.warning('Wrong invite token: %r', err)
+        return None
+
+    return payload.get('user_id')

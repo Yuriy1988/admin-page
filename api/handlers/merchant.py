@@ -1,6 +1,6 @@
 from flask import request, jsonify, Response
 
-from api import api_v1, db
+from api import api_v1, db, auth, utils
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant
 from api.schemas import MerchantSchema
@@ -26,6 +26,9 @@ def merchant_create():
 
     merchant = Merchant.create(data)
     db.session.commit()
+
+    invite_token = auth.generate_invite_token(merchant.user.id)
+    utils.send_invite_to_user_by_email(merchant.user, invite_token)
 
     result = schema.dump(merchant)
     return jsonify(result.data)

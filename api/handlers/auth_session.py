@@ -1,11 +1,11 @@
 from flask import g, request, jsonify, Response
 
-from api import api_v1, auth, errors as api_err
-from api.schemas import UserAuthSchema
-from api.models import User
+from api import db, api_v1, auth, errors as api_err, models, schemas, utils
 
 __author__ = 'Kostel Serhii'
 
+
+# Authorization
 
 def _filter_dict(dict_obj, keys):
     return {key: val for key, val in dict_obj if key in keys}
@@ -13,14 +13,14 @@ def _filter_dict(dict_obj, keys):
 
 @api_v1.route('/authorization', methods=['POST'])
 def auth_login():
-    schema = UserAuthSchema()
+    schema = schemas.UserAuthSchema()
     data, errors = schema.load(request.get_json())
     if errors:
         raise api_err.ValidationError(errors=errors)
 
-    user = User.query.get(data['username'])
+    user = models.User.query.filter_by(username=data['username']).first()
     if not user or not user.check_password(data['password']):
-        raise api_err.UnauthorizedError('Wrong username or password')
+        raise api_err.ForbiddenError('Wrong username or password')
 
     if not user.enabled:
         raise api_err.ForbiddenError('User is not enabled')
@@ -39,3 +39,64 @@ def auth_logout():
 def auth_refresh_token():
     session = auth.refresh_session(g.token)
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp')))
+
+
+# Password
+
+@api_v1.route('/user/create_password', methods=['POST'])
+def user_create_password():
+    schema = schemas.UserCreatePasswordSchema()
+    data, errors = schema.load(request.get_json())
+    if errors:
+        raise api_err.ValidationError(errors=errors)
+
+    invite_token = request.args.get('token')
+    user_id = auth.get_invite_user_id(token=invite_token)
+    if not user_id:
+        raise api_err.ForbiddenError('Invite token invalid or expired')
+
+    user = models.User.query.get(user_id)
+    if not user:
+        raise api_err.ForbiddenError('User not found')
+
+    user.set_password(data['password'])
+    db.session.commit()
+
+    return Response(status=200)
+
+
+@api_v1.route('/user/forgot_password', methods=['POST'])
+def user_forgot_password():
+    schema = schemas.UserForgotPasswordSchema()
+    data, errors = schema.load(request.get_json())
+    if errors:
+        raise api_err.ValidationError(errors=errors)
+
+    user = models.User.query.filter_by(username=data['username']).first()
+    if not user:
+        raise api_err.ValidationError('User with username "%s" not registered' % data['username'])
+
+    invite_token = auth.generate_invite_token(user.id)
+    utils.send_invite_to_user_by_email(user, invite_token)
+
+    return Response(status=200)
+
+
+@api_v1.route('/user/change_password', methods=['POST'], auth=['manager', 'merchant'])
+def user_change_password():
+    schema = schemas.UserChangePasswordSchema()
+    data, errors = schema.load(request.get_json())
+    if errors:
+        raise api_err.ValidationError(errors=errors)
+
+    user = models.User.query.get(g.user_id)
+    if not user or not user.check_password(data['old_password']):
+        raise api_err.ForbiddenError('Wrong original password')
+
+    if not user.is_activated():
+        raise api_err.ForbiddenError('User is not activated')
+
+    user.set_password(data['new_password'])
+    db.session.commit()
+
+    return Response(status=200)

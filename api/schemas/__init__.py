@@ -4,6 +4,10 @@ from .manager import ManagerSchema
 from .merchant import MerchantSchema
 from .payment_system import PaymentSystemSchema, PaymentSystemUpdateSchema
 from .store import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema
-from .user import UserSchema, UserAuthSchema
+from .user import (UserSchema,
+                   UserAuthSchema,
+                   UserChangePasswordSchema,
+                   UserForgotPasswordSchema,
+                   UserCreatePasswordSchema)
 
 __author__ = 'Kostel Serhii'

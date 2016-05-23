@@ -3,10 +3,11 @@ import pprint
 import random
 import string
 from copy import deepcopy
+from unittest.mock import MagicMock
 from flask import json
 from flask.ext.testing import TestCase
 
-from api import app, db as app_db
+from api import app, db as app_db, utils
 from api.models import Merchant, Store, PaymentSystem
 from api.models.payment_system import init_payment_systems
 
@@ -98,6 +99,9 @@ class BaseTestCase(TestCase, TestDefaults):
         app_db.create_all()
 
         init_payment_systems()
+
+        # mock
+        utils.push_to_queue = MagicMock(return_value=None)
 
     def tearDown(self):
         """ Teardown after test case """

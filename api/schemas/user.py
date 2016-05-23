@@ -27,3 +27,19 @@ class UserAuthSchema(base.BaseSchema):
 
     username = fields.Str(required=True, validate=(Length(min=3, max=80), base.Login()))
     password = fields.Str(required=True, validate=Length(min=8, max=255))
+
+
+class UserChangePasswordSchema(base.BaseSchema):
+
+    old_password = fields.Str(required=True, validate=Length(min=8, max=255))
+    new_password = fields.Str(required=True, validate=Length(min=8, max=255))
+
+
+class UserForgotPasswordSchema(base.BaseSchema):
+
+    username = fields.Str(required=True, validate=(Length(min=3, max=80), base.Login()))
+
+
+class UserCreatePasswordSchema(base.BaseSchema):
+
+    password = fields.Str(required=True, validate=Length(min=8, max=255))

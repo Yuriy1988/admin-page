@@ -6,6 +6,9 @@ DEBUG = True
 BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
 STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
+# FIXME: uncomment after config update (for full invite url)
+# SERVER_NAME = 'xopay.digitaloutlooks.com'
+
 # Upload
 MAX_CONTENT_LENGTH = 4 * 1024 * 1024
 MEDIA_BASE_FOLDER = os.path.join(BASE_FOLDER, 'media', 'admin')
@@ -26,6 +29,7 @@ AUTH_KEY = 'PzYs2qLh}2$8uUJbBnWB800iYKe5xdYqItRNo7@38yW@tPDVAX}EV5V31*ZK78QS'
 
 AUTH_TOKEN_LIFE_TIME = timedelta(minutes=30)
 AUTH_SESSION_LIFE_TIME = timedelta(hours=24)
+AUTH_INVITE_LIFE_TIME = timedelta(days=3)
 
 
 # Queue:

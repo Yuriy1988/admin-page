@@ -3,7 +3,7 @@ import random
 import string
 import pika
 from pika import exceptions as mq_err
-from flask import request, json
+from flask import request, json, url_for
 from werkzeug.utils import secure_filename
 
 from api import app, errors
@@ -95,6 +95,26 @@ def send_sms(phone_number, message):
     :param str message: sms message
     """
     _send_notify(app.config['QUEUE_SMS'], {'phone': phone_number, 'text': message})
+
+
+def send_invite_to_user_by_email(user_model, invite_token):
+    """
+    Create invite token and message and send to user email
+    :param user_model: user model
+    :param invite_token: unique invite token for user
+    """
+    invite_url = url_for('api_v1.user_create_password', token=invite_token, _external=True)
+
+    subject = 'XOPay Payment System Registration'
+    invite_msg = '''
+        Dear {user_name}, you have been invited to manage XOPay Payment System.
+        To continue registration and set your account password click by this url {invite_url}.
+
+        Skip this letter if your do not registered into XOPay Payment System.
+    '''
+    invite_msg = invite_msg.format(user_name=user_model.get_full_name(), invite_url=invite_url)
+
+    send_email(user_model.email, subject=subject, message=invite_msg)
 
 
 # Media files
