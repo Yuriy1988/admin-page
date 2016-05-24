@@ -14,10 +14,10 @@ hosts = dict(
 path_to_deploy = [
     'frontend/static',
     'api',
-    'config.py',
-    'manage.py',
+    '*.py',
     'requirements.txt',
     'Makefile',
+    'fabfile.py'
 ]
 
 path_to_exclude = [
@@ -152,10 +152,9 @@ def setup():
     sudo('usermod -a -G www-data $USER')
 
     # create project structure
-    base_deploy_dir = os.path.dirname(env.deploy_dir)
     sudo('mkdir -p {deploy_dir}'.format(**env))
-    sudo('chown -R "{user}:www-data" {base_deploy_dir}'.format(user=env.user, base_deploy_dir=base_deploy_dir))
-    sudo('chmod 2750 {base_deploy_dir}'.format(base_deploy_dir=base_deploy_dir))
+    sudo('chown -R "{user}:www-data" {deploy_dir}'.format(**env))
+    sudo('chmod 2750 {deploy_dir}'.format(**env))
 
     # create log structure
     sudo('mkdir -p {log_dir}'.format(**env))
