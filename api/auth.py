@@ -52,6 +52,9 @@ def _check_authorization(access_groups, verify=False):
             that has permissions to make request for current rule
     :param verify: True/False - raise error if token expired or not
     """
+    if isinstance(access_groups, str):
+        access_groups = [access_groups]
+
     token_header = request.headers.get('Authorization', '').split()
     token = token_header[1] if len(token_header) == 2 and token_header[0] == 'Bearer' else None
 

@@ -86,13 +86,13 @@ class TestStore(base.BaseTestCase):
         merchant = self.create_merchant(self.get_merchant())
         store = self.create_store(self.get_store(), merchant.id)
 
-        status, body = self.get('/stores/%s/exists' % store.id)
+        status, body = self.get('/stores/%s/exists' % store.id, auth='system')
 
         self.assertEqual(status, 200)
         self.assertDictEqual(body, {'exists': True})
 
     def test_get_store_not_exists(self):
-        status, body = self.get('/stores/%s/exists' % 'STORE_UP')
+        status, body = self.get('/stores/%s/exists' % 'STORE_UP', auth='system')
 
         self.assertEqual(status, 200)
         self.assertDictEqual(body, {'exists': False})

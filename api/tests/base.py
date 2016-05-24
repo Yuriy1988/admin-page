@@ -203,6 +203,8 @@ class BaseTestCase(TestCase, TestDefaults):
         if token:
             headers["Authorization"] = "Bearer %s" % token
 
+        data = json.dumps(data) if isinstance(data, dict) else data
+
         return self.client.open(self.api_base + url, method=method, data=data, headers=headers, **options)
 
     def get(self, url, query_args=None, auth=None, token=None):
@@ -210,11 +212,11 @@ class BaseTestCase(TestCase, TestDefaults):
         return response.status_code, response.json
 
     def put(self, url, body, auth=None, token=None):
-        response = self.request(url, method='PUT', data=json.dumps(body), auth=auth or 'admin', token=token)
+        response = self.request(url, method='PUT', data=body, auth=auth or 'admin', token=token)
         return response.status_code, response.json
 
     def post(self, url, body, auth=None, token=None):
-        response = self.request(url, method='POST', data=json.dumps(body), auth=auth or 'admin', token=token)
+        response = self.request(url, method='POST', data=body, auth=auth or 'admin', token=token)
         return response.status_code, response.json if response.mimetype == 'application/json' else response.data
 
     def delete(self, url, auth=None, token=None):
