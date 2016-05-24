@@ -3,8 +3,6 @@ from flask import Flask, Blueprint, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.contrib.fixers import ProxyFix
 
-from config import STATIC_FOLDER
-
 __author__ = 'Kostel Serhii'
 
 
@@ -54,9 +52,9 @@ class AuthBlueprint(Blueprint):
         return decorator
 
 
-app = Flask(__name__, static_folder=STATIC_FOLDER)
-
+app = Flask(__name__)
 app.config.from_object('config')
+app.static_folder = app.config["STATIC_FOLDER"]
 
 app.wsgi_app = ProxyFix(app.wsgi_app)
 app.json_encoder = XOPayJSONEncoder

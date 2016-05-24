@@ -34,7 +34,7 @@ def merchant_create():
     return jsonify(result.data)
 
 
-@api_v1.route('/merchants/<merchant_id>', methods=['GET'], auth=['admin'])
+@api_v1.route('/merchants/<merchant_id>', methods=['GET'], auth=['admin', 'system'])
 def merchant_detail(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:

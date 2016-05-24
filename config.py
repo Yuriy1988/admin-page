@@ -31,6 +31,8 @@ AUTH_TOKEN_LIFE_TIME = timedelta(minutes=30)
 AUTH_SESSION_LIFE_TIME = timedelta(hours=24)
 AUTH_INVITE_LIFE_TIME = timedelta(days=3)
 
+AUTH_SYSTEM_USER_ID = 'xopay.admin'
+
 
 # Queue:
 QUEUE_HOST = '0.0.0.0'

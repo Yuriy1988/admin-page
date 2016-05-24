@@ -40,7 +40,7 @@ def merchant_stores_create(merchant_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/stores/<store_id>', methods=['GET'], auth=['admin'])
+@api_v1.route('/stores/<store_id>', methods=['GET'], auth=['admin', 'system'])
 def store_detail(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -97,14 +97,14 @@ def store_upload_logo(store_id):
     return jsonify(logo=store.logo)
 
 
-@api_v1.route('/stores/<store_id>/exists', methods=['GET'], auth=['admin'])
+@api_v1.route('/stores/<store_id>/exists', methods=['GET'], auth=['system'])
 def store_exists(store_id):
     return jsonify(exists=Store.exists(store_id))
 
 
 # Store Payment System
 
-@api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'], auth=['admin'])
+@api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'], auth=['admin', 'system'])
 def store_payment_systems_list(store_id):
     if not Store.exists(store_id):
         raise NotFoundError()

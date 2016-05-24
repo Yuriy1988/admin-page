@@ -10,7 +10,7 @@ __author__ = 'Kostel Serhii'
 
 # Merchant Contract
 
-@api_v1.route('/merchants/<merchant_id>/contracts', methods=['GET'], auth=['admin'])
+@api_v1.route('/merchants/<merchant_id>/contracts', methods=['GET'], auth=['admin', 'system'])
 def merchant_contracts_list(merchant_id):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
@@ -109,7 +109,7 @@ def merchant_contract_upload_contract_doc_url(merchant_contract_id):
 
 # Payment System Contract
 
-@api_v1.route('/payment_systems/<paysys_id>/contracts', methods=['GET'], auth=['admin'])
+@api_v1.route('/payment_systems/<paysys_id>/contracts', methods=['GET'], auth=['admin', 'system'])
 def payment_system_contracts_list(paysys_id):
     paysys_id = paysys_id.upper()
     if not PaymentSystem.exists(paysys_id):

@@ -274,7 +274,7 @@ def get_system_token():
     """
     payload = dict(
         exp=datetime.utcnow() + app.config['AUTH_TOKEN_LIFE_TIME'],
-        user_id='xopay.admin',
+        user_id=app.config['AUTH_SYSTEM_USER_ID'],
         groups=['system'],
     )
     return _create_token(payload=payload)
