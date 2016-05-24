@@ -5,3 +5,4 @@ node_modules
 migrations
 *.DS_Store
 dist
+test_cover
