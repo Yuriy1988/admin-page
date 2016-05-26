@@ -11,7 +11,7 @@ class CurrencySchema(base.BaseSchema):
 
     from_currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     to_currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
-    rate = fields.Decimal(required=True)
+    rate = fields.Decimal(required=True, places=6)
     commit_time = fields.DateTime(dump_only=True)
 
 

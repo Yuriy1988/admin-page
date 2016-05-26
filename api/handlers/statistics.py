@@ -5,7 +5,7 @@ from api import api_v1, utils
 __author__ = 'Kostel Serhii'
 
 
-@api_v1.route('/statistics/payments', methods=['GET']) # , auth=['admin'])
+@api_v1.route('/statistics/payments', methods=['GET'], auth=['admin'])
 def payments_statistics():
     """Proxy statistic request to Client service"""
     proxy_resp = utils.client_server_get_request('/statistics/payments', **request.args)

@@ -9,8 +9,8 @@ __author__ = 'Omelchenko Daniel'
 
 class AbstractContractSchema(base.BaseSchema):
     id = fields.Int(dump_only=True)
-    commission_fixed = fields.Decimal(required=True)
-    commission_pct = fields.Decimal(required=True, validate=Range(min=-100, max=100))
+    commission_fixed = fields.Decimal(required=True, places=2)
+    commission_pct = fields.Decimal(required=True, places=2, validate=Range(min=-100, max=100))
     contract_doc_url = fields.Url(required=True)
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     active = fields.Boolean(missing=False)
