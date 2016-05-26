@@ -10,6 +10,7 @@ pyjwt==1.4.0
 redis==2.10.5
 pika==0.10.0
 coverage==4.1
+requests==2.9.1
 
 flask==0.10.1
 flask-sqlalchemy==2.1

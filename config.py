@@ -33,6 +33,7 @@ AUTH_INVITE_LIFE_TIME = timedelta(days=3)
 
 AUTH_SYSTEM_USER_ID = 'xopay.admin'
 
+CLIENT_API_URL = 'http://127.0.0.1:7254/api/client/dev'
 
 # Queue:
 QUEUE_HOST = '0.0.0.0'

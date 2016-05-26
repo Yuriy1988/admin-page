@@ -2,13 +2,39 @@ import os
 import random
 import string
 import pika
+import requests
+from requests import exceptions
 from pika import exceptions as mq_err
 from flask import request, json, url_for
 from werkzeug.utils import secure_filename
 
-from api import app, errors
+from api import app, errors, auth
 
 __author__ = 'Kostel Serhii'
+
+
+# Client service
+
+def client_server_get_request(url, **params):
+    """
+    Make request to admin server and return response.
+    :param url: url (without base prefix) to admin server
+    :param params: url parameters
+    :return: response as dict or raise exception
+    """
+    full_url = app.config["CLIENT_API_URL"] + url
+    headers = {"Authorization": "Bearer %s" % auth.get_system_token()}
+
+    try:
+        response = requests.get(full_url, params=params, headers=headers, timeout=5)
+    except exceptions.Timeout:
+        raise errors.ServiceUnavailableError('The client server connection timeout.')
+    except exceptions.ConnectionError:
+        raise errors.ServiceUnavailableError('The client server connection error.')
+    except exceptions.RequestException:
+        raise errors.InternalServerError('The client server request error.')
+
+    return response
 
 
 # Queue

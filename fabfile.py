@@ -16,14 +16,14 @@ path_to_deploy = [
     'api',
     '*.py',
     'requirements.txt',
-    'Makefile',
-    'fabfile.py'
+    'Makefile'
 ]
 
 path_to_exclude = [
     '*.pyc',
     '__pycache__',
-    'api/tests'
+    'api/tests',
+    'fabfile.py'
 ]
 
 env.deploy_dir = '/var/www/xopay/admin'
