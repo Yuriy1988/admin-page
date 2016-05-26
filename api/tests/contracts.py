@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 from api.tests import base
-from api.models import enum, MerchantContract, PaySysContract
+from api.models import MerchantContract, PaySysContract
 
 __author__ = 'Daniel Omelchenko'
 
@@ -9,8 +11,8 @@ class TestMerchantContracts(base.BaseTestCase):
     # test environment
 
     _merchant_contract = {
-        "commission_fixed": '0.1',
-        "commission_pct": '2.0',
+        "commission_fixed": '0.10',
+        "commission_pct": '2.00',
         "currency": "USD",
         "contract_doc_url": "http://contract.doc",
         "active": True,
@@ -135,12 +137,14 @@ class TestMerchantContracts(base.BaseTestCase):
         merchant = self.create_merchant(self._merchant)
         contract = self.create_merchant_contracts(merchant.id)[0]
 
-        merchant_contract_update = {"commission_fixed": "3.5", "active": False}
+        merchant_contract_update = {"commission_fixed": "3.50", "active": False}
         contract.update(merchant_contract_update)
 
         status, body = self.put('/merchant_contracts/%s' % contract['id'], merchant_contract_update)
 
         self.assertEqual(status, 200, msg=body)
+        body['commission_fixed'] = Decimal(body['commission_fixed'])
+        contract['commission_fixed'] = Decimal(contract['commission_fixed'])
         self.assertDictEqual(body, contract)
 
     def test_put_contract_read_only_fields_not_update(self):
@@ -184,8 +188,8 @@ class TestPaySysContracts(base.BaseTestCase):
 
     _pay_sys_contract = {
         "contractor_name": "Alpha Bank",
-        "commission_fixed": '0.1',
-        "commission_pct": '2.0',
+        "commission_fixed": '0.10',
+        "commission_pct": '2.00',
         "currency": "USD",
         "contract_doc_url": "http://contract.doc",
         "active": True,

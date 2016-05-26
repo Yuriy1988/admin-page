@@ -17,7 +17,7 @@ class TestCurrency(base.BaseTestCase):
     _currency = {
         "from_currency": "USD",
         "to_currency": "UAH",
-        "rate": "27.5",
+        "rate": "27.500000",
         "commit_time": "2016-01-01T00:00:00+00:00"
     }
 
