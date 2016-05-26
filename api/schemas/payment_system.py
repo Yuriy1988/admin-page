@@ -10,7 +10,7 @@ class PaymentSystemSchema(base.BaseSchema):
 
     id = fields.Str(dump_only=True)
     paysys_name = fields.Str(dump_only=True)
-    active = fields.Boolean(default=False)
+    active = fields.Boolean(missing=False)
 
 
 class PaymentSystemUpdateSchema(base.BaseSchema):

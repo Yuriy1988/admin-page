@@ -18,9 +18,9 @@ class UserSchema(base.BaseSchema):
     last_name = fields.Str(allow_none=True, validate=Length(min=2, max=80))
 
     phone = fields.Str(allow_none=True, validate=base.Phone())
-    notify = fields.Str(default='NONE', validate=OneOf(enum.USER_NOTIFY_ENUM))
+    notify = fields.Str(missing='NONE', validate=OneOf(enum.USER_NOTIFY_ENUM))
 
-    enabled = fields.Bool(required=True, default=False)
+    enabled = fields.Bool(required=True, missing=False)
 
 
 class UserAuthSchema(base.BaseSchema):

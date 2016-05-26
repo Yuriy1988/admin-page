@@ -9,7 +9,7 @@ __author__ = 'Kostel Serhii'
 
 class StoreSettingsSchema(base.BaseSchema):
 
-    sign_algorithm = fields.Str(required=True, validate=OneOf(enum.SIGN_ALGORITHM_ENUM), default='MD5')
+    sign_algorithm = fields.Str(required=True, validate=OneOf(enum.SIGN_ALGORITHM_ENUM))
     sign_key = fields.Str(dump_only=True)
     succeed_url = fields.Url(required=True)
     failure_url = fields.Url(required=True)
@@ -37,7 +37,7 @@ class StorePaySysSchema(base.BaseSchema):
     id = fields.Str(dump_only=True)
     store_id = fields.Str(dump_only=True)
     paysys_id = fields.Str(dump_only=True)
-    allowed = fields.Boolean(default=False)
+    allowed = fields.Boolean(missing=False)
 
 
 class StorePaySysRequestSchema(base.BaseSchema):

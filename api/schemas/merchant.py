@@ -11,7 +11,7 @@ class MerchantAccountSchema(base.BaseSchema):
 
     bank_name = fields.Str(required=True, validate=Length(min=3, max=255))
     checking_account = fields.Str(required=True, validate=[base.DigitsOnly(), Length(min=12, max=24)])
-    currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM), default='USD')
+    currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
     mfo = fields.Str(required=True, validate=[base.DigitsOnly(), Length(equal=6)])
     okpo = fields.Str(required=True, validate=[base.DigitsOnly(), Length(equal=8)])
 

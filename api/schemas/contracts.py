@@ -13,8 +13,8 @@ class AbstractContractSchema(base.BaseSchema):
     commission_pct = fields.Decimal(required=True, validate=Range(min=-100, max=100))
     contract_doc_url = fields.Url(required=True)
     currency = fields.Str(required=True, validate=OneOf(enum.CURRENCY_ENUM))
-    active = fields.Boolean(default=False)
-    filter = fields.Str(default="*")
+    active = fields.Boolean(missing=False)
+    filter = fields.Str(missing="*")
 
 
 class MerchantContractSchema(AbstractContractSchema):
