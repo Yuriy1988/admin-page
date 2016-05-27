@@ -331,13 +331,15 @@ class TestPaySysContracts(base.BaseTestCase):
     def test_put_contract(self):
         contract = self.create_pay_sys_contracts(self.paysys_id)[0]
 
-        pay_sys_contract_update = {"commission_fixed": "3.5", "active": False}
+        pay_sys_contract_update = {"commission_fixed": "3.50", "active": False}
 
         status, body = self.put('/paysys_contracts/%s' % contract['id'], pay_sys_contract_update)
 
         contract.update(pay_sys_contract_update)
 
         self.assertEqual(status, 200, msg=body)
+        body['commission_fixed'] = Decimal(body['commission_fixed'])
+        contract['commission_fixed'] = Decimal(contract['commission_fixed'])
         self.assertDictEqual(body, contract)
 
     def test_put_contract_read_only_fields_not_update(self):
