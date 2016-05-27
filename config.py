@@ -9,6 +9,13 @@ STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 # FIXME: uncomment after config update (for full invite url)
 # SERVER_NAME = 'xopay.digitaloutlooks.com'
 
+LOG_BASE_NAME = 'xop'
+LOG_FORMAT = 'ADMIN  | %(levelname)-6.6s | %(name)-15.15s | %(asctime)s | %(message)s'
+LOG_DATE_FORMAT = '%d.%m %H:%M:%S'
+
+LOG_ROOT_LEVEL = 'DEBUG'
+LOG_LEVEL = 'DEBUG'
+
 # Upload
 MAX_CONTENT_LENGTH = 4 * 1024 * 1024
 MEDIA_BASE_FOLDER = os.path.join(BASE_FOLDER, 'media', 'admin')

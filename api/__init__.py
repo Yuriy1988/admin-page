@@ -1,4 +1,7 @@
+import os
 import decimal
+import logging
+import logging.handlers
 from flask import Flask, Blueprint, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.contrib.fixers import ProxyFix
@@ -52,12 +55,37 @@ class AuthBlueprint(Blueprint):
         return decorator
 
 
+def logger_configure(log_config):
+
+    if 'LOG_FILE' in log_config and os.access(os.path.dirname(log_config['LOG_FILE']), os.W_OK):
+        log_handler = logging.handlers.RotatingFileHandler(
+            filename=log_config['LOG_FILE'],
+            maxBytes=log_config['LOG_MAX_BYTES'],
+            backupCount=log_config['LOG_BACKUP_COUNT'],
+            encoding='utf8',
+        )
+    else:
+        log_handler = logging.StreamHandler()
+
+    log_formatter = logging.Formatter(fmt=log_config['LOG_FORMAT'], datefmt=log_config['LOG_DATE_FORMAT'])
+    log_handler.setFormatter(log_formatter)
+
+    # root logger
+    logging.getLogger('').addHandler(log_handler)
+    logging.getLogger('').setLevel(log_config['LOG_ROOT_LEVEL'])
+
+    # local logger
+    logging.getLogger(log_config.get('LOG_BASE_NAME', '')).setLevel(log_config['LOG_LEVEL'])
+
+
 app = Flask(__name__)
 app.config.from_object('config')
 app.static_folder = app.config["STATIC_FOLDER"]
 
 app.wsgi_app = ProxyFix(app.wsgi_app)
 app.json_encoder = XOPayJSONEncoder
+
+logger_configure(app.config)
 
 db = SQLAlchemy(app)
 
