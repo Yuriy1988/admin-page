@@ -96,7 +96,7 @@ if not app.config['DEBUG']:
     @app.after_request
     def log_request(response):
         request_detail = dict(
-            remote_address=request.headers.get('X-Real-IP', request.remote_addr),
+            remote_address=request.remote_addr,
             method=request.method,
             path=request.full_path if request.query_string else request.path,
             status=response.status_code
