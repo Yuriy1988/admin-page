@@ -14,6 +14,9 @@ server {{
     set $CLIENT_BASE $XOPAY_BASE/client;
     set $CLIENT_STATIC $CLIENT_BASE/frontend/static/client;
 
+    access_log  /var/log/xopay/nginx-access.log;
+    error_log  /var/log/xopay/nginx-error.log;
+
     location /static/admin/ {{
         root   $ADMIN_BASE/frontend;
         access_log off;
@@ -30,11 +33,15 @@ server {{
     }}
 
     location /api/admin/ {{
-        proxy_pass_header Server;
-        proxy_set_header Host $http_host;
         proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Scheme $scheme;
+        proxy_pass_header Server;
+
+        proxy_set_header   Host                 $host;
+        proxy_set_header   X-Real-IP            $remote_addr;
+        proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto    $scheme;
+        proxy_set_header   X-Scheme             $scheme;
+
         proxy_connect_timeout 10;
         proxy_read_timeout 10;
         proxy_pass http://127.0.0.1:{admin_port}/api/admin/;
@@ -46,22 +53,30 @@ server {{
     }}
 
     location /client/ {{
-        proxy_pass_header Server;
-        proxy_set_header Host $http_host;
         proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Scheme $scheme;
+        proxy_pass_header Server;
+
+        proxy_set_header   Host                 $host;
+        proxy_set_header   X-Real-IP            $remote_addr;
+        proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto    $scheme;
+        proxy_set_header   X-Scheme             $scheme;
+
         proxy_connect_timeout 10;
         proxy_read_timeout 10;
         proxy_pass http://127.0.0.1:{client_port}/client/;
     }}
 
     location /api/client/ {{
-        proxy_pass_header Server;
-        proxy_set_header Host $http_host;
         proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Scheme $scheme;
+        proxy_pass_header Server;
+
+        proxy_set_header   Host                 $host;
+        proxy_set_header   X-Real-IP            $remote_addr;
+        proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto    $scheme;
+        proxy_set_header   X-Scheme             $scheme;
+
         proxy_connect_timeout 10;
         proxy_read_timeout 10;
         proxy_pass http://127.0.0.1:{client_port}/api/client/;
