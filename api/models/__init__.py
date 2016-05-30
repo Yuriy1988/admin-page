@@ -5,6 +5,6 @@ from .merchant import Merchant, MerchantAccount, MerchantInfo
 from .manager import Manager
 from .payment_system import PaymentSystem
 from .store import Store, StoreSettings, StorePaySys
-from .user import User
+from .user import User, UserGroup
 
 __author__ = 'Kostel Serhii'
