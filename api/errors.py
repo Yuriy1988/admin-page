@@ -1,8 +1,8 @@
 import sys
 from traceback import format_exception
-from flask import jsonify
+from flask import jsonify, current_app
 
-from api import app
+from api import api_v1,  after_app_created
 
 __author__ = 'Kostel Serhii'
 
@@ -41,7 +41,7 @@ def _handle_api_error(cls):
     Decorator to handle API errors
     :param cls: BaseAPIError class instance
     """
-    @app.errorhandler(cls)
+    @api_v1.errorhandler(cls)
     def _handler(err):
         return _error_serializer(message=err.message, status_code=err.status_code, errors=err.errors)
     return cls
@@ -56,7 +56,7 @@ def _handle_default_error(error, status_code, message=None, with_traceback=False
     """
     message = message or getattr(error, 'description', str(error))
     traceback = None
-    if with_traceback and app.config['DEBUG']:
+    if with_traceback and current_app.config['DEBUG']:
         etype, value, tb = sys.exc_info()
         traceback = ''.join(format_exception(etype, value, tb))
     return _error_serializer(message=message, status_code=status_code, traceback=traceback)
@@ -122,27 +122,25 @@ class ServiceUnavailableError(BaseApiError):
 
 # Default Errors
 
+@after_app_created
+def register_default_error(app):
 
-@app.errorhandler(400)
-def error_bad_request(error):
-    return _handle_default_error(error, 400, with_traceback=True)
+    @api_v1.errorhandler(400)
+    def error_bad_request(error):
+        return _handle_default_error(error, 400, with_traceback=True)
 
+    @api_v1.errorhandler(404)
+    def error_not_found(error):
+        return _handle_default_error(error, 404)
 
-@app.errorhandler(404)
-def error_not_found(error):
-    return _handle_default_error(error, 404)
+    @api_v1.errorhandler(405)
+    def error_method_not_allowed(error):
+        return _handle_default_error(error, 405)
 
+    @api_v1.errorhandler(413)
+    def page_not_found(error):
+        return _handle_default_error(error, 413)
 
-@app.errorhandler(405)
-def error_method_not_allowed(error):
-    return _handle_default_error(error, 405)
-
-
-@app.errorhandler(413)
-def page_not_found(error):
-    return _handle_default_error(error, 413)
-
-
-@app.errorhandler(500)
-def error_internal_server_error(error):
-    return _handle_default_error(error, 500, with_traceback=True)
+    @api_v1.errorhandler(500)
+    def error_internal_server_error(error):
+        return _handle_default_error(error, 500, with_traceback=True)

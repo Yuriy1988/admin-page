@@ -1,7 +1,9 @@
 import decimal
 import logging
+from functools import wraps
 from flask import Flask, Blueprint, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from werkzeug.contrib.fixers import ProxyFix
 
 __author__ = 'Kostel Serhii'
@@ -19,7 +21,7 @@ def _inform_app_created(app):
 def after_app_created(func):
     """Subscribe function to call after app created."""
     _app_created_subscribers.add(func)
-    return func
+    return wraps(func)
 
 
 class XOPayJSONEncoder(json.JSONEncoder):
@@ -36,6 +38,8 @@ class XOPayJSONEncoder(json.JSONEncoder):
         return super(XOPayJSONEncoder, self).default(obj)
 
 
+db = SQLAlchemy()
+migrate = Migrate()
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -49,7 +53,9 @@ log = logging.getLogger('xop.main')
 log.info('Starting XOPay Admin Service...')
 
 
-db = SQLAlchemy(app)
+db.init_app(app)
+migrate.init_app(app, db)
+
 
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/admin/dev')
 

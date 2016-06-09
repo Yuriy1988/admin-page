@@ -4,7 +4,7 @@ from collections import defaultdict
 from sqlalchemy.inspection import inspect
 from flask_sqlalchemy import before_models_committed, models_committed
 
-from api import app, db
+from api import db, after_app_created
 
 __author__ = 'Kostel Serhii'
 
@@ -116,8 +116,11 @@ class _EventHandler:
         if subscribers_store is not None:
             subscribers_store[(model_class.__name__, operation)].append(subscribe_func)
 
-before_models_committed.connect(_EventHandler.before_committed, sender=app)
-models_committed.connect(_EventHandler.after_committed, sender=app)
+
+@after_app_created
+def register_connection(app):
+    before_models_committed.connect(_EventHandler.before_committed, sender=app)
+    models_committed.connect(_EventHandler.after_committed, sender=app)
 
 
 def on_model_event(model_class, event_type):

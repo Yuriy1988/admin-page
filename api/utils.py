@@ -6,10 +6,10 @@ import pika
 import requests
 from requests import exceptions
 from pika import exceptions as mq_err
-from flask import request, json, url_for
+from flask import request, json, url_for, current_app as app
 from werkzeug.utils import secure_filename
 
-from api import app, errors, auth
+from api import errors, auth
 
 __author__ = 'Kostel Serhii'
 

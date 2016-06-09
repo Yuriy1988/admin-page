@@ -6,9 +6,9 @@ from calendar import timegm
 from uuid import uuid4
 from datetime import datetime
 from functools import wraps
-from flask import g, request, json
+from flask import g, request, json, current_app as app
 
-from api import app, errors
+from api import errors
 
 __author__ = 'Kostel Serhii'
 
