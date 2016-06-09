@@ -29,13 +29,15 @@ def auth_login():
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp', 'user_name', 'groups')))
 
 
-@api_v1.route('/authorization/token', methods=['GET'], auth=['admin', 'merchant', 'manager'])
+@api_v1.route('/authorization/token', methods=['GET'])
+@auth.auth(['admin', 'merchant', 'manager'])
 def auth_refresh_token():
     session = auth.refresh_session(g.token)
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp')))
 
 
-@api_v1.route('/authorization/token', methods=['DELETE'], auth=['admin', 'merchant', 'manager'])
+@api_v1.route('/authorization/token', methods=['DELETE'])
+@auth.auth(['admin', 'merchant', 'manager'])
 def auth_logout():
     auth.remove_session(g.token)
     return Response(status=200)
@@ -82,7 +84,8 @@ def user_forgot_password():
     return Response(status=200)
 
 
-@api_v1.route('/user/change_password', methods=['POST'], auth=['admin', 'manager', 'merchant'])
+@api_v1.route('/user/change_password', methods=['POST'])
+@auth.auth(['admin', 'merchant', 'manager'])
 def user_change_password():
     schema = schemas.UserChangePasswordSchema()
     data, errors = schema.load(request.get_json())
@@ -102,7 +105,8 @@ def user_change_password():
     return Response(status=200)
 
 
-@api_v1.route('/admins_emails', methods=['GET'], auth=['system'])
+@api_v1.route('/admins_emails', methods=['GET'])
+@auth.auth('system')
 def admins_emails():
     emails = db.session.query(models.User.email).join(models.UserGroup).filter_by(group_name='admin').all()
     return jsonify(emails=list(emails))

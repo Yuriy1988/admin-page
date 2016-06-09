@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from api import api_v1, db
+from api import api_v1, db, auth
 from api.models import PaymentSystem
 from api.schemas import PaymentSystemSchema, PaymentSystemUpdateSchema
 from api.errors import NotFoundError, ValidationError
@@ -8,7 +8,8 @@ from api.errors import NotFoundError, ValidationError
 __author__ = 'Kostel Serhii'
 
 
-@api_v1.route('/payment_systems/allowed/paysys_id', methods=['GET'], auth=['admin'])
+@api_v1.route('/payment_systems/allowed/paysys_id', methods=['GET'])
+@auth.auth('admin')
 def allowed_paysys_id():
     return jsonify(paysys_id=list(PaymentSystem.allowed_paysys_id()))
 
@@ -21,7 +22,8 @@ def payment_system_list():
     return jsonify(payment_systems=result.data)
 
 
-@api_v1.route('/payment_systems/<paysys_id>', methods=['GET'], auth=['admin'])
+@api_v1.route('/payment_systems/<paysys_id>', methods=['GET'])
+@auth.auth('admin')
 def payment_system_detail(paysys_id):
     paysys_id = paysys_id.upper()
     payment_system = PaymentSystem.query.get(paysys_id)
@@ -34,7 +36,8 @@ def payment_system_detail(paysys_id):
     return jsonify(result.data)
 
 
-@api_v1.route('/payment_systems/<paysys_id>', methods=['PUT'], auth=['admin'])
+@api_v1.route('/payment_systems/<paysys_id>', methods=['PUT'])
+@auth.auth('admin')
 def payment_system_update(paysys_id):
     paysys_id = paysys_id.upper()
     payment_system = PaymentSystem.query.get(paysys_id)

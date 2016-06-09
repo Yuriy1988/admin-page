@@ -18,43 +18,6 @@ class XOPayJSONEncoder(json.JSONEncoder):
         return super(XOPayJSONEncoder, self).default(obj)
 
 
-class AuthBlueprint(Blueprint):
-
-    def route(self, rule, **options):
-        """
-        A decorator that is used to extend basic flask route decorator
-        with authorization functionality.
-        Use "auth" option to check access group::
-
-            @api.route('/', auth='admin')
-            def index():
-                return 'Hello World'
-
-        This is equivalent to::
-
-            @app.route('/')
-            @auth('admin')
-            def index():
-                return 'Hello World'
-
-        :param rule: the URL rule as string
-        :param options: route options
-                :auth: user group or list of groups,
-                that has permissions to make request for current rule.
-                If None or not set - do not check permission.
-        """
-        from api.auth import auth
-
-        access_groups = options.pop('auth', None)
-
-        def decorator(f):
-            auth_decorator = auth(access_groups)
-            route_decorator = super(AuthBlueprint, self).route(rule, **options)
-            return route_decorator(auth_decorator(f))
-
-        return decorator
-
-
 def logger_configure(log_config):
 
     if 'LOG_FILE' in log_config and os.access(os.path.dirname(log_config['LOG_FILE']), os.W_OK):
@@ -106,7 +69,7 @@ if not app.config['DEBUG']:
 
 db = SQLAlchemy(app)
 
-api_v1 = AuthBlueprint('api_v1', __name__, url_prefix='/api/admin/dev')
+api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/admin/dev')
 
 import api.handlers
 app.register_blueprint(api_v1)
