@@ -13,7 +13,7 @@ from api import app, errors
 __author__ = 'Kostel Serhii'
 
 
-_log = logging.getLogger('auth')
+_log = logging.getLogger('xop.auth')
 _redis_auth = redis.StrictRedis(db=1)
 
 

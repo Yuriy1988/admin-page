@@ -1,4 +1,5 @@
 import os
+import logging
 import random
 import string
 import pika
@@ -11,6 +12,9 @@ from werkzeug.utils import secure_filename
 from api import app, errors, auth
 
 __author__ = 'Kostel Serhii'
+
+
+_log = logging.getLogger('xop.utils')
 
 
 # Client service
@@ -96,12 +100,12 @@ def _send_notify(queue_name, body_json):
     :param queue_name: notification queue name
     :param dict body_json: notification body json
     """
-    app.logger.info("Send notification to queue [%s]", queue_name)
+    _log.info("Send notification to queue [%s]", queue_name)
     try:
         push_to_queue(queue_name, body_json)
     except Exception as err:
         # Notification error should not crash task execution
-        app.logger.error("Notification service is unavailable now: %s" % str(err))
+        _log.error("Notification service is unavailable now: %s" % str(err))
 
 
 def send_email(email_address, subject, message):
