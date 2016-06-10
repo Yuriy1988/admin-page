@@ -10,6 +10,7 @@ from flask.ext.testing import TestCase
 
 from api import app, db as app_db, utils, auth as api_auth
 from api.models import Merchant, Store, PaymentSystem, User
+from api.models.base import BaseModel
 from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME
 
 __author__ = 'Kostel Serhii'
@@ -179,9 +180,9 @@ class BaseTestCase(TestCase, TestDefaults):
     def _create_system_token(self):
         return api_auth.get_system_token()
 
-    def get_auth_token(self, auth_group):
-        if auth_group in self.token_storage:
-            return self.token_storage[auth_group]
+    def get_auth_token(self, auth_group_or_model):
+        if auth_group_or_model in self.token_storage:
+            return self.token_storage[auth_group_or_model]
 
         token_map = {
             'admin': self._create_admin_token,
@@ -189,10 +190,16 @@ class BaseTestCase(TestCase, TestDefaults):
         }
 
         token = None
-        token_creator = token_map.get(auth_group)
-        if token_creator:
-            token = token_creator()
-            self.token_storage[auth_group] = token
+        if isinstance(auth_group_or_model, str):
+            token_creator = token_map.get(auth_group_or_model)
+            if token_creator:
+                token = token_creator()
+        elif isinstance(auth_group_or_model, BaseModel):
+            session = api_auth.create_session(auth_group_or_model)
+            token = session['token']
+
+        if token:
+            self.token_storage[auth_group_or_model] = token
 
         return token
 

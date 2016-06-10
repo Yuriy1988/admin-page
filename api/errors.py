@@ -1,10 +1,14 @@
 import sys
+import logging
 from traceback import format_exception
 from flask import jsonify, current_app
 
 from api import api_v1,  after_app_created
 
 __author__ = 'Kostel Serhii'
+
+
+_log = logging.getLogger('xop.error')
 
 
 def _error_serializer(message, status_code, errors=None, traceback=None):
@@ -59,6 +63,7 @@ def _handle_default_error(error, status_code, message=None, with_traceback=False
     if with_traceback and current_app.config['DEBUG']:
         etype, value, tb = sys.exc_info()
         traceback = ''.join(format_exception(etype, value, tb))
+        _log.error('Handle exception traceback: %s', traceback)
     return _error_serializer(message=message, status_code=status_code, traceback=traceback)
 
 
@@ -125,22 +130,22 @@ class ServiceUnavailableError(BaseApiError):
 @after_app_created
 def register_default_error(app):
 
-    @api_v1.errorhandler(400)
+    @app.errorhandler(400)
     def error_bad_request(error):
         return _handle_default_error(error, 400, with_traceback=True)
 
-    @api_v1.errorhandler(404)
+    @app.errorhandler(404)
     def error_not_found(error):
         return _handle_default_error(error, 404)
 
-    @api_v1.errorhandler(405)
+    @app.errorhandler(405)
     def error_method_not_allowed(error):
         return _handle_default_error(error, 405)
 
-    @api_v1.errorhandler(413)
+    @app.errorhandler(413)
     def page_not_found(error):
         return _handle_default_error(error, 413)
 
-    @api_v1.errorhandler(500)
+    @app.errorhandler(500)
     def error_internal_server_error(error):
         return _handle_default_error(error, 500, with_traceback=True)
