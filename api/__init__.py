@@ -52,7 +52,7 @@ app.json_encoder = XOPayJSONEncoder
 log = logging.getLogger('xop.main')
 log.info('Starting XOPay Admin Service...')
 
-
+db.app = app
 db.init_app(app)
 migrate.init_app(app, db)
 

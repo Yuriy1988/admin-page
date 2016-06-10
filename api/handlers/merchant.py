@@ -37,7 +37,7 @@ def merchant_create():
 
 
 @api_v1.route('/merchants/<merchant_id>', methods=['GET'])
-@auth.auth(['admin', 'system'])
+@auth.auth('admin', 'system')
 def merchant_detail(merchant_id):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:

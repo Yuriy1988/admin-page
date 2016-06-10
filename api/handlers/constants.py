@@ -13,7 +13,7 @@ def constant_notify():
 
 
 @api_v1.route('/constants/currency', methods=['GET'])
-@auth.auth(['admin', 'system', 'merchant', 'manager'])
+@auth.auth('admin', 'system', 'merchant', 'manager')
 def constant_currency():
     return jsonify(currency=enum.CURRENCY_ENUM)
 

@@ -30,14 +30,14 @@ def auth_login():
 
 
 @api_v1.route('/authorization/token', methods=['GET'])
-@auth.auth(['admin', 'merchant', 'manager'])
+@auth.auth('admin', 'merchant', 'manager')
 def auth_refresh_token():
     session = auth.refresh_session(g.token)
     return jsonify(_filter_dict(session, ('token', 'exp', 'session_exp')))
 
 
 @api_v1.route('/authorization/token', methods=['DELETE'])
-@auth.auth(['admin', 'merchant', 'manager'])
+@auth.auth('admin', 'merchant', 'manager')
 def auth_logout():
     auth.remove_session(g.token)
     return Response(status=200)
@@ -85,7 +85,7 @@ def user_forgot_password():
 
 
 @api_v1.route('/user/change_password', methods=['POST'])
-@auth.auth(['admin', 'merchant', 'manager'])
+@auth.auth('admin', 'merchant', 'manager')
 def user_change_password():
     schema = schemas.UserChangePasswordSchema()
     data, errors = schema.load(request.get_json())

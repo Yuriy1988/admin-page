@@ -48,13 +48,9 @@ def _check_authorization(access_groups, verify=False):
         3. User access group
         4. IP address
 
-    :param access_groups: user group or list of groups,
-            that has permissions to make request for current rule
+    :param access_groups: list of user groups, that has permissions to make request for current rule
     :param verify: True/False - raise error if token expired or not
     """
-    if isinstance(access_groups, str):
-        access_groups = [access_groups]
-
     token_header = request.headers.get('Authorization', '').split()
     token = token_header[1] if len(token_header) == 2 and token_header[0] == 'Bearer' else None
 
@@ -96,38 +92,30 @@ def _check_authorization(access_groups, verify=False):
     g.user_id = user_id
 
 
-def auth(access_groups=None, verify=False):
+def auth(*access_groups, verify=False):
     """
     A decorator that is used to check user authorization
     for access groups only::
-
-        @auth
-        def index():
-            return 'Hi to All'
 
         @auth('admin'):
         def secret_code():
             return 42
 
-        @auth(['admin', 'client'])
+        @auth('admin', 'client')
         def registered_only():
             return 'Hello User!'
 
-    :param access_groups: user group or list of groups,
-            that has permissions to make request for current rule.
-            If None - do not check permission.
+    :param access_groups: user groups, that has permissions to make request for current rule.
     :param verify: True/False - raise error if token expired or not
     """
     def auth_decorator(handler_method):
 
         @wraps(handler_method)
         def _handle_with_auth(*args, **kwargs):
-
             _check_authorization(access_groups, verify=verify)
-
             return handler_method(*args, **kwargs)
 
-        return _handle_with_auth if access_groups is not None else handler_method
+        return _handle_with_auth
 
     return auth_decorator
 

@@ -54,6 +54,24 @@ class TestStore(base.BaseTestCase):
             status, body = self.get('/merchants/%s/stores' % merchant_id)
             self.assertEqual(status, 404)
 
+    # GET /merchant/stores
+
+    def test_get_stores_list_all_for_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+        [self.create_store(self.get_store(), merchant.id) for _ in range(10)]
+        status, body = self.get('/merchant/stores', auth=merchant.user)
+
+        self.assertEqual(status, 200)
+        self.assertIn('stores', body)
+        self.assertEqual(len(body['stores']), 10)
+
+    def test_get_stores_list_wrong_user(self):
+        merchant = self.create_merchant(self.get_merchant())
+        self.create_store(self.get_store(), merchant.id)
+        status, body = self.get('/merchant/stores', auth='admin')
+
+        self.assertEqual(status, 404)
+
     # POST /merchants/<merchant_id>/stores
 
     # GET /stores/<store_id>
