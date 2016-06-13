@@ -22,7 +22,7 @@ def merchants_list():
 @auth.auth('admin')
 def merchant_create():
     schema = MerchantSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise ValidationError(errors=errors)
 
@@ -57,7 +57,7 @@ def merchant_update(merchant_id):
         raise NotFoundError()
 
     schema = MerchantSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json(), origin_model=merchant)
+    data, errors = schema.load(request.get_json(silent=True), origin_model=merchant)
     if errors:
         raise ValidationError(errors=errors)
 

@@ -28,7 +28,7 @@ def merchant_manager_create(merchant_id):
         raise NotFoundError()
 
     schema = ManagerSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise ValidationError(errors=errors)
 
@@ -64,7 +64,7 @@ def manager_update(manager_id):
         raise NotFoundError()
 
     schema = ManagerSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json(), origin_model=manager)
+    data, errors = schema.load(request.get_json(silent=True), origin_model=manager)
     if errors:
         raise ValidationError(errors=errors)
 

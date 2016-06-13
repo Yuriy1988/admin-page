@@ -45,7 +45,7 @@ def payment_system_update(paysys_id):
         raise NotFoundError()
 
     update_schema = PaymentSystemUpdateSchema(partial=True)
-    data, errors = update_schema.load(request.get_json(), origin_model=payment_system)
+    data, errors = update_schema.load(request.get_json(silent=True), origin_model=payment_system)
     if errors:
         raise ValidationError(errors=errors)
 

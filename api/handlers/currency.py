@@ -61,7 +61,7 @@ def currency_history():
 @auth.auth('system')
 def currency_update():
     """ Handler for currency daemon to update (add new record) information about currency. """
-    data_json = request.get_json()
+    data_json = request.get_json(silent=True)
     if not data_json or 'update' not in data_json:
         raise ValidationError(message='Wrong JSON or update field missing')
 

@@ -14,7 +14,7 @@ def _filter_dict(dict_obj, keys):
 @api_v1.route('/authorization', methods=['POST'])
 def auth_login():
     schema = schemas.UserAuthSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise api_err.ValidationError(errors=errors)
 
@@ -48,7 +48,7 @@ def auth_logout():
 @api_v1.route('/user/create_password', methods=['POST'])
 def user_create_password():
     schema = schemas.UserCreatePasswordSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise api_err.ValidationError(errors=errors)
 
@@ -70,7 +70,7 @@ def user_create_password():
 @api_v1.route('/user/forgot_password', methods=['POST'])
 def user_forgot_password():
     schema = schemas.UserForgotPasswordSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise api_err.ValidationError(errors=errors)
 
@@ -88,7 +88,7 @@ def user_forgot_password():
 @auth.auth('admin', 'merchant', 'manager')
 def user_change_password():
     schema = schemas.UserChangePasswordSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise api_err.ValidationError(errors=errors)
 

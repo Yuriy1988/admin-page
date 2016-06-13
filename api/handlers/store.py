@@ -30,7 +30,7 @@ def merchant_stores_create(merchant_id):
         raise NotFoundError()
 
     schema = StoreSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise ValidationError(errors=errors)
 
@@ -43,7 +43,7 @@ def merchant_stores_create(merchant_id):
 
 
 @api_v1.route('/stores/<store_id>', methods=['GET'])
-@auth.auth(['admin', 'system'])
+@auth.auth('admin', 'system')
 def store_detail(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -63,7 +63,7 @@ def store_update(store_id):
         raise NotFoundError()
 
     schema = StoreSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json(), origin_model=store)
+    data, errors = schema.load(request.get_json(silent=True), origin_model=store)
     if errors:
         raise ValidationError(errors=errors)
 
@@ -112,7 +112,7 @@ def store_exists(store_id):
 # Store Payment System
 
 @api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'])
-@auth.auth(['admin', 'system'])
+@auth.auth('admin', 'system')
 def store_payment_systems_list(store_id):
     if not Store.exists(store_id):
         raise NotFoundError()
@@ -145,7 +145,7 @@ def store_payment_system_update(store_paysys_id):
             'Payment system {paysys_id} is not allowed to use.'.format(paysys_id=store_paysys.paysys_id))
 
     schema = StorePaySysSchema(partial=True, exclude=('paysys_id',))
-    data, errors = schema.load(request.get_json(), origin_model=store_paysys)
+    data, errors = schema.load(request.get_json(silent=True), origin_model=store_paysys)
     if errors:
         raise ValidationError(errors=errors)
 

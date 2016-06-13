@@ -41,7 +41,7 @@ def merchant_contract_create(merchant_id):
         raise NotFoundError()
 
     schema = MerchantContractSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise ValidationError(errors=errors)
 
@@ -73,7 +73,7 @@ def merchant_contract_update(merchant_contract_id):
         raise NotFoundError()
 
     schema = MerchantContractSchema(partial=True, partial_nested=True)
-    data, errors = schema.load(request.get_json(), origin_model=contract)
+    data, errors = schema.load(request.get_json(silent=True), origin_model=contract)
     if errors:
         raise ValidationError(errors=errors)
 
@@ -151,7 +151,7 @@ def payment_system_contract_create(paysys_id):
         raise NotFoundError()
 
     schema = PaySysContractSchema()
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise ValidationError(errors=errors)
 
@@ -183,7 +183,7 @@ def payment_system_contract_update(paysys_contract_id):
         raise NotFoundError()
 
     schema = PaySysContractSchema(partial=True)
-    data, errors = schema.load(request.get_json())
+    data, errors = schema.load(request.get_json(silent=True))
     if errors:
         raise ValidationError(errors=errors)
 
