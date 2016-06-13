@@ -35,7 +35,7 @@ def autofill_id(handler_method):
         params = list(bound_params.arguments.items()) or default_parameters
 
         for param_name, param_value in params:
-            if not param_name.endswith('_id') or param_value is not None:
+            if not param_name.endswith('_id') or param_value:
                 continue
             model = _model_id_str_to_model_obj(param_name[:-3])
             if not model:
@@ -47,7 +47,7 @@ def autofill_id(handler_method):
                 filter(models.User.id == g.user_id).\
                 first()
 
-            bound_params.arguments[param_name] = model_id[0] if model_id else None
+            bound_params.arguments[param_name] = model_id[0] if model_id else param_value
 
         return handler_method(*bound_params.args, **bound_params.kwargs)
 

@@ -536,6 +536,44 @@ class TestManager(base.BaseTestCase):
 
             self.assertEqual(manager_status, 404)
 
+    def test_get_manager_owner_only(self):
+        merchant1 = self.create_merchant(self.get_merchant(), 'MerchantFirst', 'UserFirst')
+        manager1 = self.create_manager(self.get_manager(), merchant1.id, 'ManagerFirst')
+
+        merchant2 = self.create_merchant(self.get_merchant(), 'MerchantSecond', 'UserSecond')
+        manager2 = self.create_manager(self.get_manager(), merchant2.id, 'ManagerSecond')
+
+        status, body = self.get('/managers/%s' % manager1.id, auth=merchant1.user)
+        self.assertEqual(status, 200)
+        status, body = self.get('/managers/%s' % manager2.id, auth=merchant2.user)
+        self.assertEqual(status, 200)
+
+        status, body = self.get('/managers/%s' % manager1.id, auth=merchant2.user)
+        self.assertEqual(status, 403)
+        status, body = self.get('/managers/%s' % manager2.id, auth=merchant1.user)
+        self.assertEqual(status, 403)
+
+    # GET /manager
+
+    def test_get_manager_own_detail(self):
+        merchant = self.create_merchant(self.get_merchant())
+        manager = self.create_manager(self.get_manager(), merchant.id, 'ManagerUser')
+
+        status, body = self.get('/manager', auth=manager.user)
+
+        self.assertEqual(status, 200)
+        self.assertEqual(body['user']['id'], manager.user.id)
+
+    def test_get_stores_list_wrong_user(self):
+        merchant = self.create_merchant(self.get_merchant())
+        manager = self.create_manager(self.get_manager(), merchant.id, 'ManagerUser')
+
+        status, body = self.get('/manager', auth='admin')
+        self.assertEqual(status, 404)
+
+        status, body = self.get('/manager', auth=merchant.user)
+        self.assertEqual(status, 404)
+
     # PUT /managers/<manager_id>
 
     def test_put_manager_edit_full_valid_response_change_user_username(self):

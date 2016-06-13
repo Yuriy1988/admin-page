@@ -13,7 +13,7 @@ __author__ = 'Kostel Serhii'
 @api_v1.route('/merchant/managers', methods=['GET'])
 @auth.auth('admin', 'merchant')
 @autofill_id
-def merchant_managers_list(merchant_id=None):
+def merchant_managers_list(merchant_id=''):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
@@ -28,7 +28,7 @@ def merchant_managers_list(merchant_id=None):
 @api_v1.route('/merchant/managers', methods=['POST'])
 @auth.auth('admin', 'merchant')
 @autofill_id
-def merchant_manager_create(merchant_id=None):
+def merchant_manager_create(merchant_id=''):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
@@ -49,9 +49,11 @@ def merchant_manager_create(merchant_id=None):
 
 
 @api_v1.route('/managers/<manager_id>', methods=['GET'])
-@auth.auth('admin', 'merchant')
+@api_v1.route('/manager', methods=['GET'])
+@auth.auth('admin', 'merchant', 'manager')
 @owner_access_only
-def manager_detail(manager_id):
+@autofill_id
+def manager_detail(manager_id=''):
     manager = Manager.query.get(manager_id)
     if not manager:
         raise NotFoundError()

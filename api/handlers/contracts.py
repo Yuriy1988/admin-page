@@ -15,7 +15,7 @@ __author__ = 'Kostel Serhii'
 @api_v1.route('/merchant/contracts', methods=['GET'])
 @auth.auth('admin', 'system', 'merchant')
 @autofill_id
-def merchant_contracts_list(merchant_id=None):
+def merchant_contracts_list(merchant_id=''):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 

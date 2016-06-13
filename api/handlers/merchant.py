@@ -41,7 +41,7 @@ def merchant_create():
 @api_v1.route('/merchant', methods=['GET'])
 @auth.auth('admin', 'system', 'merchant')
 @autofill_id
-def merchant_detail(merchant_id=None):
+def merchant_detail(merchant_id=''):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
         raise NotFoundError()
