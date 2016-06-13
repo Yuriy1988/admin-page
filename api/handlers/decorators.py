@@ -81,10 +81,13 @@ def owner_access_only(handler_method):
 
                 query = model.query.filter(getattr(model, 'id') == param_value)
 
-                for auth_model_name in g.groups:
-                    auth_model = _model_id_str_to_model_obj(auth_model_name)
-                    if auth_model:
-                        query = query.join(auth_model)
+                if 'merchant' in g.groups:
+                    query = query.join(models.Merchant)
+
+                elif 'manager' in g.groups:
+                    if model == models.Store:
+                        query = query.join(models.ManagerStore)
+                    query = query.join(models.Manager)
 
                 query = query.join(models.User).filter(models.User.id == g.user_id)
 

@@ -46,7 +46,7 @@ def merchant_stores_create(merchant_id):
 
 
 @api_v1.route('/stores/<store_id>', methods=['GET'])
-@auth.auth('admin', 'system', 'merchant')
+@auth.auth('admin', 'system', 'merchant', 'manager')
 @owner_access_only
 def store_detail(store_id):
     store = Store.query.get(store_id)
@@ -174,7 +174,7 @@ def store_exists(store_id):
 # Store Payment System
 
 @api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'])
-@auth.auth('admin', 'system', 'merchant')
+@auth.auth('admin', 'system', 'merchant', 'manager')
 @owner_access_only
 def store_payment_systems_list(store_id):
     if not Store.exists(store_id):

@@ -101,7 +101,7 @@ class TestStore(base.BaseTestCase):
             status, body = self.get('/stores/%s' % store_id)
             self.assertEqual(status, 404)
 
-    def test_get_store_owner_only(self):
+    def test_get_store_owner_only_by_merchant(self):
         merchant1 = self.create_merchant(self.get_merchant(), 'MerchantFirst', 'UserFirst')
         store1 = self.create_store(self.get_store(), merchant1.id)
 
@@ -116,6 +116,29 @@ class TestStore(base.BaseTestCase):
         status, body = self.get('/stores/%s' % store1.id, auth=merchant2.user)
         self.assertEqual(status, 403)
         status, body = self.get('/stores/%s' % store2.id, auth=merchant1.user)
+        self.assertEqual(status, 403)
+
+    def test_get_store_owner_only_by_manager(self):
+        merchant1 = self.create_merchant(self.get_merchant(), 'MerchantFirst', 'UserFirst')
+        store1 = self.create_store(self.get_store(), merchant1.id)
+        manager1 = self.create_manager(self.get_manager(), merchant1.id)
+        manager1.stores.append(store1)
+        self.db.commit()
+
+        merchant2 = self.create_merchant(self.get_merchant(), 'MerchantSecond', 'UserSecond')
+        store2 = self.create_store(self.get_store(), merchant2.id)
+        manager2 = self.create_manager(self.get_manager(), merchant2.id)
+        manager2.stores.append(store2)
+        self.db.commit()
+
+        status, body = self.get('/stores/%s' % store1.id, auth=manager1.user)
+        self.assertEqual(status, 200)
+        status, body = self.get('/stores/%s' % store2.id, auth=manager2.user)
+        self.assertEqual(status, 200)
+
+        status, body = self.get('/stores/%s' % store1.id, auth=manager2.user)
+        self.assertEqual(status, 403)
+        status, body = self.get('/stores/%s' % store2.id, auth=manager1.user)
         self.assertEqual(status, 403)
 
     # PUT /stores/<store_id>

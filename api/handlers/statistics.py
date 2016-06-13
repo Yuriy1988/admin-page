@@ -19,7 +19,7 @@ def payments_statistics():
 
 
 @api_v1.route('/statistics/store/<store_id>', methods=['GET'])
-@auth.auth('merchant')
+@auth.auth('merchant', 'manager')
 @owner_access_only
 def store_payments_statistics(store_id):
     request_args = request.args.copy()
