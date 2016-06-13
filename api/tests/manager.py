@@ -8,22 +8,6 @@ __author__ = 'Kostel Serhii'
 
 class TestManager(base.BaseTestCase):
 
-    def get_manager(self):
-        return deepcopy(self._manager)
-
-    def create_manager(self, manager_dict, merchant_id=None, username=None):
-        merchant_id = merchant_id or self.create_merchant(self.get_merchant()).id
-        manager_dict['merchant_id'] = merchant_id
-        manager_dict['user']['username'] = username or "user" + self.rand_str()
-
-        manager_model = Manager.create(manager_dict)
-        self.db.commit()
-
-        # Add password to make manager enabled
-        manager_model.user.set_password('password')
-
-        return manager_model
-
     # GET /merchants/<merchant_id>/managers
 
     def test_get_merchant_managers_list_empty(self):

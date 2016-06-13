@@ -9,7 +9,7 @@ from flask import json
 from flask.ext.testing import TestCase
 
 from api import app, db as app_db, utils, auth as api_auth
-from api.models import Merchant, Store, PaymentSystem, User
+from api.models import Merchant, Manager, Store, PaymentSystem, User
 from api.models.base import BaseModel
 from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME
 
@@ -94,6 +94,9 @@ class TestDefaults:
 
     def get_merchant(self):
         return deepcopy(self._merchant)
+
+    def get_manager(self):
+        return deepcopy(self._manager)
 
     def get_store(self):
         return deepcopy(self._store)
@@ -241,6 +244,19 @@ class BaseTestCase(TestCase, TestDefaults):
         merchant_model.user.set_password('password')
 
         return merchant_model
+
+    def create_manager(self, manager_dict, merchant_id=None, username=None):
+        merchant_id = merchant_id or self.create_merchant(self.get_merchant()).id
+        manager_dict['merchant_id'] = merchant_id
+        manager_dict['user']['username'] = username or "user" + self.rand_str()
+
+        manager_model = Manager.create(manager_dict)
+        self.db.commit()
+
+        # Add password to make manager enabled
+        manager_model.user.set_password('password')
+
+        return manager_model
 
     def create_store(self, store_dict, merchant_id):
         store_dict['merchant_id'] = merchant_id

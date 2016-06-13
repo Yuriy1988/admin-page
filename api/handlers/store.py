@@ -1,8 +1,8 @@
 from flask import request, jsonify, Response
 
 from api import api_v1, db, utils, auth
-from api.errors import NotFoundError, ValidationError
-from api.models import Merchant, Store, StorePaySys, PaymentSystem
+from api.errors import NotFoundError, ValidationError, ForbiddenError
+from api.models import Merchant, Manager, Store, StorePaySys, PaymentSystem
 from api.schemas import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema
 from .decorators import autofill_id, owner_access_only
 
@@ -87,6 +87,64 @@ def store_delete(store_id):
         raise NotFoundError()
 
     db.session.commit()
+    return Response(status=200)
+
+
+@api_v1.route('/managers/<manager_id>/stores', methods=['GET'])
+@api_v1.route('/manager/stores', methods=['GET'])
+@auth.auth('admin', 'merchant', 'manager')
+@owner_access_only
+@autofill_id
+def manager_stores_list(manager_id=''):
+    manager = Manager.query.get(manager_id)
+    if not manager:
+        raise NotFoundError()
+    stores = Store.query.filter(Store.managers.any(id=manager_id)).all()
+
+    schema = StoreSchema(many=True, exclude=('merchant_id', 'store_settings',))
+    result = schema.dump(stores)
+    return jsonify(stores=result.data)
+
+
+@api_v1.route('/managers/<manager_id>/stores/<store_id>', methods=['POST'])
+@auth.auth('admin', 'merchant')
+@owner_access_only
+def manager_store_connect(manager_id, store_id):
+    manager = Manager.query.get(manager_id)
+    if not manager:
+        raise NotFoundError()
+
+    store = Store.query.get(store_id)
+    if not store:
+        raise NotFoundError()
+
+    if manager.merchant_id != store.merchant_id:
+        raise ForbiddenError('Wrong store for current manager')
+
+    manager.stores.append(store)
+    db.session.commit()
+
+    return Response(status=200)
+
+
+@api_v1.route('/managers/<manager_id>/stores/<store_id>', methods=['DELETE'])
+@auth.auth('admin', 'merchant')
+@owner_access_only
+def manager_store_delete(manager_id, store_id):
+    manager = Manager.query.get(manager_id)
+    if not manager:
+        raise NotFoundError()
+
+    store = Store.query.get(store_id)
+    if not store:
+        raise NotFoundError()
+
+    if store not in manager.stores:
+        raise NotFoundError()
+
+    manager.stores.remove(store)
+    db.session.commit()
+
     return Response(status=200)
 
 

@@ -6,6 +6,13 @@ from api.models import base, user as user_model
 __author__ = 'Kostel Serhii'
 
 
+manager_store = db.Table('manager_store', base.BaseModel.metadata,
+    db.Column('manager_id', db.String, db.ForeignKey('manager.id'), nullable=False),
+    db.Column('store_id', db.String, db.ForeignKey('store.id'), nullable=False),
+    db.PrimaryKeyConstraint('manager_id', 'store_id')
+)
+
+
 class Manager(base.BaseModel):
 
     __tablename__ = 'manager'
@@ -15,6 +22,8 @@ class Manager(base.BaseModel):
     user = db.relationship('User', backref='manager', uselist=False, lazy='joined')
 
     merchant_id = db.Column(db.String, db.ForeignKey('merchant.id', ondelete='CASCADE'), nullable=False)
+
+    stores = db.relationship('Store', secondary=manager_store, backref=db.backref('managers'))
 
     def __init__(self, user, merchant_id):
         self.user = user

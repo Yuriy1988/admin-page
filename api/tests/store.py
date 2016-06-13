@@ -140,6 +140,192 @@ class TestStore(base.BaseTestCase):
         self.assertIsNone(deleted_store_settings)
         self.assertListEqual(deleted_store_paysys, [])
 
+    # GET /managers/<manager_id>/stores
+
+    def test_get_manager_stores_list_empty(self):
+        merchant = self.create_merchant(self.get_merchant())
+        self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+
+        status, body = self.get('/managers/%s/stores' % manager.id)
+
+        self.assertEqual(status, 200)
+        self.assertIn('stores', body)
+        self.assertListEqual(body['stores'], [])
+
+    def test_get_manager_stores_list_all(self):
+        merchant = self.create_merchant(self.get_merchant())
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        [self.create_store(self.get_store(), merchant.id) for _ in range(5)]
+
+        stores_num = 10
+        for si in range(stores_num):
+            store = self.create_store(self.get_store(), merchant.id)
+            manager.stores.append(store)
+        self.db.commit()
+
+        status, body = self.get('/managers/%s/stores' % manager.id)
+
+        self.assertEqual(status, 200)
+        self.assertIn('stores', body)
+        self.assertEqual(len(body['stores']), stores_num)
+
+    def test_get_manager_stores_not_found(self):
+        merchant = self.create_merchant(self.get_merchant())
+        self.create_manager(self.get_manager(), merchant.id)
+
+        for manager_id in ['00000000-1111-2222-3333-444444444444', '0', '1', 'test', 'null', '']:
+            status, body = self.get('/managers/%s/stores' % manager_id)
+            self.assertEqual(status, 404)
+
+    # POST /managers/<manager_id>/stores/<store_id>
+
+    def test_post_manager_store_connected(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+
+        status, body = self.post('/managers/%s/stores/%s' % (manager.id, store.id), body={})
+        self.assertEqual(status, 200)
+
+        status, body = self.get('/managers/%s/stores' % manager.id)
+
+        self.assertEqual(status, 200)
+        self.assertEqual(len(body['stores']), 1)
+        self.assertEqual(body['stores'][0]['id'], store.id)
+
+    def test_post_manager_store_connect_again(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+
+        status, body = self.post('/managers/%s/stores/%s' % (manager.id, store.id), body={})
+        self.assertEqual(status, 200)
+        status, body = self.post('/managers/%s/stores/%s' % (manager.id, store.id), body={})
+        self.assertEqual(status, 200)
+
+        status, body = self.get('/managers/%s/stores' % manager.id)
+        self.assertEqual(status, 200)
+        self.assertEqual(len(body['stores']), 1)
+        self.assertEqual(body['stores'][0]['id'], store.id)
+
+    def test_post_manager_store_connect_by_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+
+        status, body = self.post('/managers/%s/stores/%s' % (manager.id, store.id),
+                                 body={}, auth=merchant.user)
+        self.assertEqual(status, 200)
+
+    def test_post_manager_store_connect_by_another_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+
+        another_merchant = self.create_merchant(self.get_merchant(), 'AMer', 'AmerU')
+
+        status, body = self.post('/managers/%s/stores/%s' % (manager.id, store.id),
+                                 body={}, auth=another_merchant.user)
+        self.assertEqual(status, 403)
+
+    def test_post_manager_store_different_owner(self):
+        merchant1 = self.create_merchant(self.get_merchant(), 'MerchantFirst', 'UserFirst')
+        manager1 = self.create_manager(self.get_manager(), merchant1.id, 'ManagerFirst')
+        store1 = self.create_store(self.get_store(), merchant1.id)
+
+        merchant2 = self.create_merchant(self.get_merchant(), 'MerchantSecond', 'UserSecond')
+        manager2 = self.create_manager(self.get_manager(), merchant2.id, 'ManagerSecond')
+        store2 = self.create_store(self.get_store(), merchant2.id)
+
+        status, body = self.post('/managers/%s/stores/%s' % (manager1.id, store1.id), body={})
+        self.assertEqual(status, 200)
+        status, body = self.post('/managers/%s/stores/%s' % (manager2.id, store2.id), body={})
+        self.assertEqual(status, 200)
+
+        status, body = self.post('/managers/%s/stores/%s' % (manager1.id, store2.id), body={})
+        self.assertEqual(status, 403)
+        status, body = self.post('/managers/%s/stores/%s' % (manager2.id, store1.id), body={})
+        self.assertEqual(status, 403)
+
+    # DELETE /managers/<manager_id>/stores/<store_id>
+
+    def test_delete_manager_store_connected(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        manager.stores.append(store)
+        self.db.commit()
+
+        status, body = self.delete('/managers/%s/stores/%s' % (manager.id, store.id))
+        self.assertEqual(status, 200)
+
+        status, body = self.get('/managers/%s/stores' % manager.id)
+        self.assertEqual(status, 200)
+        self.assertEqual(len(body['stores']), 0)
+
+    def test_delete_manager_store_connect_again(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        manager.stores.append(store)
+        self.db.commit()
+
+        status, body = self.delete('/managers/%s/stores/%s' % (manager.id, store.id))
+        self.assertEqual(status, 200)
+        status, body = self.delete('/managers/%s/stores/%s' % (manager.id, store.id))
+        self.assertEqual(status, 404)
+
+        status, body = self.get('/managers/%s/stores' % manager.id)
+        self.assertEqual(status, 200)
+        self.assertEqual(len(body['stores']), 0)
+
+    def test_delete_manager_store_connect_by_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        manager.stores.append(store)
+        self.db.commit()
+
+        status, body = self.delete('/managers/%s/stores/%s' % (manager.id, store.id),
+                                   auth=merchant.user)
+        self.assertEqual(status, 200)
+
+    def test_delete_manager_store_connect_by_another_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        manager.stores.append(store)
+        self.db.commit()
+
+        another_merchant = self.create_merchant(self.get_merchant(), 'AMer', 'AmerU')
+
+        status, body = self.delete('/managers/%s/stores/%s' % (manager.id, store.id), auth=another_merchant.user)
+        self.assertEqual(status, 403)
+
+    def test_delete_manager_store_different_owner(self):
+        merchant1 = self.create_merchant(self.get_merchant(), 'MerchantFirst', 'UserFirst')
+        manager1 = self.create_manager(self.get_manager(), merchant1.id, 'ManagerFirst')
+        store1 = self.create_store(self.get_store(), merchant1.id)
+        manager1.stores.append(store1)
+        self.db.commit()
+
+        merchant2 = self.create_merchant(self.get_merchant(), 'MerchantSecond', 'UserSecond')
+        manager2 = self.create_manager(self.get_manager(), merchant2.id, 'ManagerSecond')
+        store2 = self.create_store(self.get_store(), merchant2.id)
+        manager2.stores.append(store2)
+        self.db.commit()
+
+        status, body = self.delete('/managers/%s/stores/%s' % (manager1.id, store1.id))
+        self.assertEqual(status, 200)
+        status, body = self.delete('/managers/%s/stores/%s' % (manager2.id, store2.id))
+        self.assertEqual(status, 200)
+
+        status, body = self.delete('/managers/%s/stores/%s' % (manager1.id, store2.id))
+        self.assertEqual(status, 404)
+        status, body = self.delete('/managers/%s/stores/%s' % (manager2.id, store1.id))
+        self.assertEqual(status, 404)
+
     # GET /stores/<store_id>/exists
 
     def test_get_store_exists(self):
