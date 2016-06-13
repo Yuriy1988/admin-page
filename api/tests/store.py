@@ -56,25 +56,67 @@ class TestStore(base.BaseTestCase):
 
     # GET /merchant/stores
 
-    # def test_get_stores_list_all_for_merchant(self):
-    #     merchant = self.create_merchant(self.get_merchant())
-    #     [self.create_store(self.get_store(), merchant.id) for _ in range(10)]
-    #     status, body = self.get('/merchant/stores', auth=merchant.user)
-    #
-    #     self.assertEqual(status, 200)
-    #     self.assertIn('stores', body)
-    #     self.assertEqual(len(body['stores']), 10)
-    #
-    # def test_get_stores_list_wrong_user(self):
-    #     merchant = self.create_merchant(self.get_merchant())
-    #     self.create_store(self.get_store(), merchant.id)
-    #     status, body = self.get('/merchant/stores', auth='admin')
-    #
-    #     self.assertEqual(status, 404)
+    def test_get_stores_list_all_for_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+        [self.create_store(self.get_store(), merchant.id) for _ in range(10)]
+        status, body = self.get('/merchant/stores', auth=merchant.user)
+
+        self.assertEqual(status, 200)
+        self.assertIn('stores', body)
+        self.assertEqual(len(body['stores']), 10)
+
+    def test_get_stores_list_wrong_user(self):
+        merchant = self.create_merchant(self.get_merchant())
+        self.create_store(self.get_store(), merchant.id)
+        status, body = self.get('/merchant/stores', auth='admin')
+
+        self.assertEqual(status, 404)
 
     # POST /merchants/<merchant_id>/stores
 
     # GET /stores/<store_id>
+
+    def test_get_store_full_valid_response(self):
+        store_dict = self.get_store()
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(store_dict, merchant.id)
+
+        status, body = self.get('/stores/%s' % store.id)
+
+        self.assertEqual(status, 200)
+
+        store_dict['id'] = store.id
+        store_settings = store_dict.pop('store_settings')
+        body_store_settings = body.pop('store_settings')
+        store_settings['sign_key'] = body_store_settings['sign_key']
+
+        self.assertEqual(body, store_dict)
+        self.assertEqual(body_store_settings, store_settings)
+
+    def test_get_store_not_found(self):
+        merchant = self.create_merchant(self.get_merchant())
+        self.create_store(self.get_store(), merchant.id)
+
+        for store_id in ['0', '00000000-1111-2222-3333-444444444444', '1', '2', 'test', 'null', '']:
+            status, body = self.get('/stores/%s' % store_id)
+            self.assertEqual(status, 404)
+
+    def test_get_store_owner_only(self):
+        merchant1 = self.create_merchant(self.get_merchant(), 'MerchantFirst', 'UserFirst')
+        store1 = self.create_store(self.get_store(), merchant1.id)
+
+        merchant2 = self.create_merchant(self.get_merchant(), 'MerchantSecond', 'UserSecond')
+        store2 = self.create_store(self.get_store(), merchant2.id)
+
+        status, body = self.get('/stores/%s' % store1.id, auth=merchant1.user)
+        self.assertEqual(status, 200)
+        status, body = self.get('/stores/%s' % store2.id, auth=merchant2.user)
+        self.assertEqual(status, 200)
+
+        status, body = self.get('/stores/%s' % store1.id, auth=merchant2.user)
+        self.assertEqual(status, 403)
+        status, body = self.get('/stores/%s' % store2.id, auth=merchant1.user)
+        self.assertEqual(status, 403)
 
     # PUT /stores/<store_id>
 

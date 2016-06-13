@@ -11,7 +11,7 @@ __author__ = 'Omelchenko Daniel, Kostel Serhii'
 
 
 @api_v1.route('/currency/current', methods=['GET'])
-@auth.auth('admin')
+@auth.auth('admin', 'merchant', 'manager')
 def currency_current():
     request_schema = CurrencyRequestSchema()
     data, errors = request_schema.load(request.args)
@@ -35,7 +35,7 @@ def currency_current():
 
 
 @api_v1.route('/currency/history', methods=['GET'])
-@auth.auth('admin')
+@auth.auth('admin', 'merchant', 'manager')
 def currency_history():
     request_schema = CurrencyRequestSchema()
     data, errors = request_schema.load(request.args)

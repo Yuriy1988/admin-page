@@ -4,6 +4,7 @@ from api import api_v1, db, auth, utils
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant
 from api.schemas import MerchantSchema
+from .decorators import autofill_id
 
 __author__ = 'Kostel Serhii'
 
@@ -37,8 +38,10 @@ def merchant_create():
 
 
 @api_v1.route('/merchants/<merchant_id>', methods=['GET'])
-@auth.auth('admin', 'system')
-def merchant_detail(merchant_id):
+@api_v1.route('/merchant', methods=['GET'])
+@auth.auth('admin', 'system', 'merchant')
+@autofill_id
+def merchant_detail(merchant_id=None):
     merchant = Merchant.query.get(merchant_id)
     if not merchant:
         raise NotFoundError()

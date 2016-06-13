@@ -4,6 +4,7 @@ from api import api_v1, db, utils, auth
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant, Store, StorePaySys, PaymentSystem
 from api.schemas import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema
+from .decorators import autofill_id, owner_access_only
 
 __author__ = 'Kostel Serhii'
 
@@ -11,8 +12,10 @@ __author__ = 'Kostel Serhii'
 # Store
 
 @api_v1.route('/merchants/<merchant_id>/stores', methods=['GET'])
-@auth.auth('admin')
-def merchant_stores_list(merchant_id):
+@api_v1.route('/merchant/stores', methods=['GET'])
+@auth.auth('admin', 'merchant')
+@autofill_id
+def merchant_stores_list(merchant_id=None):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
@@ -43,7 +46,8 @@ def merchant_stores_create(merchant_id):
 
 
 @api_v1.route('/stores/<store_id>', methods=['GET'])
-@auth.auth('admin', 'system')
+@auth.auth('admin', 'system', 'merchant')
+@owner_access_only
 def store_detail(store_id):
     store = Store.query.get(store_id)
     if not store:
@@ -112,7 +116,8 @@ def store_exists(store_id):
 # Store Payment System
 
 @api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'])
-@auth.auth('admin', 'system')
+@auth.auth('admin', 'system', 'merchant')
+@owner_access_only
 def store_payment_systems_list(store_id):
     if not Store.exists(store_id):
         raise NotFoundError()

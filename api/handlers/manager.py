@@ -4,13 +4,16 @@ from api import api_v1, db, auth, utils
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant, Manager
 from api.schemas import ManagerSchema
+from .decorators import autofill_id, owner_access_only
 
 __author__ = 'Kostel Serhii'
 
 
 @api_v1.route('/merchants/<merchant_id>/managers', methods=['GET'])
-@auth.auth('admin')
-def merchant_managers_list(merchant_id):
+@api_v1.route('/merchant/managers', methods=['GET'])
+@auth.auth('admin', 'merchant')
+@autofill_id
+def merchant_managers_list(merchant_id=None):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
@@ -22,8 +25,10 @@ def merchant_managers_list(merchant_id):
 
 
 @api_v1.route('/merchants/<merchant_id>/managers', methods=['POST'])
-@auth.auth('admin')
-def merchant_manager_create(merchant_id):
+@api_v1.route('/merchant/managers', methods=['POST'])
+@auth.auth('admin', 'merchant')
+@autofill_id
+def merchant_manager_create(merchant_id=None):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
@@ -44,7 +49,8 @@ def merchant_manager_create(merchant_id):
 
 
 @api_v1.route('/managers/<manager_id>', methods=['GET'])
-@auth.auth('admin')
+@auth.auth('admin', 'merchant')
+@owner_access_only
 def manager_detail(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -57,7 +63,8 @@ def manager_detail(manager_id):
 
 
 @api_v1.route('/managers/<manager_id>', methods=['PUT'])
-@auth.auth('admin')
+@auth.auth('admin', 'merchant')
+@owner_access_only
 def manager_update(manager_id):
     manager = Manager.query.get(manager_id)
     if not manager:
@@ -77,7 +84,8 @@ def manager_update(manager_id):
 
 
 @api_v1.route('/managers/<manager_id>', methods=['DELETE'])
-@auth.auth('admin')
+@auth.auth('admin', 'merchant')
+@owner_access_only
 def manager_delete(manager_id):
     delete_count = Manager.query.filter_by(id=manager_id).delete()
     if delete_count == 0:

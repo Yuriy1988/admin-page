@@ -4,6 +4,7 @@ from api import api_v1, db, utils, auth
 from api.errors import NotFoundError, ValidationError
 from api.models import Merchant, MerchantContract, PaySysContract, PaymentSystem
 from api.schemas import MerchantContractSchema, PaySysContractSchema, ContractRequestSchema
+from .decorators import autofill_id, owner_access_only
 
 __author__ = 'Kostel Serhii'
 
@@ -11,8 +12,10 @@ __author__ = 'Kostel Serhii'
 # Merchant Contract
 
 @api_v1.route('/merchants/<merchant_id>/contracts', methods=['GET'])
-@auth.auth('admin', 'system')
-def merchant_contracts_list(merchant_id):
+@api_v1.route('/merchant/contracts', methods=['GET'])
+@auth.auth('admin', 'system', 'merchant')
+@autofill_id
+def merchant_contracts_list(merchant_id=None):
     if not Merchant.exists(merchant_id):
         raise NotFoundError()
 
@@ -54,7 +57,8 @@ def merchant_contract_create(merchant_id):
 
 
 @api_v1.route('/merchant_contracts/<int:merchant_contract_id>', methods=['GET'])
-@auth.auth('admin')
+@auth.auth('admin', 'merchant')
+@owner_access_only
 def merchant_contract_detail(merchant_contract_id):
     contract = MerchantContract.query.get(merchant_contract_id)
     if not contract:

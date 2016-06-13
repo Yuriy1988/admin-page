@@ -73,7 +73,7 @@ class TestDefaults:
         "sign_algorithm": "SHA1",
         "succeed_url": "http://good.ron",
         "failure_url": "http://bad.boy",
-        "commission_pct": "1.423"
+        "commission_pct": "1.42"
     }
     _store = {
         "store_name": "Test Store",

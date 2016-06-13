@@ -90,6 +90,7 @@ def _check_authorization(access_groups, verify=False):
 
     g.token = token
     g.user_id = user_id
+    g.groups = groups
 
 
 def auth(*access_groups, verify=False):
