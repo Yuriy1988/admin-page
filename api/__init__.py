@@ -9,6 +9,14 @@ from werkzeug.contrib.fixers import ProxyFix
 __author__ = 'Kostel Serhii'
 
 
+db = SQLAlchemy()
+migrate = Migrate()
+
+api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/admin/dev')
+
+
+# App created notifier
+
 _app_created_subscribers = set()
 
 
@@ -24,6 +32,8 @@ def after_app_created(func):
     return wraps(func)
 
 
+# Extended JSON encoder
+
 class XOPayJSONEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -38,49 +48,52 @@ class XOPayJSONEncoder(json.JSONEncoder):
         return super(XOPayJSONEncoder, self).default(obj)
 
 
-db = SQLAlchemy()
-migrate = Migrate()
+# Create application
 
-app = Flask(__name__)
-app.config.from_object('config')
-app.static_folder = app.config["STATIC_FOLDER"]
+def create_app(config='debug', **options):
+    """
+    Create flask application object with additional parameters
+    :param config: name of the config object: debug, test, production
+    :param options: additional config values to overwrite
+    :return: Flask app object
+    """
+    app = Flask(__name__)
+    app.config.from_object('config')
+    app.static_folder = app.config["STATIC_FOLDER"]
 
-app.wsgi_app = ProxyFix(app.wsgi_app)
-app.json_encoder = XOPayJSONEncoder
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+    app.json_encoder = XOPayJSONEncoder
 
+    db.app = app
+    db.init_app(app)
+    migrate.init_app(app, db)
 
-log = logging.getLogger('xop.main')
-log.info('Starting XOPay Admin Service...')
+    import api.handlers
+    app.register_blueprint(api_v1)
 
-db.app = app
-db.init_app(app)
-migrate.init_app(app, db)
+    import api.logger
 
+    _inform_app_created(app)
 
-api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/admin/dev')
+    if app.config['DEBUG']:
+        # enable only in debug mode. In production use nginx/apache for this purpose
 
-import api.handlers
-app.register_blueprint(api_v1)
+        @app.route('/admin/')
+        @app.route('/admin/<path:path>/')
+        def admin_page(path=None):
+            """
+            Return single page html for xopay admin
+            :param path: any valid url (used in frontend routing system)
+            :return: index html page
+            """
+            return app.send_static_file('admin/index.html')
 
-import api.logger
+        @app.route('/')
+        def index():
+            """ Redirect from root to admin page """
+            return redirect(url_for('admin_page'))
 
-_inform_app_created(app)
+    log = logging.getLogger('xop.main')
+    log.info('Starting XOPay Admin Service...')
 
-if app.config['DEBUG']:
-    # enable only in debug mode. In production use nginx/apache for this purpose
-
-    @app.route('/admin/')
-    @app.route('/admin/<path:path>/')
-    def admin_page(path=None):
-        """
-        Return single page html for xopay admin
-        :param path: any valid url (used in frontend routing system)
-        :return: index html page
-        """
-        return app.send_static_file('admin/index.html')
-
-
-    @app.route('/')
-    def index():
-        """ Redirect from root to admin page """
-        return redirect(url_for('admin_page'))
+    return app

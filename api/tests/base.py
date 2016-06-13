@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 from flask import json
 from flask.ext.testing import TestCase
 
-from api import app, db as app_db, utils, auth as api_auth
+from api import create_app, db as app_db, utils, auth as api_auth
 from api.models import Merchant, Manager, Store, PaymentSystem, User
 from api.models.base import BaseModel
 from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME
@@ -139,10 +139,11 @@ class BaseTestCase(TestCase, TestDefaults):
 
     def create_app(self):
         """ App for testing """
-        self.config()
+        app = create_app('test')
+        self.config(app)
         return app
 
-    def config(self):
+    def config(self, app):
         """ Configuration for testing """
         app.config['DEBUG'] = True
         app.config['TESTING'] = True

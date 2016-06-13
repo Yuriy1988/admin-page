@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from itertools import permutations
 
-from api.models import Currency, enum
 from api.tests import base
+from api.models import Currency, enum
 
 __author__ = 'Daniel Omelchenko'
 

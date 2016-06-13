@@ -16,14 +16,15 @@ COV = coverage.coverage(
 )
 COV.start()
 
-from api import app, db
+from api import create_app, db
 from api.models import payment_system as paysys, user
 from api.schemas import UserSchema, UserCreatePasswordSchema
 
 __author__ = 'Kostel Serhii'
 
 
-manager = Manager(app)
+manager = Manager(create_app)
+manager.add_option("-c", "--config", dest="config", default='debug', required=False)
 
 
 # db (migrations)
