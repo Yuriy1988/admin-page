@@ -117,14 +117,14 @@ def setup_supervisor():
     sudo('apt-get install -y supervisor')
 
     base_config_file = '/tmp/supervisord.conf'
-    create_config(base_config_file, 'server/supervisord.conf.templ')
+    create_config(base_config_file, 'DEPLOY/supervisord.conf.templ')
     put(base_config_file, '/etc/supervisor/', use_sudo=True)
     local('rm {config}'.format(config=base_config_file))
 
     sudo('service supervisor restart')
 
     config_file = '/tmp/xopay-admin.conf'
-    create_config(config_file, 'server/xopay-admin.conf.supervisor.templ')
+    create_config(config_file, 'DEPLOY/xopay-admin.conf.supervisor.templ')
     put(config_file, '/etc/supervisor/conf.d/', use_sudo=True)
     local('rm {config}'.format(config=config_file))
 
@@ -137,7 +137,7 @@ def setup_nginx():
     sudo('apt-get install -y nginx')
 
     config_file = '/tmp/xopay.conf'
-    create_config(config_file, 'server/xopay.conf.nginx.templ')
+    create_config(config_file, 'DEPLOY/xopay.conf.nginx.templ')
 
     put(config_file, '/etc/nginx/sites-available/', use_sudo=True)
     local('rm {config}'.format(config=config_file))
