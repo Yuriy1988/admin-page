@@ -11,8 +11,6 @@ SERVICE_NAME = 'xopay-admin'
 # FIXME: uncomment after config update (for full invite url)
 # SERVER_NAME = 'xopay.digitaloutlooks.com'
 
-TIMEZONE = 'Europe/Riga'
-
 LOG_BASE_NAME = 'xop'
 LOG_FORMAT = 'ADMIN  | %(levelname)-6.6s | %(name)-15.15s | %(asctime)s | %(message)s'
 LOG_DATE_FORMAT = '%d.%m %H:%M:%S'

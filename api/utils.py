@@ -19,30 +19,6 @@ __author__ = 'Kostel Serhii'
 _log = logging.getLogger('xop.utils')
 
 
-# Client service
-
-def client_server_get_request(url, **params):
-    """
-    Make request to admin server and return response.
-    :param url: url (without base prefix) to admin server
-    :param params: url parameters
-    :return: response as dict or raise exception
-    """
-    full_url = app.config["CLIENT_API_URL"] + url
-    headers = {"Authorization": "Bearer %s" % auth.get_system_token()}
-
-    try:
-        response = requests.get(full_url, params=params, headers=headers, timeout=5)
-    except exceptions.Timeout:
-        raise errors.ServiceUnavailableError('The client server connection timeout.')
-    except exceptions.ConnectionError:
-        raise errors.ServiceUnavailableError('The client server connection error.')
-    except exceptions.RequestException:
-        raise errors.InternalServerError('The client server request error.')
-
-    return response
-
-
 # Queue
 
 def _get_queue_connection_parameters():
@@ -92,6 +68,30 @@ def push_to_queue(queue_name, body_json):
         raise errors.ServiceUnavailableError('Queue error: %r' % err)
     except (mq_err.AMQPChannelError, mq_err.AMQPError) as err:
         raise errors.InternalServerError('Queue error: %r' % err)
+
+
+# Client service
+
+def client_server_get_request(url, **params):
+    """
+    Make request to admin server and return response.
+    :param url: url (without base prefix) to admin server
+    :param params: url parameters
+    :return: response as dict or raise exception
+    """
+    full_url = app.config["CLIENT_API_URL"] + url
+    headers = {"Authorization": "Bearer %s" % auth.get_system_token()}
+
+    try:
+        response = requests.get(full_url, params=params, headers=headers, timeout=5)
+    except exceptions.Timeout:
+        raise errors.ServiceUnavailableError('The client server connection timeout.')
+    except exceptions.ConnectionError:
+        raise errors.ServiceUnavailableError('The client server connection error.')
+    except exceptions.RequestException:
+        raise errors.InternalServerError('The client server request error.')
+
+    return response
 
 
 # Notify service
@@ -152,18 +152,22 @@ def send_invite_to_user_by_email(user_model, invite_token):
 
 
 def add_track_extra_info(extra_info):
+    """
+    Add extra information into track extra info storage.
+    :param dict extra_info: dict with extra information to track
+    """
     if 'track_extra_info' not in g:
         g.track_extra_info = {}
     g.track_extra_info.update(extra_info)
 
 
 @after_app_created
-def register_request_notifier(app):
+def register_request_notifier(created_app):
     """
     Register request notifier.
-    :param app: Flask application
+    :param created_app: Flask application
     """
-    @app.after_request
+    @created_app.after_request
     def track_request(response):
         """
         After every request send information to the notify queue
@@ -174,7 +178,7 @@ def register_request_notifier(app):
             service_name=app.config['SERVICE_NAME'],
 
             query=dict(
-                timestamp=datetime.now(tz=pytz.timezone(app.config['TIMEZONE'])),
+                timestamp=datetime.now(tz=pytz.utc),
                 path=request.full_path if request.query_string else request.path,
                 method=request.method,
                 status_code=response.status_code,
