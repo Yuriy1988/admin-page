@@ -3,7 +3,7 @@ import logging
 from traceback import format_exception
 from flask import jsonify, current_app
 
-from api import api_v1,  after_app_created, utils
+from api import api_v1, after_app_created, utils
 
 __author__ = 'Kostel Serhii'
 

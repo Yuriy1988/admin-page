@@ -13,7 +13,7 @@ def _default_logger_config(log_config):
 
     log_config.setdefault('LOG_FORMAT', '%(levelname)-6.6s | %(name)-12.12s | %(asctime)s | %(message)s')
     log_config.setdefault('LOG_DATE_FORMAT', '%d.%m %H:%M:%S')
-    log_config.setdefault('LOG_ROOT_LEVEL', 'INFO')
+    log_config.setdefault('LOG_LEVEL', 'INFO')
     log_config.setdefault('LOG_ROOT_LEVEL', 'INFO')
     log_config.setdefault('LOG_BASE_NAME', '')
 

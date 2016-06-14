@@ -167,6 +167,8 @@ def register_request_notifier(created_app):
     Register request notifier.
     :param created_app: Flask application
     """
+    filtered_headers = ['HTTP_USER_AGENT', 'CONTENT_LENGTH', 'CONTENT_TYPE']
+
     @created_app.after_request
     def track_request(response):
         """
@@ -184,7 +186,7 @@ def register_request_notifier(created_app):
                 status_code=response.status_code,
                 remote_address=request.remote_addr,
                 view_args=request.view_args,
-                headers=request.headers.environ,
+                headers={k: v for k, v in request.headers.environ.items() if k in filtered_headers},
             ),
 
             user=dict(
