@@ -97,7 +97,7 @@ def merchant_contract_delete(merchant_contract_id):
         raise NotFoundError()
 
     db.session.commit()
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/merchant_contract/<int:merchant_contract_id>/upload/contract_doc_url', methods=['POST'])
@@ -207,7 +207,7 @@ def payment_system_contract_delete(paysys_contract_id):
         raise NotFoundError()
 
     db.session.commit()
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/paysys_contract/<int:paysys_contract_id>/upload/contract_doc_url', methods=['POST'])

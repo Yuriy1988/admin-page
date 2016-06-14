@@ -85,4 +85,4 @@ def currency_update():
 
     db.session.commit()
 
-    return Response(response='', status=200)
+    return Response(response='', status=200, mimetype='application/json')

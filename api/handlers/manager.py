@@ -94,4 +94,4 @@ def manager_delete(manager_id):
         raise NotFoundError()
 
     db.session.commit()
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')

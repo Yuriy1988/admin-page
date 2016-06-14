@@ -40,7 +40,7 @@ def auth_refresh_token():
 @auth.auth('admin', 'merchant', 'manager')
 def auth_logout():
     auth.remove_session(g.token)
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 # Password
@@ -64,7 +64,7 @@ def user_create_password():
     user.set_password(data['password'])
     db.session.commit()
 
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/user/forgot_password', methods=['POST'])
@@ -81,7 +81,7 @@ def user_forgot_password():
     invite_token = auth.generate_invite_token(user.id)
     utils.send_invite_to_user_by_email(user, invite_token)
 
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/users/<user_id>/change_password', methods=['POST'])
@@ -96,7 +96,7 @@ def user_change_password(user_id):
     user.set_password(data['new_password'])
     db.session.commit()
 
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @auth.auth('admin', 'merchant', 'manager')
@@ -116,7 +116,7 @@ def user_change_password():
     user.set_password(data['new_password'])
     db.session.commit()
 
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/admins_emails', methods=['GET'])

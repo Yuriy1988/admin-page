@@ -16,7 +16,7 @@ LOG_FORMAT = 'ADMIN  | %(levelname)-6.6s | %(name)-15.15s | %(asctime)s | %(mess
 LOG_DATE_FORMAT = '%d.%m %H:%M:%S'
 LOG_REQUESTS = False
 
-LOG_ROOT_LEVEL = 'DEBUG'
+LOG_ROOT_LEVEL = 'INFO'
 LOG_LEVEL = 'DEBUG'
 
 # Upload

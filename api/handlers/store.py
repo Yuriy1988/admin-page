@@ -87,7 +87,7 @@ def store_delete(store_id):
         raise NotFoundError()
 
     db.session.commit()
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/managers/<manager_id>/stores', methods=['GET'])
@@ -124,7 +124,7 @@ def manager_store_connect(manager_id, store_id):
     manager.stores.append(store)
     db.session.commit()
 
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/managers/<manager_id>/stores/<store_id>', methods=['DELETE'])
@@ -145,7 +145,7 @@ def manager_store_delete(manager_id, store_id):
     manager.stores.remove(store)
     db.session.commit()
 
-    return Response(status=200)
+    return Response(status=200, mimetype='application/json')
 
 
 @api_v1.route('/stores/<store_id>/upload/logo', methods=['POST'])
