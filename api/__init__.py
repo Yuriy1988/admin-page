@@ -1,6 +1,7 @@
 import decimal
 import logging
 from functools import wraps
+from datetime import datetime
 from flask import Flask, Blueprint, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -42,9 +43,12 @@ class XOPayJSONEncoder(json.JSONEncoder):
             # Convert decimal instances to strings.
             return str(obj)
 
-        if isinstance(obj, decimal.Decimal):
-            # Convert decimal instances to strings.
-            return str(obj)
+        if isinstance(obj, datetime):
+            # datetime in format: YYYY-MM-DDThh:mm:ss±hh:mm
+            if not obj.tzinfo:
+                raise TypeError(repr(obj) + ' timezone missing')
+            return obj.strftime('%Y-%m-%dT%H:%M:%S%z')
+
         return super(XOPayJSONEncoder, self).default(obj)
 
 

@@ -3,7 +3,7 @@ import logging
 from traceback import format_exception
 from flask import jsonify, current_app
 
-from api import api_v1,  after_app_created
+from api import api_v1,  after_app_created, utils
 
 __author__ = 'Kostel Serhii'
 
@@ -34,6 +34,8 @@ def _error_serializer(message, status_code, errors=None, traceback=None):
         error_dict['errors'] = errors
     if traceback:
         error_dict['traceback'] = traceback
+
+    utils.add_track_extra_info({'error': error_dict})
 
     response = jsonify(error=error_dict)
     response.status_code = status_code

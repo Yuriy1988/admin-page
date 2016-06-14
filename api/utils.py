@@ -4,12 +4,14 @@ import random
 import string
 import pika
 import requests
+import pytz
+from datetime import datetime
 from requests import exceptions
 from pika import exceptions as mq_err
-from flask import request, json, url_for, current_app as app
+from flask import g, request, json, url_for, current_app as app
 from werkzeug.utils import secure_filename
 
-from api import errors, auth
+from api import errors, auth, after_app_created
 
 __author__ = 'Kostel Serhii'
 
@@ -135,6 +137,8 @@ def send_invite_to_user_by_email(user_model, invite_token):
     """
     invite_url = url_for('api_v1.user_create_password', token=invite_token, _external=True)
 
+    add_track_extra_info({'invite_url': invite_url})
+
     subject = 'XOPay Payment System Registration'
     invite_msg = '''
         Dear {user_name}, you have been invited to manage XOPay Payment System.
@@ -145,6 +149,53 @@ def send_invite_to_user_by_email(user_model, invite_token):
     invite_msg = invite_msg.format(user_name=user_model.get_full_name(), invite_url=invite_url)
 
     send_email(user_model.email, subject=subject, message=invite_msg)
+
+
+def add_track_extra_info(extra_info):
+    if 'track_extra_info' not in g:
+        g.track_extra_info = {}
+    g.track_extra_info.update(extra_info)
+
+
+@after_app_created
+def register_request_notifier(app):
+    """
+    Register request notifier.
+    :param app: Flask application
+    """
+    @app.after_request
+    def track_request(response):
+        """
+        After every request send information to the notify queue
+        to monitor and send alerts depending on the request information.
+        :param response: request response
+        """
+        request_detail = dict(
+            service_name=app.config['SERVICE_NAME'],
+
+            query=dict(
+                timestamp=datetime.now(tz=pytz.timezone(app.config['TIMEZONE'])),
+                path=request.full_path if request.query_string else request.path,
+                method=request.method,
+                status_code=response.status_code,
+                remote_address=request.remote_addr,
+                view_args=request.view_args,
+                headers=request.headers.environ,
+            ),
+
+            user=dict(
+                id=g.get('user_id'),
+                name=g.get('user_name'),
+                ip_addr=g.get('user_ip_addr'),
+                groups=g.get('groups'),
+            ),
+
+            extra=g.get('track_extra_info', {})
+        )
+
+        _send_notify(app.config['QUEUE_REQUEST'], request_detail)
+
+        return response
 
 
 # Media files

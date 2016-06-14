@@ -90,6 +90,8 @@ def _check_authorization(access_groups, verify=False):
 
     g.token = token
     g.user_id = user_id
+    g.user_name = payload.get('user_name', '')
+    g.user_ip_addr = payload.get('ip_addr', '')
     g.groups = groups
 
 
@@ -268,6 +270,8 @@ def get_system_token():
     payload = dict(
         exp=datetime.utcnow() + app.config['AUTH_TOKEN_LIFE_TIME'],
         user_id=app.config['AUTH_SYSTEM_USER_ID'],
+        user_name='system',
+        ip_addr=request.remote_addr,
         groups=['system'],
     )
     return _create_token(payload=payload)

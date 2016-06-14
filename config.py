@@ -6,8 +6,12 @@ DEBUG = True
 BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
 STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
+SERVICE_NAME = 'xopay-admin'
+
 # FIXME: uncomment after config update (for full invite url)
 # SERVER_NAME = 'xopay.digitaloutlooks.com'
+
+TIMEZONE = 'Europe/Riga'
 
 LOG_BASE_NAME = 'xop'
 LOG_FORMAT = 'ADMIN  | %(levelname)-6.6s | %(name)-15.15s | %(asctime)s | %(message)s'
@@ -52,3 +56,4 @@ QUEUE_VIRTUAL_HOST = '/xopay'
 
 QUEUE_EMAIL = 'notify_email'
 QUEUE_SMS = 'notify_sms'
+QUEUE_REQUEST = 'notify_request'
