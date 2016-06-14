@@ -84,7 +84,21 @@ def user_forgot_password():
     return Response(status=200)
 
 
-@api_v1.route('/user/change_password', methods=['POST'])
+@api_v1.route('/users/<user_id>/change_password', methods=['POST'])
+@auth.auth('admin')
+def user_change_password(user_id):
+    schema = schemas.UserChangePasswordSchema(exclude=('old_password',))
+    data, errors = schema.load(request.get_json(silent=True))
+    if errors:
+        raise api_err.ValidationError(errors=errors)
+
+    user = models.User.query.get(user_id)
+    user.set_password(data['new_password'])
+    db.session.commit()
+
+    return Response(status=200)
+
+
 @auth.auth('admin', 'merchant', 'manager')
 def user_change_password():
     schema = schemas.UserChangePasswordSchema()
