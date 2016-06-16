@@ -118,9 +118,3 @@ def user_change_password():
 
     return Response(status=200, mimetype='application/json')
 
-
-@api_v1.route('/admins_emails', methods=['GET'])
-@auth.auth('system')
-def admins_emails():
-    emails = db.session.query(models.User.email).join(models.UserGroup).filter_by(group_name='admin').all()
-    return jsonify(emails=list(emails))
