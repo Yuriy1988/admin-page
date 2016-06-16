@@ -87,7 +87,7 @@ def emails_of_user(user_id):
 
 
 @api_v1.route('/emails/stores/<store_id>/merchants', methods=['GET'])
-# @auth.auth('system')
+@auth.auth('system')
 def emails_of_stores_merchants(store_id):
     emails = db.session.query(models.User.email).\
         join(models.Merchant).\
