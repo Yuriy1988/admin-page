@@ -1,6 +1,7 @@
 import os
 import binascii
 from copy import deepcopy
+from itertools import chain
 
 from api import db, utils
 from api.models import base, enum, PaymentSystem
@@ -119,7 +120,7 @@ def create_store_paysys(store):
     """
     paysys_id_list = db.session.query(PaymentSystem.id).all()
 
-    for paysys_id, in paysys_id_list:
+    for paysys_id in chain.from_iterable(paysys_id_list):
         # print('Add payment systems %s to store %s' % (paysys_id, store.id))
         sps = StorePaySys(store.id, paysys_id, allowed=False)
         db.session.add(sps)

@@ -25,4 +25,5 @@ class Currency(base.BaseModel):
 
     @classmethod
     def request_last_commit_time(cls):
-        return db.session.query(cls.commit_time).order_by(cls.commit_time).first()
+        last_commit_time, = db.session.query(cls.commit_time).order_by(cls.commit_time).first() or (None,)
+        return last_commit_time

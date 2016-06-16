@@ -1,3 +1,4 @@
+from itertools import chain
 from passlib.apps import custom_app_context as pwd_context
 
 from api import db
@@ -61,4 +62,4 @@ class PaymentSystem(base.BaseModel):
         :return set allowed paysys_id
         """
         paysys_id_values = cls.filter_allowed(db.session.query(cls.id)).all()
-        return set(ps[0] for ps in paysys_id_values)
+        return set(chain.from_iterable(paysys_id_values))
