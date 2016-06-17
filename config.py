@@ -8,13 +8,15 @@ STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
 SERVICE_NAME = 'xopay-admin'
 
+AFTER_REQUEST_TRACK_ENABLE = True
+AFTER_REQUEST_LOGGER_ENABLE = False
+
 # FIXME: uncomment after config update (for full invite url)
 # SERVER_NAME = 'xopay.digitaloutlooks.com'
 
 LOG_BASE_NAME = 'xop'
 LOG_FORMAT = 'ADMIN  | %(levelname)-6.6s | %(name)-15.15s | %(asctime)s | %(message)s'
 LOG_DATE_FORMAT = '%d.%m %H:%M:%S'
-LOG_REQUESTS = False
 
 LOG_ROOT_LEVEL = 'INFO'
 LOG_LEVEL = 'DEBUG'

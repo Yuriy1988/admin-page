@@ -216,23 +216,25 @@ class BaseTestCase(TestCase, TestDefaults):
 
         data = json.dumps(data) if isinstance(data, dict) else data
 
-        return self.client.open(self.api_base + url, method=method, data=data, headers=headers, **options)
+        response = self.client.open(self.api_base + url, method=method, data=data, headers=headers, **options)
+        body = response.json if response.data and response.mimetype == 'application/json' else response.data
+        return response.status_code, body
 
     def get(self, url, query_args=None, auth=None, token=None):
-        response = self.request(url, method='GET', auth=auth or 'admin', token=token, query_string=query_args or {})
-        return response.status_code, response.json
+        code, body = self.request(url, method='GET', auth=auth or 'admin', token=token, query_string=query_args or {})
+        return code, body
 
     def put(self, url, body, auth=None, token=None):
-        response = self.request(url, method='PUT', data=body, auth=auth or 'admin', token=token)
-        return response.status_code, response.json
+        code, body = self.request(url, method='PUT', data=body, auth=auth or 'admin', token=token)
+        return code, body
 
     def post(self, url, body, auth=None, token=None):
-        response = self.request(url, method='POST', data=body, auth=auth or 'admin', token=token)
-        return response.status_code, response.json if response.mimetype == 'application/json' else response.data
+        code, body = self.request(url, method='POST', data=body, auth=auth or 'admin', token=token)
+        return code, body
 
     def delete(self, url, auth=None, token=None):
-        response = self.request(url, method='DELETE', auth=auth or 'admin', token=token)
-        return response.status_code, response.json if response.status_code >= 400 else None
+        code, body = self.request(url, method='DELETE', auth=auth or 'admin', token=token)
+        return code, body
 
     def create_merchant(self, merchant_dict, merchant_name=None, username=None):
         merchant_dict['merchant_name'] = merchant_name or "merchant" + self.rand_str()

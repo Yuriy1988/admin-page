@@ -61,7 +61,7 @@ def register_request_logger(app):
     Add request logger (in production werkzeug logger does not work).
     :param app: Flask application
     """
-    if not app.config.get('LOG_REQUESTS'):
+    if not app.config.get('AFTER_REQUEST_LOGGER_ENABLE'):
         return
 
     @app.after_request

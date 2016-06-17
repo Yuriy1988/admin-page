@@ -162,14 +162,17 @@ def add_track_extra_info(extra_info):
 
 
 @after_app_created
-def register_request_notifier(created_app):
+def register_request_notifier(app):
     """
     Register request notifier.
-    :param created_app: Flask application
+    :param app: Flask application
     """
+    if not app.config.get('AFTER_REQUEST_TRACK_ENABLE'):
+        return
+
     filtered_headers = ['HTTP_USER_AGENT', 'CONTENT_LENGTH', 'CONTENT_TYPE']
 
-    @created_app.after_request
+    @app.after_request
     def track_request(response):
         """
         After every request send information to the notify queue

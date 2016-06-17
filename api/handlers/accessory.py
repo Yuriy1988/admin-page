@@ -88,7 +88,7 @@ def emails_of_user(user_id):
 
 @api_v1.route('/emails/stores/<store_id>/merchants', methods=['GET'])
 @auth.auth('system')
-def emails_of_stores_merchants(store_id):
+def emails_of_store_merchants(store_id):
     emails = db.session.query(models.User.email).\
         join(models.Merchant).\
         join(models.Store).\
@@ -102,7 +102,7 @@ def emails_of_stores_merchants(store_id):
 
 @api_v1.route('/emails/stores/<store_id>/managers', methods=['GET'])
 @auth.auth('system')
-def emails_of_stores_managers(store_id):
+def emails_of_store_managers(store_id):
     emails = db.session.query(models.User.email).\
         join(models.Manager).\
         join(models.Store).\
