@@ -70,10 +70,12 @@ def unique_merchant():
 @api_v1.route('/emails/groups/<group_name>', methods=['GET'])
 @auth.auth('system')
 def emails_of_group(group_name):
-    emails = db.session.query(models.User.email).\
-        join(models.UserGroup).\
-        filter(models.UserGroup.group_name == group_name).\
-        all()
+    emails = []
+    if group_name in models.enum.USER_GROUP_ENUM:
+        emails = db.session.query(models.User.email).\
+            join(models.UserGroup).\
+            filter(models.UserGroup.group_name == group_name).\
+            all()
     return jsonify(emails=list(chain.from_iterable(emails)))
 
 
@@ -105,6 +107,7 @@ def emails_of_store_merchants(store_id):
 def emails_of_store_managers(store_id):
     emails = db.session.query(models.User.email).\
         join(models.Manager).\
+        join(models.ManagerStore).\
         join(models.Store).\
         join(models.UserGroup).\
         filter(models.Store.id == store_id).\
