@@ -35,6 +35,7 @@ env.hosts = list(hosts.values())
 
 env.admin_port = 7128
 env.client_port = 7254
+env.client_port = 7515
 # In demo server nginx behind apache, and apache make redirect from 80 to 443
 
 
