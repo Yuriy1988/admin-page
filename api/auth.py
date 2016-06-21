@@ -33,7 +33,7 @@ def _datetime_to_timestamp(dt_obj):
 
 # Auth decorator
 
-def _check_authorization(access_groups, verify=False):
+def _check_authorization(access_groups, verify=True):
     """
     Check user authorisation and permissions.
     Save information about token and user_id into Flask.g storage.
@@ -95,7 +95,7 @@ def _check_authorization(access_groups, verify=False):
     g.groups = groups
 
 
-def auth(*access_groups, verify=False):
+def auth(*access_groups, verify=True):
     """
     A decorator that is used to check user authorization
     for access groups only::
