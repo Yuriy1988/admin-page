@@ -1,59 +1,136 @@
 import os
 from datetime import timedelta
 
-DEBUG = True
+__author__ = 'Kostel Serhii'
 
-BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
-STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend', 'static')
 
-SERVICE_NAME = 'xopay-admin'
+class debug:
 
-AFTER_REQUEST_TRACK_ENABLE = True
-AFTER_REQUEST_LOGGER_ENABLE = False
+    SERVICE_NAME = 'xopay-admin'
+    BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
 
-# FIXME: uncomment after config update (for full invite url)
-# SERVER_NAME = 'xopay.digitaloutlooks.com'
+    # Common
+    ADMIN_PORT = 7128
+    CLIENT_PORT = 7254
 
-LOG_BASE_NAME = 'xop'
-LOG_FORMAT = 'ADMIN  | %(levelname)-6.6s | %(name)-15.15s | %(asctime)s | %(message)s'
-LOG_DATE_FORMAT = '%d.%m %H:%M:%S'
+    ADMIN_API_VERSION = 'dev'
+    CLIENT_API_VERSION = 'dev'
 
-LOG_ROOT_LEVEL = 'INFO'
-LOG_LEVEL = 'DEBUG'
+    @property
+    def ADMIN_API_URL(self):
+        return 'http://127.0.0.1:%s/api/admin/%s' % (self.ADMIN_PORT, self.ADMIN_API_VERSION)
 
-# Upload
-MAX_CONTENT_LENGTH = 4 * 1024 * 1024
-MEDIA_BASE_FOLDER = os.path.join(BASE_FOLDER, 'media', 'admin')
-MEDIA_BASE_URL = '/media/admin'
+    @property
+    def CLIENT_API_URL(self):
+        return 'http://127.0.0.1:%s/api/client/%s' % (self.CLIENT_PORT, self.CLIENT_API_VERSION)
 
-# Define the database
-SQLALCHEMY_DATABASE_URI = 'postgresql://xopadmin:UC4EhhQ6HkwNn7qK@localhost/xopadmindb'
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+    # Local
+    HOST = '127.0.0.1'
+    PORT = ADMIN_PORT
+    PREFERRED_URL_SCHEME = 'http'
 
-CSRF_ENABLED = True
-CSRF_SESSION_KEY = "mhe=d4#2xvb1348j%m+sn0d8ssdbjv18yi+f_w#&yd!+&4ic4)"
+    DEBUG = True
+    AFTER_REQUEST_TRACK_ENABLE = True
+    AFTER_REQUEST_LOGGER_ENABLE = False
 
-SECRET_KEY = "ugGB0uH1cJTW=1L9Vs|8roMlFfFgsWD%NA|*WBpYQ3Uytr-6rImVk2Rp%BJ+"
+    SERVER_NAME = '%s:%d' % (HOST, PORT)
 
-# TODO: generate AUTH_KEY for production and copy to every service
-AUTH_ALGORITHM = 'HS512'
-AUTH_KEY = 'PzYs2qLh}2$8uUJbBnWB800iYKe5xdYqItRNo7@38yW@tPDVAX}EV5V31*ZK78QS'
+    # Logger
+    LOGGER_NAME = 'xop'
+    LOG_FORMAT = ' %(levelname)-6.6s | ADMIN  | %(name)-12.12s | %(asctime)s | %(message)s'
+    LOG_DATE_FORMAT = '%d.%m %H:%M:%S'
 
-AUTH_TOKEN_LIFE_TIME = timedelta(minutes=30)
-AUTH_SESSION_LIFE_TIME = timedelta(hours=24)
-AUTH_INVITE_LIFE_TIME = timedelta(days=3)
+    LOG_ROOT_LEVEL = 'INFO'
+    LOG_LEVEL = 'DEBUG'
 
-AUTH_SYSTEM_USER_ID = 'xopay.admin'
+    # Auth
+    AUTH_ALGORITHM = 'HS512'
+    # TODO: generate AUTH_KEY for production and copy to every service
+    AUTH_KEY = 'PzYs2qLh}2$8uUJbBnWB800iYKe5xdYqItRNo7@38yW@tPDVAX}EV5V31*ZK78QS'
 
-CLIENT_API_URL = 'http://127.0.0.1:7254/api/client/dev'
+    AUTH_TOKEN_LIFE_TIME = timedelta(minutes=30)
+    AUTH_SESSION_LIFE_TIME = timedelta(hours=24)
+    AUTH_INVITE_LIFE_TIME = timedelta(days=3)
 
-# Queue:
-QUEUE_HOST = '0.0.0.0'
-QUEUE_PORT = 5672
-QUEUE_USERNAME = 'xopay_rabbit'
-QUEUE_PASSWORD = '5lf01xiOFwyMLvQrkzz7'
-QUEUE_VIRTUAL_HOST = '/xopay'
+    AUTH_SYSTEM_USER_ID = SERVICE_NAME
 
-QUEUE_EMAIL = 'notify_email'
-QUEUE_SMS = 'notify_sms'
-QUEUE_REQUEST = 'notify_request'
+    # Database
+    DB_NAME = 'xopadmindb'
+    DB_USER = 'xopadmin'
+    DB_PASSWORD = 'UC4EhhQ6HkwNn7qK'
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+    @property
+    def SQLALCHEMY_DATABASE_URI(self):
+        return 'postgresql://%s:%s@localhost/%s' % (self.DB_USER, self.DB_PASSWORD, self.DB_NAME)
+
+    # Queue:
+    QUEUE_HOST = '0.0.0.0'
+    QUEUE_PORT = 5672
+    QUEUE_USERNAME = 'xopay_rabbit'
+    QUEUE_VIRTUAL_HOST = '/xopay'
+    QUEUE_PASSWORD = '5lf01xiOFwyMLvQrkzz7'
+
+    QUEUE_EMAIL = 'notify_email'
+    QUEUE_SMS = 'notify_sms'
+    QUEUE_REQUEST = 'notify_request'
+
+    # Upload
+    MAX_CONTENT_LENGTH = 4 * 1024 * 1024
+    MEDIA_BASE_FOLDER = os.path.join(BASE_FOLDER, 'media/admin')
+    MEDIA_BASE_URL = '/media/admin'
+
+    # Flask
+    STATIC_FOLDER = os.path.join(BASE_FOLDER, 'frontend/static')
+    SECRET_KEY = "ugGB0uH1cJTW=1L9Vs|8roMlFfFgsWD%NA|*WBpYQ3Uytr-6rImVk2Rp%BJ+"
+    CSRF_SESSION_KEY = "mhe=d4#2xvb1348j%m+sn0d8ssdbjv18yi+f_w#&yd!+&4ic4)"
+    CSRF_ENABLED = True
+
+
+class test(debug):
+
+    TESTING = True
+    DEBUG = True
+    AFTER_REQUEST_TRACK_ENABLE = False
+    AFTER_REQUEST_LOGGER_ENABLE = False
+
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
+
+    LOG_ROOT_LEVEL = 'WARNING'
+    LOG_LEVEL = 'WARNING'
+
+    AUTH_TOKEN_LIFE_TIME = timedelta(minutes=10)
+    AUTH_SESSION_LIFE_TIME = timedelta(minutes=15)
+    AUTH_INVITE_LIFE_TIME = timedelta(minutes=15)
+
+    DB_NAME = 'xopadmintestdb'
+    DB_USER = 'xopadmintest'
+    DB_PASSWORD = 'test123'
+
+
+class production(debug):
+
+    PREFERRED_URL_SCHEME = 'https'
+
+    DEBUG = False
+    SERVER_NAME = 'xopay.digitaloutlooks.com'
+
+    LOG_ROOT_LEVEL = 'INFO'
+    LOG_LEVEL = 'INFO'
+
+
+class ConfigLoader(dict):
+    """ Load config with config_name."""
+
+    def __init__(self, config_name='debug'):
+        super().__init__()
+
+        xop_config_obj = globals()[config_name]
+        if not xop_config_obj:
+            return
+
+        config_instance = xop_config_obj()
+        for key in dir(config_instance):
+            if key.isupper():
+                self[key] = getattr(config_instance, key)

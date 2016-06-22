@@ -15,9 +15,6 @@ from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS
 
 __author__ = 'Kostel Serhii'
 
-# If database is missing, run shell command: make db_test_create
-SQLALCHEMY_DATABASE_URI = "postgresql://xopadmintest:test123@localhost/xopadmintestdb"
-
 
 def prettify(obj, depth=10):
     """"
@@ -140,19 +137,7 @@ class BaseTestCase(TestCase, TestDefaults):
     def create_app(self):
         """ App for testing """
         app = create_app('test')
-        self.config(app)
         return app
-
-    def config(self, app):
-        """ Configuration for testing """
-        app.config['DEBUG'] = True
-        app.config['TESTING'] = True
-        app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-
-        app.config['AUTH_TOKEN_LIFE_TIME'] = timedelta(minutes=15)
-        app.config['AUTH_SESSION_LIFE_TIME'] = timedelta(minutes=30)
-        app.config['AUTH_INVITE_LIFE_TIME'] = timedelta(minutes=30)
 
     @staticmethod
     def rand_int(a=0, b=100):

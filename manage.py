@@ -1,9 +1,29 @@
 #!venv/bin/python
+
+"""
+ Project management commands.
+ Commands variables depends on config file name.
+ Default config is debug.
+ Run commands only if virtual environment created (make venv_init).
+
+
+ Run commands:
+    ./manage.py <command> [<sub command>] [--config=<config name>]
+
+
+ Config name: debug, production, test (default debug)
+
+
+"""
+
 import os
 import unittest
 import coverage
-from flask_script import Manager, Server
+from flask_script import Manager
 from flask_migrate import MigrateCommand
+
+__author__ = 'Kostel Serhii'
+
 
 COV = coverage.coverage(
     branch=True,
@@ -16,28 +36,26 @@ COV = coverage.coverage(
 )
 COV.start()
 
+import run
 from api import create_app, db
 from api.models import payment_system as paysys, user
 from api.schemas import UserSchema, UserCreatePasswordSchema
-
-__author__ = 'Kostel Serhii'
 
 
 manager = Manager(create_app)
 manager.add_option("-c", "--config", dest="config", default='debug', required=False)
 
 
-# db (migrations)
-manager.add_command('db', MigrateCommand)
+# ------ Runserver -----
+
+@manager.command
+@manager.option('--reload', dest='reload', default=True)
+def runserver(reload):
+    run.runserver(config=manager.get_options()['config'], reload=reload)
 
 
-# runserver
-# TODO: move port and debug into config
-server = Server(host="0.0.0.0", port=7128, use_debugger=True)
-manager.add_command('runserver', server)
+# ------ Tests -----
 
-
-# tests
 def _api_test():
     tests_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'api/tests')
     suite = unittest.TestLoader().discover(tests_path, pattern='*.py')
@@ -69,8 +87,8 @@ def test_cover():
     return 1
 
 
-# create_admin
-@manager.command
+# ------ Database -----
+
 def create_admin():
     """Create database administrator user model"""
     for _ in range(3):
@@ -107,7 +125,6 @@ def create_admin():
     return 0
 
 
-# create_payment_systems
 @manager.command
 def create_payment_systems():
     """Create payment system."""
@@ -117,11 +134,13 @@ def create_payment_systems():
     db.session.commit()
 
 
-# create_data
 @manager.command
 def create_data():
     """Create default database models data."""
     create_payment_systems()
+
+
+manager.add_command('db', MigrateCommand)
 
 
 if __name__ == '__main__':

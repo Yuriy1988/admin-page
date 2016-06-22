@@ -15,7 +15,7 @@ def _default_logger_config(log_config):
     log_config.setdefault('LOG_DATE_FORMAT', '%d.%m %H:%M:%S')
     log_config.setdefault('LOG_LEVEL', 'INFO')
     log_config.setdefault('LOG_ROOT_LEVEL', 'INFO')
-    log_config.setdefault('LOG_BASE_NAME', '')
+    log_config.setdefault('LOGGER_NAME', '')
 
     log_config.setdefault('LOG_FILE', None)
     log_config.setdefault('LOG_MAX_BYTES', 10*1024*1024)
@@ -51,7 +51,7 @@ def logger_configure(app):
     root_logger.addHandler(log_handler)
     root_logger.setLevel(log_config['LOG_ROOT_LEVEL'])
 
-    local_logger = logging.getLogger(log_config['LOG_BASE_NAME'])
+    local_logger = logging.getLogger(log_config['LOGGER_NAME'])
     local_logger.setLevel(log_config['LOG_LEVEL'])
 
 

@@ -7,6 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.contrib.fixers import ProxyFix
 
+from config import ConfigLoader
+
 __author__ = 'Kostel Serhii'
 
 
@@ -54,15 +56,15 @@ class XOPayJSONEncoder(json.JSONEncoder):
 
 # Create application
 
-def create_app(config='debug', **options):
+def create_app(config='debug'):
     """
     Create flask application object with additional parameters
     :param config: name of the config object: debug, test, production
-    :param options: additional config values to overwrite
     :return: Flask app object
     """
     app = Flask(__name__)
-    app.config.from_object('config')
+    config_dict = ConfigLoader(config)
+    app.config.update(config_dict)
     app.static_folder = app.config["STATIC_FOLDER"]
 
     app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -96,8 +98,5 @@ def create_app(config='debug', **options):
         def index():
             """ Redirect from root to admin page """
             return redirect(url_for('admin_page'))
-
-    log = logging.getLogger('xop.main')
-    log.info('Starting XOPay Admin Service...')
 
     return app
