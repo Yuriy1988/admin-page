@@ -19,8 +19,8 @@ install_python35_repo:
 	sudo apt-get update
 
 install:
-	sudo apt-get install $(PYTHON) $(PYTHON)-dev python3-pip python3-wheel python-virtualenv
-	sudo apt-get install postgresql postgresql-contrib python-psycopg2
+	sudo apt-get -y install $(PYTHON) $(PYTHON)-dev python3-pip python3-wheel python-virtualenv
+	sudo apt-get -y install postgresql postgresql-contrib python-psycopg2 redis-server
 
 
 # ------ Database -----

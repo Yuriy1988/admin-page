@@ -35,8 +35,7 @@ env.hosts = list(hosts.values())
 
 env.admin_port = 7128
 env.client_port = 7254
-env.client_port = 7515
-# In demo server nginx behind apache, and apache make redirect from 80 to 443
+env.notify_port = 7515
 
 
 def create_config(config_file, template_file, **config_kwargs):
