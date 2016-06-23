@@ -37,7 +37,7 @@ class debug:
 
     # Logger
     LOGGER_NAME = 'xop'
-    LOG_FORMAT = ' %(levelname)-6.6s | ADMIN  | %(name)-12.12s | %(asctime)s | %(message)s'
+    LOG_FORMAT = '%(levelname)-6.6s | ADMIN  | %(name)-12.12s | %(asctime)s | %(message)s'
     LOG_DATE_FORMAT = '%d.%m %H:%M:%S'
 
     LOG_ROOT_LEVEL = 'INFO'
@@ -118,6 +118,10 @@ class production(debug):
 
     LOG_ROOT_LEVEL = 'INFO'
     LOG_LEVEL = 'INFO'
+
+    LOG_FILE = '/var/log/xopay/xopay.log'
+    LOG_MAX_BYTES = 10*1024*1024
+    LOG_BACKUP_COUNT = 10
 
 
 class ConfigLoader(dict):
