@@ -61,3 +61,17 @@ def payment_system_update(paysys_id):
     schema = PaymentSystemSchema()
     result = schema.dump(payment_system)
     return jsonify(result.data)
+
+
+@api_v1.route('/payment_systems/<paysys_id>/account', methods=['GET'])
+@auth.auth('system')
+def payment_system_account(paysys_id):
+    paysys_id = paysys_id.upper()
+    payment_system = PaymentSystem.query.get(paysys_id)
+    if not payment_system:
+        raise NotFoundError()
+
+    schema = PaymentSystemUpdateSchema()
+
+    result = schema.dump(payment_system)
+    return jsonify(result.data)
