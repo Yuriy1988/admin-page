@@ -1,4 +1,16 @@
 #!venv/bin/python
+"""
+Run Flask app server.
+
+Usage:
+    run.py [-h] [--config CONFIG] [--reload]
+
+Examples:
+    ./run.py                              : config=debug, reload=False
+    ./run.py --reload                     : config=debug, reload=True
+    ./run.py --config=production --reload : config=production, reload=True
+"""
+
 import logging
 import argparse
 
@@ -6,11 +18,10 @@ from api import create_app
 
 __author__ = 'Kostel Serhii'
 
-
 service_name = 'XOPay Admin Service'
 
 
-def runserver(config='debug', reload=True):
+def runserver(config='debug', reload=False):
     """
     Run server with defined configuration.
     :param config: config name: debug, test, production
@@ -26,7 +37,6 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description=service_name, allow_abbrev=False)
     parser.add_argument('--config', default='debug', help='load config: [debug, test, production] (default "debug")')
-    parser.add_argument('--reload', default=True, help='reload server if changed (default True)')
-
+    parser.add_argument('--reload', action='store_true', help='reload server if changed (default False)')
     args = parser.parse_args()
     runserver(args.config, args.reload)

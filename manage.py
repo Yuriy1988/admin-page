@@ -19,6 +19,7 @@
 import os
 import unittest
 import coverage
+import getpass
 from flask_script import Manager
 from flask_migrate import MigrateCommand
 
@@ -36,7 +37,6 @@ COV = coverage.coverage(
 )
 COV.start()
 
-import run
 from api import create_app, db
 from api.models import payment_system as paysys, user
 from api.schemas import UserSchema, UserCreatePasswordSchema
@@ -44,14 +44,6 @@ from api.schemas import UserSchema, UserCreatePasswordSchema
 
 manager = Manager(create_app)
 manager.add_option("-c", "--config", dest="config", default='debug', required=False)
-
-
-# ------ Runserver -----
-
-@manager.command
-@manager.option('--reload', dest='reload', default=True)
-def runserver(reload):
-    run.runserver(config=manager.get_options()['config'], reload=reload)
 
 
 # ------ Tests -----
@@ -89,6 +81,7 @@ def test_cover():
 
 # ------ Database -----
 
+@manager.command
 def create_admin():
     """Create database administrator user model"""
     for _ in range(3):
@@ -105,7 +98,7 @@ def create_admin():
         return 1
 
     for _ in range(3):
-        password = input("Enter admin password:\n>>> ")
+        password = getpass.getpass("Enter admin password:\n>>> ")
 
         password_data, errors = UserCreatePasswordSchema().load(dict(password=password))
         if not errors: break

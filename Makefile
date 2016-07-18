@@ -92,6 +92,11 @@ setup: install venv_init db_create
 update: venv_init db_update
 
 
+# ----- Update -----
+
+remove: db_remove
+	rm -rf venv
+
 # ----- Test -----
 
 test: venv_init
@@ -110,7 +115,7 @@ deploy:
 # ----- Run Server -----
 
 runserver:
-	./manage.py runserver
+	./run.py --config=debug --reload
 
 
 # ========== MacOS ==========
