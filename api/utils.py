@@ -11,7 +11,7 @@ from pika import exceptions as mq_err
 from flask import g, request, json, url_for, current_app as app
 from werkzeug.utils import secure_filename
 
-from api import errors, auth, after_app_created
+from api import errors, auth, after_app_created, api_v1
 
 __author__ = 'Kostel Serhii'
 
@@ -170,9 +170,12 @@ def register_request_notifier(app):
     if not app.config.get('AFTER_REQUEST_TRACK_ENABLE'):
         return
 
+    service_name = app.config['SERVICE_NAME']
+    queue_request = app.config['QUEUE_REQUEST']
+
     filtered_headers = ['HTTP_USER_AGENT', 'CONTENT_LENGTH', 'CONTENT_TYPE']
 
-    @app.after_request
+    @api_v1.after_request
     def track_request(response):
         """
         After every request send information to the notify queue
@@ -180,7 +183,7 @@ def register_request_notifier(app):
         :param response: request response
         """
         request_detail = dict(
-            service_name=app.config['SERVICE_NAME'],
+            service_name=service_name,
 
             query=dict(
                 timestamp=datetime.now(tz=pytz.utc),
@@ -202,7 +205,7 @@ def register_request_notifier(app):
             extra=g.get('track_extra_info', {})
         )
 
-        _send_notify(app.config['QUEUE_REQUEST'], request_detail)
+        _send_notify(queue_request, request_detail)
 
         return response
 

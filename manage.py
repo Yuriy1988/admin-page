@@ -1,5 +1,4 @@
 #!venv/bin/python
-
 """
  Project management commands.
  Commands variables depends on config file name.
@@ -12,8 +11,6 @@
 
 
  Config name: debug, production, test (default debug)
-
-
 """
 
 import os

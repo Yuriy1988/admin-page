@@ -19,9 +19,9 @@ install_python35_repo:
 	sudo apt-get update
 
 install:
-	sudo apt-get -y install $(PYTHON) $(PYTHON)-dev python3-pip python3-wheel python-virtualenv
-	sudo apt-get -y install postgresql postgresql-contrib python-psycopg2 redis-server
-
+	sudo apt-get install -y $(PYTHON) $(PYTHON)-dev python3-pip python3-wheel python-virtualenv
+	sudo apt-get install -y libpq-dev postgresql postgresql-contrib python-psycopg2 redis-server
+	sudo apt-get install -y rabbitmq-server
 
 # ------ Database -----
 
@@ -92,10 +92,11 @@ setup: install venv_init db_create
 update: venv_init db_update
 
 
-# ----- Update -----
+# ----- Remove -----
 
 remove: db_remove
 	rm -rf venv
+
 
 # ----- Test -----
 

@@ -30,7 +30,7 @@ class debug:
     PREFERRED_URL_SCHEME = 'http'
 
     DEBUG = True
-    AFTER_REQUEST_TRACK_ENABLE = True
+    AFTER_REQUEST_TRACK_ENABLE = False
     AFTER_REQUEST_LOGGER_ENABLE = False
 
     SERVER_NAME = '%s:%d' % (HOST, PORT)
@@ -114,6 +114,9 @@ class production(debug):
     PREFERRED_URL_SCHEME = 'https'
 
     DEBUG = False
+    AFTER_REQUEST_TRACK_ENABLE = True
+    AFTER_REQUEST_LOGGER_ENABLE = True
+
     SERVER_NAME = 'xopay.digitaloutlooks.com'
 
     LOG_ROOT_LEVEL = 'INFO'
