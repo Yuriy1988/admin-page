@@ -58,7 +58,8 @@ export function getById(merchantId) {
         [CALL_API]: {
             types: [MERCHANT_GET_REQUEST, MERCHANT_GET_SUCCESS, MERCHANT_GET_FAILURE],
             cError: MERCHANT_GET_CERROR,
-            endpoint: MERCHANT_GET(merchantId)
+            endpoint: MERCHANT_GET(merchantId),
+            isAuth: true,
         }
     }
 }

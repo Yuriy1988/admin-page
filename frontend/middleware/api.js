@@ -9,13 +9,17 @@ const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
-    const { schema, path, method } = endpoint;
+    const { schema, path, method, isAuth = false} = endpoint;
 
     let fullUrl = API_ROOT + path;
 
     const headers = new Headers();
 
     headers.append("Content-type", "application/json");
+
+    if (isAuth === true) {
+        headers.append("AuthToken", 123);
+    }
 
     let options = {
         credentials: 'same-origin',
@@ -186,7 +190,9 @@ export default store => next => action => {
         fParams = failureType;
     }
 
-    next(actionWith(action, Object.assign({type: requestType}, rParams)));
+    const newAction = actionWith(action, Object.assign({type: requestType}, rParams));
+    console.log(newAction);
+    next(newAction);
 
     return callApi(endpoint, body).then(
         response => {
