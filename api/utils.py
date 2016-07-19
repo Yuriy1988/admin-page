@@ -135,7 +135,7 @@ def send_invite_to_user_by_email(user_model, invite_token):
     :param user_model: user model
     :param invite_token: unique invite token for user
     """
-    invite_url = url_for('api_v1.user_create_password', token=invite_token, _external=True)
+    invite_url = app.config['SERVER_URL'] + url_for('api_v1.user_create_password', token=invite_token)
 
     add_track_extra_info({'invite_url': invite_url})
 
