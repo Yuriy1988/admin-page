@@ -2,16 +2,28 @@ import * as UserActions from '../actions/user';
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
 
-const initial_user = (DEV_MODE ) ? {
-    name: "Vlad",
-    login: "vladik7244",
-    mainPage: "/admin/administrator",
-    roles: ["ROLE_ADMINISTRATOR"],
-    token: localStorage.getItem("user_token")
-} : {
+const initial_user = {
+    isFetching: false
 };
 
 export default function user(state = initial_user, action) {
+
+   //switch (action.type) {
+   //    case UserActions.USER_LOGIN_AUTH_REQUEST:
+   //        return Object.assign({}, state, {isFetching: true});
+   //
+   //    case UserActions.USER_LOGIN_AUTH_SUCCESS:
+   //        localStorage.setItem("user_token", action.response.token);
+   //        console.log(action.response);
+   //        return Object.assign({}, state, action.response, {isFetching: false}, {mainPage: "/admin/administrator"});
+   //
+   //    case UserActions.USER_LOGIN_AUTH_FAILURE:
+   //        return Object.assign({}, state, action.error, {isFetching: false});
+   //    default:
+   //        return state;
+   //}
+
+
     const { type } = action;
 
     if (type === UserActions.USER_LOGIN) {

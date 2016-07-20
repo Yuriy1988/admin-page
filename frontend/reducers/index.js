@@ -5,7 +5,7 @@ import {
     MerchantContractActions,
     PaySystemsContractsActions,
     PaySystemsActions,
-
+    UserActions
 } from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
@@ -16,7 +16,7 @@ import {routeReducer} from 'react-router-redux'
 import {combineReducers} from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
-function entities(state = {
+function entities (state = {
     merchants: {},
     stores: {},
     paySystems: {},
@@ -26,9 +26,11 @@ function entities(state = {
     storePaySys: {}
 }, action) {
     if (!!action.response && !!action.response.entities) {
+        console.log(action.response);
         return merge({}, state, action.response.entities);
     }
     if (!!action.deleteObject && !!action.deleteObject.entity) {
+        console.log(action.response);
         const newState = merge({}, state);
         delete newState[action.deleteObject.entity][action.deleteObject.id];
         return newState;
@@ -38,6 +40,7 @@ function entities(state = {
 
 
 // Updates the pagination data for different actions.
+
 const pagination = combineReducers({
 //PaySystems
     paySystemsList: paginate({
@@ -288,21 +291,20 @@ const pagination = combineReducers({
 const rootReducer = combineReducers({
     entities,
     pagination,
-    auth,
     user,
     sideBar,
     dictionary,
     routing: routeReducer
 });
 
-function auth(prevState = {token: null}, action) {
-    if (action.type === 'LOGIN_SUCCESS') {
-        return {
-            token: action.token
-        };
-
-    }
-    return prevState;
-}
+//function auth(prevState = {token: null}, action) {
+//    if (action.type === 'LOGIN_SUCCESS') {
+//        return {
+//            token: action.token
+//        };
+//
+//    }
+//    return prevState;
+//}
 
 export default rootReducer

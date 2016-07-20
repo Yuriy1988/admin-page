@@ -1,6 +1,12 @@
 import { Schema, arrayOf, valuesOf} from 'normalizr'
 
 /**
+ * USER_AUTH
+ */
+export const USER_LOGIN_AUTH = {path: "authorization", method: "POST"};
+
+
+/**
  * MERCHANTS
  */
 const merchantSchema = new Schema('merchants');

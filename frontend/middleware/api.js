@@ -143,7 +143,6 @@ function actionWith(action, data) {
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.
 export default store => next => action => {
-
     const callAPI = action[CALL_API];
     if (typeof callAPI === 'undefined') {
         return next(action);
@@ -191,7 +190,6 @@ export default store => next => action => {
     }
 
     const newAction = actionWith(action, Object.assign({type: requestType}, rParams));
-    console.log(newAction);
     next(newAction);
 
     return callApi(endpoint, body).then(
