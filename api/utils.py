@@ -65,9 +65,9 @@ def push_to_queue(queue_name, body_json):
             channel.basic_publish(exchange='', routing_key=queue_name, body=body, properties=publish_properties)
 
     except mq_err.AMQPConnectionError as err:
-        raise errors.ServiceUnavailableError('Queue error: %r' % err)
+        raise errors.ServiceUnavailableError('Queue error: %s' % err)
     except (mq_err.AMQPChannelError, mq_err.AMQPError) as err:
-        raise errors.InternalServerError('Queue error: %r' % err)
+        raise errors.InternalServerError('Queue error: %s' % err)
 
 
 # Client service
@@ -107,7 +107,7 @@ def _send_notify(queue_name, body_json):
         push_to_queue(queue_name, body_json)
     except Exception as err:
         # Notification error should not crash task execution
-        _log.error("Notification service is unavailable now: %s" % str(err))
+        _log.error("Notification service is unavailable now: %s", err)
 
 
 def send_email(email_address, subject, message):
