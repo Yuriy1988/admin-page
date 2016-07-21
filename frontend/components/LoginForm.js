@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as UserActions from '../actions/user'
+import * as SystemsActions from '../actions/system'
 import Alert,{TYPE_ERROR} from '../components/Alert'
 class LoginForm extends Component {
 
@@ -13,6 +14,14 @@ class LoginForm extends Component {
             login: "",
             password: ""
         };
+    }
+    componentDidMount() {
+      //  'after server implementation here will be function that gets server version'
+     //   this.props.getServerVersion();
+    }
+
+    componentWillUnmount() {
+        console.log(this.props.refreshToken);
     }
 
     handleChange(e) {
@@ -72,5 +81,7 @@ class LoginForm extends Component {
 export default connect((state)=> {
     return {user: state.user, session: state.session}
 }, {
-    makeLogin: UserActions.login
+    makeLogin: UserActions.login,
+    getServerVersion: SystemsActions.getServerVersion,
+    refreshToken: SystemsActions.refreshToken
 })(LoginForm)

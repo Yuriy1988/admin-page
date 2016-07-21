@@ -13,6 +13,9 @@ export {_SideBarActions as SideBarActions}
 import * as _UserActions from './user'
 export {_UserActions as UserActions}
 
+import * as _SystemActions from './system'
+export {_SystemActions as SystemActions}
+
 import * as _RedirectActions from './redirect'
 export {_RedirectActions as RedirectActions}
 

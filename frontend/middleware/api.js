@@ -9,7 +9,7 @@ const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
-    const { schema, path, method, isAuth = false} = endpoint;
+    const { schema, path, method, isAuth = true} = endpoint;
 
     let fullUrl = API_ROOT + path;
 
@@ -17,8 +17,8 @@ function callApi(endpoint, body) {
 
     headers.append("Content-type", "application/json");
 
-    if (isAuth === true) {
-        headers.append("AuthToken", 123);
+    if (isAuth) {
+        headers.append("Authorization", 'Bearer ' + window.localStorage.user_token);
     }
 
     let options = {
@@ -38,7 +38,6 @@ function callApi(endpoint, body) {
             let params = [];
             for (let key in body) {
                 params.push(`${key}=${body[key]}`);
-
             }
 
             if (fullUrl.indexOf("?") == -1) {

@@ -10,6 +10,7 @@ import {
 import merge from 'lodash/merge'
 import paginate from './paginate'
 import user from './user'
+import system from './system'
 import dictionary from './dictionary'
 import sideBar from './sideBar'
 import {routeReducer} from 'react-router-redux'
@@ -26,11 +27,9 @@ function entities (state = {
     storePaySys: {}
 }, action) {
     if (!!action.response && !!action.response.entities) {
-        console.log(action.response);
         return merge({}, state, action.response.entities);
     }
     if (!!action.deleteObject && !!action.deleteObject.entity) {
-        console.log(action.response);
         const newState = merge({}, state);
         delete newState[action.deleteObject.entity][action.deleteObject.id];
         return newState;
@@ -256,6 +255,7 @@ const pagination = combineReducers({
     }),
     //StorePaysys
     storePaysysGet: paginate({
+
         mapActionToKey: action => "store",
         paginationId: "storePaysysGet",
         types: [
@@ -291,6 +291,7 @@ const pagination = combineReducers({
 const rootReducer = combineReducers({
     entities,
     pagination,
+    system,
     user,
     sideBar,
     dictionary,
