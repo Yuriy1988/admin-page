@@ -4,6 +4,7 @@ import {Route, IndexRoute} from 'react-router' //React
 import App               from './containers/App'
 import ErrorPage         from './containers/ErrorPage'
 import LoginPage         from './containers/LoginPage'
+import PasswordCreate from './containers/PasswordCreate'
 import TestPage          from './containers/TestPage'
 import AdminPage         from './containers/AdminPage'
 import SelectRolePage    from './containers/SelectRolePage'
@@ -41,7 +42,7 @@ import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
-    ADMINISTRATOR: "admin",
+    ADMINISTRATOR: "admin", //ok
     MERCHANT: "ROLE_MERCHANT",
     MANAGER: "ROLE_MANAGER"
 };
@@ -58,11 +59,13 @@ class Routes {
     getRoutes() {
         return (
             <Route>
+
                 <Route path="/admin/login" component={LoginPage}/>
                 <Route component={App}>
 
-
+                    <Route path="/admin/dev/user/create_password" component={PasswordCreate}/>
                     <Route path="/admin/access_denied" component={ErrorPage} status={403}/>
+
 
                     <Route path="/admin">
                         <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
@@ -191,6 +194,5 @@ class Routes {
         }).bind(this);
     }
 }
-
 
 export default Routes
