@@ -1,6 +1,18 @@
 import { Schema, arrayOf, valuesOf} from 'normalizr'
 
 /**
+ * SYSTEM_ACTIONS
+ */
+export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET", isAuth: false}; // waiting for server fix;
+export const TOKEN_REFRESH = {path: "authorization/token", method: "GET"};
+
+/**
+ * USER_ACTIONS
+ */
+export const USER_LOGIN = {path: "authorization", method: "POST", isAuth: false};
+export const USER_LOGOUT = {path: "authorization/token", method: "DELETE"};
+
+/**
  * MERCHANTS
  */
 const merchantSchema = new Schema('merchants');
@@ -16,7 +28,7 @@ export const MERCHANT_DELETE = (merchantId) => ({path: `merchants/${merchantId}`
  */
 const paySystemSchema = new Schema('paySystems');
 const paySystemListSchema = {paymentSystems: arrayOf(paySystemSchema)};
-export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema};
+export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema, isAuth: true};
 export const PAYSYSTEM_GET = (paySysId) => ({path: `payment_systems/${paySysId}`, method: "GET", schema: paySystemSchema});
 export const PAYSYSTEM_EDIT= (paySysId, data) => ({path: `payment_systems/${paySysId}`, method: "PUT", schema: paySystemSchema});
 
@@ -60,8 +72,8 @@ export const PAYSYSTEM_CONTRACT_DELETE = (paysysContractId) => ({path: `paysys_c
  * DICTIONARY
  */
 export const DICT_SIGN_ALGORITHM = {path: "constants/sign_algorithm", method: "GET" };
-export const DICT_CURRENCY = {path: "constants/currency", method: "GET" };
-export const DICT_NOTIFY = {path: "constants/notify", method: "GET" };
+export const DICT_CURRENCY = {path: "constants/currency", method: "GET"};
+export const DICT_NOTIFY = {path: "constants/notify", method: "GET"};
 export const DICT_CATEGORY = {path: "constants/category", method: "GET" };
 export const DICT_PAYSYS_ID = {path: "payment_systems/allowed/paysys_id", method: "GET" };
 

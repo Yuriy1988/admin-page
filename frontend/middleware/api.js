@@ -9,13 +9,17 @@ const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
-    const { schema, path, method } = endpoint;
+    const { schema, path, method, isAuth = true} = endpoint;
 
     let fullUrl = API_ROOT + path;
 
     const headers = new Headers();
 
     headers.append("Content-type", "application/json");
+
+    if (isAuth) {
+        headers.append("Authorization", 'Bearer ' + window.localStorage.user_token);
+    }
 
     let options = {
         credentials: 'same-origin',
@@ -34,7 +38,6 @@ function callApi(endpoint, body) {
             let params = [];
             for (let key in body) {
                 params.push(`${key}=${body[key]}`);
-
             }
 
             if (fullUrl.indexOf("?") == -1) {
@@ -139,7 +142,6 @@ function actionWith(action, data) {
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.
 export default store => next => action => {
-
     const callAPI = action[CALL_API];
     if (typeof callAPI === 'undefined') {
         return next(action);
@@ -186,7 +188,8 @@ export default store => next => action => {
         fParams = failureType;
     }
 
-    next(actionWith(action, Object.assign({type: requestType}, rParams)));
+    const newAction = actionWith(action, Object.assign({type: requestType}, rParams));
+    next(newAction);
 
     return callApi(endpoint, body).then(
         response => {

@@ -41,10 +41,11 @@ import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
-    ADMINISTRATOR: "ROLE_ADMINISTRATOR",
+    ADMINISTRATOR: "admin",
     MERCHANT: "ROLE_MERCHANT",
     MANAGER: "ROLE_MANAGER"
 };
+
 
 
 class Routes {
@@ -171,8 +172,8 @@ class Routes {
             let accessDenied = true;
 
             if (!!user) {
-                if (!!user.roles) {
-                    if (user.roles.indexOf(role) !== -1) {
+                if (!!user.groups) {
+                    if (user.groups.indexOf(role) !== -1) {
                         accessDenied = false;
                     }
                 }

@@ -63,7 +63,7 @@ class HeaderUser extends Component {
                     <li className={["dropdown",(open)?"open":""].join(" ")}
                         onClick={this.handleToggle}> {/*class open should be added/removed by click event*/}
                         <a href="#" className="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <i className="glyphicon glyphicon-user"/> {user.login}
+                            <i className="glyphicon glyphicon-user"/> {user.userName}
                         </a>
                         <ul className="dropdown-menu">
                             <li>
