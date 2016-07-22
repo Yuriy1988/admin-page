@@ -1,27 +1,64 @@
 //TODO refactor
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
 import * as SystemsActions from '../actions/system'
-import Alert,{TYPE_ERROR} from '../components/Alert'
+import Alert, {TYPE_ERROR} from '../components/Alert'
 class LoginForm extends Component {
 
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.tokenRefresh = this.tokenRefresh.bind(this)
         this.state = {
             login: "",
             password: ""
         };
     }
+
     componentDidMount() {
-      //  'after server implementation here will be function that gets server version'
-     //   this.props.getServerVersion();
+        //  'after server implementation here will be function that gets server version'
+        //   this.props.getServerVersion();
+    }
+
+    tokenRefresh() {
+// todo: refactor;
+        function refreshToken(url) {
+            return new Promise(function (resolve, reject) {
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        resolve(this.response);
+                    } else {
+                        var error = new Error(this.statusText);
+                        error.code = this.status;
+                        reject(error);
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject(new Error("Network Error"));
+                };
+
+                xhr.send();
+            });
+        }
+
+        var API_VERSION = "dev"; //todo: get from localstorage after server fix;
+        if (window.localStorage.user_token) {
+            refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
+                .then(
+                    response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
+                    error => console.log(`Rejected: ${error}`));
+        }
     }
 
     componentWillUnmount() {
-        console.log(this.props.refreshToken);
+        setInterval(this.tokenRefresh, 1500000);
     }
 
     handleChange(e) {
@@ -32,18 +69,18 @@ class LoginForm extends Component {
 
     handleSubmit(e) {
         const {makeLogin} = this.props;
-        const {login,password} = this.state;
+        const {login, password} = this.state;
         makeLogin(login, password);
         e.preventDefault();
     }
 
     render() {
-        const {login,password} = this.state;
+        const {login, password} = this.state;
         const {user} = this.props;
 
         return (
             <form name="form" role="form" onSubmit={this.handleSubmit}>
-                <Alert type={TYPE_ERROR} >
+                <Alert type={TYPE_ERROR}>
                     {user.error}
                 </Alert>
                 <div className="form-group has-feedback">
@@ -83,5 +120,4 @@ export default connect((state)=> {
 }, {
     makeLogin: UserActions.login,
     getServerVersion: SystemsActions.getServerVersion,
-    refreshToken: SystemsActions.refreshToken
 })(LoginForm)

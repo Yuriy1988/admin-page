@@ -4,7 +4,6 @@ import { Schema, arrayOf, valuesOf} from 'normalizr'
  * SYSTEM_ACTIONS
  */
 export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET", isAuth: false}; // waiting for server fix;
-export const TOKEN_REFRESH = {path: "authorization/token", method: "GET"};
 
 /**
  * USER_ACTIONS
