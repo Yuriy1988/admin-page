@@ -105,8 +105,9 @@ class LoginForm extends Component {
                     <span className="glyphicon glyphicon-lock form-control-feedback"/>
                 </div>
                 <div className="row">
+                    <a href="#" className="forgot-pass"><span>forgot password?</span></a>
                     <div className="col-xs-offset-8 col-xs-4">
-                        <button type="submit" className="btn btn-success btn-block btn-flat">Sign In</button>
+                        <button type="submit" className="btn btn-success btn-block btn-flat log-btn">Sign In</button>
                     </div>
                 </div>
             </form>

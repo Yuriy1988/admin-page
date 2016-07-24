@@ -68,6 +68,7 @@ class HeaderUser extends Component {
                         <ul className="dropdown-menu">
                             <li>
                                 <a href="#" onClick={this.logoutHandle}>Logout</a>
+                                <a href="#" >Change password</a> //todo passchanging;
                             </li>
                             {/*<<li className="divider"/>
                              <li>

@@ -10,6 +10,8 @@ export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET
  */
 export const USER_LOGIN = {path: "authorization", method: "POST", isAuth: false};
 export const USER_LOGOUT = {path: "authorization/token", method: "DELETE"};
+export const USER_CREATE_PASS = {path: `user/create_password/?token=${window.localStorage.user_token}`, method: "POST", isAuth: false};
+export const USER_RECOVER_PASS = {path: 'user/forgot_password', method: "POST", isAuth: false};
 
 /**
  * MERCHANTS
@@ -27,7 +29,7 @@ export const MERCHANT_DELETE = (merchantId) => ({path: `merchants/${merchantId}`
  */
 const paySystemSchema = new Schema('paySystems');
 const paySystemListSchema = {paymentSystems: arrayOf(paySystemSchema)};
-export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema, isAuth: true};
+export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema};
 export const PAYSYSTEM_GET = (paySysId) => ({path: `payment_systems/${paySysId}`, method: "GET", schema: paySystemSchema});
 export const PAYSYSTEM_EDIT= (paySysId, data) => ({path: `payment_systems/${paySysId}`, method: "PUT", schema: paySystemSchema});
 

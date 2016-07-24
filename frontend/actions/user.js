@@ -1,6 +1,8 @@
 import {CALL_API} from '../middleware/api';
 import {USER_LOGIN} from '../lib/api'
 import {USER_LOGOUT} from '../lib/api'
+import {USER_CREATE_PASS} from '../lib/api'
+import {USER_RECOVER_PASS} from '../lib/api'
 
 export const USER_LOGOUT_REQUEST = 'USER_LOGOUT_REQUEST';
 export const USER_LOGOUT_SUCCESS = 'USER_LOGOUT_SUCCESS';
@@ -42,3 +44,35 @@ export function login(username, password) {
     }
 }
 
+export const USER_CREATE_PASS_REQUEST = 'USER_CREATE_PASS_REQUEST';
+export const USER_CREATE_PASS_SUCCESS = 'USER_CREATE_PASS_SUCCESS';
+export const USER_CREATE_PASS_FAILURE = 'USER_CREATE_PASS_FAILURE';
+export const USER_CREATE_PASS_CERROR = 'USER_CREATE_PASS_CERROR';
+
+export function createPassword(password) {
+    console.log('create pass');
+    return {
+        [CALL_API]: {
+            types: [USER_CREATE_PASS_REQUEST, USER_CREATE_PASS_SUCCESS, USER_CREATE_PASS_FAILURE],
+            cError: USER_CREATE_PASS_CERROR,
+            endpoint: USER_CREATE_PASS,
+            body: {password},
+        }
+    }
+}
+
+export const USER_RECOVER_PASS_REQUEST = 'USER_RECOVER_PASS_REQUEST';
+export const USER_RECOVER_PASS_SUCCESS = 'USER_RECOVER_PASS_SUCCESS';
+export const USER_RECOVER_PASS_FAILURE = 'USER_RECOVER_PASS_FAILURE';
+export const USER_RECOVER_PASS_CERROR = 'USER_RECOVER_PASS_CERROR';
+
+export function recoverPassword(login) {
+    return {
+        [CALL_API]: {
+            types: [USER_RECOVER_PASS_REQUEST, USER_RECOVER_PASS_SUCCESS, USER_RECOVER_PASS_FAILURE],
+            cError: USER_RECOVER_PASS_CERROR,
+            endpoint: USER_RECOVER_PASS,
+            body: {login},
+        }
+    }
+}

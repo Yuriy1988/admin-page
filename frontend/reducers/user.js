@@ -9,6 +9,7 @@ const initial_user = {
 export default function user(state = initial_user, action) {
 
     switch (action.type) {
+        //login
         case UserActions.USER_LOGIN_REQUEST:
             return Object.assign({}, state, {isFetching: true});
 
@@ -28,6 +29,7 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_LOGIN_FAILURE:
             return {error: "Wrong username or password"}
 
+            //logout
         case UserActions.USER_LOGOUT_REQUEST:
             return Object.assign({}, state, action.response,
                 {isFetching: false});
@@ -39,6 +41,34 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_LOGOUT_SUCCESS:
             localStorage.setItem("user_token", '');
             return {};
+
+            //create pass
+        case UserActions.USER_CREATE_PASS_REQUEST:
+            return {};
+
+        case UserActions.USER_CREATE_PASS_SUCCESS:
+            return {};
+
+        case UserActions.USER_CREATE_PASS_FAILURE:
+            return {};
+
+        case UserActions.USER_CREATE_PASS_CERROR:
+            return {};
+
+            //recover pass
+
+        case UserActions.USER_RECOVER_PASS_REQUEST:
+            return {};
+
+        case UserActions.USER_RECOVER_PASS_SUCCESS:
+            return {};
+
+        case UserActions.USER_RECOVER_PASS_FAILURE:
+            return {};
+
+        case UserActions.USER_RECOVER_PASS_CERROR:
+            return {};
+
 
         default:
             return state;

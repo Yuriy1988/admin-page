@@ -1,11 +1,16 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import PasswordCreateForm from '../components/PasswordCreateForm'
-import Content from '../components/Content'
+
 
 class PasswordCreatePage extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        let token = window.location.search;
+        window.localStorage.setItem('user_token', token.substring(7, token.length-1));
     }
 
     componentWillMount() {
@@ -13,20 +18,21 @@ class PasswordCreatePage extends Component {
     }
 
     componentWillUnmount() {
-        document.body.className = "skin-green-light";
+        // document.body.className = "skin-green-light";
     }
 
     render() {
         const {children} = this.props;
 
         return (
+
             <div className="hold-transition login-page">
                 <div className="login-box">  {/* <body className="hold-transition login-page">*/}
                     <div className="login-logo">
-                        <a href="../../index2.html"><b>XOP</b>ay</a>
+                        <b>XOP</b><span>ay</span>
                     </div>
                     <div className="login-box-body">
-                        <p className="login-box-msg">Sign in to administrator panel</p>
+                        <p className="login-box-msg">Create your password here. It must contain at least 8 characters</p>
                         <PasswordCreateForm />
                     </div>
                 </div>
