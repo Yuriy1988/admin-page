@@ -10,7 +10,7 @@ class PasswordCreatePage extends Component {
 
     componentDidMount() {
         let token = window.location.search;
-        window.localStorage.setItem('user_token', token.substring(7, token.length-1));
+        window.localStorage.setItem('user_token', token.substring(7, token.length));
     }
 
     componentWillMount() {

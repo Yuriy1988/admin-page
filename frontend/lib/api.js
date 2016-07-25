@@ -10,7 +10,7 @@ export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET
  */
 export const USER_LOGIN = {path: "authorization", method: "POST", isAuth: false};
 export const USER_LOGOUT = {path: "authorization/token", method: "DELETE"};
-export const USER_CREATE_PASS = {path: `user/create_password/?token=${window.localStorage.user_token}`, method: "POST", isAuth: false};
+export const USER_CREATE_PASS = {path: `user/create_password?token=${window.localStorage.user_token}`, method: "POST", isAuth: false};
 export const USER_RECOVER_PASS = {path: 'user/forgot_password', method: "POST", isAuth: false};
 
 /**

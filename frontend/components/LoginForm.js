@@ -1,19 +1,21 @@
 //TODO refactor
 import React, {Component, PropTypes} from 'react'
+import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
 import * as SystemsActions from '../actions/system'
 import Alert, {TYPE_ERROR} from '../components/Alert'
+import Transition from '../containers/Transition';
 class LoginForm extends Component {
 
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.tokenRefresh = this.tokenRefresh.bind(this)
+        this.tokenRefresh = this.tokenRefresh.bind(this);
         this.state = {
             login: "",
-            password: ""
+            password: "",
         };
     }
 
@@ -77,47 +79,51 @@ class LoginForm extends Component {
     render() {
         const {login, password} = this.state;
         const {user} = this.props;
-
+        console.log(user);
         return (
-            <form name="form" role="form" onSubmit={this.handleSubmit}>
-                <Alert type={TYPE_ERROR}>
-                    {user.error}
-                </Alert>
-                <div className="form-group has-feedback">
-                    <input type="text"
-                           value={login}
-                           id="username"
-                           onChange={this.handleChange}
-                           name="login"
-                           placeholder="Login"
-                           className="form-control"/>
+            <div>
+                <form name="form" role="form" onSubmit={this.handleSubmit}>
+                    <Alert type={TYPE_ERROR}>
+                        {user.error}
+                    </Alert>
+                    <div className="form-group has-feedback">
+                        <input type="text"
+                               value={login}
+                               id="username"
+                               onChange={this.handleChange}
+                               name="login"
+                               placeholder="Login"
+                               className="form-control"/>
 
-                    <span className="glyphicon glyphicon-user form-control-feedback"/>
-                </div>
-                <div className="form-group has-feedback">
-                    <input type="password"
-                           value={password}
-                           id="password"
-                           onChange={this.handleChange}
-                           name="password"
-                           placeholder="Password"
-                           className="form-control"/>
-                    <span className="glyphicon glyphicon-lock form-control-feedback"/>
-                </div>
-                <div className="row">
-                    <a href="#" className="forgot-pass"><span>forgot password?</span></a>
-                    <div className="col-xs-offset-8 col-xs-4">
-                        <button type="submit" className="btn btn-success btn-block btn-flat log-btn">Sign In</button>
+                        <span className="glyphicon glyphicon-user form-control-feedback"/>
                     </div>
-                </div>
-            </form>
+                    <div className="form-group has-feedback">
+                        <input type="password"
+                               value={password}
+                               id="password"
+                               onChange={this.handleChange}
+                               name="password"
+                               placeholder="Password"
+                               className="form-control"/>
+                        <span className="glyphicon glyphicon-lock form-control-feedback"/>
+                    </div>
+                    <div className="row">
+                        <a href="/admin/dev/user/recover_password" className="forgot-pass"><span>forgot password?</span></a>
+                        <div className="col-xs-offset-8 col-xs-4">
+                            <button type="submit" className="btn btn-success btn-block btn-flat log-btn">Sign In
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <LoadingOverlay loading={user.isFetching }/>
+            </div>
         )
     }
 }
 
 
 export default connect((state)=> {
-    return {user: state.user, session: state.session}
+    return {user: state.user}
 }, {
     makeLogin: UserActions.login,
     getServerVersion: SystemsActions.getServerVersion,

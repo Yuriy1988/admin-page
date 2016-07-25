@@ -66,13 +66,13 @@ export const USER_RECOVER_PASS_SUCCESS = 'USER_RECOVER_PASS_SUCCESS';
 export const USER_RECOVER_PASS_FAILURE = 'USER_RECOVER_PASS_FAILURE';
 export const USER_RECOVER_PASS_CERROR = 'USER_RECOVER_PASS_CERROR';
 
-export function recoverPassword(login) {
+export function recoverPassword(username) {
     return {
         [CALL_API]: {
             types: [USER_RECOVER_PASS_REQUEST, USER_RECOVER_PASS_SUCCESS, USER_RECOVER_PASS_FAILURE],
             cError: USER_RECOVER_PASS_CERROR,
             endpoint: USER_RECOVER_PASS,
-            body: {login},
+            body: {username},
         }
     }
 }

@@ -57,20 +57,16 @@ class MerchantList extends Component {
                     </td>
                     <td >
                         <div className="btn-toolbar pull-right">
-                            <Link className="btn btn-sm btn-primary change-pass-btn"
-                                  to={`/admin/administrator/merchants/${merchants[merchantId].id}/changePass`}>   {/*rename*/}
-                                <i className="fa fa fa-key"/> Change password
-                            </Link>
 
                             <Link className="btn btn-sm btn-primary"
                                   to={`/admin/administrator/merchants/${merchants[merchantId].id}/edit`}>
                                 <i className="fa fa-edit"/> Edit
                             </Link>
 
-                            <button className="btn btn-sm btn-danger"
+                            <span className="btn btn-sm btn-danger"
                                     onClick={this.handleDeleteButton.bind(this, merchants[merchantId].id)}>
                                 <i className="fa fa-trash"/> Delete
-                            </button>
+                            </span>
                         </div>
                     </td>
                 </tr>

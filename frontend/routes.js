@@ -5,7 +5,7 @@ import App               from './containers/App'
 import ErrorPage         from './containers/ErrorPage'
 import LoginPage         from './containers/LoginPage'
 import PasswordCreatePage from './containers/passwordCreatePage'
-// import PasswordRecoveryPage from './containers/PasswordRecoveryPage'
+import PasswordRecoveryPage from './containers/passwordRecoveryPage'
 import TestPage          from './containers/TestPage'
 import AdminPage         from './containers/AdminPage'
 import SelectRolePage    from './containers/SelectRolePage'
@@ -60,9 +60,9 @@ class Routes {
     getRoutes() {
         return (
             <Route>
-                //added
+
                 <Route path="/admin/dev/user/create_password" component={PasswordCreatePage}/>
-                {/*<Route path="/admin/dev/user/recover_password" component={PasswordRecoveryPage}/>*/}
+                <Route path="/admin/dev/user/recover_password" component={PasswordRecoveryPage}/>
 
                 <Route path="/admin/login" component={LoginPage}/>
                 <Route component={App}>

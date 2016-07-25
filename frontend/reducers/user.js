@@ -27,7 +27,8 @@ export default function user(state = initial_user, action) {
                 {mainPage: `/admin/${path}`});
 
         case UserActions.USER_LOGIN_FAILURE:
-            return {error: "Wrong username or password"}
+            return  {error: "Wrong username or password", isFetching: false};
+
 
             //logout
         case UserActions.USER_LOGOUT_REQUEST:

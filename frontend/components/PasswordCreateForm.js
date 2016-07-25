@@ -28,13 +28,15 @@ class PasswordCreateForm extends Component {
     }
 
     handleSubmit(e) {
-        console.log('create password');
         const {createPassword} = this.props;
         const {password, PasswordToConfirm} = this.state;
-        //todo refactor, handle errors
         if (password === PasswordToConfirm && password.length >= 8) {
+            this.refs.passForm1.className = 'form-group has-feedback has-success';
+            this.refs.passForm2.className = 'form-group has-feedback has-success';
             createPassword(password);
         } else {
+            this.refs.passForm1.className = 'form-group has-feedback has-error';
+            this.refs.passForm2.className = 'form-group has-feedback has-error';
             console.log('password is less then 8 characters or it doesn\'t match;')
         }
         e.preventDefault();
@@ -47,7 +49,7 @@ class PasswordCreateForm extends Component {
                 {/*<Alert type={TYPE_ERROR}>*/}
                 {/*{user.error}*/}
                 {/*</Alert>*/}
-                <div className="form-group has-feedback">
+                <div ref="passForm1" className="form-group has-feedback">
                     <input type="password"
                            value={password}
                            id="password"
@@ -58,7 +60,7 @@ class PasswordCreateForm extends Component {
 
                     <span className="glyphicon glyphicon-lock form-control-feedback"/>
                 </div>
-                <div className="form-group has-feedback">
+                <div ref="passForm2" className="form-group has-feedback">
                     <input type="password"
                            value={PasswordToConfirm}
                            id="PasswordToConfirm"

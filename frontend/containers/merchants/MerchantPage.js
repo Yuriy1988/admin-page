@@ -26,6 +26,9 @@ class MerchantPage extends Component {
         MerchantPage.loadData(props, merchantId);
     }
 
+    test () {
+        console.log('edit pass');
+    }
     static loadData(props, prevMerchantId = -1) {
         const {merchantId} = props.params;
 
@@ -51,6 +54,11 @@ class MerchantPage extends Component {
                 <h1 className="page-header">
                     <i className="fa fa-briefcase"/> {merchantInfo.merchantName}
                     <div className="box-tools pull-right btn-toolbar">
+
+                        <span className="btn btn-sm pull-left btn-warning"
+                               onClick={this.test}>
+                            <i className="fa fa-edit"/>&nbsp;Edit password
+                        </span>
 
                         <Link className="btn btn-sm btn-warning"
                               to={`/admin/administrator/merchants/${merchantInfo.id}/stores`}>
