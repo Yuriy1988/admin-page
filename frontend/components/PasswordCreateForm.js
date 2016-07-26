@@ -30,7 +30,7 @@ class PasswordCreateForm extends Component {
     handleSubmit(e) {
         const {createPassword} = this.props;
         const {password, PasswordToConfirm} = this.state;
-        if (password === PasswordToConfirm && password.length >= 8) {
+        if (password === PasswordToConfirm) {
             this.refs.passForm1.className = 'form-group has-feedback has-success';
             this.refs.passForm2.className = 'form-group has-feedback has-success';
             createPassword(password);

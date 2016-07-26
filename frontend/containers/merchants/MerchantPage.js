@@ -55,10 +55,10 @@ class MerchantPage extends Component {
                     <i className="fa fa-briefcase"/> {merchantInfo.merchantName}
                     <div className="box-tools pull-right btn-toolbar">
 
-                        <span className="btn btn-sm pull-left btn-warning"
-                               onClick={this.test}>
+                        <Link className="btn btn-sm pull-left btn-warning"
+                               to={`/admin/administrator/merchants/${merchantInfo.id}/passEdit`}>
                             <i className="fa fa-edit"/>&nbsp;Edit password
-                        </span>
+                        </Link>
 
                         <Link className="btn btn-sm btn-warning"
                               to={`/admin/administrator/merchants/${merchantInfo.id}/stores`}>

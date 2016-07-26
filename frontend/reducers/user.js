@@ -43,13 +43,13 @@ export default function user(state = initial_user, action) {
 
             //create pass
         case UserActions.USER_CREATE_PASS_REQUEST:
-            return {};
+            return Object.assign({}, state, {isFetching: true});
 
         case UserActions.USER_CREATE_PASS_SUCCESS:
-            return {};
+            return {success: "Now you can use your password to login on the main page", isFetching: false};
 
         case UserActions.USER_CREATE_PASS_FAILURE:
-            return {};
+            return {error: "The password must consist more than 8 characters", isFetching: false};
 
         case UserActions.USER_CREATE_PASS_CERROR:
             return {};
@@ -68,7 +68,19 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_RECOVER_PASS_CERROR:
             return {};
 
+        //merchant pass changing
 
+        case UserActions.USER_CHANGE_MERCHANT_PASS_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_SUCCESS:
+            return {success: "The password of current merchant was changed", isFetching: false};
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_FAILURE:
+            return {error: "The password must consist more than 8 characters", isFetching: false};
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_CERROR:
+            return {};
         default:
             return state;
     }

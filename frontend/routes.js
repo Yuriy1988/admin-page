@@ -17,6 +17,7 @@ import MerchantPage     from './containers/merchants/MerchantPage'
 import MerchantInfoPage from './containers/merchants/MerchantInfoPage'
 import MerchantAddPage  from './containers/merchants/MerchantAddPage'
 import MerchantEditPage from './containers/merchants/MerchantEditPage' //Merchants
+import merchantPassChangingForm from './components/forms/merchantPassChangingForm'
 
 import StoresPage       from './containers/stores/StoresPage'
 import StoreAddPage     from './containers/stores/StoreAddPage'
@@ -97,6 +98,12 @@ class Routes {
                                         <Route path="add" component={StoreAddPage}
                                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                     </Route>
+
+
+                                    <Route path="passEdit" component={merchantPassChangingForm}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                    </Route>
+
                                     <Route path="contracts" component={MerchantContractsPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                         <IndexRoute component={MerchantContractListPage}
