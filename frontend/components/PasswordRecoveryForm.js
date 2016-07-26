@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
 import * as SystemsActions from '../actions/system'
+import Alert, {TYPE_ERROR, TYPE_SUCCESS} from '../components/Alert'
+import LoadingOverlay from '../components/LoadingOverlay';
 
 class PasswordRecoveryForm extends Component {
 
@@ -14,9 +16,8 @@ class PasswordRecoveryForm extends Component {
         };
     }
 
-
     componentDidMount() {
-         this.props.getServerVersion();
+        this.props.getServerVersion();
     }
 
     handleChange(e) {
@@ -34,29 +35,37 @@ class PasswordRecoveryForm extends Component {
 
     render() {
         const {login} = this.state;
+        const {user} = this.props;
+        console.log(user);
         return (
-            <form name="form" role="form" onSubmit={this.handleSubmit}>
-                {/*<Alert type={TYPE_ERROR}>*/}
-                {/*{user.error}*/}
-                {/*</Alert>*/}
-                <div className="form-group has-feedback">
-                    <input type="text"
-                           value={login}
-                           id="login"
-                           onChange={this.handleChange}
-                           name="login"
-                           placeholder="Login"
-                           className="form-control"/>
+            <div>
+                <form name="form" role="form" onSubmit={this.handleSubmit}>
+                    <Alert type={TYPE_ERROR}>
+                        {user.error}
+                    </Alert>
+                    <Alert type={TYPE_SUCCESS}>
+                        {user.success}
+                    </Alert>
+                    <div className="form-group has-feedback">
+                        <input type="text"
+                               value={login}
+                               id="login"
+                               onChange={this.handleChange}
+                               name="login"
+                               placeholder="Login"
+                               className="form-control"/>
 
-                    <span className="glyphicon glyphicon-user form-control-feedback"/>
-                </div>
-
-                <div className="row">
-                    <div className="col-xs-offset-8 col-xs-4">
-                        <button type="submit" className='btn btn-success btn-block btn-flat'>Submit</button>
+                        <span className="glyphicon glyphicon-user form-control-feedback"/>
                     </div>
-                </div>
-            </form>
+
+                    <div className="row">
+                        <div className="col-xs-offset-8 col-xs-4">
+                            <button type="submit" className='btn btn-success btn-block btn-flat'>Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <LoadingOverlay loading={user.isFetching}/>
+            </div>
         )
     }
 }

@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
 import * as SystemsActions from '../actions/system'
 import Alert, {TYPE_ERROR} from '../components/Alert'
+import {Link} from 'react-router'
 import Transition from '../containers/Transition';
 class LoginForm extends Component {
 
@@ -79,12 +80,14 @@ class LoginForm extends Component {
     render() {
         const {login, password} = this.state;
         const {user} = this.props;
-        console.log(user);
         return (
             <div>
                 <form name="form" role="form" onSubmit={this.handleSubmit}>
                     <Alert type={TYPE_ERROR}>
                         {user.error}
+                    </Alert>
+                    <Alert type={TYPE_ERROR}>
+                        {user.success}
                     </Alert>
                     <div className="form-group has-feedback">
                         <input type="text"
@@ -108,7 +111,7 @@ class LoginForm extends Component {
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>
                     </div>
                     <div className="row">
-                        <a href="/admin/dev/user/recover_password" className="forgot-pass"><span>forgot password?</span></a>
+                        <Link to="/admin/dev/user/recover_password" className="forgot-pass"><span>forgot password?</span></Link>
                         <div className="col-xs-offset-8 col-xs-4">
                             <button type="submit" className="btn btn-success btn-block btn-flat log-btn">Sign In
                             </button>

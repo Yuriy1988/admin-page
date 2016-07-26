@@ -32,16 +32,14 @@ export default function user(state = initial_user, action) {
 
             //logout
         case UserActions.USER_LOGOUT_REQUEST:
-            return Object.assign({}, state, action.response,
-                {isFetching: false});
+            return {};
 
         case UserActions.USER_LOGOUT_FAILURE:
-            console.log('err while logging out');
             return {};
 
         case UserActions.USER_LOGOUT_SUCCESS:
             localStorage.setItem("user_token", '');
-            return {};
+            return  Object.assign({}, state, {isFetching: false});
 
             //create pass
         case UserActions.USER_CREATE_PASS_REQUEST:
@@ -59,13 +57,13 @@ export default function user(state = initial_user, action) {
             //recover pass
 
         case UserActions.USER_RECOVER_PASS_REQUEST:
-            return {};
+            return Object.assign({}, state, {isFetching: true});
 
         case UserActions.USER_RECOVER_PASS_SUCCESS:
-            return {};
+            return {success: "Check your e-mail to recover your password", isFetching: false};
 
         case UserActions.USER_RECOVER_PASS_FAILURE:
-            return {};
+            return {error: "Wrong username", isFetching: false};
 
         case UserActions.USER_RECOVER_PASS_CERROR:
             return {};

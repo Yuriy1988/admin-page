@@ -37,7 +37,6 @@ class HeaderUser extends Component {
     }
 
     logoutHandle(e) {
-        debugger;
         e.preventDefault();
         const {logout} = this.props;
         logout();

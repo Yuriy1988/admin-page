@@ -19,8 +19,7 @@ class App extends Component {
 
         return (
             <SideBarProvider>
-                <Header isLoged={false}/>
-
+                <Header/>
                     {children}
                 <Footer />
             </SideBarProvider>
