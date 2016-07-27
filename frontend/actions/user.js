@@ -50,12 +50,12 @@ export const USER_CREATE_PASS_SUCCESS = 'USER_CREATE_PASS_SUCCESS';
 export const USER_CREATE_PASS_FAILURE = 'USER_CREATE_PASS_FAILURE';
 export const USER_CREATE_PASS_CERROR = 'USER_CREATE_PASS_CERROR';
 
-export function createPassword(password) {
+export function createPassword(password, token) {
     return {
         [CALL_API]: {
             types: [USER_CREATE_PASS_REQUEST, USER_CREATE_PASS_SUCCESS, USER_CREATE_PASS_FAILURE],
             cError: USER_CREATE_PASS_CERROR,
-            endpoint: USER_CREATE_PASS,
+            endpoint: USER_CREATE_PASS(token),
             body: {password},
         }
     }
@@ -82,13 +82,13 @@ export const USER_CHANGE_MERCHANT_PASS_SUCCESS = 'USER_CHANGE_MERCHANT_PASS_SUCC
 export const USER_CHANGE_MERCHANT_PASS_FAILURE = 'USER_CHANGE_MERCHANT_PASS_FAILURE';
 export const USER_CHANGE_MERCHANT_PASS_CERROR = 'USER_CHANGE_MERCHANT_PASS_CERROR';
 
-export function changeMerchantPassword(password, merchantId) {
+export function changeMerchantPassword(new_password, merchantId) {
     return {
         [CALL_API]: {
             types: [USER_CHANGE_MERCHANT_PASS_REQUEST, USER_CHANGE_MERCHANT_PASS_SUCCESS, USER_CHANGE_MERCHANT_PASS_FAILURE],
             cError: USER_CHANGE_MERCHANT_PASS_CERROR,
             endpoint: USER_CHANGE_MERCHANT_PASS(merchantId),
-            body: {password},
+            body: {new_password},
         }
     }
 }

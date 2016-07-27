@@ -1,10 +1,12 @@
-import React, {Component, PropTypes} from 'react'
-import {connect} from 'react-redux'
-import * as UserActions from '../actions/user'
-import Alert, {TYPE_ERROR, TYPE_SUCCESS} from '../components/Alert'
-import LoadingOverlay from '../components/LoadingOverlay';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router'
+import { merge } from 'lodash'
+import * as UserActions from './../../actions/user'
+import Alert, {TYPE_ERROR, TYPE_SUCCESS} from './../../components/Alert'
+import LoadingOverlay from './../../components/LoadingOverlay';
 
-class PasswordCreateForm extends Component {
+class merchantPassChangingForm extends Component {
 
     constructor(props) {
         super(props);
@@ -16,6 +18,12 @@ class PasswordCreateForm extends Component {
         };
     }
 
+    componentWillMount() {
+        const {user} = this.props;
+        user.error = '';
+        user.success = '';
+    }
+
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -23,18 +31,17 @@ class PasswordCreateForm extends Component {
     }
 
     handleSubmit(e) {
-        const token = window.location.search.substring(7, window.location.search.length);
-        const {createPassword} = this.props;
+        debugger;
+        const merchantId = this.props.params.merchantId;
+        const {changeMerchantPassword} = this.props;
         const {password, PasswordToConfirm} = this.state;
         if (password === PasswordToConfirm) {
-            createPassword(password, token);
+            console.log(changeMerchantPassword);
+            changeMerchantPassword(password, merchantId);
             if (password.length >= 8) {
                 this.refs.btn.disabled = true;
                 this.refs.passForm1.className = 'form-group has-feedback has-success';
                 this.refs.passForm2.className = 'form-group has-feedback has-success';
-                setTimeout(function () {
-                    window.location.pathname = '/admin'
-                }, 5000);
             }
         } else {
             this.refs.passForm1.className = 'form-group has-feedback has-error';
@@ -46,19 +53,13 @@ class PasswordCreateForm extends Component {
     render() {
         const {password, PasswordToConfirm} = this.state;
         const {user} = this.props;
-        console.log(user.success);
         if (user.success) {
             user.isFetching = true;
         }
         return (
             <div>
                 <form name="form" role="form" onSubmit={this.handleSubmit}>
-                    <Alert type={TYPE_ERROR}>
-                        {user.error}
-                    </Alert>
-                    <Alert type={TYPE_SUCCESS}>
-                        {user.success}
-                    </Alert>
+
                     <div ref="passForm1" className="form-group has-feedback">
                         <input type="password"
                                value={password}
@@ -82,12 +83,18 @@ class PasswordCreateForm extends Component {
                     </div>
                     <div className="row">
                         <div className="col-xs-offset-8 col-xs-4">
-                            <button ref="btn" type="submit" className='btn btn-success btn-block btn-flat'>Crete
+                            <button ref="btn" type="submit" className='btn btn-success btn-block btn-flat'>Change merchant's password
                             </button>
                         </div>
                     </div>
                 </form>
                 <LoadingOverlay loading={user.isFetching}/>
+                <Alert type={TYPE_ERROR}>
+                    {user.error}
+                </Alert>
+                <Alert type={TYPE_SUCCESS}>
+                    {user.success}
+                </Alert>
             </div>
         )
     }
@@ -97,5 +104,5 @@ class PasswordCreateForm extends Component {
 export default connect((state)=> {
     return {user: state.user}
 }, {
-    createPassword: UserActions.createPassword,
-})(PasswordCreateForm)
+    changeMerchantPassword: UserActions.changeMerchantPassword,
+})(merchantPassChangingForm)

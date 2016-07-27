@@ -57,7 +57,7 @@ class MerchantPage extends Component {
 
                         <Link className="btn btn-sm pull-left btn-warning"
                                to={`/admin/administrator/merchants/${merchantInfo.id}/passEdit`}>
-                            <i className="fa fa-edit"/>&nbsp;Edit password
+                            <i className="fa fa-edit"/>&nbsp;Change password
                         </Link>
 
                         <Link className="btn btn-sm btn-warning"

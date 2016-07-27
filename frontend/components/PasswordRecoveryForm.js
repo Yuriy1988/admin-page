@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
-import * as SystemsActions from '../actions/system'
 import Alert, {TYPE_ERROR, TYPE_SUCCESS} from '../components/Alert'
 import LoadingOverlay from '../components/LoadingOverlay';
 
@@ -16,8 +15,10 @@ class PasswordRecoveryForm extends Component {
         };
     }
 
-    componentDidMount() {
-        this.props.getServerVersion();
+    componentWillMount() {
+        const {user} = this.props;
+        user.error = '';
+        user.success = '';
     }
 
     handleChange(e) {
@@ -36,7 +37,12 @@ class PasswordRecoveryForm extends Component {
     render() {
         const {login} = this.state;
         const {user} = this.props;
-        console.log(user);
+
+        if (user.success) {
+            user.isFetching = true;
+            this.refs.btn.disabled = true;
+            setTimeout(function() { window.location.pathname = '/admin' }, 5000);
+        }
         return (
             <div>
                 <form name="form" role="form" onSubmit={this.handleSubmit}>
@@ -60,7 +66,7 @@ class PasswordRecoveryForm extends Component {
 
                     <div className="row">
                         <div className="col-xs-offset-8 col-xs-4">
-                            <button type="submit" className='btn btn-success btn-block btn-flat'>Submit</button>
+                            <button ref='btn' type="submit" className='btn btn-success btn-block btn-flat'>Submit</button>
                         </div>
                     </div>
                 </form>
@@ -74,6 +80,5 @@ class PasswordRecoveryForm extends Component {
 export default connect((state)=> {
     return {user: state.user}
 }, {
-    recoverPassword: UserActions.recoverPassword,
-    getServerVersion: SystemsActions.getServerVersion,
+    recoverPassword: UserActions.recoverPassword
 })(PasswordRecoveryForm)

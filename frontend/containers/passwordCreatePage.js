@@ -8,17 +8,9 @@ class PasswordCreatePage extends Component {
         super(props);
     }
 
-    componentDidMount() {
-        let token = window.location.search;
-        window.localStorage.setItem('user_token', token.substring(7, token.length));
-    }
 
     componentWillMount() {
         document.body.className = "hold-transition login-page";
-    }
-
-    componentWillUnmount() {
-        // document.body.className = "skin-green-light";
     }
 
     render() {
