@@ -35,6 +35,8 @@ import PaySystemListPage       from './containers/paySystems/PaySystemListPage'
 import PaySystemEditPage       from './containers/paySystems/PaySystemEditPage'
 import PaySystemPage       from './containers/paySystems/PaySystemPage' //PaySystems
 
+import selfPassChangingForm from './components/forms/selfPassChangingForm' //user
+
 import PaySysContractsPage       from './containers/paysystemContracts/PaySystemContractsPage'
 import PaySysContractAddPage     from './containers/paysystemContracts/PaySystemContractAddPage'
 import PaySysContractEditPage    from './containers/paysystemContracts/PaySystemContractEditPage'
@@ -81,6 +83,10 @@ class Routes {
                             <Route path="notifications" component={NotificationsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
 
+                            <Route path="changePassword" component={selfPassChangingForm}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                            </Route>
+
                             <Route path="merchants" component={MerchantsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                 <Route path="add" component={MerchantAddPage}
@@ -103,6 +109,7 @@ class Routes {
                                     <Route path="passEdit" component={merchantPassChangingForm}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                     </Route>
+
 
                                     <Route path="contracts" component={MerchantContractsPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>

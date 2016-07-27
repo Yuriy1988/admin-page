@@ -4,6 +4,7 @@ import {USER_LOGOUT} from '../lib/api'
 import {USER_CREATE_PASS} from '../lib/api'
 import {USER_RECOVER_PASS} from '../lib/api'
 import {USER_CHANGE_MERCHANT_PASS} from '../lib/api'
+import {USER_CHANGE_SELF_PASS} from '../lib/api'
 
 export const USER_LOGOUT_REQUEST = 'USER_LOGOUT_REQUEST';
 export const USER_LOGOUT_SUCCESS = 'USER_LOGOUT_SUCCESS';
@@ -89,6 +90,22 @@ export function changeMerchantPassword(new_password, merchantId) {
             cError: USER_CHANGE_MERCHANT_PASS_CERROR,
             endpoint: USER_CHANGE_MERCHANT_PASS(merchantId),
             body: {new_password},
+        }
+    }
+}
+
+export const USER_CHANGE_SELF_PASS_REQUEST = 'USER_CHANGE_SELF_PASS_REQUEST';
+export const USER_CHANGE_SELF_PASS_SUCCESS = 'USER_CHANGE_SELF_PASS_SUCCESS';
+export const USER_CHANGE_SELF_PASS_FAILURE = 'USER_CHANGE_SELF_PASS_FAILURE';
+export const USER_CHANGE_SELF_PASS_CERROR = 'USER_CHANGE_SELF_PASS_CERROR';
+
+export function changeSelfPassword(old_password, new_password) {
+    return {
+        [CALL_API]: {
+            types: [USER_CHANGE_SELF_PASS_REQUEST, USER_CHANGE_SELF_PASS_SUCCESS, USER_CHANGE_SELF_PASS_FAILURE],
+            cError: USER_CHANGE_SELF_PASS_CERROR,
+            endpoint: USER_CHANGE_SELF_PASS,
+            body: {old_password, new_password},
         }
     }
 }

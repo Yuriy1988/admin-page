@@ -1,17 +1,17 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import { browserHistory } from 'react-router'
 import {merge} from 'lodash'
 import * as UserActions from './../../actions/user'
 import Alert, {TYPE_ERROR, TYPE_SUCCESS} from './../../components/Alert'
 
-class merchantPassChangingForm extends Component {
+class selfPassChangingForm extends Component {
 
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
+            oldPass: "",
             password: "",
             PasswordToConfirm: ""
         };
@@ -30,18 +30,20 @@ class merchantPassChangingForm extends Component {
     }
 
     handleSubmit(e) {
-        const merchantId = this.props.params.merchantId;
-        const {changeMerchantPassword, merchants} = this.props;
-        const {password, PasswordToConfirm} = this.state;
-        const userId = merchants[merchantId].user.id;
+        const {changeSelfPassword} = this.props;
+        const {oldPass, password, PasswordToConfirm} = this.state;
 
-        if (password === PasswordToConfirm) {
-            changeMerchantPassword(password, userId);
+        if (oldPass.length >= 8) {
+            this.refs.oldPassForm.className = 'form-group has-feedback has-success';
+        } else {
+            this.refs.oldPassForm.className = 'form-group has-feedback has-error';
+        }
+
+        if (password === PasswordToConfirm && oldPass.length >= 8) {
+            changeSelfPassword(oldPass, password);
             if (password.length >= 8) {
-                this.refs.btn.disabled = true;
                 this.refs.passForm1.className = 'form-group has-feedback has-success';
                 this.refs.passForm2.className = 'form-group has-feedback has-success';
-                setTimeout(function() { browserHistory.goBack()}, 3000)
             }
         } else {
             this.refs.passForm1.className = 'form-group has-feedback has-error';
@@ -51,26 +53,42 @@ class merchantPassChangingForm extends Component {
     }
 
     render() {
-        const {password, PasswordToConfirm} = this.state;
+        const {oldPass, password, PasswordToConfirm} = this.state;
         const {user} = this.props;
         const btnStyle = {      //refactor
             marginBottom: '10px'
         };
 
         if (user.success) {
-            user.error ='';
+            user.error = '';
         }
-        debugger;
+
+        if (this.props.user.success) {
+            this.refs.btn.disabled = true;
+            setTimeout(function () {
+                window.location.pathname = 'admin'
+            }, 3000);
+            window.localStorage.setItem('user_token', '');
+        }
         return (
             <div>
-                <form name="form" role="form" onSubmit={this.handleSubmit}>
-
+                <form name="oldPassForm" role="form" onSubmit={this.handleSubmit}>
+                    <div ref="oldPassForm" className="form-group has-feedback">
+                        <input type="password"
+                               value={oldPass}
+                               id="oldPass"
+                               onChange={this.handleChange}
+                               name="oldPass"
+                               placeholder="Enter your current password here"
+                               className="form-control"/>
+                        <span className="glyphicon glyphicon-lock form-control-feedback"/>
+                    </div>
                     <div ref="passForm1" className="form-group has-feedback">
                         <input type="password"
                                value={password}
-                               id="MerchPassword"
+                               id="password"
                                onChange={this.handleChange}
-                               name="MerchPassword"
+                               name="password"
                                placeholder="Enter new password here"
                                className="form-control"/>
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>
@@ -87,8 +105,8 @@ class merchantPassChangingForm extends Component {
                     </div>
                     <div className="row">
                         <div className="col-xs-offset-8 col-xs-4" style={btnStyle}>
-                            <button ref="btn" type="submit" className='btn btn-success btn-block btn-flat'>Change
-                                merchant's password
+                            <button ref="btn" type="submit" className='btn btn-success btn-block btn-flat'>Change your
+                                password
                             </button>
                         </div>
                     </div>
@@ -107,8 +125,7 @@ class merchantPassChangingForm extends Component {
 export default connect((state)=> {
     return {
         user: state.user,
-        merchants: state.entities.merchants
     }
 }, {
-    changeMerchantPassword: UserActions.changeMerchantPassword,
-})(merchantPassChangingForm)
+    changeSelfPassword: UserActions.changeSelfPassword,
+})(selfPassChangingForm)

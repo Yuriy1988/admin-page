@@ -13,6 +13,7 @@ export const USER_LOGOUT = {path: "authorization/token", method: "DELETE"};
 export const USER_CREATE_PASS = (token) => ({path: `user/create_password?token=${token}`, method: "POST", isAuth: false});
 export const USER_RECOVER_PASS = {path: 'user/forgot_password', method: "POST", isAuth: false};
 export const USER_CHANGE_MERCHANT_PASS = (merchantId) => ({path: `users/${merchantId}/change_password`, method: "POST"});
+export const USER_CHANGE_SELF_PASS  = {path: `user/change_password`, method: "POST"};
 
 
 /**

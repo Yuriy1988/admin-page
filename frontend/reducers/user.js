@@ -74,13 +74,24 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {isFetching: true});
 
         case UserActions.USER_CHANGE_MERCHANT_PASS_SUCCESS:
-            return {success: "The password of current merchant was changed", isFetching: false};
+            return Object.assign({}, state, {success: "The password of current merchant was changed", isFetching: false});
 
         case UserActions.USER_CHANGE_MERCHANT_PASS_FAILURE:
-            return {error: "The password must consist more than 8 characters", isFetching: false};
+            return Object.assign({}, state, {error: "The password must consist more than 8 characters", isFetching: false});
 
         case UserActions.USER_CHANGE_MERCHANT_PASS_CERROR:
-            return {};
+
+        //self pass changing
+        case UserActions.USER_CHANGE_SELF_PASS_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_CHANGE_SELF_PASS_SUCCESS:
+            return Object.assign({}, state, {success: "Your password was changed, please re-login", isFetching: false});
+
+        case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
+            return Object.assign({}, state, {error: "You have entered wrong values", isFetching: false}); //todo: refactor
+
+        case UserActions.USER_CHANGE_SELF_PASS_CERROR:
         default:
             return state;
     }
