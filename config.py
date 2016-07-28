@@ -1,5 +1,6 @@
 import os
-from datetime import timedelta
+import pytz
+from datetime import timedelta, datetime
 
 __author__ = 'Kostel Serhii'
 
@@ -10,6 +11,10 @@ class debug:
     BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
 
     # Common
+    # TODO: get server version and build date from file, create on build
+    SERVER_VERSION = '0.1.0'
+    BUILD_DATE = pytz.utc.localize(datetime(2016, 6, 28, 12, 0, 0))
+
     ADMIN_PORT = 7128
     CLIENT_PORT = 7254
 
