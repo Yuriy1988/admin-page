@@ -1,6 +1,10 @@
 import {CALL_API} from '../middleware/api';
 import {USER_LOGIN} from '../lib/api'
 import {USER_LOGOUT} from '../lib/api'
+import {USER_CREATE_PASS} from '../lib/api'
+import {USER_RECOVER_PASS} from '../lib/api'
+import {USER_CHANGE_MERCHANT_PASS} from '../lib/api'
+import {USER_CHANGE_SELF_PASS} from '../lib/api'
 
 export const USER_LOGOUT_REQUEST = 'USER_LOGOUT_REQUEST';
 export const USER_LOGOUT_SUCCESS = 'USER_LOGOUT_SUCCESS';
@@ -42,3 +46,66 @@ export function login(username, password) {
     }
 }
 
+export const USER_CREATE_PASS_REQUEST = 'USER_CREATE_PASS_REQUEST';
+export const USER_CREATE_PASS_SUCCESS = 'USER_CREATE_PASS_SUCCESS';
+export const USER_CREATE_PASS_FAILURE = 'USER_CREATE_PASS_FAILURE';
+export const USER_CREATE_PASS_CERROR = 'USER_CREATE_PASS_CERROR';
+
+export function createPassword(password, token) {
+    return {
+        [CALL_API]: {
+            types: [USER_CREATE_PASS_REQUEST, USER_CREATE_PASS_SUCCESS, USER_CREATE_PASS_FAILURE],
+            cError: USER_CREATE_PASS_CERROR,
+            endpoint: USER_CREATE_PASS(token),
+            body: {password},
+        }
+    }
+}
+
+export const USER_RECOVER_PASS_REQUEST = 'USER_RECOVER_PASS_REQUEST';
+export const USER_RECOVER_PASS_SUCCESS = 'USER_RECOVER_PASS_SUCCESS';
+export const USER_RECOVER_PASS_FAILURE = 'USER_RECOVER_PASS_FAILURE';
+export const USER_RECOVER_PASS_CERROR = 'USER_RECOVER_PASS_CERROR';
+
+export function recoverPassword(username) {
+    return {
+        [CALL_API]: {
+            types: [USER_RECOVER_PASS_REQUEST, USER_RECOVER_PASS_SUCCESS, USER_RECOVER_PASS_FAILURE],
+            cError: USER_RECOVER_PASS_CERROR,
+            endpoint: USER_RECOVER_PASS,
+            body: {username},
+        }
+    }
+}
+
+export const USER_CHANGE_MERCHANT_PASS_REQUEST = 'USER_CHANGE_MERCHANT_PASS_REQUEST';
+export const USER_CHANGE_MERCHANT_PASS_SUCCESS = 'USER_CHANGE_MERCHANT_PASS_SUCCESS';
+export const USER_CHANGE_MERCHANT_PASS_FAILURE = 'USER_CHANGE_MERCHANT_PASS_FAILURE';
+export const USER_CHANGE_MERCHANT_PASS_CERROR = 'USER_CHANGE_MERCHANT_PASS_CERROR';
+
+export function changeMerchantPassword(new_password, merchantId) {
+    return {
+        [CALL_API]: {
+            types: [USER_CHANGE_MERCHANT_PASS_REQUEST, USER_CHANGE_MERCHANT_PASS_SUCCESS, USER_CHANGE_MERCHANT_PASS_FAILURE],
+            cError: USER_CHANGE_MERCHANT_PASS_CERROR,
+            endpoint: USER_CHANGE_MERCHANT_PASS(merchantId),
+            body: {new_password},
+        }
+    }
+}
+
+export const USER_CHANGE_SELF_PASS_REQUEST = 'USER_CHANGE_SELF_PASS_REQUEST';
+export const USER_CHANGE_SELF_PASS_SUCCESS = 'USER_CHANGE_SELF_PASS_SUCCESS';
+export const USER_CHANGE_SELF_PASS_FAILURE = 'USER_CHANGE_SELF_PASS_FAILURE';
+export const USER_CHANGE_SELF_PASS_CERROR = 'USER_CHANGE_SELF_PASS_CERROR';
+
+export function changeSelfPassword(old_password, new_password) {
+    return {
+        [CALL_API]: {
+            types: [USER_CHANGE_SELF_PASS_REQUEST, USER_CHANGE_SELF_PASS_SUCCESS, USER_CHANGE_SELF_PASS_FAILURE],
+            cError: USER_CHANGE_SELF_PASS_CERROR,
+            endpoint: USER_CHANGE_SELF_PASS,
+            body: {old_password, new_password},
+        }
+    }
+}

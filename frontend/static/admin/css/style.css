@@ -120,6 +120,32 @@ hr, .mv {
 .contract-filter {
     /*font-size: 16pt;*/
 }
+
+.forgot-pass {
+    display: inline-block;
+    position: relative;
+    margin: 15px;
+}
+
+.log-btn {
+    position: relative;
+    bottom: 40px;
+}
+
+.change-pass-btn {
+    margin: 5px;
+}
+
+.login-box-body > div {
+    position: relative;
+}
+
+.login-box-body .fa-spin {
+    position: absolute;
+    left: 45%;
+    bottom: 7px;
+    font-size: 1.5em;
+}
 /*
 @media (min-width: 768px) {
     .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.active):hover > a > span,

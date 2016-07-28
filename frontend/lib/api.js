@@ -4,13 +4,17 @@ import { Schema, arrayOf, valuesOf} from 'normalizr'
  * SYSTEM_ACTIONS
  */
 export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET", isAuth: false}; // waiting for server fix;
-export const TOKEN_REFRESH = {path: "authorization/token", method: "GET"};
 
 /**
  * USER_ACTIONS
  */
 export const USER_LOGIN = {path: "authorization", method: "POST", isAuth: false};
 export const USER_LOGOUT = {path: "authorization/token", method: "DELETE"};
+export const USER_CREATE_PASS = (token) => ({path: `user/create_password?token=${token}`, method: "POST", isAuth: false});
+export const USER_RECOVER_PASS = {path: 'user/forgot_password', method: "POST", isAuth: false};
+export const USER_CHANGE_MERCHANT_PASS = (merchantId) => ({path: `users/${merchantId}/change_password`, method: "POST"});
+export const USER_CHANGE_SELF_PASS  = {path: `user/change_password`, method: "POST"};
+
 
 /**
  * MERCHANTS
@@ -28,7 +32,7 @@ export const MERCHANT_DELETE = (merchantId) => ({path: `merchants/${merchantId}`
  */
 const paySystemSchema = new Schema('paySystems');
 const paySystemListSchema = {paymentSystems: arrayOf(paySystemSchema)};
-export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema, isAuth: true};
+export const PAYSYSTEMS_LIST = {path: "payment_systems", method: "GET", schema: paySystemListSchema};
 export const PAYSYSTEM_GET = (paySysId) => ({path: `payment_systems/${paySysId}`, method: "GET", schema: paySystemSchema});
 export const PAYSYSTEM_EDIT= (paySysId, data) => ({path: `payment_systems/${paySysId}`, method: "PUT", schema: paySystemSchema});
 

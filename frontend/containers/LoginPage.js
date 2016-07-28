@@ -18,12 +18,11 @@ class LoginPage extends Component {
 
     render() {
         const {children} = this.props;
-
         return (
                 <div className="hold-transition login-page">
                     <div className="login-box">  {/* <body className="hold-transition login-page">*/}
                         <div className="login-logo">
-                            <a href="../../index2.html"><b>XOP</b>ay</a>
+                            <a href="../../"><b>XOP</b>ay</a>
                         </div>
                         <div className="login-box-body">
                             <p className="login-box-msg">Sign in to administrator panel</p>

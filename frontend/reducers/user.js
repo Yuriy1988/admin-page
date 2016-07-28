@@ -9,6 +9,7 @@ const initial_user = {
 export default function user(state = initial_user, action) {
 
     switch (action.type) {
+        //login
         case UserActions.USER_LOGIN_REQUEST:
             return Object.assign({}, state, {isFetching: true});
 
@@ -26,20 +27,71 @@ export default function user(state = initial_user, action) {
                 {mainPage: `/admin/${path}`});
 
         case UserActions.USER_LOGIN_FAILURE:
-            return {error: "Wrong username or password"}
+            return  {error: "Wrong username or password", isFetching: false};
 
+
+            //logout
         case UserActions.USER_LOGOUT_REQUEST:
-            return Object.assign({}, state, action.response,
-                {isFetching: false});
+            return {};
 
         case UserActions.USER_LOGOUT_FAILURE:
-            console.log('err while logging out');
             return {};
 
         case UserActions.USER_LOGOUT_SUCCESS:
             localStorage.setItem("user_token", '');
+            return  Object.assign({}, state, {isFetching: false});
+
+            //create pass
+        case UserActions.USER_CREATE_PASS_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_CREATE_PASS_SUCCESS:
+            return {success: "Now you can use your password to login on the main page", isFetching: false};
+
+        case UserActions.USER_CREATE_PASS_FAILURE:
+            return {error: "The password must consist more than 8 characters", isFetching: false};
+
+        case UserActions.USER_CREATE_PASS_CERROR:
             return {};
 
+            //recover pass
+
+        case UserActions.USER_RECOVER_PASS_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_RECOVER_PASS_SUCCESS:
+            return {success: "Check your e-mail to recover your password", isFetching: false};
+
+        case UserActions.USER_RECOVER_PASS_FAILURE:
+            return {error: "Wrong username", isFetching: false};
+
+        case UserActions.USER_RECOVER_PASS_CERROR:
+            return {};
+
+        //merchant pass changing
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_SUCCESS:
+            return Object.assign({}, state, {success: "The password of current merchant was changed", isFetching: false});
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_FAILURE:
+            return Object.assign({}, state, {error: "The password must consist more than 8 characters", isFetching: false});
+
+        case UserActions.USER_CHANGE_MERCHANT_PASS_CERROR:
+
+        //self pass changing
+        case UserActions.USER_CHANGE_SELF_PASS_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_CHANGE_SELF_PASS_SUCCESS:
+            return Object.assign({}, state, {success: "Your password was changed, please re-login", isFetching: false});
+
+        case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
+            return Object.assign({}, state, {error: "You have entered wrong values", isFetching: false}); //todo: refactor
+
+        case UserActions.USER_CHANGE_SELF_PASS_CERROR:
         default:
             return state;
     }

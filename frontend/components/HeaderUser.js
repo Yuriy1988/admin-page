@@ -37,7 +37,6 @@ class HeaderUser extends Component {
     }
 
     logoutHandle(e) {
-        debugger;
         e.preventDefault();
         const {logout} = this.props;
         logout();
@@ -62,22 +61,14 @@ class HeaderUser extends Component {
                 <ul className="nav navbar-nav">
                     <li className={["dropdown",(open)?"open":""].join(" ")}
                         onClick={this.handleToggle}> {/*class open should be added/removed by click event*/}
-                        <a href="#" className="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        <a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             <i className="glyphicon glyphicon-user"/> {user.userName}
                         </a>
                         <ul className="dropdown-menu">
                             <li>
                                 <a href="#" onClick={this.logoutHandle}>Logout</a>
+                                <a><Link to="/admin/administrator/changePassword">Change password</Link></a>
                             </li>
-                            {/*<<li className="divider"/>
-                             <li>
-                             <a href="">Русский</a>
-                             </li>
-                             li>
-                             <a href="">English
-                             <i className="fa fa-hand-o-left"/>
-                             </a>
-                             </li>*/}
                         </ul>
                     </li>
                 </ul>

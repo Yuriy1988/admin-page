@@ -24,17 +24,4 @@ export function getServerVersion() {
     }
 }
 
-export const TOKEN_REFRESH_REQUEST = 'TOKEN_REFRESH_REQUEST';
-export const TOKEN_REFRESH_SUCCESS = 'TOKEN_REFRESH_SUCCESS';
-export const TOKEN_REFRESH_FAILURE = 'TOKEN_REFRESH_FAILURE';
-export const TOKEN_REFRESH_CERROR = 'TOKEN_REFRESH_CERROR';
 
-export function refreshToken() {
-    return {
-        [CALL_API]: {
-            types: [TOKEN_REFRESH_REQUEST, TOKEN_REFRESH_SUCCESS, TOKEN_REFRESH_FAILURE],
-            cError: TOKEN_REFRESH_CERROR,
-            endpoint: TOKEN_REFRESH,
-        }
-    }
-}

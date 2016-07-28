@@ -4,6 +4,8 @@ import {Route, IndexRoute} from 'react-router' //React
 import App               from './containers/App'
 import ErrorPage         from './containers/ErrorPage'
 import LoginPage         from './containers/LoginPage'
+import PasswordCreatePage from './containers/passwordCreatePage'
+import PasswordRecoveryPage from './containers/passwordRecoveryPage'
 import TestPage          from './containers/TestPage'
 import AdminPage         from './containers/AdminPage'
 import SelectRolePage    from './containers/SelectRolePage'
@@ -15,6 +17,7 @@ import MerchantPage     from './containers/merchants/MerchantPage'
 import MerchantInfoPage from './containers/merchants/MerchantInfoPage'
 import MerchantAddPage  from './containers/merchants/MerchantAddPage'
 import MerchantEditPage from './containers/merchants/MerchantEditPage' //Merchants
+import merchantPassChangingForm from './components/forms/merchantPassChangingForm'
 
 import StoresPage       from './containers/stores/StoresPage'
 import StoreAddPage     from './containers/stores/StoreAddPage'
@@ -32,6 +35,8 @@ import PaySystemListPage       from './containers/paySystems/PaySystemListPage'
 import PaySystemEditPage       from './containers/paySystems/PaySystemEditPage'
 import PaySystemPage       from './containers/paySystems/PaySystemPage' //PaySystems
 
+import selfPassChangingForm from './components/forms/selfPassChangingForm' //user
+
 import PaySysContractsPage       from './containers/paysystemContracts/PaySystemContractsPage'
 import PaySysContractAddPage     from './containers/paysystemContracts/PaySystemContractAddPage'
 import PaySysContractEditPage    from './containers/paysystemContracts/PaySystemContractEditPage'
@@ -41,7 +46,7 @@ import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
-    ADMINISTRATOR: "admin",
+    ADMINISTRATOR: "admin", //ok
     MERCHANT: "ROLE_MERCHANT",
     MANAGER: "ROLE_MANAGER"
 };
@@ -58,6 +63,10 @@ class Routes {
     getRoutes() {
         return (
             <Route>
+
+                <Route path="/admin/dev/user/create_password" component={PasswordCreatePage}/>
+                <Route path="/admin/dev/user/recover_password" component={PasswordRecoveryPage}/>
+
                 <Route path="/admin/login" component={LoginPage}/>
                 <Route component={App}>
 
@@ -65,6 +74,7 @@ class Routes {
                     <Route path="/admin/access_denied" component={ErrorPage} status={403}/>
 
                     <Route path="/admin">
+
                         <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
 
                         <Route path="administrator" component={AdminPage}
@@ -72,6 +82,10 @@ class Routes {
                             <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                             <Route path="notifications" component={NotificationsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
+                            <Route path="changePassword" component={selfPassChangingForm}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                            </Route>
 
                             <Route path="merchants" component={MerchantsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
@@ -90,6 +104,13 @@ class Routes {
                                         <Route path="add" component={StoreAddPage}
                                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                     </Route>
+
+
+                                    <Route path="passEdit" component={merchantPassChangingForm}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                    </Route>
+
+
                                     <Route path="contracts" component={MerchantContractsPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                         <IndexRoute component={MerchantContractListPage}
@@ -191,6 +212,5 @@ class Routes {
         }).bind(this);
     }
 }
-
 
 export default Routes
