@@ -16,7 +16,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/admin/dev')
-pages = Blueprint('pages', __name__)
+web = Blueprint('web', __name__)
 
 
 # App created notifier
@@ -67,7 +67,6 @@ def create_app(config='debug'):
     config_dict = ConfigLoader(config)
     app.config.update(config_dict)
     app.static_folder = app.config["STATIC_FOLDER"]
-    pages.static_folder = app.config["STATIC_FOLDER"]
 
     app.wsgi_app = ProxyFix(app.wsgi_app)
     app.json_encoder = XOPayJSONEncoder
@@ -79,8 +78,8 @@ def create_app(config='debug'):
     if app.config['DEBUG']:
         # enable only in debug mode. In production use nginx/apache for this purpose
 
-        @pages.route('/admin/')
-        @pages.route('/admin/<path:path>/')
+        @app.route('/admin/')
+        @app.route('/admin/<path:path>/')
         def admin_page(path=None):
             """
             Return single page html for xopay admin
@@ -89,14 +88,14 @@ def create_app(config='debug'):
             """
             return app.send_static_file('admin/index.html')
 
-        @pages.route('/')
+        @app.route('/')
         def index():
             """ Redirect from root to admin page """
-            return redirect(url_for('pages.admin_page'))
+            return redirect(url_for('admin_page'))
 
     import api.handlers
     app.register_blueprint(api_v1)
-    app.register_blueprint(pages)
+    app.register_blueprint(web)
 
     import api.logger
 

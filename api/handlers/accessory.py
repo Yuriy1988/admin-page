@@ -1,7 +1,7 @@
 from itertools import chain
 from flask import jsonify, request, current_app as app
 
-from api import api_v1, pages, auth, db, models
+from api import api_v1, web, auth, db, models
 from api.errors import ValidationError
 
 __author__ = 'Kostel Serhii'
@@ -9,7 +9,7 @@ __author__ = 'Kostel Serhii'
 
 # Version
 
-@pages.route('/api/admin/version')
+@web.route('/api/admin/version')
 def server_version():
     version = {
         'api_version': app.config['ADMIN_API_VERSION'],
