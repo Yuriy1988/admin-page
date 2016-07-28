@@ -7,5 +7,6 @@ from . import merchant
 from . import payment_system
 from . import statistics
 from . import store
+from . import antifraud_settings
 
 __author__ = 'Kostel Serhii'
