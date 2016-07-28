@@ -93,6 +93,9 @@ def user_change_password_by_admin(user_id):
         raise api_err.ValidationError(errors=errors)
 
     user = models.User.query.get(user_id)
+    if not user:
+        raise api_err.NotFoundError('User not found')
+
     user.set_password(data['new_password'])
     db.session.commit()
 
