@@ -4,6 +4,32 @@ from api import db
 from api.models import base
 
 
+DEFAULT_SCORING_RULES = [
+    {
+        "id": "is_trust_location",
+        "formatted_text": "Different country of customer and card issuer country.",
+        "score": 30.0,
+        "parameters": {}
+    },
+    {
+        "id": "is_normal_amount",
+        "formatted_text": "Average transaction amount for day increases by {threshold} percents.",
+        "score": 30.0,
+        "parameters": {
+            "threshold": 200.0
+        }
+    },
+    {
+        "id": "is_normal_count",
+        "formatted_text": "Average transaction count for day increases by {threshold} percents.",
+        "score": 30.0,
+        "parameters": {
+            "threshold": 200.0
+        }
+    }
+]
+
+
 class AntiFraudScoringRule(base.BaseModel):
 
     __tablename__ = 'antifraud_scoring_rules'
@@ -46,5 +72,10 @@ class AntiFraudRule(base.BaseModel):
 
     id = db.Column(db.Integer(), primary_key=True)
 
-    decline_threshold = db.Column(db.Float)
+    def __init__(self, three_d_secure_threshold,  decline_threshold):
+        self.id = 0
+        self.three_d_secure_threshold = three_d_secure_threshold
+        self.decline_threshold = decline_threshold
+
     three_d_secure_threshold = db.Column(db.Float)
+    decline_threshold = db.Column(db.Float)
