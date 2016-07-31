@@ -12,7 +12,7 @@ class merchantPassChangingForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
-            password: "",
+            merchPassword: "",
             passwordToConfirm: ""
         };
     }
@@ -32,12 +32,12 @@ class merchantPassChangingForm extends Component {
     handleSubmit(e) {
         const merchantId = this.props.params.merchantId;
         const {changeMerchantPassword, merchants} = this.props;
-        const {password, passwordToConfirm} = this.state;
+        const {merchPassword, passwordToConfirm} = this.state;
         const userId = merchants[merchantId].user.id;
 
-        if (password === passwordToConfirm) {
-            changeMerchantPassword(password, userId);
-            if (password.length >= 8) {
+        if (merchPassword === passwordToConfirm) {
+            changeMerchantPassword(merchPassword, userId);
+            if (merchPassword.length >= 8) {
                 this.refs.btn.disabled = true;
                 this.refs.passForm1.className = 'form-group has-feedback has-success';
                 this.refs.passForm2.className = 'form-group has-feedback has-success';
@@ -51,7 +51,7 @@ class merchantPassChangingForm extends Component {
     }
 
     render() {
-        const {password, passwordToConfirm} = this.state;
+        const {merchPassword, passwordToConfirm} = this.state;
         const {user} = this.props;
         const btnStyle = {      //refactor
             marginBottom: '10px'
@@ -67,10 +67,10 @@ class merchantPassChangingForm extends Component {
 
                     <div ref="passForm1" className="form-group has-feedback">
                         <input type="password"
-                               value={password}
-                               id="password"
+                               value={merchPassword}
+                               id="merchPassword"
                                onChange={this.handleChange}
-                               name="password"
+                               name="merchPassword"
                                placeholder="Enter new password here"
                                className="form-control"/>
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>

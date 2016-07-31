@@ -28,6 +28,7 @@ class AdminPage extends Component {
                     <SidebarItem to="/admin/administrator/paysys" icon="fa-credit-card">Payment Systems</SidebarItem>
                     <SidebarItem to="/admin/administrator/notifications" icon="fa-bell">Notifications</SidebarItem>
                     <SidebarItem to="/admin/administrator/currencies" icon="fa-money">Currency Courses</SidebarItem>
+                    <SidebarItem to="/admin/administrator/statistic" icon="fa-pie-chart ">Statistic</SidebarItem>
                 </Sidebar>
                 <Content>
                     <Transition path={path}>

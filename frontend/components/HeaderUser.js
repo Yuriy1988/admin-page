@@ -67,7 +67,7 @@ class HeaderUser extends Component {
                         <ul className="dropdown-menu">
                             <li>
                                 <a href="#" onClick={this.logoutHandle}>Logout</a>
-                                <a><Link to="/admin/administrator/changePassword">Change password</Link></a>
+                                <Link to="/admin/administrator/changePassword">Change password</Link>
                             </li>
                         </ul>
                     </li>

@@ -6,7 +6,6 @@ import * as SideBarAction from '../actions/sideBar'
 class Sidebar extends Component {
     constructor(props) {
         super(props);
-
     }
 
     componentDidMount() {

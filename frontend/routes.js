@@ -10,6 +10,7 @@ import TestPage          from './containers/TestPage'
 import AdminPage         from './containers/AdminPage'
 import SelectRolePage    from './containers/SelectRolePage'
 import NotificationsPage from './containers/pages/NotificationsPage' //Containers
+import Statistic from './containers/pages/Statistic' //admin statistic
 
 import MerchantsPage    from './containers/merchants/MerchantsPage'
 import MerchantList     from './components/MerchantList'
@@ -138,6 +139,9 @@ class Routes {
                                 </Route>
                             </Route>
                             <Route path="currencies" component={CurrenciesPage}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
+                            <Route path="statistic" component={Statistic}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
 
                             <Route path="paysys" component={PaySystemPage}

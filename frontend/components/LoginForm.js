@@ -82,7 +82,7 @@ class LoginForm extends Component {
         const {user} = this.props;
         return (
             <div>
-                <form name="form" role="form" onSubmit={this.handleSubmit}>
+                <form name="form" role="form"  onSubmit={this.handleSubmit}>
                     <Alert type={TYPE_ERROR}>
                         {user.error}
                     </Alert>
