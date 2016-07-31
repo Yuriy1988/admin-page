@@ -1,7 +1,7 @@
 var test;
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-
+import * as UserActions from './../../actions/user'
 import LoadingOverlay from '../../components/LoadingOverlay';
 import Chart from '../../components/Chart'
 
@@ -17,10 +17,11 @@ class Statistic extends Component {
         $('.calendar-input').daterangepicker();
     }
 
-    getDate (position) {
-        let result;
-        if ($('.calendar-input').val()) {
-            let arr = $('.calendar-input').val().split('-')[position].split('/'); // make date to correct format
+    getDate(position) {
+        let result, calendar = $('.calendar-input');
+
+        if (calendar.val()) {
+            let arr = calendar.val().split('-')[position].split('/'); // make date to correct format
             result = arr[2].toString().trim() + '/' + arr[1].toString().trim() + '/' + arr[0].toString().trim()
         } else {
             result = '';
@@ -29,7 +30,8 @@ class Statistic extends Component {
     }
 
     getValues() {
-        let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset;
+        const {getAdminStatistic} = this.props;
+        let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
 
         storeId = $('.store-id-input').val();
         currency = $('.currency-input').val();
@@ -39,55 +41,55 @@ class Statistic extends Component {
         status = ($('.status-input').val()).replace(' ', '_').toUpperCase();
         fromDate = this.getDate(0);
         tillDate = this.getDate(1);
-        orderBy = '';
-        limit ='';
-        offset ='';
-        console.log(`?store_id=${storeId}&currency=${currency}&from_total_price=${fromPrice}&till_total_price=${tillPrice}&paysys_id=${paysysId}&status=${status}&from_date=${fromDate}till_date=${tillDate}&order_by=${orderBy}&limit=${limit}&offset=${offset}`);    }
+        orderBy = ''; //todo
+        limit = ''; //todo
+        offset = ''; //todo
+
+        query = `store_id=${storeId}&currency=${currency}&from_total_price=${fromPrice}&till_total_price=${tillPrice}&paysys_id=${paysysId}&status=${status}&from_date=${fromDate}till_date=${tillDate}&order_by=${orderBy}&limit=${limit}&offset=${offset}`;
+        getAdminStatistic(query);
+    }
 
     render() {
-        const {stores, storePagination} = this.props;
 
         return (
             <div>
-                <div className="col-sm-3">
-                    <span>Select date </span>
+                <div className="col-sm-2">
+                    <span style={{ 'white-space': 'nowrap'}}>Select date </span>
                     <div className="input-group">
                         <div className="input-group-addon">
                             <i className="fa fa-calendar"/>
                         </div>
-                        <input type="text" className="form-control pull-right calendar-input"/>
+                        <input type="text" className="form-control calendar-input" />
                     </div>
                 </div>
-                <div className="col-sm-3">
-                    <span>Store id </span>
+                <div className="col-sm-2">
+                    <span style={{ 'white-space': 'nowrap'}}>Store id </span>
                     <div className="input-group">
                         <div className="input-group-addon">
                             <i className="fa fa-shopping-cart"/>
                         </div>
-                        <input type="text" className="form-control pull-right store-id-input"/>
-                    </div>
-                </div>
-
-                <div className="col-sm-3">
-                    <span>Payment account</span>
-                    <div className="input-group">
-                        <input type="text" className="form-control pull-right payment-account-input"/>
+                        <input type="text" className="form-control store-id-input"/>
                     </div>
                 </div>
 
                 <div className="col-sm-2">
-                    <span>Select currency</span>
+                    <span style={{ 'white-space': 'nowrap'}}>Payment account</span>
+                    <input type="text" className="form-control payment-account-input"/>
+                </div>
+
+                <div className="col-sm-2">
+                    <span style={{ 'white-space': 'nowrap'}}>Select currency</span>
                     <select className="form-control currency-input">
                         <option></option>
                         <option>UAH</option>
-                        <option>RUR</option>
+                        <option>RUB</option>
                         <option>USD</option>
                         <option>EUR</option>
                     </select>
                 </div>
 
                 <div className="col-sm-2">
-                    <span>Select pay system</span>
+                    <span style={{ 'white-space': 'nowrap'}}>Select pay system</span>
                     <select className="form-control paysyss-id-input">
                         <option></option>
                         <option>PAY PAL</option>
@@ -97,7 +99,7 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2">
-                    <span>Select payment status</span>
+                    <span style={{ 'white-space': 'nowrap'}}>Select payment status</span>
                     <select className="form-control status-input">
                         <option></option>
                         <option>Created</option>
@@ -110,15 +112,17 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2">
-                    <span>Payment from</span>
-                    <input type="text" className="form-control pull-right paymentFrom-input"/>
+                    <span style={{ 'white-space': 'nowrap'}}>Payment from</span>
+                    <input type="text" className="form-control paymentFrom-input"/>
                     <div>
-                        <span>Payment till</span>
-                        <input type="text" className="form-control pull-right paymentTill-input"/>
+                        <span style={{ 'white-space': 'nowrap'}}>Payment till</span>
+                        <input type="text" className="form-control paymentTill-input"/>
                     </div>
                 </div>
 
-                <button className="btn btn-success" onClick={this.getValues.bind(this)}>Get statistic</button>
+                <button className="btn btn-success" style={{margin: '15px'}} onClick={this.getValues.bind(this)}>Get
+                    statistic
+                </button>
                 <LoadingOverlay loading={false}/>
             </div>
         )
@@ -131,8 +135,5 @@ export default connect(
         stores: state.entities.stores,
         storePagination: state.pagination.store
     }),
-    {
-        // loadStore: StoreActions.getById,
-        // loadStoreCE: StoreActions.getByIdCError
-    }
+    {getAdminStatistic: UserActions.getAdminStatistic}
 )(Statistic)

@@ -14,7 +14,7 @@ export const USER_CREATE_PASS = (token) => ({path: `user/create_password?token=$
 export const USER_RECOVER_PASS = {path: 'user/forgot_password', method: "POST", isAuth: false};
 export const USER_CHANGE_MERCHANT_PASS = (merchantId) => ({path: `users/${merchantId}/change_password`, method: "POST"});
 export const USER_CHANGE_SELF_PASS  = {path: `user/change_password`, method: "POST"};
-
+export const USER_GET_ADMIN_STAT = (query) =>({path: `statistics/payments?${query}`, method: "GET"});
 
 /**
  * MERCHANTS

@@ -5,6 +5,8 @@ import {USER_CREATE_PASS} from '../lib/api'
 import {USER_RECOVER_PASS} from '../lib/api'
 import {USER_CHANGE_MERCHANT_PASS} from '../lib/api'
 import {USER_CHANGE_SELF_PASS} from '../lib/api'
+import {USER_GET_ADMIN_STAT} from '../lib/api'
+
 
 export const USER_LOGOUT_REQUEST = 'USER_LOGOUT_REQUEST';
 export const USER_LOGOUT_SUCCESS = 'USER_LOGOUT_SUCCESS';
@@ -106,6 +108,21 @@ export function changeSelfPassword(old_password, new_password) {
             cError: USER_CHANGE_SELF_PASS_CERROR,
             endpoint: USER_CHANGE_SELF_PASS,
             body: {old_password, new_password},
+        }
+    }
+}
+
+export const USER_GET_ADMIN_STAT_REQUEST = 'USER_GET_ADMIN_STAT_REQUEST';
+export const USER_GET_ADMIN_STAT_SUCCESS = 'USER_GET_ADMIN_STAT_SUCCESS';
+export const USER_GET_ADMIN_STAT_FAILURE = 'USER_GET_ADMIN_STAT_FAILURE';
+export const USER_GET_ADMIN_STAT_CERROR = 'USER_GET_ADMIN_STAT_CERROR';
+
+export function getAdminStatistic(query) {
+    return {
+        [CALL_API]: {
+            types: [USER_GET_ADMIN_STAT_REQUEST, USER_GET_ADMIN_STAT_SUCCESS, USER_GET_ADMIN_STAT_FAILURE],
+            cError: USER_GET_ADMIN_STAT_CERROR,
+            endpoint: USER_GET_ADMIN_STAT(query),
         }
     }
 }

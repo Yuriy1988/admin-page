@@ -91,7 +91,23 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
             return Object.assign({}, state, {error: "You have entered wrong values", isFetching: false}); //todo: refactor
 
-        case UserActions.USER_CHANGE_SELF_PASS_CERROR:
+        case UserActions.USER_CHANGE_SELF_PASS_CERROR: return {};
+
+
+        //get admin statistic
+
+        case UserActions.USER_GET_ADMIN_STAT_REQUEST:
+            return Object.assign({}, state, {isFetching: true});
+
+        case UserActions.USER_GET_ADMIN_STAT_SUCCESS:
+            console.log(action.response);
+            return Object.assign({}, state, {isFetching: false});
+
+        case UserActions.USER_GET_ADMIN_STAT_FAILURE:
+            return Object.assign({}, state, {error: "something went wrong", isFetching: false});
+
+        case UserActions.USER_GET_ADMIN_STAT_CERROR: return {};
+
         default:
             return state;
     }

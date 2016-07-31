@@ -53,16 +53,13 @@ class merchantPassChangingForm extends Component {
     render() {
         const {merchPassword, passwordToConfirm} = this.state;
         const {user} = this.props;
-        const btnStyle = {      //refactor
-            marginBottom: '10px'
-        };
 
         if (user.success) {
             user.error ='';
         }
         debugger;
         return (
-            <div>
+            <div className="col-xs-4">
                 <form name="form" role="form" onSubmit={this.handleSubmit}>
 
                     <div ref="passForm1" className="form-group has-feedback">
@@ -86,11 +83,9 @@ class merchantPassChangingForm extends Component {
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>
                     </div>
                     <div className="row">
-                        <div className="col-xs-offset-8 col-xs-4" style={btnStyle}>
                             <button ref="btn" type="submit" className='btn btn-success btn-block btn-flat'>Change
                                 merchant's password
                             </button>
-                        </div>
                     </div>
                 </form>
                 <Alert type={TYPE_ERROR}>

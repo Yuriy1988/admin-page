@@ -55,9 +55,6 @@ class selfPassChangingForm extends Component {
     render() {
         const {oldPass, password, PasswordToConfirm} = this.state;
         const {user} = this.props;
-        const btnStyle = {      //refactor
-            marginBottom: '10px'
-        };
 
         if (user.success) {
             user.error = '';
@@ -71,7 +68,7 @@ class selfPassChangingForm extends Component {
             window.localStorage.setItem('user_token', '');
         }
         return (
-            <div>
+            <div className="col-xs-4">
                 <form name="oldPassForm" role="form" onSubmit={this.handleSubmit}>
                     <div ref="oldPassForm" className="form-group has-feedback">
                         <input type="password"
@@ -104,11 +101,10 @@ class selfPassChangingForm extends Component {
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>
                     </div>
                     <div className="row">
-                        <div className="col-xs-offset-8 col-xs-4" style={btnStyle}>
+
                             <button ref="btn" type="submit" className='btn btn-success btn-block btn-flat'>Change your
                                 password
                             </button>
-                        </div>
                     </div>
                 </form>
                 <Alert type={TYPE_ERROR}>
