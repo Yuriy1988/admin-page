@@ -21,15 +21,14 @@ class Statistic extends Component {
 
         if (calendar.val()) {
             arr = calendar.val().split('-')[position].split('/'); // make date to correct format
-            result = arr[2].toString().trim() + '/' + arr[1].toString().trim() + '/' + arr[0].toString().trim()
+            result = arr[2].toString().trim() + '-' + arr[1].toString().trim() + '-' + arr[0].toString().trim()
         } else {
             result = '';
         }
         return result;
     }
 
-    getValues() {
-        debugger;
+    getValues() {;
         const {getAdminStatistic} = this.props;
         let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
         let fromPriceNode = $('.paymentFrom-input');
@@ -40,8 +39,8 @@ class Statistic extends Component {
 
         storeId = $('.store-id-input').val();
         currency = $('.currency-input').val();
-        fromPrice = +fromPriceNode.val().replace(',', '.');
-        tillPrice = +tillPriceNode.val().replace(',', '.');
+        fromPrice = +fromPriceNode.val().replace(',', '.').replace('', '0');
+        tillPrice = +tillPriceNode.val().replace(',', '.').replace('', '0');
         paysysId = ($('.paysyss-id-input').val()).replace(' ', '_');
         status = ($('.status-input').val()).replace(' ', '_').toUpperCase();
         fromDate = this.getDate(0);
@@ -51,7 +50,7 @@ class Statistic extends Component {
         offset = ''; //todo
 
         function isAccurate () {
-            if (fromPrice < tillPrice && isFinite(fromPrice) && isFinite(tillPrice)) {
+            if (fromPrice <= tillPrice && isFinite(fromPrice) && isFinite(tillPrice)) {
                 moneyAmount.removeClass('has-error');
                 return true;
             } else {
@@ -60,7 +59,7 @@ class Statistic extends Component {
             }
         }
 
-        query = `store_id=${storeId}&currency=${currency}&from_total_price=${fromPrice}&till_total_price=${tillPrice}&paysys_id=${paysysId}&status=${status}&from_date=${fromDate}till_date=${tillDate}&order_by=${orderBy}&limit=${limit}&offset=${offset}`;
+        query = `store_id=${storeId}&currency=${currency}&from_total_price=${fromPrice}&till_total_price=${tillPrice}&paysys_id=${paysysId}&status=${status}&from_date=${fromDate}&till_date=${tillDate}&order_by=${orderBy}&limit=${limit}&offset=${offset}`;
         if (isAccurate ()) {
             getAdminStatistic(query);
         }

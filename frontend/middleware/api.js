@@ -5,10 +5,46 @@ import 'isomorphic-fetch'
 const API_VERSION = "dev";
 const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 
+let isLoggedIn = false;
+
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
+    debugger;
+    setInterval(function tokenRefresh() {
+        function refreshToken(url) {
+            return new Promise(function (resolve, reject) {
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        resolve(this.response);
+                    } else {
+                        var error = new Error(this.statusText);
+                        error.code = this.status;
+                        reject(error);
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject(new Error("Network Error"));
+                };
+
+                xhr.send();
+            });
+        }
+        var API_VERSION = localStorage.version || "dev";
+        if (window.localStorage.user_token) {
+            refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
+                .then(
+                    response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
+                    error => console.log(`Rejected: ${error}`));
+        }
+    }, (store.getState().user.exp-Date.now()/1000 - 500)*1000);
+
     const { schema, path, method, isAuth = true} = endpoint;
 
     let fullUrl = API_ROOT + path;

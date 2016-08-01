@@ -101,8 +101,9 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {success: "Your password was changed, please re-login", isFetching: false});
 
         case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
-            return Object.assign({}, state, {error: "You have entered wrong values", isFetching: false}); //todo: refactor
-
+            debugger;
+            return Object.assign({}, state, {error: `${action.error.serverError.errors.new_password[0]}`, isFetching: false}); //todo: refactor
+      //  ${action.error.serverError.errors.new_password[0]}
         case UserActions.USER_CHANGE_SELF_PASS_CERROR:
             return {};
 
@@ -113,7 +114,6 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {isFetching: true});
 
         case UserActions.USER_GET_ADMIN_STAT_SUCCESS:
-            console.log(action.response);
             return Object.assign({}, state, {isFetching: false});
 
         case UserActions.USER_GET_ADMIN_STAT_FAILURE:
