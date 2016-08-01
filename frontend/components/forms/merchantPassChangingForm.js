@@ -13,7 +13,7 @@ class merchantPassChangingForm extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.state = {
             password: "",
-            PasswordToConfirm: ""
+            passwordToConfirm: ""
         };
     }
 
@@ -32,10 +32,10 @@ class merchantPassChangingForm extends Component {
     handleSubmit(e) {
         const merchantId = this.props.params.merchantId;
         const {changeMerchantPassword, merchants} = this.props;
-        const {password, PasswordToConfirm} = this.state;
+        const {password, passwordToConfirm} = this.state;
         const userId = merchants[merchantId].user.id;
 
-        if (password === PasswordToConfirm) {
+        if (password === passwordToConfirm) {
             changeMerchantPassword(password, userId);
             if (password.length >= 8) {
                 this.refs.btn.disabled = true;
@@ -51,7 +51,7 @@ class merchantPassChangingForm extends Component {
     }
 
     render() {
-        const {password, PasswordToConfirm} = this.state;
+        const {password, passwordToConfirm} = this.state;
         const {user} = this.props;
         const btnStyle = {      //refactor
             marginBottom: '10px'
@@ -68,19 +68,19 @@ class merchantPassChangingForm extends Component {
                     <div ref="passForm1" className="form-group has-feedback">
                         <input type="password"
                                value={password}
-                               id="MerchPassword"
+                               id="password"
                                onChange={this.handleChange}
-                               name="MerchPassword"
+                               name="password"
                                placeholder="Enter new password here"
                                className="form-control"/>
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>
                     </div>
                     <div ref="passForm2" className="form-group has-feedback">
                         <input type="password"
-                               value={PasswordToConfirm}
-                               id="PasswordToConfirm"
+                               value={passwordToConfirm}
+                               id="passwordToConfirm"
                                onChange={this.handleChange}
-                               name="PasswordToConfirm"
+                               name="passwordToConfirm"
                                placeholder="Confirm your password"
                                className="form-control"/>
                         <span className="glyphicon glyphicon-lock form-control-feedback"/>
