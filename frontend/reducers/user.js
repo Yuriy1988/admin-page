@@ -2,9 +2,14 @@ import * as UserActions from '../actions/user';
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
 
-const initial_user = {
-    isFetching: false
-};
+let initial_user;
+if (localStorage.user) {
+    initial_user = JSON.parse(localStorage.user)
+} else {
+    initial_user = {
+        isFetching: false
+    };
+}
 
 export default function user(state = initial_user, action) {
 
@@ -22,15 +27,15 @@ export default function user(state = initial_user, action) {
             }
 
             localStorage.setItem("user_token", action.response.token);
+
             return Object.assign({}, state, action.response,
                 {isFetching: false},
                 {mainPage: `/admin/${path}`});
 
         case UserActions.USER_LOGIN_FAILURE:
-            return  {error: "Wrong username or password", isFetching: false};
+            return {error: "Wrong username or password", isFetching: false};
 
-
-            //logout
+        //logout
         case UserActions.USER_LOGOUT_REQUEST:
             return {};
 
@@ -39,9 +44,10 @@ export default function user(state = initial_user, action) {
 
         case UserActions.USER_LOGOUT_SUCCESS:
             localStorage.setItem("user_token", '');
-            return  Object.assign({}, state, {isFetching: false});
+            localStorage.setItem("user", '');
+            return Object.assign({}, state, {isFetching: false});
 
-            //create pass
+        //create pass
         case UserActions.USER_CREATE_PASS_REQUEST:
             return Object.assign({}, state, {isFetching: true});
 
@@ -54,7 +60,7 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_CREATE_PASS_CERROR:
             return {};
 
-            //recover pass
+        //recover pass
 
         case UserActions.USER_RECOVER_PASS_REQUEST:
             return Object.assign({}, state, {isFetching: true});
@@ -74,10 +80,16 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {isFetching: true});
 
         case UserActions.USER_CHANGE_MERCHANT_PASS_SUCCESS:
-            return Object.assign({}, state, {success: "The password of current merchant was changed", isFetching: false});
+            return Object.assign({}, state, {
+                success: "The password of current merchant was changed",
+                isFetching: false
+            });
 
         case UserActions.USER_CHANGE_MERCHANT_PASS_FAILURE:
-            return Object.assign({}, state, {error: "The password must consist more than 8 characters", isFetching: false});
+            return Object.assign({}, state, {
+                error: "The password must consist more than 8 characters",
+                isFetching: false
+            });
 
         case UserActions.USER_CHANGE_MERCHANT_PASS_CERROR:
 
@@ -91,7 +103,8 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
             return Object.assign({}, state, {error: "You have entered wrong values", isFetching: false}); //todo: refactor
 
-        case UserActions.USER_CHANGE_SELF_PASS_CERROR: return {};
+        case UserActions.USER_CHANGE_SELF_PASS_CERROR:
+            return {};
 
 
         //get admin statistic
@@ -106,7 +119,8 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_GET_ADMIN_STAT_FAILURE:
             return Object.assign({}, state, {error: "something went wrong", isFetching: false});
 
-        case UserActions.USER_GET_ADMIN_STAT_CERROR: return {};
+        case UserActions.USER_GET_ADMIN_STAT_CERROR:
+            return {};
 
         default:
             return state;

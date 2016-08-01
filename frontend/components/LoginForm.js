@@ -13,7 +13,6 @@ class LoginForm extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.tokenRefresh = this.tokenRefresh.bind(this);
         this.state = {
             login: "",
             password: "",
@@ -22,46 +21,12 @@ class LoginForm extends Component {
 
     componentDidMount() {
         //  'after server implementation here will be function that gets server version'
-        //   this.props.getServerVersion();
-    }
-
-    tokenRefresh() {
-// todo: refactor;
-        function refreshToken(url) {
-            return new Promise(function (resolve, reject) {
-
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
-                xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
-                xhr.onload = function () {
-                    if (this.status === 200) {
-                        resolve(this.response);
-                    } else {
-                        var error = new Error(this.statusText);
-                        error.code = this.status;
-                        reject(error);
-                    }
-                };
-
-                xhr.onerror = function () {
-                    reject(new Error("Network Error"));
-                };
-
-                xhr.send();
-            });
-        }
-
-        var API_VERSION = "dev"; //todo: get from localstorage after server fix;
-        if (window.localStorage.user_token) {
-            refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
-                .then(
-                    response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
-                    error => console.log(`Rejected: ${error}`));
-        }
+        //this.props.getServerVersion();
     }
 
     componentWillUnmount() {
-        setInterval(this.tokenRefresh, 1500000);
+        localStorage.setItem('user',JSON.stringify(store.getState().user));
+        setInterval(this.props.tokenRefresh, store.getState().user.exp-Date.now()/1000);
     }
 
     handleChange(e) {
@@ -124,10 +89,9 @@ class LoginForm extends Component {
     }
 }
 
-
 export default connect((state)=> {
     return {user: state.user}
 }, {
     makeLogin: UserActions.login,
-    getServerVersion: SystemsActions.getServerVersion,
+    tokenRefresh: SystemsActions.tokenRefresh
 })(LoginForm)
