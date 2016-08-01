@@ -3,10 +3,10 @@ import React, {Component, PropTypes} from 'react'
 import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
-import * as SystemsActions from '../actions/system'
 import Alert, {TYPE_ERROR} from '../components/Alert'
 import {Link} from 'react-router'
 import Transition from '../containers/Transition';
+
 class LoginForm extends Component {
 
     constructor(props) {
@@ -26,7 +26,40 @@ class LoginForm extends Component {
 
     componentWillUnmount() {
         localStorage.setItem('user',JSON.stringify(store.getState().user));
-        setInterval(this.props.tokenRefresh, store.getState().user.exp-Date.now()/1000);
+        setInterval(function tokenRefresh() {
+
+            function refreshToken(url) {
+                return new Promise(function (resolve, reject) {
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
+                    xhr.onload = function () {
+                        if (this.status === 200) {
+                            resolve(this.response);
+                        } else {
+                            var error = new Error(this.statusText);
+                            error.code = this.status;
+                            reject(error);
+                        }
+                    };
+
+                    xhr.onerror = function () {
+                        reject(new Error("Network Error"));
+                    };
+
+                    xhr.send();
+                });
+            }
+
+            var API_VERSION = localStorage.version || "dev";
+            if (window.localStorage.user_token) {
+                refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
+                    .then(
+                        response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
+                        error => console.log(`Rejected: ${error}`));
+            }
+        }, store.getState().user.exp-Date.now()/1000 - 300);
     }
 
     handleChange(e) {
@@ -92,6 +125,5 @@ class LoginForm extends Component {
 export default connect((state)=> {
     return {user: state.user}
 }, {
-    makeLogin: UserActions.login,
-    tokenRefresh: SystemsActions.tokenRefresh
+    makeLogin: UserActions.login
 })(LoginForm)
