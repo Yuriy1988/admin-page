@@ -40,7 +40,7 @@ export default function user(state = initial_user, action) {
             return {};
 
         case UserActions.USER_LOGOUT_FAILURE:
-            return {};
+            return Object.assign({}, state, {isFetching: false});
 
         case UserActions.USER_LOGOUT_SUCCESS:
             localStorage.setItem("user_token", '');

@@ -9,48 +9,52 @@ import Chart from '../../components/Chart'
 class Statistic extends Component {
     constructor(props) {
         super(props);
-        this.getDate = this.getDate.bind(this);
+        this.getValues = this.getValues.bind(this);
     }
 
     componentDidMount() {
-        $('.calendar-input').daterangepicker();
+        $('.calendar-from').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true
+        });
+        $('.calendar-till').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true
+        })
     }
 
-    getDate(position) {
-        let arr, result, calendar = $('.calendar-input');
+    getValues() {
 
-        if (calendar.val()) {
-            arr = calendar.val().split('-')[position].split('/'); // make date to correct format
-            result = arr[2].toString().trim() + '-' + arr[1].toString().trim() + '-' + arr[0].toString().trim()
-        } else {
-            result = '';
-        }
-        return result;
-    }
-
-    getValues() {;
         const {getAdminStatistic} = this.props;
         let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
         let fromPriceNode = $('.paymentFrom-input');
         let tillPriceNode = $('.paymentTill-input');
         let moneyAmount = $('.moneyAmount');
 
+        storeId = $('.store-id-input').val()? `store_id=${$('.store-id-input').val()}` : '';
+        currency = $('.currency-input').val()? `&currency=${$('.currency-input').val()}`: '';
+        fromPrice = fromPriceNode.val().replace(',', '.')? `&from_total_price=${+fromPriceNode.val().replace(',', '.')}` : '';
+        tillPrice = tillPriceNode.val().replace(',', '.')? `&till_total_price=${+tillPriceNode.val().replace(',', '.')}` : '';
+        paysysId = ($('.paysyss-id-input').val()).replace(' ', '_')? `&paysys_id=${($('.paysyss-id-input').val()).replace(' ', '_')}` : '';
+        status = ($('.status-input').val()).replace(' ', '_').toUpperCase()? `&status=${($('.status-input').val()).replace(' ', '_').toUpperCase()}`:'';
+        fromDate = moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')? `&from_date=${moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
+        tillDate = moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')? `&till_date=${moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
 
+        if (fromDate  === '&from_date=Invalid date') {
+            fromDate = '';
+        }
+        if (tillDate === '&till_date=Invalid date') {
+            tillDate = '';
+        }
 
-        storeId = $('.store-id-input').val();
-        currency = $('.currency-input').val();
-        fromPrice = +fromPriceNode.val().replace(',', '.').replace('', '0');
-        tillPrice = +tillPriceNode.val().replace(',', '.').replace('', '0');
-        paysysId = ($('.paysyss-id-input').val()).replace(' ', '_');
-        status = ($('.status-input').val()).replace(' ', '_').toUpperCase();
-        fromDate = this.getDate(0);
-        tillDate = this.getDate(1);
-        orderBy = ''; //todo
-        limit = ''; //todo
-        offset = ''; //todo
+        orderBy = ''; //todo &order_by=
+        limit = ''; //todo &limit=
+        offset = ''; //todo &offset=
 
-        function isAccurate () {
-            if (fromPrice <= tillPrice && isFinite(fromPrice) && isFinite(tillPrice)) {
+        function isAccurate() {
+            if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() ==='' ||
+                ($('.paymentFrom-input').val() <= $('.paymentTill-input').val() && isFinite(+$('.paymentFrom-input').val())
+                && isFinite(+$('.paymentTill-input').val()))) {
                 moneyAmount.removeClass('has-error');
                 return true;
             } else {
@@ -59,14 +63,13 @@ class Statistic extends Component {
             }
         }
 
-        query = `store_id=${storeId}&currency=${currency}&from_total_price=${fromPrice}&till_total_price=${tillPrice}&paysys_id=${paysysId}&status=${status}&from_date=${fromDate}&till_date=${tillDate}&order_by=${orderBy}&limit=${limit}&offset=${offset}`;
-        if (isAccurate ()) {
+        query = `${storeId}${currency}${fromPrice}${tillPrice}${paysysId}${status}${fromDate}${tillDate}${orderBy}${limit}${offset}`;
+        if (isAccurate()) {
             getAdminStatistic(query);
         }
     }
 
     render() {
-
         return (
             <div>
                 <div className="col-sm-2">
@@ -75,7 +78,8 @@ class Statistic extends Component {
                         <div className="input-group-addon">
                             <i className="fa fa-calendar"/>
                         </div>
-                        <input type="text" className="form-control calendar-input" />
+                        <input type="text" className="form-control calendar-from" placeholder="from"/>
+                        <input type="text" className="form-control calendar-till" placeholder="till"/>
                     </div>
                 </div>
                 <div className="col-sm-2">
@@ -84,7 +88,7 @@ class Statistic extends Component {
                         <div className="input-group-addon">
                             <i className="fa fa-shopping-cart"/>
                         </div>
-                        <input type="text" className="form-control store-id-input"/>
+                        <input ref="input" type="text" className="form-control store-id-input"/>
                     </div>
                 </div>
 
@@ -94,7 +98,7 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2">
-                    <span style={{ 'whiteSpace': 'nowrap'}}>Select currency</span>
+                    <span style={{'whiteSpace': 'nowrap'}}>Select currency</span>
                     <select className="form-control currency-input">
                         <option></option>
                         <option>UAH</option>
@@ -105,7 +109,7 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2">
-                    <span style={{ 'whiteSpace': 'nowrap'}}>Select pay system</span>
+                    <span style={{'whiteSpace': 'nowrap'}}>Select pay system</span>
                     <select className="form-control paysyss-id-input">
                         <option></option>
                         <option>PAY PAL</option>
@@ -115,7 +119,7 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2">
-                    <span style={{ 'whiteSpace': 'nowrap'}}>Select payment status</span>
+                    <span style={{'whiteSpace': 'nowrap'}}>Select payment status</span>
                     <select className="form-control status-input">
                         <option></option>
                         <option>Created</option>
@@ -128,10 +132,10 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2 moneyAmount">
-                    <span style={{ 'whiteSpace': 'nowrap'}}>Payment from</span>
+                    <span style={{'whiteSpace': 'nowrap'}}>Payment from</span>
                     <input type="text" className="form-control paymentFrom-input"/>
                     <div>
-                        <span style={{ 'whiteSpace': 'nowrap'}}>Payment till</span>
+                        <span style={{'whiteSpace': 'nowrap'}}>Payment till</span>
                         <input type="text" className="form-control paymentTill-input"/>
                     </div>
                 </div>

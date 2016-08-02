@@ -1,5 +1,5 @@
-import { normalize } from 'normalizr'
-import { camelizeKeys } from 'humps'
+import {normalize} from 'normalizr'
+import {camelizeKeys} from 'humps'
 import 'isomorphic-fetch'
 
 const API_VERSION = "dev";
@@ -11,8 +11,8 @@ let isLoggedIn = false;
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
-    debugger;
-    setInterval(function tokenRefresh() {
+
+    if ((store.getState().user.exp - Date.now() / 1000) / 60 < 7) {
         function refreshToken(url) {
             return new Promise(function (resolve, reject) {
 
@@ -36,16 +36,17 @@ function callApi(endpoint, body) {
                 xhr.send();
             });
         }
-        var API_VERSION = localStorage.version || "dev";
+
+        var API_VERSION = localStorage.version || "dev"; // refactor
         if (window.localStorage.user_token) {
             refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
                 .then(
                     response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
                     error => console.log(`Rejected: ${error}`));
         }
-    }, (store.getState().user.exp-Date.now()/1000 - 500)*1000);
+    }
 
-    const { schema, path, method, isAuth = true} = endpoint;
+    const {schema, path, method, isAuth = true} = endpoint;
 
     let fullUrl = API_ROOT + path;
 
@@ -183,14 +184,14 @@ export default store => next => action => {
         return next(action);
     }
 
-    const { endpoint, types, body, cError } = callAPI;
+    const {endpoint, types, body, cError} = callAPI;
 
 
     if (typeof endpoint !== 'object') {
         throw new Error('Specify an endpoint { method: [GET|POST|PUT|DELETE], path: string, schema:normalizrSchema }');
     }
 
-    const { schema, path, method } = endpoint;
+    const {schema, path, method} = endpoint;
 
     if (typeof path !== 'string') {
         throw new Error('Endpoint.path should be a string');
