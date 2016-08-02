@@ -65,8 +65,7 @@ db_clean:
 	sudo -u postgres psql $(DB_NAME) -c "GRANT ALL ON SCHEMA public TO public"
 
 db_dummy:
-	node ./generators/index.js --target merchant --count 10
-	node ./generators/index.js --target store --count 3 --mid 1..10
+	./dummy.py --username=admin --password=password
 
 
 # ----- Virtualenv -----
