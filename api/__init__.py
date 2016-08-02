@@ -1,5 +1,4 @@
 import decimal
-import logging
 from functools import wraps
 from datetime import datetime
 from flask import Flask, Blueprint, json, redirect, url_for
