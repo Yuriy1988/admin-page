@@ -31,16 +31,16 @@ class Statistic extends Component {
         let tillPriceNode = $('.paymentTill-input');
         let moneyAmount = $('.moneyAmount');
 
-        storeId = $('.store-id-input').val()? `store_id=${$('.store-id-input').val()}` : '';
-        currency = $('.currency-input').val()? `&currency=${$('.currency-input').val()}`: '';
-        fromPrice = fromPriceNode.val().replace(',', '.')? `&from_total_price=${+fromPriceNode.val().replace(',', '.')}` : '';
-        tillPrice = tillPriceNode.val().replace(',', '.')? `&till_total_price=${+tillPriceNode.val().replace(',', '.')}` : '';
-        paysysId = ($('.paysyss-id-input').val()).replace(' ', '_')? `&paysys_id=${($('.paysyss-id-input').val()).replace(' ', '_')}` : '';
-        status = ($('.status-input').val()).replace(' ', '_').toUpperCase()? `&status=${($('.status-input').val()).replace(' ', '_').toUpperCase()}`:'';
-        fromDate = moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')? `&from_date=${moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
-        tillDate = moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')? `&till_date=${moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
+        storeId = $('.store-id-input').val() ? `store_id=${$('.store-id-input').val()}` : '';
+        currency = $('.currency-input').val() ? `&currency=${$('.currency-input').val()}` : '';
+        fromPrice = fromPriceNode.val().replace(',', '.') ? `&from_total_price=${+fromPriceNode.val().replace(',', '.')}` : '';
+        tillPrice = tillPriceNode.val().replace(',', '.') ? `&till_total_price=${+tillPriceNode.val().replace(',', '.')}` : '';
+        paysysId = ($('.paysyss-id-input').val()).replace(' ', '_') ? `&paysys_id=${($('.paysyss-id-input').val()).replace(' ', '_')}` : '';
+        status = ($('.status-input').val()).replace(' ', '_').toUpperCase() ? `&status=${($('.status-input').val()).replace(' ', '_').toUpperCase()}` : '';
+        fromDate = moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD') ? `&from_date=${moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
+        tillDate = moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD') ? `&till_date=${moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
 
-        if (fromDate  === '&from_date=Invalid date') {
+        if (fromDate === '&from_date=Invalid date') {
             fromDate = '';
         }
         if (tillDate === '&till_date=Invalid date') {
@@ -52,7 +52,7 @@ class Statistic extends Component {
         offset = ''; //todo &offset=
 
         function isAccurate() {
-            if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() ==='' ||
+            if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
                 ($('.paymentFrom-input').val() <= $('.paymentTill-input').val() && isFinite(+$('.paymentFrom-input').val())
                 && isFinite(+$('.paymentTill-input').val()))) {
                 moneyAmount.removeClass('has-error');
@@ -70,6 +70,8 @@ class Statistic extends Component {
     }
 
     render() {
+        const statistic = this.props.statistic.payments;
+
         return (
             <div>
                 <div className="col-sm-2">
@@ -82,7 +84,7 @@ class Statistic extends Component {
                         <input type="text" className="form-control calendar-till" placeholder="till"/>
                     </div>
                 </div>
-                <div className="col-sm-2">
+                <div className="col-sm-6">
                     <span style={{'whiteSpace': 'nowrap'}}>Store id </span>
                     <div className="input-group">
                         <div className="input-group-addon">
@@ -144,6 +146,41 @@ class Statistic extends Component {
                     statistic
                 </button>
                 <LoadingOverlay loading={false}/>
+
+                <div>
+                    <table className="statTable">
+                        <thead>
+                        <tr>
+                            <th rowSpan="2">created</th>
+                            <th rowSpan="2">payment_account</th>
+                            <th rowSpan="2">paysys_id</th>
+                            <th rowSpan="2">status</th>
+                            <th rowSpan="2">updated</th>
+                            <th colSpan="3">invoice</th>
+                        </tr>
+                        <tr>
+                            <th>currency</th>
+                            <th>store_id</th>
+                            <th>В total_price</th>
+                        </tr>
+                        </thead>
+
+                        {statistic.map(function (result, i) {
+                            return <tbody key={Math.random()}>
+                            <tr key={i}>
+                                <td key={Math.random()}>{result.created}</td>
+                                <td key={Math.random()}>{result.paymentAccount}</td>
+                                <td key={Math.random()}>{result.paysysId}</td>
+                                <td key={Math.random()}>{result.status}</td>
+                                <td key={Math.random()}>{result.updated}</td>
+                                <td key={Math.random()}>{result.invoice.currency}</td>
+                                <td key={Math.random()}>{result.invoice.storeId}</td>
+                                <td key={Math.random()}>{result.invoice.totalPrice}</td>
+                            </tr>
+                            </tbody>
+                        })}
+                    </table>
+                </div>
             </div>
         )
     }
@@ -152,8 +189,7 @@ class Statistic extends Component {
 
 export default connect(
     (state)=>({
-        stores: state.entities.stores,
-        storePagination: state.pagination.store
+        statistic: state.user.statistic
     }),
     {getAdminStatistic: UserActions.getAdminStatistic}
 )(Statistic)

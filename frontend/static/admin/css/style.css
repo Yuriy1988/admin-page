@@ -146,6 +146,30 @@ hr, .mv {
     bottom: 7px;
     font-size: 1.5em;
 }
+
+
+.statTable {
+    margin-top: 10%;
+    border-collapse: collapse;
+    border: 2px solid black;
+
+}
+
+.statTable td {
+    padding: 5px;
+    padding-right: 10px;
+    border: 1px solid lightgray;
+}
+
+.statTable th {
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.statTable caption {
+    margin-bottom: 10px;
+}
+
 /*
 @media (min-width: 768px) {
     .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.active):hover > a > span,

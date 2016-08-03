@@ -7,11 +7,12 @@ const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 
 let isLoggedIn = false;
 
-
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
 
+
+    //token refresh logic starts
     if ((store.getState().user.exp - Date.now() / 1000) / 60 < 7) {
         function refreshToken(url) {
             return new Promise(function (resolve, reject) {
@@ -41,10 +42,16 @@ function callApi(endpoint, body) {
         if (window.localStorage.user_token) {
             refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
                 .then(
-                    response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
+                    function (response) {
+                        store.dispatch({
+                            type: 'TOKEN_REFRESH',
+                            response: `${camelizeKeys(response)}`
+                        });
+                    },
                     error => console.log(`Rejected: ${error}`));
         }
     }
+    //token refresh logic ends
 
     const {schema, path, method, isAuth = true} = endpoint;
 
