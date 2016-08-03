@@ -42,3 +42,11 @@ class PaymentSystem(base.BaseModel):
         """
         # FIXME: select with single query
         return set(ps.id for ps in cls.query.all() if ps.is_allowed_to_use())
+
+
+@base.on_model_event(PaySysContract, 'after_delete')
+def disable_payment_system_if_last_contract(paysys_contract):
+    payment_system = PaymentSystem.query.get(paysys_contract.paysys_id)
+    if payment_system and not payment_system.has_contracts():
+        payment_system.active = False
+        db.session.commit()

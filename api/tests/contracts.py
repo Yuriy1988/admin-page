@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from api.tests import base
-from api.models import MerchantContract, PaySysContract
+from api.models import MerchantContract, PaySysContract, PaymentSystem
 
 __author__ = 'Daniel Omelchenko'
 
@@ -344,6 +344,21 @@ class TestPaySysContracts(base.BaseTestCase):
 
         status, body = self.get('/paysys_contracts/%s' % contract['id'])
         self.assertEqual(status, 404)
+
+    def test_delete_contract_disable_paysys(self):
+        contract = self.create_pay_sys_contracts(self.paysys_id)[0]
+
+        paysys_model = PaymentSystem.query.get(self.paysys_id)
+        paysys_model.update({"active": True})
+        self.db.commit()
+
+        self.assertTrue(paysys_model.is_allowed_to_use())
+
+        status, body = self.delete('/paysys_contracts/%s' % contract['id'])
+        self.assertEqual(status, 200)
+
+        paysys_model = PaymentSystem.query.get(self.paysys_id)
+        self.assertFalse(paysys_model.is_allowed_to_use())
 
     def test_delete_not_found_contract(self):
         status, body = self.delete('/paysys_contracts/1')
