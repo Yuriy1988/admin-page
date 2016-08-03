@@ -11,7 +11,7 @@ from pika import exceptions as mq_err
 from flask import g, request, json, url_for, current_app as app
 from werkzeug.utils import secure_filename
 
-from api import errors, auth, after_app_created
+from api import errors, auth, after_app_created, api_v1
 
 __author__ = 'Kostel Serhii'
 
@@ -65,9 +65,9 @@ def push_to_queue(queue_name, body_json):
             channel.basic_publish(exchange='', routing_key=queue_name, body=body, properties=publish_properties)
 
     except mq_err.AMQPConnectionError as err:
-        raise errors.ServiceUnavailableError('Queue error: %r' % err)
+        raise errors.ServiceUnavailableError('Queue error: %s' % err)
     except (mq_err.AMQPChannelError, mq_err.AMQPError) as err:
-        raise errors.InternalServerError('Queue error: %r' % err)
+        raise errors.InternalServerError('Queue error: %s' % err)
 
 
 # Client service
@@ -107,7 +107,7 @@ def _send_notify(queue_name, body_json):
         push_to_queue(queue_name, body_json)
     except Exception as err:
         # Notification error should not crash task execution
-        _log.error("Notification service is unavailable now: %s" % str(err))
+        _log.error("Notification service is unavailable now: %s", err)
 
 
 def send_email(email_address, subject, message):
@@ -135,7 +135,7 @@ def send_invite_to_user_by_email(user_model, invite_token):
     :param user_model: user model
     :param invite_token: unique invite token for user
     """
-    invite_url = url_for('api_v1.user_create_password', token=invite_token, _external=True)
+    invite_url = app.config['SERVER_URL'] + url_for('api_v1.user_create_password', token=invite_token)
 
     add_track_extra_info({'invite_url': invite_url})
 
@@ -170,9 +170,12 @@ def register_request_notifier(app):
     if not app.config.get('AFTER_REQUEST_TRACK_ENABLE'):
         return
 
+    service_name = app.config['SERVICE_NAME']
+    queue_request = app.config['QUEUE_REQUEST']
+
     filtered_headers = ['HTTP_USER_AGENT', 'CONTENT_LENGTH', 'CONTENT_TYPE']
 
-    @app.after_request
+    @api_v1.after_request
     def track_request(response):
         """
         After every request send information to the notify queue
@@ -180,7 +183,7 @@ def register_request_notifier(app):
         :param response: request response
         """
         request_detail = dict(
-            service_name=app.config['SERVICE_NAME'],
+            service_name=service_name,
 
             query=dict(
                 timestamp=datetime.now(tz=pytz.utc),
@@ -202,7 +205,7 @@ def register_request_notifier(app):
             extra=g.get('track_extra_info', {})
         )
 
-        _send_notify(app.config['QUEUE_REQUEST'], request_detail)
+        _send_notify(queue_request, request_detail)
 
         return response
 

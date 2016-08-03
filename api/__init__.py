@@ -1,5 +1,4 @@
 import decimal
-import logging
 from functools import wraps
 from datetime import datetime
 from flask import Flask, Blueprint, json, redirect, url_for
@@ -16,6 +15,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/admin/dev')
+web = Blueprint('web', __name__)
 
 
 # App created notifier
@@ -74,13 +74,6 @@ def create_app(config='debug'):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    import api.handlers
-    app.register_blueprint(api_v1)
-
-    import api.logger
-
-    _inform_app_created(app)
-
     if app.config['DEBUG']:
         # enable only in debug mode. In production use nginx/apache for this purpose
 
@@ -98,5 +91,13 @@ def create_app(config='debug'):
         def index():
             """ Redirect from root to admin page """
             return redirect(url_for('admin_page'))
+
+    import api.handlers
+    app.register_blueprint(api_v1)
+    app.register_blueprint(web)
+
+    import api.logger
+
+    _inform_app_created(app)
 
     return app

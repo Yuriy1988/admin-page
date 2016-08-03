@@ -1,5 +1,4 @@
 #!venv/bin/python
-
 """
  Project management commands.
  Commands variables depends on config file name.
@@ -12,8 +11,6 @@
 
 
  Config name: debug, production, test (default debug)
-
-
 """
 
 import os
@@ -38,7 +35,7 @@ COV = coverage.coverage(
 COV.start()
 
 from api import create_app, db
-from api.models import payment_system as paysys, user
+from api.models import payment_system as paysys, user, antifraud_settings
 from api.schemas import UserSchema, UserCreatePasswordSchema
 
 
@@ -128,9 +125,24 @@ def create_payment_systems():
 
 
 @manager.command
+def create_antifraud_settings():
+
+    # scoring rules:
+
+    for rule in antifraud_settings.DEFAULT_SCORING_RULES:
+        db.session.add(antifraud_settings.AntiFraudScoringRule(rule))
+
+    # antifraud settings:
+    db.session.add(antifraud_settings.AntiFraudRule(30, 100))
+
+    db.session.commit()
+
+
+@manager.command
 def create_data():
     """Create default database models data."""
     create_payment_systems()
+    create_antifraud_settings()
 
 
 manager.add_command('db', MigrateCommand)

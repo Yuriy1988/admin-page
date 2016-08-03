@@ -29,7 +29,7 @@ def runserver(config='debug', reload=False):
     """
     app = create_app(config)
     log = logging.getLogger('xop.main')
-    log.info('Starting %s on %s://%s', service_name, app.config['PREFERRED_URL_SCHEME'], app.config['SERVER_NAME'])
+    log.info('Starting %s on %s', service_name, app.config['SERVER_URL'])
     app.run(host='127.0.0.1', port=app.config['PORT'], use_reloader=reload)
 
 

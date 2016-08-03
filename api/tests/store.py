@@ -74,6 +74,43 @@ class TestStore(base.BaseTestCase):
 
     # POST /merchants/<merchant_id>/stores
 
+    def test_post_merchant_stores_full_valid_response(self):
+        merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        stores_num = 10
+
+        for si in range(stores_num):
+            store = self.get_store()
+            self.create_store(store, merchant_id)
+
+        status, body = self.post('/merchants/%s/stores' % merchant_id, self.get_store())
+
+        self.assertEqual(status, 200)
+        self.assertIn('store_url', body)
+
+    def test_post_merchant_stores_missing_data(self):
+        merchant = self.create_merchant(self.get_merchant())
+        merchant_id = merchant.id
+        stores_num = 10
+
+        for si in range(stores_num):
+            store = self.get_store()
+            self.create_store(store, merchant_id)
+
+        status, body = self.post('/merchants/%s/stores' % merchant_id, {})
+
+        self.assertEqual(status, 400)
+
+    def test_post_merchant_store_connect_by_another_merchant(self):
+        merchant = self.create_merchant(self.get_merchant())
+
+        another_merchant = self.create_merchant(self.get_merchant(), 'AMer', 'AmerU')
+
+        status, body = self.post('/merchants/%s/stores' % merchant.id,
+                                 body={}, auth=another_merchant.user)
+
+        self.assertEqual(status, 403)
+
     # GET /stores/<store_id>
 
     def test_get_store_full_valid_response(self):
@@ -143,6 +180,52 @@ class TestStore(base.BaseTestCase):
 
     # PUT /stores/<store_id>
 
+    def test_put_store_full_valid_response(self):
+        store_dict = self.get_store()
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(store_dict, merchant.id)
+
+        status, body = self.put('/stores/%s' % store.id, store_dict)
+
+        self.assertEqual(status, 200)
+
+        store_dict['id'] = store.id
+        store_settings = store_dict.pop('store_settings')
+        body_store_settings = body.pop('store_settings')
+        store_settings['sign_key'] = body_store_settings['sign_key']
+
+        self.assertEqual(body, store_dict)
+        self.assertEqual(body_store_settings, store_settings)
+
+    def test_put_store_bad_request(self):
+        store_dict = self.get_store()
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(store_dict, merchant.id)
+
+        for show_logo in ('test', '', 42, None):
+            status, body = self.put('/stores/%s' % store.id, {'show_logo': show_logo})
+            self.assertEqual(status, 400)
+
+    def test_put_store_forbidden(self):
+        store_dict = self.get_store()
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        manager.stores.append(store)
+        self.db.commit()
+
+        another_merchant = self.create_merchant(self.get_merchant(), 'AMer', 'AmerU')
+
+        status, body = self.put('/stores/%s' % store.id, auth=another_merchant.user, body=store_dict)
+        self.assertEqual(status, 403)
+
+    def test_put_store_not_found(self):
+        store_dict = self.get_store()
+
+        for store_id in ['00000000-1111-2222-3333-444444444444', '0', '1', 'test', 'null', '']:
+            status, body = self.put('/stores/%s' % store_id, store_dict)
+            self.assertEqual(status, 404)
+
     # DELETE /stores/<store_id>
 
     # TODO: add more delete tests
@@ -162,6 +245,29 @@ class TestStore(base.BaseTestCase):
         self.assertIsNone(deleted_store)
         self.assertIsNone(deleted_store_settings)
         self.assertListEqual(deleted_store_paysys, [])
+
+    def test_delete_store_access_denied(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        manager = self.create_manager(self.get_manager(), merchant.id)
+        manager.stores.append(store)
+        self.db.commit()
+
+        another_merchant = self.create_merchant(self.get_merchant(), 'AMer', 'AmerU')
+
+        status, body = self.delete('/stores/%s' % store.id, auth=another_merchant.user)
+        self.assertEqual(status, 403)
+
+    def test_delete_store_not_found(self):
+        merchant = self.create_merchant(self.get_merchant())
+        store = self.create_store(self.get_store(), merchant.id)
+        store_id = store.id
+
+        status, body = self.delete('/stores/%s' % store_id)
+        self.assertEqual(status, 200)
+        status, body = self.delete('/stores/%s' % store_id)
+        self.assertEqual(status, 404)
+
 
     # GET /managers/<manager_id>/stores
 

@@ -1,5 +1,6 @@
 import os
-from datetime import timedelta
+import pytz
+from datetime import timedelta, datetime
 
 __author__ = 'Kostel Serhii'
 
@@ -10,6 +11,10 @@ class debug:
     BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
 
     # Common
+    # TODO: get server version and build date from file, create on build
+    SERVER_VERSION = '0.1.0'
+    BUILD_DATE = pytz.utc.localize(datetime(2016, 6, 28, 12, 0, 0))
+
     ADMIN_PORT = 7128
     CLIENT_PORT = 7254
 
@@ -28,12 +33,15 @@ class debug:
     HOST = '127.0.0.1'
     PORT = ADMIN_PORT
     PREFERRED_URL_SCHEME = 'http'
+    HOSTNAME = '%s:%d' % (HOST, PORT)
+
+    @property
+    def SERVER_URL(self):
+        return '%s://%s' % (self.PREFERRED_URL_SCHEME, self.HOSTNAME)
 
     DEBUG = True
     AFTER_REQUEST_TRACK_ENABLE = False
     AFTER_REQUEST_LOGGER_ENABLE = False
-
-    SERVER_NAME = '%s:%d' % (HOST, PORT)
 
     # Logger
     LOGGER_NAME = 'xop'
@@ -112,9 +120,11 @@ class test(debug):
 class production(debug):
 
     PREFERRED_URL_SCHEME = 'https'
+    HOSTNAME = 'xopay.digitaloutlooks.com'
 
     DEBUG = False
-    SERVER_NAME = 'xopay.digitaloutlooks.com'
+    AFTER_REQUEST_TRACK_ENABLE = True
+    AFTER_REQUEST_LOGGER_ENABLE = True
 
     LOG_ROOT_LEVEL = 'INFO'
     LOG_LEVEL = 'INFO'

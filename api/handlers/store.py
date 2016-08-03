@@ -13,7 +13,7 @@ __author__ = 'Kostel Serhii'
 
 @api_v1.route('/merchants/<merchant_id>/stores', methods=['GET'])
 @api_v1.route('/merchant/stores', methods=['GET'])
-@auth.auth('admin', 'merchant')
+@auth.auth('admin', 'merchant', 'system')
 @autofill_id
 def merchant_stores_list(merchant_id=''):
     if not Merchant.exists(merchant_id):

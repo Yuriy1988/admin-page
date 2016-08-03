@@ -9,5 +9,7 @@ from .user import (UserSchema,
                    UserChangePasswordSchema,
                    UserForgotPasswordSchema,
                    UserCreatePasswordSchema)
+from .antifraud_settings import AntiFraudRuleSchema
+
 
 __author__ = 'Kostel Serhii'

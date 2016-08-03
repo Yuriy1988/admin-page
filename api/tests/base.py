@@ -3,7 +3,6 @@ import pprint
 import random
 import string
 from copy import deepcopy
-from datetime import timedelta
 from unittest.mock import MagicMock
 from flask import json
 from flask.ext.testing import TestCase

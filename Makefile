@@ -19,9 +19,9 @@ install_python35_repo:
 	sudo apt-get update
 
 install:
-	sudo apt-get -y install $(PYTHON) $(PYTHON)-dev python3-pip python3-wheel python-virtualenv
-	sudo apt-get -y install postgresql postgresql-contrib python-psycopg2 redis-server
-
+	sudo apt-get install -y $(PYTHON) $(PYTHON)-dev python3-pip python3-wheel python-virtualenv
+	sudo apt-get install -y libpq-dev postgresql postgresql-contrib python-psycopg2 redis-server
+	sudo apt-get install -y rabbitmq-server
 
 # ------ Database -----
 
@@ -65,8 +65,7 @@ db_clean:
 	sudo -u postgres psql $(DB_NAME) -c "GRANT ALL ON SCHEMA public TO public"
 
 db_dummy:
-	node ./generators/index.js --target merchant --count 10
-	node ./generators/index.js --target store --count 3 --mid 1..10
+	./dummy.py --username=admin --password=password
 
 
 # ----- Virtualenv -----
@@ -92,10 +91,11 @@ setup: install venv_init db_create
 update: venv_init db_update
 
 
-# ----- Update -----
+# ----- Remove -----
 
 remove: db_remove
 	rm -rf venv
+
 
 # ----- Test -----
 

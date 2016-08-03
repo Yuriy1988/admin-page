@@ -79,10 +79,10 @@ class BaseApiError(Exception):
     default_message = 'Bad Request'
 
     def __init__(self, message=None, status_code=None, errors=None):
-        super().__init__(self)
         self.message = message or self.default_message
         self.status_code = status_code or self.default_status_code
         self.errors = errors
+        super().__init__(self.message)
 
 
 @_handle_api_error
