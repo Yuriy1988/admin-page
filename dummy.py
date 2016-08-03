@@ -19,13 +19,12 @@ from random import choice, randint
 from functools import wraps
 from datetime import timedelta, datetime
 
+from api.models import enum
+
 __author__ = 'Kostel Serhii'
 
 
 AUTH_KEY = 'PzYs2qLh}2$8uUJbBnWB800iYKe5xdYqItRNo7@38yW@tPDVAX}EV5V31*ZK78QS'
-
-
-CURRENCIES = ["USD", "RUB", "UAH", "EUR"]
 
 
 def admin_url(url):
@@ -37,7 +36,7 @@ def client_url(url):
 
 
 def get_currency():
-    return choice(CURRENCIES)
+    return choice(enum.CURRENCY_ENUM)
 
 
 def get_admin_token():
@@ -158,6 +157,7 @@ def get_store():
 def get_paysys_contract(curr=None):
     return {
         "contractor_name": choice(["TASS Bank", "Privat Bank", "Raifaizen Bank Aval"]),
+        'payment_interface': choice(enum.PAYMENT_INTERFACE_ENUM),
         "commission_fixed": choice(['0.1', '0.2', '0.96', '1.7', '1.77', '1.99']),
         "commission_pct": choice(['1.07', '1.4', '1.76', '2.00', '2.42', '3.00']),
         "currency": curr or get_currency(),
@@ -185,7 +185,7 @@ def get_currency_list():
             'to_currency': tc,
             'rate': '%.2f' % (randint(1, 2500) / 100)
         }
-        for fc in CURRENCIES for tc in CURRENCIES if fc != tc
+        for fc in enum.CURRENCY_ENUM for tc in enum.CURRENCY_ENUM if fc != tc
         ]
 
 
@@ -223,7 +223,7 @@ def generate_admin_dummy():
         post(
             url=admin_url('/payment_systems/{id}/contracts'.format(id=ps_id)),
             json_body=get_paysys_contract(curr))
-        for ps_id in ['PAY_PAL', 'VISA_MASTER', 'BIT_COIN'] for curr in CURRENCIES
+        for ps_id in ['PAY_PAL', 'VISA_MASTER', 'BIT_COIN'] for curr in enum.CURRENCY_ENUM
         ]
 
     print('Activate PaySys')
@@ -244,7 +244,7 @@ def generate_admin_dummy():
         post(
             url=admin_url('/merchants/{id}/contracts'.format(**merchant)),
             json_body=get_merchant_contract(curr))
-        for curr in CURRENCIES
+        for curr in enum.CURRENCY_ENUM
         ]
 
     print('Create managers')
