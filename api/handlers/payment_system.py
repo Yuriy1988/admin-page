@@ -49,10 +49,8 @@ def payment_system_update(paysys_id):
     if errors:
         raise ValidationError(errors=errors)
 
-    if 'active' in data:
-        # TODO: check for contract before activate
-        if data['active'] and (payment_system.paysys_login is None or payment_system._paysys_password_hash is None):
-            raise ValidationError(errors={'active': ['Fill in the login and password fields first.']})
+    if data.get('active') and not payment_system.has_contracts():
+        raise ValidationError(errors={'active': ['Add payment system contract first.']})
 
     if data:
         payment_system.update(data)

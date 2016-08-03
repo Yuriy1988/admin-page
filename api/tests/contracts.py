@@ -186,33 +186,7 @@ class TestPaySysContracts(base.BaseTestCase):
 
     # test environment
 
-    _pay_sys_contract = {
-        "contractor_name": "Alpha Bank",
-        "commission_fixed": '0.10',
-        "commission_pct": '2.00',
-        "currency": "USD",
-        "contract_doc_url": "http://contract.doc",
-        "active": True,
-        "filter": "*",
-    }
-
     paysys_id = 'VISA_MASTER'
-
-    def create_pay_sys_contracts(self, pay_sys_id, count=1, **contract_kwargs):
-        contract = self._pay_sys_contract.copy()
-        contract.update(contract_kwargs)
-        contract["paysys_id"] = pay_sys_id
-
-        contract_models = [PaySysContract.create(contract) for _ in range(count)]
-        self.db.commit()
-
-        contracts = []
-        for cm in contract_models:
-            contract_result = contract.copy()
-            contract_result['id'] = cm.id
-            contracts.append(contract_result)
-
-        return contracts
 
     # GET /payment_systems/{paysys_id}/contracts
 

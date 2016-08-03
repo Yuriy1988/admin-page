@@ -15,6 +15,4 @@ class PaymentSystemSchema(base.BaseSchema):
 
 class PaymentSystemUpdateSchema(base.BaseSchema):
 
-    paysys_login = fields.Str(allow_none=False, validate=Length(min=3, max=255))
-    paysys_password = fields.Str(allow_none=False, validate=Length(min=8, max=255))
     active = fields.Boolean(allow_none=False)

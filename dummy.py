@@ -227,13 +227,6 @@ def generate_admin_dummy():
         ]
 
     print('Activate PaySys')
-    # TODO: remove after update
-    _ = [
-        put(
-            url=admin_url('/payment_systems/{id}'.format(id=ps_id)),
-            json_body={'paysys_login': 'TestLogin', 'paysys_password': 'test.password',})
-        for ps_id in ['PAY_PAL', 'VISA_MASTER']
-    ]
     pay_sys = [
         put(
             url=admin_url('/payment_systems/{id}'.format(id=ps_id)),

@@ -8,7 +8,7 @@ from flask import json
 from flask.ext.testing import TestCase
 
 from api import create_app, db as app_db, utils, auth as api_auth
-from api.models import Merchant, Manager, Store, PaymentSystem, User
+from api.models import Merchant, Manager, Store, PaymentSystem, User, PaySysContract
 from api.models.base import BaseModel
 from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME
 
@@ -82,6 +82,16 @@ class TestDefaults:
         "store_settings": _store_settings
     }
 
+    _pay_sys_contract = {
+        "contractor_name": "Alpha Bank",
+        "commission_fixed": '0.10',
+        "commission_pct": '2.00',
+        "currency": "USD",
+        "contract_doc_url": "http://contract.doc",
+        "active": True,
+        "filter": "*",
+    }
+
     def get_admin(self):
         return self._admin.copy()
 
@@ -96,6 +106,9 @@ class TestDefaults:
 
     def get_store(self):
         return deepcopy(self._store)
+
+    def get_paysys_contract(self):
+        return self._pay_sys_contract.copy()
 
 
 class BaseTestCase(TestCase, TestDefaults):
@@ -220,6 +233,22 @@ class BaseTestCase(TestCase, TestDefaults):
         code, body = self.request(url, method='DELETE', auth=auth or 'admin', token=token)
         return code, body
 
+    def create_pay_sys_contracts(self, pay_sys_id, count=1, **contract_kwargs):
+        contract = self.get_paysys_contract()
+        contract.update(contract_kwargs)
+        contract["paysys_id"] = pay_sys_id
+
+        contract_models = [PaySysContract.create(contract) for _ in range(count)]
+        self.db.commit()
+
+        contracts = []
+        for cm in contract_models:
+            contract_result = contract.copy()
+            contract_result['id'] = cm.id
+            contracts.append(contract_result)
+
+        return contracts
+
     def create_merchant(self, merchant_dict, merchant_name=None, username=None):
         merchant_dict['merchant_name'] = merchant_name or "merchant" + self.rand_str()
         merchant_dict['user']['username'] = username or "user" + self.rand_str()
@@ -254,9 +283,9 @@ class BaseTestCase(TestCase, TestDefaults):
         return store_model
 
     def activate_payment_system(self, paysys_id):
+        self.create_pay_sys_contracts(paysys_id)
         paysys_model = PaymentSystem.query.get(paysys_id)
-        paysys_model.update({"paysys_login": "xopay_test", "active": True})
-        paysys_model.set_password("0xJtwe76GDSAFknui8we45unohyDKUFSGku")
+        paysys_model.update({"active": True})
         self.db.commit()
 
     def login(self, username, password):

@@ -188,7 +188,7 @@ def store_payment_systems_list(store_id):
     query = StorePaySys.query.filter_by(store_id=store_id)
     if 'allowed' in data:
         query = query.filter_by(allowed=data['allowed'])
-    query = PaymentSystem.filter_allowed(query.join(PaymentSystem))
+    query = query.join(PaymentSystem).filter(PaymentSystem.active == True)
     store_paysys = query.all()
 
     schema = StorePaySysSchema(many=True)

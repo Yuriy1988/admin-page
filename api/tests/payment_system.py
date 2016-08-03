@@ -36,7 +36,7 @@ class TestPaymentSystem(base.BaseTestCase):
         self.assertEqual(status, 200)
         self.assertSetEqual(set(body['paysys_id']), {'VISA_MASTER', 'PAY_PAL', 'BIT_COIN'})
 
-    def test_allowed_only_if_active_login_and_password_set(self):
+    def test_allowed_only_if_contract_set(self):
         paysys_model = PaymentSystem.query.get(self.paysys_id)
 
         paysys_model.active = True
@@ -44,14 +44,9 @@ class TestPaymentSystem(base.BaseTestCase):
         status, body = self.get('/payment_systems/allowed/paysys_id')
         self.assertListEqual(body['paysys_id'], [])
 
-        paysys_model.paysys_login = 'test_login'
-        self.db.commit()
-        status, body = self.get('/payment_systems/allowed/paysys_id')
-        self.assertListEqual(body['paysys_id'], [])
-
         paysys_model.active = False
-        paysys_model.set_password("0xJtwe76GDSAFknui8we45unohyDKUFSGku")
         self.db.commit()
+        self.create_pay_sys_contracts(paysys_model.id)
         status, body = self.get('/payment_systems/allowed/paysys_id')
         self.assertListEqual(body['paysys_id'], [])
 
@@ -133,46 +128,15 @@ class TestPaymentSystem(base.BaseTestCase):
         paysys = PaymentSystem.query.get(self.paysys_id)
         self.assertFalse(paysys.active)
 
-    def test_put_payment_system_not_activate_until_login_password_set(self):
+    def test_put_payment_system_not_activate_until_contracts_set(self):
         status, body = self.put('/payment_systems/%s' % self.paysys_id, {'active': True})
         self.assertEqual(status, 400)
 
-        status, body = self.put('/payment_systems/%s' % self.paysys_id, {'paysys_login': 'test'})
-        self.assertEqual(status, 200)
-
-        status, body = self.put('/payment_systems/%s' % self.paysys_id, {'active': True})
-        self.assertEqual(status, 400)
-
-        status, body = self.put('/payment_systems/%s' % self.paysys_id, {'paysys_password': 'qwertyuiop'})
-        self.assertEqual(status, 200)
+        self.create_pay_sys_contracts(self.paysys_id)
 
         status, body = self.put('/payment_systems/%s' % self.paysys_id, {'active': True})
         self.assertEqual(status, 200)
         self.assertTrue(body['active'])
-
-    def test_put_payment_system_update_login_password(self):
-        paysys = PaymentSystem.query.get(self.paysys_id)
-        self.assertIsNone(paysys.paysys_login)
-        self.assertIsNone(paysys._paysys_password_hash)
-
-        data = {'paysys_login': 'test', 'paysys_password': '123456789'}
-        status, body = self.put('/payment_systems/%s' % self.paysys_id, data)
-        self.assertEqual(status, 200)
-
-        paysys = PaymentSystem.query.get(self.paysys_id)
-        self.assertEqual(paysys.paysys_login, data['paysys_login'])
-        self.assertTrue(paysys.check_password(data['paysys_password']))
-
-    def test_put_payment_system_not_set_login_password_to_none(self):
-        self.activate_payment_system(self.paysys_id)
-
-        data = {'paysys_login': None, 'paysys_password': None}
-        status, body = self.put('/payment_systems/%s' % self.paysys_id, data)
-        self.assertEqual(status, 400)
-
-        paysys = PaymentSystem.query.get(self.paysys_id)
-        self.assertIsNotNone(paysys.paysys_login)
-        self.assertIsNotNone(paysys._paysys_password_hash)
 
     def test_put_payment_system_not_update_read_only_fields(self):
         self.activate_payment_system(self.paysys_id)
@@ -188,14 +152,6 @@ class TestPaymentSystem(base.BaseTestCase):
         self.assertNotEqual(body['paysys_name'], data['paysys_name'])
 
     def test_put_payment_system_update_fields_type(self):
-        for login in ('', False, 42):
-            status, body = self.put('/payment_systems/%s' % self.paysys_id, {'paysys_login': login})
-            self.assertEqual(status, 400)
-
-        for password in ('', True, 42):
-            status, body = self.put('/payment_systems/%s' % self.paysys_id, {'paysys_password': password})
-            self.assertEqual(status, 400)
-
         for active in ('test', '', 42):
             status, body = self.put('/payment_systems/%s' % self.paysys_id, {'active': active})
             self.assertEqual(status, 400)

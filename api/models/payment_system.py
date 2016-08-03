@@ -1,13 +1,12 @@
-from itertools import chain
-from passlib.apps import custom_app_context as pwd_context
-
 from api import db
-from api.models import base
+from api.models import base, PaySysContract
 
 __author__ = 'Kostel Serhii'
 
 _PAYMENT_SYSTEMS_ID_ENUM = ('PAY_PAL', 'BIT_COIN', 'VISA_MASTER')
 _PAYMENT_SYSTEMS_NAME = ('PayPal', 'Bitcoin', 'Visa/MasterCard')
+
+_PAYSYS_WITHOUT_CONTRACTS = ('PAY_PAL', )
 
 
 class PaymentSystem(base.BaseModel):
@@ -18,48 +17,28 @@ class PaymentSystem(base.BaseModel):
     paysys_name = db.Column(db.String(80), nullable=False)
     active = db.Column(db.Boolean, default=False)
 
-    paysys_login = db.Column(db.String(255))
-    _paysys_password_hash = db.Column(db.String(255))
-
-    def __init__(self, paysys_id, paysys_name, active=False, paysys_login=None, paysys_password=None):
+    def __init__(self, paysys_id, paysys_name, active=False):
         self.id = paysys_id
         self.paysys_name = paysys_name
         self.active = active
 
-        self.paysys_login = paysys_login
-        self.set_password(paysys_password)
-
     def __repr__(self):
         return '<PaymentSystem %r>' % self.id
 
-    def update(self, data, add_to_db=True):
-        data = data.copy()
-
-        if 'paysys_password' in data:
-            paysys_password = data.pop('paysys_password', None)
-            self.set_password(paysys_password)
-
-        super(PaymentSystem, self).update(data)
+    def has_contracts(self):
+        return self.id in _PAYSYS_WITHOUT_CONTRACTS or \
+               PaySysContract.query.filter_by(paysys_id=self.id).count() >= 1
 
     def is_allowed_to_use(self):
-        return self.active and self.paysys_login is not None and self._paysys_password_hash is not None
-
-    def set_password(self, password):
-        self._paysys_password_hash = pwd_context.encrypt(password) if password is not None else None
-
-    def check_password(self, password):
-        return pwd_context.verify(password, self._paysys_password_hash)
-
-    @classmethod
-    def filter_allowed(cls, query):
-        return query.filter(cls.active == True, cls.paysys_login != None, cls._paysys_password_hash != None)
+        """Allowed only if has contract."""
+        return self.active and self.has_contracts()
 
     @classmethod
     def allowed_paysys_id(cls):
         """
-        Payment system is alowed to use only
+        Payment system id, that allowed to use only
         if active=True and login, password specified
         :return set allowed paysys_id
         """
-        paysys_id_values = cls.filter_allowed(db.session.query(cls.id)).all()
-        return set(chain.from_iterable(paysys_id_values))
+        # FIXME: select with single query
+        return set(ps.id for ps in cls.query.all() if ps.is_allowed_to_use())
