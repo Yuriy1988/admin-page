@@ -8,7 +8,7 @@ from flask import json
 from flask.ext.testing import TestCase
 
 from api import create_app, db as app_db, utils, auth as api_auth
-from api.models import Merchant, Manager, Store, PaymentSystem, User, PaySysContract
+from api.models import Merchant, Manager, Store, PaymentSystem, User, PaySysContract, enum
 from api.models.base import BaseModel
 from api.models.payment_system import _PAYMENT_SYSTEMS_ID_ENUM, _PAYMENT_SYSTEMS_NAME
 
@@ -84,6 +84,7 @@ class TestDefaults:
 
     _pay_sys_contract = {
         "contractor_name": "Alpha Bank",
+        'payment_interface': enum.PAYMENT_INTERFACE_ENUM[0],
         "commission_fixed": '0.10',
         "commission_pct": '2.00',
         "currency": "USD",

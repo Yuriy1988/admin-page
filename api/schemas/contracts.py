@@ -24,6 +24,7 @@ class MerchantContractSchema(AbstractContractSchema):
 class PaySysContractSchema(AbstractContractSchema):
     paysys_id = fields.Str(dump_only=True)
     contractor_name = fields.Str(required=True)
+    payment_interface = fields.Str(required=True, validate=OneOf(enum.PAYMENT_INTERFACE_ENUM))
 
 
 class ContractRequestSchema(base.BaseSchema):
