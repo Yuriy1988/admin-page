@@ -2,12 +2,16 @@ import * as UserActions from '../actions/user';
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
 
-let initial_user;
+let initial_user
+
 if (localStorage.user) {
     initial_user = JSON.parse(localStorage.user)
 } else {
     initial_user = {
-        isFetching: false
+        isFetching: false,
+        statistic: {
+            payments: []
+        }
     };
 }
 
@@ -99,7 +103,6 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {success: "Your password was changed, please re-login", isFetching: false});
 
         case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
-            debugger;
             return Object.assign({}, state, {error: `${action.error.serverError.errors.new_password[0]}`, isFetching: false}); //todo: refactor
       //  ${action.error.serverError.errors.new_password[0]}
         case UserActions.USER_CHANGE_SELF_PASS_CERROR:
@@ -112,13 +115,17 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {isFetching: true});
 
         case UserActions.USER_GET_ADMIN_STAT_SUCCESS:
-            return Object.assign({}, state, {isFetching: false});
+            return Object.assign({}, state, {statistic: action.response}, {isFetching: false});
 
         case UserActions.USER_GET_ADMIN_STAT_FAILURE:
             return Object.assign({}, state, {error: "something went wrong", isFetching: false});
 
         case UserActions.USER_GET_ADMIN_STAT_CERROR:
             return {};
+        //token refresh
+        case 'TOKEN_REFRESH':
+            localStorage.setItem("user_token", (`${JSON.parse(action.response).token}`));
+            return Object.assign({}, state, JSON.parse(action.response));
 
         default:
             return state;
