@@ -181,6 +181,7 @@ class Statistic extends Component {
                         })}
                     </table>
                 </div>
+                <Chart />
             </div>
         )
     }

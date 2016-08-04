@@ -2,7 +2,7 @@ import * as UserActions from '../actions/user';
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
 
-let initial_user
+let initial_user;
 
 if (localStorage.user) {
     initial_user = JSON.parse(localStorage.user)
@@ -20,7 +20,11 @@ export default function user(state = initial_user, action) {
     switch (action.type) {
         //login
         case UserActions.USER_LOGIN_REQUEST:
-            return Object.assign({}, state, {isFetching: true});
+            return Object.assign({}, state, {isFetching: true}, {
+                statistic: {
+                    payments: []
+                }
+            });
 
         case UserActions.USER_LOGIN_SUCCESS:
             let path = '';
@@ -103,8 +107,11 @@ export default function user(state = initial_user, action) {
             return Object.assign({}, state, {success: "Your password was changed, please re-login", isFetching: false});
 
         case UserActions.USER_CHANGE_SELF_PASS_FAILURE:
-            return Object.assign({}, state, {error: `${action.error.serverError.errors.new_password[0]}`, isFetching: false}); //todo: refactor
-      //  ${action.error.serverError.errors.new_password[0]}
+            return Object.assign({}, state, {
+                error: `${action.error.serverError.errors.new_password[0]}`,
+                isFetching: false
+            }); //todo: refactor
+        //  ${action.error.serverError.errors.new_password[0]}
         case UserActions.USER_CHANGE_SELF_PASS_CERROR:
             return {};
 
