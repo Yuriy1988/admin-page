@@ -7,42 +7,50 @@ const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 
 let isLoggedIn = false;
 
-
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
 
-    if ((store.getState().user.exp - Date.now() / 1000) / 60 < 7) {
-        function refreshToken(url) {
-            return new Promise(function (resolve, reject) {
 
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
-                xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
-                xhr.onload = function () {
-                    if (this.status === 200) {
-                        resolve(this.response);
-                    } else {
-                        var error = new Error(this.statusText);
-                        error.code = this.status;
-                        reject(error);
-                    }
-                };
+    //token refresh logic starts
+    if(localStorage.user) {
+        if ((localStorage.user.exp - Date.now() / 1000) / 60 < 7) {
+            function refreshToken(url) {
+                return new Promise(function (resolve, reject) {
 
-                xhr.onerror = function () {
-                    reject(new Error("Network Error"));
-                };
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
+                    xhr.onload = function () {
+                        if (this.status === 200) {
+                            resolve(this.response);
+                        } else {
+                            var error = new Error(this.statusText);
+                            error.code = this.status;
+                            reject(error);
+                        }
+                    };
 
-                xhr.send();
-            });
-        }
+                    xhr.onerror = function () {
+                        reject(new Error("Network Error"));
+                    };
 
-        var API_VERSION = localStorage.version || "dev"; // refactor
-        if (window.localStorage.user_token) {
-            refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
-                .then(
-                    response => localStorage.setItem("user_token", (`${JSON.parse(response).token}`)),
-                    error => console.log(`Rejected: ${error}`));
+                    xhr.send();
+                });
+            }
+
+            var API_VERSION = localStorage.version || "dev"; // refactor
+            if (window.localStorage.user_token) {
+                refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
+                    .then(
+                        function (response) {
+                            store.dispatch({
+                                type: 'TOKEN_REFRESH',
+                                response: `${camelizeKeys(response)}`
+                            });
+                        },
+                        error => console.log(`Rejected: ${error}`));
+            }
         }
     }
 

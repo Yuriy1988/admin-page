@@ -25,7 +25,8 @@ class LoginForm extends Component {
     }
 
     componentWillUnmount() {
-        localStorage.setItem('user',JSON.stringify(store.getState().user));
+        const {user} = this.props;
+        localStorage.setItem('user', JSON.stringify(user));
     }
 
     handleChange(e) {

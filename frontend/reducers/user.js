@@ -25,9 +25,7 @@ export default function user(state = initial_user, action) {
             } else {
                 path = 'anotherPath'; // todo: handle roles here;
             }
-
             localStorage.setItem("user_token", action.response.token);
-
             return Object.assign({}, state, action.response,
                 {isFetching: false},
                 {mainPage: `/admin/${path}`});
