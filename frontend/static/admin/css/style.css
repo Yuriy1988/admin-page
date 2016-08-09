@@ -151,19 +151,23 @@ hr, .mv {
 .statTable {
     margin-top: 10%;
     border-collapse: collapse;
-    border: 2px solid black;
-
+    border: 2px solid black !important;
+    background-color: lightgreen;
 }
 
 .statTable td {
     padding: 5px;
     padding-right: 10px;
-    border: 1px solid lightgray;
+    border: 1px solid black !important;;
+    background-color: lightgreen;
+}
+.statTable tr {
+    border: 1px solid black !important;;
 }
 
 .statTable th {
     padding: 10px;
-    border: 1px solid black;
+    border: 1px solid black !important;;
 }
 
 .statTable caption {

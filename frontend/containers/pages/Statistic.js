@@ -48,7 +48,7 @@ class Statistic extends Component {
         }
 
         orderBy = ''; //todo &order_by=
-        limit = ''; //todo &limit=
+        limit = `limit=20`; //todo &limit=
         offset = ''; //todo &offset=
 
         function isAccurate() {
@@ -67,6 +67,18 @@ class Statistic extends Component {
         if (isAccurate()) {
             getAdminStatistic(query);
         }
+    }
+
+    selectPage(page = 1) {
+        return page * 10;
+    }
+
+    prevPage() {
+        return this.currentPage--;
+    }
+
+    nextPage() {
+        return this.currentPage++;
     }
 
     render() {
@@ -148,7 +160,7 @@ class Statistic extends Component {
                 <LoadingOverlay loading={false}/>
 
                 <div>
-                    <table className="statTable">
+                    <table className="statTable table table-striped table-bordered">
                         <thead>
                         <tr>
                             <th rowSpan="2">created</th>
@@ -164,24 +176,23 @@ class Statistic extends Component {
                             <th>В total_price</th>
                         </tr>
                         </thead>
-
+                        <tbody>
                         {statistic.map(function (result, i) {
-                            return <tbody key={Math.random()}>
-                            <tr key={i}>
-                                <td key={Math.random()}>{result.created}</td>
+                            return <tr key={i}>
+                                <td key={Math.random()}>{moment(result.created).format('MMMM Do YYYY')}</td>
                                 <td key={Math.random()}>{result.paymentAccount}</td>
                                 <td key={Math.random()}>{result.paysysId}</td>
                                 <td key={Math.random()}>{result.status}</td>
-                                <td key={Math.random()}>{result.updated}</td>
+                                <td key={Math.random()}>{moment(result.updated).format('MMMM Do YYYY')}</td>
                                 <td key={Math.random()}>{result.invoice.currency}</td>
                                 <td key={Math.random()}>{result.invoice.storeId}</td>
                                 <td key={Math.random()}>{result.invoice.totalPrice}</td>
                             </tr>
-                            </tbody>
                         })}
+                        </tbody>
                     </table>
                 </div>
-                <Chart />
+                <Chart statistic/>
             </div>
         )
     }
