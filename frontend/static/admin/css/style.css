@@ -173,6 +173,13 @@ hr, .mv {
     margin-bottom: 10px;
 }
 
+.pagination>.active>a {
+    background-color: #00a65a !important;
+}
+
+.pagination {
+    display: block !important;
+}
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

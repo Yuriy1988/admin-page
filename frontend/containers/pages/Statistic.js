@@ -14,6 +14,8 @@ class Statistic extends Component {
         this.offset = '';
         this.getValues = this.getValues.bind(this);
         this.pagination = this.pagination.bind(this);
+        this.displayStatistic = false;
+        this.firstTimeLoad = true;
     }
 
     componentDidMount() {
@@ -27,8 +29,12 @@ class Statistic extends Component {
         });
 
     }
+    componentWillUnmount() {
+        this.props.clearStatistic();
+    }
 
-    getValues() {
+
+    getValues(e) {
 
         const {getAdminStatistic} = this.props;
         let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
@@ -54,7 +60,11 @@ class Statistic extends Component {
 
         orderBy = ''; //todo &order_by=
         limit = `&limit=10`;
-        offset = $('ul .active').text() ? '&offset=' + +$('ul .active').text() * 10 : ''; //this.currentPage*10;
+        if (e) {
+            offset = ''
+        } else {
+            offset = $('ul .active').text() ? '&offset=' + (+$('ul .active').text() - 1) * 10 : '';
+        }
 
         function isAccurate() {
             if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
@@ -65,7 +75,6 @@ class Statistic extends Component {
             } else {
                 moneyAmount.addClass('form-group has-feedback has-error');
                 return false;
-                e
             }
         }
 
@@ -73,10 +82,16 @@ class Statistic extends Component {
         if (isAccurate()) {
             getAdminStatistic(query);
         }
+        if (e && !this.firstTimeLoad) {
+            $('.pagination').remove();
+            $('.pagination-holder').append($("<div class='pagination'></div>"));
+            this.pagination();
+        }
+        this.firstTimeLoad = false;
     }
 
     pagination() {
-        const info = this.props.statistic;
+        let info = this.props.statistic;
         this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
         let visiblePages = 1;
         if (this.maxPage > 3) {
@@ -85,7 +100,6 @@ class Statistic extends Component {
             visiblePages = 1;
         }
         let pageNum = 0;
-
         let self = this;
         $('.pagination').twbsPagination({
             totalPages: this.maxPage,
@@ -94,23 +108,23 @@ class Statistic extends Component {
                 pageNum = page;
                 setTimeout(function () {
                     self.getValues();
-                },1)
+                }, 1)
             }
         });
-        if (pageNum > 10) {
-            this.offset = pageNum * 10 - 10;
-        }
-
-
     }
 
-    //paginator logic starts;
-
     render() {
+        console.log('rendered');
         const statistic = this.props.statistic.payments;
+        this.displayStatistic = statistic.length ? true : false;
+
+        let style = {};
+        style.display = this.displayStatistic ? 'block' : 'none';
+
         this.pagination();
+
         return (
-            <div>
+            <div className="statistic">
                 <div className="col-sm-2">
                     <span style={{'whiteSpace': 'nowrap'}}>Select date </span>
                     <div className="input-group">
@@ -184,53 +198,57 @@ class Statistic extends Component {
                 </button>
                 <LoadingOverlay loading={false}/>
 
-                <div>
-
-                    <table className="statTable table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th rowSpan="2">created</th>
-                            <th rowSpan="2">payment_account</th>
-                            <th rowSpan="2">paysys_id</th>
-                            <th rowSpan="2">status</th>
-                            <th rowSpan="2">updated</th>
-                            <th colSpan="3">invoice</th>
-                        </tr>
-                        <tr>
-                            <th>currency</th>
-                            <th>store_id</th>
-                            <th>В total_price</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {statistic.map(function (result, i) {
-                            return <tr key={i}>
-                                <td key={Math.random()}>{moment(result.created).format('MMMM Do YYYY')}</td>
-                                <td key={Math.random()}>{result.paymentAccount}</td>
-                                <td key={Math.random()}>{result.paysysId}</td>
-                                <td key={Math.random()}>{result.status}</td>
-                                <td key={Math.random()}>{moment(result.updated).format('MMMM Do YYYY')}</td>
-                                <td key={Math.random()}>{result.invoice.currency}</td>
-                                <td key={Math.random()}>{result.invoice.storeId}</td>
-                                <td key={Math.random()}>{result.invoice.totalPrice}</td>
+                <div className="holder" style={style}>
+                    <div>
+                        {/*statistic result table starts here*/}
+                        <table className="statTable table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th rowSpan="2">created</th>
+                                <th rowSpan="2">payment_account</th>
+                                <th rowSpan="2">paysys_id</th>
+                                <th rowSpan="2">status</th>
+                                <th rowSpan="2">updated</th>
+                                <th colSpan="3">invoice</th>
                             </tr>
-                        })}
-                        </tbody>
-                    </table>
-                    <div className="pagination">
+                            <tr>
+                                <th>currency</th>
+                                <th>store_id</th>
+                                <th>total_price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {statistic.map(function (result, i) {
+                                return <tr key={i}>
+                                    <td key={Math.random()}>{moment(result.created).format('MMMM Do YYYY')}</td>
+                                    <td key={Math.random()}>{result.paymentAccount}</td>
+                                    <td key={Math.random()}>{result.paysysId}</td>
+                                    <td key={Math.random()}>{result.status}</td>
+                                    <td key={Math.random()}>{moment(result.updated).format('MMMM Do YYYY')}</td>
+                                    <td key={Math.random()}>{result.invoice.currency}</td>
+                                    <td key={Math.random()}>{result.invoice.storeId}</td>
+                                    <td key={Math.random()}>{result.invoice.totalPrice}</td>
+                                </tr>
+                            })}
+                            </tbody>
+                        </table>
+                        <div className="pagination-holder">
+                            <div className="pagination">
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <Chart statistic/>
+                    <Chart statistic/>
+                </div>
             </div>
         )
     }
 }
 
-
 export default connect(
     (state)=>({
         statistic: state.user.statistic
     }),
-    {getAdminStatistic: UserActions.getAdminStatistic}
+    {getAdminStatistic: UserActions.getAdminStatistic,
+        clearStatistic: UserActions.clearStatistic}
 )(Statistic)
