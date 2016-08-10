@@ -10,6 +10,9 @@ class Statistic extends Component {
     constructor(props) {
         super(props);
         this.getValues = this.getValues.bind(this);
+        this.currentPage = 1;
+        this.maxPage = 1;
+        this.selectPage = this.selectPage.bind(this);
     }
 
     componentDidMount() {
@@ -48,8 +51,8 @@ class Statistic extends Component {
         }
 
         orderBy = ''; //todo &order_by=
-        limit = `limit=20`; //todo &limit=
-        offset = ''; //todo &offset=
+        limit = `limit=10`; //todo &limit=
+        offset = this.currentPage*10;
 
         function isAccurate() {
             if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
@@ -69,21 +72,48 @@ class Statistic extends Component {
         }
     }
 
-    selectPage(page = 1) {
-        return page * 10;
+    //paginator logic starts;
+
+    checkPages() {
+        if (this.currentPage === 1) {
+            $('.prevPage').addClass('disabled');
+        } else {
+            $('.prevPage').removeClass('disabled');
+        }
+        if (this.currentPage === this.maxPage) {
+            $('.nextPage').addClass('disabled');
+        } else {
+            $('.nextPage').removeClass('disabled');
+        }
     }
 
-    prevPage() {
-        return this.currentPage--;
-    }
+    selectPage(e) {
 
-    nextPage() {
-        return this.currentPage++;
+        if(e.target.text === '«' && this.currentPage===1) {
+
+        } else if (e.target.text === '«') {
+            this.currentPage = Number(this.currentPage) - 1;
+        } else if (e.target.text === '»') {
+            this.currentPage = Number(this.currentPage) + 1;
+        } else {
+            // $('.selected').removeClass('.selected');
+            // $(e.target).addClass('selected');
+            this.currentPage = Number(e.target.text);
+        }
+        this.checkPages();
     }
 
     render() {
+        this.checkPages();
         const statistic = this.props.statistic.payments;
+        const info = this.props.statistic;
 
+        this.maxPage = Math.ceil(info.totalCount / 10);
+        let pages = [];
+        pages.length = this.maxPage || 1;
+        for (let i = 0; i < pages.length; i++) {
+            pages[i] = i + 1;
+        }
         return (
             <div>
                 <div className="col-sm-2">
@@ -160,6 +190,7 @@ class Statistic extends Component {
                 <LoadingOverlay loading={false}/>
 
                 <div>
+
                     <table className="statTable table table-striped table-bordered">
                         <thead>
                         <tr>
@@ -191,7 +222,18 @@ class Statistic extends Component {
                         })}
                         </tbody>
                     </table>
+                    {/*pagination*/}
+                    <div>
+                        <ul className="pagination" onClick={this.selectPage.bind(this)}>
+                            <li className="prevPage"><a>&laquo;</a></li>
+                            {pages.map(function (page) {
+                                return <li className="page-item" key={page}><a>{page}</a></li>
+                            })}
+                            <li className="nextPage"><a>&raquo;</a></li>
+                        </ul>
+                    </div>
                 </div>
+
                 <Chart statistic/>
             </div>
         )
