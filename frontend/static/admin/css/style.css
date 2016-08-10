@@ -173,13 +173,13 @@ hr, .mv {
     margin-bottom: 10px;
 }
 
-.pagination li:hover {
-    cursor: pointer;
-}
+/*.pagination li:hover {*/
+    /*cursor: pointer;*/
+/*}*/
 
-.pagination .selected {
-    background-color: #00a65a;
-}
+/*.pagination:active {*/
+    /*background-color: #00a65a;*/
+/*}*/
 
 /*
 @media (min-width: 768px) {

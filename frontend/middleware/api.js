@@ -14,6 +14,7 @@ function callApi(endpoint, body) {
 
     //token refresh logic starts
     if(localStorage.user) {
+
         if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 7) {
             function refreshToken(url) {
                 return new Promise(function (resolve, reject) {

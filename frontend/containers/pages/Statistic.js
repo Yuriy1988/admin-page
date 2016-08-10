@@ -9,10 +9,11 @@ import Chart from '../../components/Chart'
 class Statistic extends Component {
     constructor(props) {
         super(props);
-        this.getValues = this.getValues.bind(this);
         this.currentPage = 1;
         this.maxPage = 1;
-        this.selectPage = this.selectPage.bind(this);
+        this.offset = '';
+        this.getValues = this.getValues.bind(this);
+        this.pagination = this.pagination.bind(this);
     }
 
     componentDidMount() {
@@ -23,7 +24,8 @@ class Statistic extends Component {
         $('.calendar-till').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true
-        })
+        });
+
     }
 
     getValues() {
@@ -51,8 +53,8 @@ class Statistic extends Component {
         }
 
         orderBy = ''; //todo &order_by=
-        limit = `limit=10`; //todo &limit=
-        offset = this.currentPage*10;
+        limit = `&limit=10`;
+        offset = $('ul .active').text() ? '&offset=' + +$('ul .active').text() * 10 : ''; //this.currentPage*10;
 
         function isAccurate() {
             if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
@@ -63,6 +65,7 @@ class Statistic extends Component {
             } else {
                 moneyAmount.addClass('form-group has-feedback has-error');
                 return false;
+                e
             }
         }
 
@@ -72,48 +75,40 @@ class Statistic extends Component {
         }
     }
 
+    pagination() {
+        const info = this.props.statistic;
+        this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
+        let visiblePages = 1;
+        if (this.maxPage > 3) {
+            visiblePages = 3;
+        } else {
+            visiblePages = 1;
+        }
+        let pageNum = 0;
+
+        let self = this;
+        $('.pagination').twbsPagination({
+            totalPages: this.maxPage,
+            visiblePages,
+            onPageClick: function (event, page) {
+                pageNum = page;
+                setTimeout(function () {
+                    self.getValues();
+                },1)
+            }
+        });
+        if (pageNum > 10) {
+            this.offset = pageNum * 10 - 10;
+        }
+
+
+    }
+
     //paginator logic starts;
 
-    checkPages() {
-        if (this.currentPage === 1) {
-            $('.prevPage').addClass('disabled');
-        } else {
-            $('.prevPage').removeClass('disabled');
-        }
-        if (this.currentPage === this.maxPage) {
-            $('.nextPage').addClass('disabled');
-        } else {
-            $('.nextPage').removeClass('disabled');
-        }
-    }
-
-    selectPage(e) {
-
-        if(e.target.text === '«' && this.currentPage===1) {
-
-        } else if (e.target.text === '«') {
-            this.currentPage = Number(this.currentPage) - 1;
-        } else if (e.target.text === '»') {
-            this.currentPage = Number(this.currentPage) + 1;
-        } else {
-            // $('.selected').removeClass('.selected');
-            // $(e.target).addClass('selected');
-            this.currentPage = Number(e.target.text);
-        }
-        this.checkPages();
-    }
-
     render() {
-        this.checkPages();
         const statistic = this.props.statistic.payments;
-        const info = this.props.statistic;
-
-        this.maxPage = Math.ceil(info.totalCount / 10);
-        let pages = [];
-        pages.length = this.maxPage || 1;
-        for (let i = 0; i < pages.length; i++) {
-            pages[i] = i + 1;
-        }
+        this.pagination();
         return (
             <div>
                 <div className="col-sm-2">
@@ -222,15 +217,7 @@ class Statistic extends Component {
                         })}
                         </tbody>
                     </table>
-                    {/*pagination*/}
-                    <div>
-                        <ul className="pagination" onClick={this.selectPage.bind(this)}>
-                            <li className="prevPage"><a>&laquo;</a></li>
-                            {pages.map(function (page) {
-                                return <li className="page-item" key={page}><a>{page}</a></li>
-                            })}
-                            <li className="nextPage"><a>&raquo;</a></li>
-                        </ul>
+                    <div className="pagination">
                     </div>
                 </div>
 

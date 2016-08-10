@@ -132,7 +132,7 @@ export default function user(state = initial_user, action) {
         //token refresh
         case 'TOKEN_REFRESH':
             localStorage.setItem("user_token", (`${JSON.parse(action.response).token}`));
-            console.log('token refresh');
+            localStorage.setItem("user", (`${JSON.parse(action.response).exp}`));
             return Object.assign({}, state, JSON.parse(action.response));
 
         default:
