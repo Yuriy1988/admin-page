@@ -1,4 +1,3 @@
-var test;
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as UserActions from './../../actions/user'
@@ -17,7 +16,12 @@ class Statistic extends Component {
         this.displayStatistic = false;
         this.firstTimeLoad = true;
     }
+    componentWillReceiveProps (nextprops) {
+        if(nextprops.statistic) { if( this.props.statistic !==  nextprops.statistic) {
+            this.pagination(nextprops);
+        }}
 
+    }
     componentDidMount() {
         $('.calendar-from').daterangepicker({
             singleDatePicker: true,
@@ -40,7 +44,9 @@ class Statistic extends Component {
         let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
         let fromPriceNode = $('.paymentFrom-input');
         let tillPriceNode = $('.paymentTill-input');
-        let moneyAmount = $('.moneyAmount');
+        let moneyAmount1 = $('.moneyAmount1');
+        let moneyAmount2 = $('.moneyAmount2');
+
 
         storeId = $('.store-id-input').val() ? `store_id=${$('.store-id-input').val()}` : '';
         currency = $('.currency-input').val() ? `&currency=${$('.currency-input').val()}` : '';
@@ -70,10 +76,12 @@ class Statistic extends Component {
             if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
                 ($('.paymentFrom-input').val() <= $('.paymentTill-input').val() && isFinite(+$('.paymentFrom-input').val())
                 && isFinite(+$('.paymentTill-input').val()))) {
-                moneyAmount.removeClass('has-error');
+                moneyAmount1.removeClass('has-error');
+                moneyAmount2.removeClass('has-error');
                 return true;
             } else {
-                moneyAmount.addClass('form-group has-feedback has-error');
+                moneyAmount1.addClass('form-group has-feedback has-error');
+                moneyAmount2.addClass('form-group has-feedback has-error');
                 return false;
             }
         }
@@ -90,8 +98,8 @@ class Statistic extends Component {
         this.firstTimeLoad = false;
     }
 
-    pagination() {
-        let info = this.props.statistic;
+    pagination(props) {
+        let info = props.statistic;
         this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
         let visiblePages = 1;
         if (this.maxPage > 3) {
@@ -106,22 +114,19 @@ class Statistic extends Component {
             visiblePages,
             onPageClick: function (event, page) {
                 pageNum = page;
-                setTimeout(function () {
-                    self.getValues();
-                }, 1)
+                self.getValues();
             }
         });
     }
 
     render() {
-        console.log('rendered');
         const statistic = this.props.statistic.payments;
         this.displayStatistic = statistic.length ? true : false;
 
         let style = {};
         style.display = this.displayStatistic ? 'block' : 'none';
 
-        this.pagination();
+
 
         return (
             <div className="statistic">
@@ -184,14 +189,18 @@ class Statistic extends Component {
                     </select>
                 </div>
 
-                <div className="col-sm-2 moneyAmount">
+                <div className="col-sm-2 moneyAmount1">
                     <span style={{'whiteSpace': 'nowrap'}}>Payment from</span>
                     <input type="text" className="form-control paymentFrom-input"/>
+                </div>
+
+                <div className="col-sm-2 moneyAmount2">
                     <div>
                         <span style={{'whiteSpace': 'nowrap'}}>Payment till</span>
                         <input type="text" className="form-control paymentTill-input"/>
                     </div>
                 </div>
+
 
                 <button className="btn btn-success" style={{margin: '15px'}} onClick={this.getValues.bind(this)}>Get
                     statistic

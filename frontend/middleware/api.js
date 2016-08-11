@@ -1,6 +1,7 @@
 import {normalize} from 'normalizr'
 import {camelizeKeys} from 'humps'
 import 'isomorphic-fetch'
+import * as UserActions from './../actions/user';
 
 const API_VERSION = "dev";
 const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
@@ -10,49 +11,6 @@ let isLoggedIn = false;
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
-
-
-    //token refresh logic starts
-    if(localStorage.user) {
-        if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 30) {
-            function refreshToken(url) {
-                return new Promise(function (resolve, reject) {
-
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', url, true);
-                    xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
-                    xhr.onload = function () {
-                        if (this.status === 200) {
-                            resolve(this.response);
-                        } else {
-                            var error = new Error(this.statusText);
-                            error.code = this.status;
-                            reject(error);
-                        }
-                    };
-
-                    xhr.onerror = function () {
-                        reject(new Error("Network Error"));
-                    };
-
-                    xhr.send();
-                });
-            }
-
-            var API_VERSION = localStorage.version || "dev"; // refactor
-            if (window.localStorage.user_token) {
-                refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
-                    .then(
-                        function (response) {
-                            store.dispatch({
-                                type: 'TOKEN_REFRESH',
-                                response: `${camelizeKeys(response)}`
-                            });
-                        },
-                        error => console.log(`Rejected: ${error}`));
-            }
-        }
-    }
 
     const {schema, path, method, isAuth = true} = endpoint;
 
@@ -191,6 +149,57 @@ export default store => next => action => {
     if (typeof callAPI === 'undefined') {
         return next(action);
     }
+    function handleTokenTime(store) {
+        if (localStorage.user) {
+            if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 0) {
+                console.log('logout');
+                store.dispatch({
+                    type: UserActions.USER_LOGOUT_SUCCESS,
+                });
+                location.pathname = 'admin/login'
+            }
+            if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 7) {
+                function refreshToken(url) {
+                    return new Promise(function (resolve, reject) {
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', url, true);
+                        xhr.setRequestHeader("Authorization", 'Bearer ' + window.localStorage.user_token);
+                        xhr.onload = function () {
+                            if (this.status === 200) {
+                                resolve(this.response);
+                            } else {
+                                var error = new Error(this.statusText);
+                                error.code = this.status;
+                                reject(error);
+                            }
+                        };
+
+                        xhr.onerror = function () {
+                            reject(new Error("Network Error"));
+                        };
+
+                        xhr.send();
+                    });
+                }
+
+                var API_VERSION = localStorage.version || "dev"; // refactor
+                if (window.localStorage.user_token) {
+                    refreshToken(`${location.origin}/api/admin/${API_VERSION}/authorization/token`)
+                        .then(
+                            function (response) {
+                                store.dispatch({
+                                    type: 'TOKEN_REFRESH',
+                                    response: `${camelizeKeys(response)}`
+                                });
+                            },
+                            error => console.log(`Rejected: ${error}`));
+                }
+            }
+        }
+    }
+
+    handleTokenTime(store);
 
     const {endpoint, types, body, cError} = callAPI;
 
