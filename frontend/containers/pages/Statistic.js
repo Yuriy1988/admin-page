@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import * as UserActions from './../../actions/user'
 import LoadingOverlay from '../../components/LoadingOverlay';
 import Chart from '../../components/Chart'
+import ReactChart from '../../components/ReactChart'
 
 
 class Statistic extends Component {
@@ -20,7 +21,6 @@ class Statistic extends Component {
         if(nextprops.statistic) { if( this.props.statistic !==  nextprops.statistic) {
             this.pagination(nextprops);
         }}
-
     }
     componentDidMount() {
         $('.calendar-from').daterangepicker({
@@ -36,7 +36,6 @@ class Statistic extends Component {
     componentWillUnmount() {
         this.props.clearStatistic();
     }
-
 
     getValues(e) {
 
@@ -74,7 +73,7 @@ class Statistic extends Component {
 
         function isAccurate() {
             if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
-                ($('.paymentFrom-input').val() <= $('.paymentTill-input').val() && isFinite(+$('.paymentFrom-input').val())
+                (+$('.paymentFrom-input').val() <= +$('.paymentTill-input').val() && isFinite(+$('.paymentFrom-input').val())
                 && isFinite(+$('.paymentTill-input').val()))) {
                 moneyAmount1.removeClass('has-error');
                 moneyAmount2.removeClass('has-error');
@@ -100,6 +99,10 @@ class Statistic extends Component {
 
     pagination(props) {
         let info = props.statistic;
+
+        if(!info.totalCount.length) {
+            return;
+        }
         this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
         let visiblePages = 1;
         if (this.maxPage > 3) {
@@ -125,8 +128,6 @@ class Statistic extends Component {
 
         let style = {};
         style.display = this.displayStatistic ? 'block' : 'none';
-
-
 
         return (
             <div className="statistic">
@@ -247,7 +248,7 @@ class Statistic extends Component {
                         </div>
                     </div>
 
-                    <Chart statistic/>
+                    <ReactChart />
                 </div>
             </div>
         )
