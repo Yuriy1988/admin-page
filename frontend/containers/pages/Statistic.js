@@ -190,13 +190,13 @@ class Statistic extends Component {
                 </div>
 
                 <div className="col-sm-2 moneyAmount1">
-                    <span style={{'whiteSpace': 'nowrap'}}>Payment from</span>
+                    <span style={{'whiteSpace': 'nowrap'}}>Amount from</span>
                     <input type="text" className="form-control paymentFrom-input"/>
                 </div>
 
                 <div className="col-sm-2 moneyAmount2">
                     <div>
-                        <span style={{'whiteSpace': 'nowrap'}}>Payment till</span>
+                        <span style={{'whiteSpace': 'nowrap'}}>Amount till</span>
                         <input type="text" className="form-control paymentTill-input"/>
                     </div>
                 </div>

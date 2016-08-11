@@ -156,7 +156,7 @@ export default store => next => action => {
                 store.dispatch({
                     type: UserActions.USER_LOGOUT_SUCCESS,
                 });
-                location.pathname = 'admin/login'
+                location.pathname = 'admin/access_denied'
             }
             if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 7) {
                 function refreshToken(url) {
