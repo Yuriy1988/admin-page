@@ -15,7 +15,6 @@ class Statistic extends Component {
         this.setFilter = this.setFilter.bind(this);
         this.displayStatistic = false;
         this.orderBy = 'created';
-        this.trigered = false;
     }
 
     componentWillReceiveProps(nextprops) {
@@ -25,7 +24,11 @@ class Statistic extends Component {
             }
         }
         $('.filter').click(function() {
-            $( ".pagination .first" ).trigger( "click" );
+            if (this.currentPage !== 1) {
+                $(".pagination .first").trigger("click");
+            } else {
+                $(".getStat").trigger("click");
+            }
         });
         $('.getStat').click(function() {
             $( ".pagination .first" ).trigger( "click" );
@@ -97,10 +100,6 @@ class Statistic extends Component {
         if (isAccurate()) {
             getAdminStatistic(query);
         }
-
-        $('.getStat').click(function() {
-            $( ".pagination .first" ).trigger( "click" );
-        });
     }
 
     setFilter(e) {
@@ -111,7 +110,7 @@ class Statistic extends Component {
         });
         $(e.currentTarget).find('.fa-sort').attr('class', 'fa fa-sort-desc');
         this.orderBy = e.currentTarget.getAttribute("data");
-        this.getValues();
+        // this.getValues();
     }
 
     pagination(props) {
