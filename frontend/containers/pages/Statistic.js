@@ -4,7 +4,6 @@ import * as UserActions from './../../actions/user'
 import LoadingOverlay from '../../components/LoadingOverlay';
 import ReactChart from '../../components/ReactChart'
 
-
 class Statistic extends Component {
     constructor(props) {
         super(props);
@@ -13,8 +12,10 @@ class Statistic extends Component {
         this.offset = '';
         this.getValues = this.getValues.bind(this);
         this.pagination = this.pagination.bind(this);
+        this.setFilter = this.setFilter.bind(this);
         this.displayStatistic = false;
-        this.firstTimeLoad = true;
+        this.orderBy = 'created';
+        this.trigered = false;
     }
 
     componentWillReceiveProps(nextprops) {
@@ -23,6 +24,12 @@ class Statistic extends Component {
                 this.pagination(nextprops);
             }
         }
+        $('.filter').click(function() {
+            $( ".pagination .first" ).trigger( "click" );
+        });
+        $('.getStat').click(function() {
+            $( ".pagination .first" ).trigger( "click" );
+        });
     }
 
     componentDidMount() {
@@ -34,7 +41,6 @@ class Statistic extends Component {
             singleDatePicker: true,
             showDropdowns: true
         });
-
     }
 
     componentWillUnmount() {
@@ -42,14 +48,12 @@ class Statistic extends Component {
     }
 
     getValues(e) {
-
         const {getAdminStatistic} = this.props;
         let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
         let fromPriceNode = $('.paymentFrom-input');
         let tillPriceNode = $('.paymentTill-input');
         let moneyAmount1 = $('.moneyAmount1');
         let moneyAmount2 = $('.moneyAmount2');
-
 
         storeId = $('.store-id-input').val() ? `store_id=${$('.store-id-input').val()}` : '';
         currency = $('.currency-input').val() ? `&currency=${$('.currency-input').val()}` : '';
@@ -67,7 +71,7 @@ class Statistic extends Component {
             tillDate = '';
         }
 
-        orderBy = ''; //todo &order_by=
+        orderBy = `&order_by=${this.orderBy}`;
         limit = `&limit=10`;
         if (e) {
             offset = ''
@@ -93,15 +97,25 @@ class Statistic extends Component {
         if (isAccurate()) {
             getAdminStatistic(query);
         }
-        if (e && !this.firstTimeLoad) {
-            $('.pagination').remove();
-            $('.pagination-holder').append($("<div class='pagination'></div>"));
-            this.pagination();
-        }
-        this.firstTimeLoad = false;
+
+        $('.getStat').click(function() {
+            $( ".pagination .first" ).trigger( "click" );
+        });
+    }
+
+    setFilter(e) {
+        debugger;
+        document.getElementsByClassName('fa-sort-desc').forEach = Array.prototype.forEach;
+        document.getElementsByClassName('fa-sort-desc').forEach(function(item) {
+            item.className = 'fa fa-sort';
+        });
+        $(e.currentTarget).find('.fa-sort').attr('class', 'fa fa-sort-desc');
+        this.orderBy = e.currentTarget.getAttribute("data");
+        this.getValues();
     }
 
     pagination(props) {
+        if (!props) return;
         let info = props.statistic;
 
         if (!info.totalCount) {
@@ -109,7 +123,10 @@ class Statistic extends Component {
         }
         this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
         let visiblePages = 1;
-        if (this.maxPage > 3) {
+
+        if (this.maxPage === 2) {
+            visiblePages = 2;
+        } else if (this.maxPage >= 3) {
             visiblePages = 3;
         } else {
             visiblePages = 1;
@@ -127,6 +144,8 @@ class Statistic extends Component {
     }
 
     render() {
+        const filterElem = <i className="fa fa-sort" aria-hidden="true"></i>;
+        const defaultElem = <i className="fa fa-sort-desc" aria-hidden="true"></i>;
         const statistic = this.props.statistic.payments;
         this.displayStatistic = statistic.length ? true : false;
 
@@ -207,7 +226,7 @@ class Statistic extends Component {
                 </div>
 
 
-                <button className="btn btn-success" style={{margin: '15px'}} onClick={this.getValues.bind(this)}>Get
+                <button className="getStat btn btn-success" style={{margin: '15px'}} onClick={this.getValues.bind(this)}>Get
                     statistic
                 </button>
                 <LoadingOverlay loading={false}/>
@@ -217,18 +236,18 @@ class Statistic extends Component {
                         {/*statistic result table starts here*/}
                         <table className="statTable table table-striped table-bordered">
                             <thead>
-                            <tr>
-                                <th rowSpan="2">created</th>
-                                <th rowSpan="2">payment_account</th>
-                                <th rowSpan="2">paysys_id</th>
-                                <th rowSpan="2">status</th>
-                                <th rowSpan="2">updated</th>
-                                <th colSpan="3">invoice</th>
+                            <tr className="filter">
+                                <th onClick={this.setFilter.bind(this)} data="created" rowSpan="2"><span>created {defaultElem}</span></th>
+                                <th onClick={this.setFilter.bind(this)} data="payment_account" rowSpan="2">payment_account {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="paysys_id" rowSpan="2">paysys_id {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="status" rowSpan="2">status {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="updated" rowSpan="2">updated {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} colSpan="3">invoice</th>
                             </tr>
-                            <tr>
-                                <th>currency</th>
-                                <th>store_id</th>
-                                <th>total_price</th>
+                            <tr  className="filter">
+                                <th data="currency" onClick={this.setFilter.bind(this)}>currency {filterElem}</th>
+                                <th data="store_id" onClick={this.setFilter.bind(this)}>store_id {filterElem}</th>
+                                <th data="total_price" onClick={this.setFilter.bind(this)}>total_price {filterElem}</th>
                             </tr>
                             </thead>
                             <tbody>

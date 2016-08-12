@@ -183,7 +183,25 @@ hr, .mv {
 .chartStatistic {
     width: 50%;
     height: 50%;
-    display: inline-block;
+    display: block;
+   /*position: absolute;*/
+}
+
+.statTable th{
+    cursor: pointer;
+}
+
+th .fa-sort {
+    position: relative;
+    top: 4px;
+    float: right;
+    opacity: 0.2;
+}
+
+th .fa-sort-desc {
+    position: relative;
+    top: 4px;
+    float: right;
 }
 
 /*.pagination li:hover {*/

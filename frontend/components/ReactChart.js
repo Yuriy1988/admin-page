@@ -25,7 +25,6 @@ const data = {
 export default React.createClass({
 
     render() {
-        debugger;
         return <Pie data={data} />
     }
 });
