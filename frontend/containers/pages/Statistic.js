@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as UserActions from './../../actions/user'
 import LoadingOverlay from '../../components/LoadingOverlay';
-import Chart from '../../components/Chart'
 import ReactChart from '../../components/ReactChart'
 
 
@@ -17,11 +16,15 @@ class Statistic extends Component {
         this.displayStatistic = false;
         this.firstTimeLoad = true;
     }
-    componentWillReceiveProps (nextprops) {
-        if(nextprops.statistic) { if( this.props.statistic !==  nextprops.statistic) {
-            this.pagination(nextprops);
-        }}
+
+    componentWillReceiveProps(nextprops) {
+        if (nextprops.statistic) {
+            if (this.props.statistic !== nextprops.statistic) {
+                this.pagination(nextprops);
+            }
+        }
     }
+
     componentDidMount() {
         $('.calendar-from').daterangepicker({
             singleDatePicker: true,
@@ -33,6 +36,7 @@ class Statistic extends Component {
         });
 
     }
+
     componentWillUnmount() {
         this.props.clearStatistic();
     }
@@ -100,7 +104,7 @@ class Statistic extends Component {
     pagination(props) {
         let info = props.statistic;
 
-        if(!info.totalCount.length) {
+        if (!info.totalCount) {
             return;
         }
         this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
@@ -247,8 +251,9 @@ class Statistic extends Component {
                             </div>
                         </div>
                     </div>
-
-                    <ReactChart />
+                    <div className="chartStatistic">
+                        <ReactChart data={statistic}/>
+                    </div>
                 </div>
             </div>
         )
@@ -259,6 +264,8 @@ export default connect(
     (state)=>({
         statistic: state.user.statistic
     }),
-    {getAdminStatistic: UserActions.getAdminStatistic,
-        clearStatistic: UserActions.clearStatistic}
+    {
+        getAdminStatistic: UserActions.getAdminStatistic,
+        clearStatistic: UserActions.clearStatistic
+    }
 )(Statistic)

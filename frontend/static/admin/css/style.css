@@ -181,8 +181,9 @@ hr, .mv {
 }
 
 .chartStatistic {
-    width: 30%;
-    height: 30%;
+    width: 50%;
+    height: 50%;
+    display: inline-block;
 }
 
 /*.pagination li:hover {*/
