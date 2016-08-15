@@ -73,10 +73,10 @@ class PaySystemListPage extends Component {
                                         onClick={this.handleToggle.bind(this, paySys)}>
                                     <i className="fa fa-power-off"/>&nbsp;{(paySys.active) ? "Disable" : "Enable"}
                                 </button>
-                                <Link className="btn btn-sm btn-primary"
-                                      to={`/admin/administrator/paysys/${paySysId}/edit`}>
-                                    <i className="fa fa-edit"/> Edit
-                                </Link>
+                                {/*<Link className="btn btn-sm btn-primary"*/}
+                                      {/*to={`/admin/administrator/paysys/${paySysId}/edit`}>*/}
+                                    {/*<i className="fa fa-edit"/> Edit*/}
+                                {/*</Link>*/}
                                 <Link className="btn btn-sm btn-primary"
                                       to={`/admin/administrator/paysys/${paySysId}/contracts`}>
                                     <i className="fa fa-file-text-o"/> Contracts
@@ -95,16 +95,16 @@ class PaySystemListPage extends Component {
                     <h3 className="box-title"><i className="fa fa-cc"/> Payment Systems</h3>
                 </div>
                 <div className="box-body no-padding">
-                    {(!!paySystemsList.error) ?
-                        <Alert type={TYPE_ERROR}
-                               handleClose={loadPaySystemsCE}>
-                            {paySystemsList.error.message}
-                        </Alert> : null}
-                    {(!!editRequest.error) ?
-                        <Alert type={TYPE_ERROR}
-                               handleClose={editRequestCE}>
-                            {editRequest.error.serverError.errors.active}
-                        </Alert> : null}
+                    {/*{(!!paySystemsList.error) ?*/}
+                        {/*<Alert type={TYPE_ERROR}*/}
+                               {/*handleClose={loadPaySystemsCE}>*/}
+                            {/*{paySystemsList.error.message}*/}
+                        {/*</Alert> : null}*/}
+                    {/*{(!!editRequest.error) ?*/}
+                        {/*<Alert type={TYPE_ERROR}*/}
+                               {/*handleClose={editRequestCE}>*/}
+                            {/*{editRequest.error.serverError.errors.active}*/}
+                        {/*</Alert> : null}*/}
                     {list}
                 </div>
                 <LoadingOverlay loading={paySystemsList.isFetching}/>

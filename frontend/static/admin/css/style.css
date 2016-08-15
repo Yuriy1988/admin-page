@@ -176,9 +176,9 @@ hr, .mv {
     background-color: #00a65a !important;
 }
 
-.pagination {
-    display: block !important;
-}
+/*.pagination {*/
+    /*display: block !important;*/
+/*}*/
 
 .chartStatistic {
     width: 50%;

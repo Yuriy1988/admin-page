@@ -290,7 +290,7 @@ class Statistic extends Component {
                             })}
                             </tbody>
                         </table>
-                        <div style={paginationStyle}>
+                        <div className="pagination" style={paginationStyle}>
                             <Pagination
                                 prev
                                 next
