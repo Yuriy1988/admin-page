@@ -29,15 +29,13 @@ class StoreSettings(base.BaseModel):
     sign_key = db.Column(db.String(512), nullable=False, default=_generate_sign_key)
     succeed_url = db.Column(db.String(255), nullable=False)
     failure_url = db.Column(db.String(255), nullable=False)
-    commission_pct = db.Column(db.Numeric, nullable=False)
 
     store_id = db.Column(db.String, db.ForeignKey('store.id', ondelete='CASCADE'), nullable=False)
 
-    def __init__(self, sign_algorithm, succeed_url, failure_url, commission_pct):
+    def __init__(self, sign_algorithm, succeed_url, failure_url):
         self.sign_algorithm = sign_algorithm
         self.succeed_url = succeed_url
         self.failure_url = failure_url
-        self.commission_pct = commission_pct
 
     def __repr__(self):
         return '<StoreSettings %r>' % self.id
