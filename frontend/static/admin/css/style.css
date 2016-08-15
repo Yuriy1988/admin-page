@@ -198,7 +198,7 @@ th .fa-sort {
     opacity: 0.2;
 }
 
-th .fa-sort-desc {
+th .fa-sort-desc, th .fa-sort-asc {
     position: relative;
     top: 4px;
     float: right;

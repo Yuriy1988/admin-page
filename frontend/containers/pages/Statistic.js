@@ -3,36 +3,22 @@ import {connect} from 'react-redux'
 import * as UserActions from './../../actions/user'
 import LoadingOverlay from '../../components/LoadingOverlay';
 import ReactChart from '../../components/ReactChart'
+import {Pagination} from 'react-bootstrap';
+import Alert, {TYPE_INFO, TYPE_ERROR} from '../../components/Alert'
 
 class Statistic extends Component {
     constructor(props) {
         super(props);
-        this.currentPage = 1;
-        this.maxPage = 1;
         this.offset = '';
         this.getValues = this.getValues.bind(this);
-        this.pagination = this.pagination.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.displayStatistic = false;
         this.orderBy = 'created';
-    }
-
-    componentWillReceiveProps(nextprops) {
-        if (nextprops.statistic) {
-            if (this.props.statistic !== nextprops.statistic) {
-                this.pagination(nextprops);
-            }
-        }
-        $('.filter').click(function() {
-            if (this.currentPage !== 1) {
-                $(".pagination .first").trigger("click");
-            } else {
-                $(".getStat").trigger("click");
-            }
-        });
-        $('.getStat').click(function() {
-            $( ".pagination .first" ).trigger( "click" );
-        });
+        this.state = {
+            activePage: 1
+        };
+        this.incorrectValues = false;
+        this.errorMessage = '';
     }
 
     componentDidMount() {
@@ -44,6 +30,7 @@ class Statistic extends Component {
             singleDatePicker: true,
             showDropdowns: true
         });
+        this.getValues();
     }
 
     componentWillUnmount() {
@@ -52,94 +39,122 @@ class Statistic extends Component {
 
     getValues(e) {
         const {getAdminStatistic} = this.props;
-        let storeId, currency, fromPrice, tillPrice, paysysId, status, fromDate, tillDate, orderBy, limit, offset, query;
-        let fromPriceNode = $('.paymentFrom-input');
-        let tillPriceNode = $('.paymentTill-input');
-        let moneyAmount1 = $('.moneyAmount1');
-        let moneyAmount2 = $('.moneyAmount2');
+        let storeId, currency, fromPrice, tillPrice, paysysId, status, orderBy, limit, offset, query;
+        var fromDate, tillDate;
+        let $fromPrice = $('.paymentFrom-input');
+        let $tillPrice = $('.paymentTill-input');
+        let $moneyAmount1 = $('.moneyAmount1');
+        let $moneyAmount2 = $('.moneyAmount2');
+        let $calendar = $('.calendar-place-holder');
+        let $storeId = $('.store-id-input');
+        let $currency = $('.currency-input');
+        let $paysysId = $('.paysyss-id-input');
+        let $status = $('.status-input');
+        let $calendarFrom = $('.calendar-from');
+        let $calendarTill = $('.calendar-till');
+        let paymentFromVal = $('.paymentFrom-input').val();
+        let paymentTillVal = $('.paymentTill-input').val();
+        let correctDates;
 
-        storeId = $('.store-id-input').val() ? `store_id=${$('.store-id-input').val()}` : '';
-        currency = $('.currency-input').val() ? `&currency=${$('.currency-input').val()}` : '';
-        fromPrice = fromPriceNode.val().replace(',', '.') ? `&from_total_price=${+fromPriceNode.val().replace(',', '.')}` : '';
-        tillPrice = tillPriceNode.val().replace(',', '.') ? `&till_total_price=${+tillPriceNode.val().replace(',', '.')}` : '';
-        paysysId = ($('.paysyss-id-input').val()).replace(' ', '_') ? `&paysys_id=${($('.paysyss-id-input').val()).replace(' ', '_')}` : '';
-        status = ($('.status-input').val()).replace(' ', '_').toUpperCase() ? `&status=${($('.status-input').val()).replace(' ', '_').toUpperCase()}` : '';
-        fromDate = moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD') ? `&from_date=${moment($('.calendar-from').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
-        tillDate = moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD') ? `&till_date=${moment($('.calendar-till').val(), 'MM/DD/YYYY').format('YYYY-MM-DD')}` : '';
-
-        if (fromDate === '&from_date=Invalid date') {
-            fromDate = '';
-        }
-        if (tillDate === '&till_date=Invalid date') {
-            tillDate = '';
-        }
+        storeId = $storeId.val() ? `store_id=${$storeId.val()}` : '';
+        currency = $currency.val() ? `&currency=${$currency.val()}` : '';
+        fromPrice = $fromPrice.val().replace(',', '.') ? `&from_total_price=${+$fromPrice.val().replace(',', '.')}` : '';
+        tillPrice = $tillPrice.val().replace(',', '.') ? `&till_total_price=${+$tillPrice.val().replace(',', '.')}` : '';
+        paysysId = ($paysysId.val()).replace(' ', '_') ? `&paysys_id=${($paysysId.val()).replace(' ', '_')}` : '';
+        status = ($status.val()).replace(' ', '_').toUpperCase() ? `&status=${($status.val()).replace(' ', '_').toUpperCase()}` : '';
 
         orderBy = `&order_by=${this.orderBy}`;
         limit = `&limit=10`;
+
         if (e) {
-            offset = ''
+            offset = '';
+            this.setState({activePage: 1})
         } else {
-            offset = $('ul .active').text() ? '&offset=' + (+$('ul .active').text() - 1) * 10 : '';
+            offset = this.offset;
         }
 
-        function isAccurate() {
-            if ($('.paymentFrom-input').val() === '' || $('.paymentTill-input').val() === '' ||
-                (+$('.paymentFrom-input').val() <= +$('.paymentTill-input').val() && isFinite(+$('.paymentFrom-input').val())
-                && isFinite(+$('.paymentTill-input').val()))) {
-                moneyAmount1.removeClass('has-error');
-                moneyAmount2.removeClass('has-error');
+        function checkCorrectDates() {
+            let fromDateVal = moment($calendarFrom.val(), 'MM/DD/YYYY').format('YYYY-MM-DD');
+            let tillDateVal = moment($calendarTill.val(), 'MM/DD/YYYY').format('YYYY-MM-DD');
+            let result;
+            if ($calendarFrom.val() === '') {
+                fromDate = '';
+            } else {
+                fromDate = `&from_date=${fromDateVal}`
+            }
+            if ($calendarTill.val() === '') {
+                tillDate = '';
+            } else {
+                tillDate = `&till_date=${tillDateVal}`
+            }
+
+            if (fromDate === '&from_date=Invalid date' || tillDate === '&till_date=Invalid date'
+                || tillDateVal < fromDateVal) {
+                $calendar.addClass('has-error');
+                fromDate = '';
+                result = false;
+            } else {
+                $calendar.removeClass('has-error');
+                result = true;
+            }
+            return result;
+        }
+
+        correctDates = checkCorrectDates();
+
+        function isAccurateAmount() {
+            if (paymentFromVal === '' || paymentTillVal === '' ||
+                (+paymentFromVal <= +paymentTillVal && isFinite(+paymentFromVal)
+                && isFinite(+paymentTillVal))) {
+                $moneyAmount1.removeClass('has-error');
+                $moneyAmount2.removeClass('has-error');
                 return true;
             } else {
-                moneyAmount1.addClass('form-group has-feedback has-error');
-                moneyAmount2.addClass('form-group has-feedback has-error');
+                $moneyAmount1.addClass('form-group has-feedback has-error');
+                $moneyAmount2.addClass('form-group has-feedback has-error');
                 return false;
             }
         }
 
         query = `${storeId}${currency}${fromPrice}${tillPrice}${paysysId}${status}${fromDate}${tillDate}${orderBy}${limit}${offset}`;
-        if (isAccurate()) {
+        if (isAccurateAmount() && correctDates) {
+            this.errorMessage = '';
+            this.incorrectValues = false;
             getAdminStatistic(query);
+        } else {
+            this.incorrectValues = true;
+            this.errorMessage = 'You have entered incorrect data';
         }
     }
 
     setFilter(e) {
-        debugger;
-        document.getElementsByClassName('fa-sort-desc').forEach = Array.prototype.forEach;
-        document.getElementsByClassName('fa-sort-desc').forEach(function(item) {
+        const directSorting = $(e.currentTarget).find('.fa-sort-desc').length ? false : true;
+        const $current = $(e.currentTarget);
+
+        Array.prototype.forEach.call(document.getElementsByClassName('fa-sort-desc'), function (item) {
             item.className = 'fa fa-sort';
         });
-        $(e.currentTarget).find('.fa-sort').attr('class', 'fa fa-sort-desc');
-        this.orderBy = e.currentTarget.getAttribute("data");
-        // this.getValues();
+
+        Array.prototype.forEach.call(document.getElementsByClassName('fa-sort-asc'), function (item) {
+            item.className = 'fa fa-sort';
+        });
+        if (!directSorting) {
+            $current.find('.fa-sort').attr('class', 'fa fa-sort-asc');
+            this.orderBy = '-' + e.currentTarget.getAttribute("data");
+        } else {
+            $current.find('.fa-sort').attr('class', 'fa fa-sort-desc');
+            this.orderBy = e.currentTarget.getAttribute("data");
+        }
+        this.getValues(true);
     }
 
-    pagination(props) {
-        if (!props) return;
-        let info = props.statistic;
-
-        if (!info.totalCount) {
-            return;
+    handleSelect(eventKey) {
+        let {activePage} = this.state;
+        if (activePage !== eventKey) {
+            this.setState({activePage: eventKey});
+            this.offset = ('&offset=' + (eventKey - 1) * 10) || '';
+            this.getValues();
         }
-        this.maxPage = Math.ceil(info.totalCount / 10 - 1) || 1;
-        let visiblePages = 1;
-
-        if (this.maxPage === 2) {
-            visiblePages = 2;
-        } else if (this.maxPage >= 3) {
-            visiblePages = 3;
-        } else {
-            visiblePages = 1;
-        }
-        let pageNum = 0;
-        let self = this;
-        $('.pagination').twbsPagination({
-            totalPages: this.maxPage,
-            visiblePages,
-            onPageClick: function (event, page) {
-                pageNum = page;
-                self.getValues();
-            }
-        });
     }
 
     render() {
@@ -147,13 +162,18 @@ class Statistic extends Component {
         const defaultElem = <i className="fa fa-sort-desc" aria-hidden="true"></i>;
         const statistic = this.props.statistic.payments;
         this.displayStatistic = statistic.length ? true : false;
-
         let style = {};
-        style.display = this.displayStatistic ? 'block' : 'none';
+        style.display = this.displayStatistic && !this.incorrectValues ? 'block' : 'none';
+
+        let paginationStyle = {};
+        let displayedPages = Math.ceil(this.props.statistic.totalCount / 10);
+        paginationStyle.display = displayedPages > 1 ? 'block' : 'none';
+        let infoMessage = statistic.length === 0? 'Nothing to display' : '';
 
         return (
+
             <div className="statistic">
-                <div className="col-sm-2">
+                <div className="col-sm-2 calendar-place-holder">
                     <span style={{'whiteSpace': 'nowrap'}}>Select date </span>
                     <div className="input-group">
                         <div className="input-group-addon">
@@ -225,25 +245,31 @@ class Statistic extends Component {
                 </div>
 
 
-                <button className="getStat btn btn-success" style={{margin: '15px'}} onClick={this.getValues.bind(this)}>Get
+                <button className="getStat btn btn-success" style={{margin: '15px'}}
+                        onClick={this.getValues.bind(this)}>Get
                     statistic
                 </button>
                 <LoadingOverlay loading={false}/>
 
                 <div className="holder" style={style}>
                     <div>
-                        {/*statistic result table starts here*/}
+
                         <table className="statTable table table-striped table-bordered">
                             <thead>
                             <tr className="filter">
-                                <th onClick={this.setFilter.bind(this)} data="created" rowSpan="2"><span>created {defaultElem}</span></th>
-                                <th onClick={this.setFilter.bind(this)} data="payment_account" rowSpan="2">payment_account {filterElem}</th>
-                                <th onClick={this.setFilter.bind(this)} data="paysys_id" rowSpan="2">paysys_id {filterElem}</th>
-                                <th onClick={this.setFilter.bind(this)} data="status" rowSpan="2">status {filterElem}</th>
-                                <th onClick={this.setFilter.bind(this)} data="updated" rowSpan="2">updated {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="created" rowSpan="2">
+                                    <span>created {defaultElem}</span></th>
+                                <th onClick={this.setFilter.bind(this)} data="payment_account" rowSpan="2">
+                                    payment_account {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="paysys_id" rowSpan="2">
+                                    paysys_id {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="status" rowSpan="2">
+                                    status {filterElem}</th>
+                                <th onClick={this.setFilter.bind(this)} data="updated" rowSpan="2">
+                                    updated {filterElem}</th>
                                 <th onClick={this.setFilter.bind(this)} colSpan="3">invoice</th>
                             </tr>
-                            <tr  className="filter">
+                            <tr className="filter">
                                 <th data="currency" onClick={this.setFilter.bind(this)}>currency {filterElem}</th>
                                 <th data="store_id" onClick={this.setFilter.bind(this)}>store_id {filterElem}</th>
                                 <th data="total_price" onClick={this.setFilter.bind(this)}>total_price {filterElem}</th>
@@ -264,15 +290,31 @@ class Statistic extends Component {
                             })}
                             </tbody>
                         </table>
-                        <div className="pagination-holder">
-                            <div className="pagination">
-                            </div>
+                        <div style={paginationStyle}>
+                            <Pagination
+                                prev
+                                next
+                                first
+                                last
+                                ellipsis
+                                items={displayedPages || 1}
+                                activePage={this.state.activePage}
+                                onSelect={this.handleSelect.bind(this)}>
+                            </Pagination>
                         </div>
+
+
                     </div>
                     <div className="chartStatistic">
-                        <ReactChart data={statistic}/>
+                        {/*<ReactChart data={statistic}/>*/}
                     </div>
                 </div>
+                <Alert type={TYPE_ERROR}>
+                    {this.errorMessage}
+                </Alert>
+                <Alert type={TYPE_INFO}>
+                    {infoMessage}
+                </Alert>
             </div>
         )
     }
