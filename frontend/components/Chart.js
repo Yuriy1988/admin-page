@@ -66,7 +66,7 @@ export default class Chart extends Component {
 
                             return (
                                 <path className="animated"
-                                      d={`M 0 0 L ${xFrom} ${yFrom} A ${radius} ${radius} 0 ${+(sector>180)} 1 ${xTo} ${yTo} Z`}
+                                      d={`M 0 0 L ${xFrom} ${yFrom} A ${radius} ${radius} 0 ${+(sector > 180)} 1 ${xTo} ${yTo} Z`}
                                       fill={self.getColor(i)} key={i}>
                                 </path>
                             );
@@ -77,4 +77,3 @@ export default class Chart extends Component {
         );
     }
 }
-

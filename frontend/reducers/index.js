@@ -298,14 +298,4 @@ const rootReducer = combineReducers({
     routing: routeReducer
 });
 
-//function auth(prevState = {token: null}, action) {
-//    if (action.type === 'LOGIN_SUCCESS') {
-//        return {
-//            token: action.token
-//        };
-//
-//    }
-//    return prevState;
-//}
-
 export default rootReducer

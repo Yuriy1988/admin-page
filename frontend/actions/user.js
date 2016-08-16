@@ -126,3 +126,11 @@ export function getAdminStatistic(query) {
         }
     }
 }
+
+export const USER_CLEAR_STATISTIC = 'USER_CLEAR_STATISTIC';
+
+export function clearStatistic() {
+    return {
+        type: USER_CLEAR_STATISTIC
+    }
+}
