@@ -1,9 +1,5 @@
 import * as SystemActions from '../actions/system';
 
-export const SERVER_VERSION_REQUEST = 'SERVER_VERSION_REQUEST';
-export const SERVER_VERSION_SUCCESS = 'SERVER_VERSION_SUCCESS';
-export const SERVER_VERSION_FAILURE = 'SERVER_VERSION_FAILURE';
-export const SERVER_VERSION_CERROR = 'SERVER_VERSION_CERROR';
 
 export default function system (state = {}, action) {
 
@@ -16,7 +12,15 @@ export default function system (state = {}, action) {
             //localStorage.setItem("server_version", action.response.token);
             return {}; // Object.assign({}, state, action.response)
 
+        case SystemActions.PAYMENT_INTERFACE_SUCCESS:
+            return Object.assign({}, state, action.response);
+
         default:
             return state;
     }
 }
+//
+// export const SERVER_VERSION_REQUEST = 'SERVER_VERSION_REQUEST';
+// export const SERVER_VERSION_SUCCESS = 'SERVER_VERSION_SUCCESS';
+// export const SERVER_VERSION_FAILURE = 'SERVER_VERSION_FAILURE';
+// export const SERVER_VERSION_CERROR = 'SERVER_VERSION_CERROR';

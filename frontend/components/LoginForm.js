@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react'
 import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
+
 import Alert, {TYPE_ERROR} from '../components/Alert'
 import {Link} from 'react-router'
 import Transition from '../containers/Transition';
@@ -27,6 +28,7 @@ class LoginForm extends Component {
     componentWillUnmount() {
         const {user} = this.props;
         localStorage.setItem('user', JSON.stringify(user));
+        this.props.getPaymentInterfaces();
     }
 
     handleChange(e) {
@@ -92,7 +94,8 @@ class LoginForm extends Component {
 export default connect((state)=> {
     return {user: state.user}
 }, {
-    makeLogin: UserActions.login
+    makeLogin: UserActions.login,
+
 })(LoginForm)
 
 // (store.getState().user.exp-Date.now()/1000 - 500)*1000);

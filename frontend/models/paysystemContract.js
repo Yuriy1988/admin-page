@@ -9,8 +9,7 @@ export default class PaySystemContractModel {
     static create(dataProp = {}) {
         let data = decamelize(dataProp);
         const initData = {
-            id: null,			// {readonly, unique} paysys_contract_id
-            paysys_id: null,		// {readonly, unique} id плат. сист. (Allowed paysys_id)
+            payment_interface: 'privat',
             contractor_name: null,	// {required} название банка/агрегатора
             commission_fixed: null,	// {required} фиксированная часть комиссии (значение в валюте currency)
             commission_pct: null,	// {required} комиссия в процентах, которую xopay взымает с торговца

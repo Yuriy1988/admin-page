@@ -48,8 +48,8 @@ class PaySystemContractForm extends Component {
         } catch (e) {
         }
 
-
         return (
+
             <form role="form" onSubmit={onCreate}>
                 <div className="row">
                     <div className="col-md-12">
@@ -61,6 +61,17 @@ class PaySystemContractForm extends Component {
                                    onChange={onChange("contractor_name")}
                                    value={contract.contractorName}
                                    placeholder="Ivanov Ivan"/>
+                        </Field>
+
+
+                        <Field>
+                            <label htmlFor="Select payment interface">Select payment interface</label>
+                            <select className="form-control status-input">
+                                <option>privat</option>
+                                <option>aval</option>
+                                <option>pumb</option>
+                            </select>
+
                         </Field>
 
                         <Field error={errors.filter}>
@@ -134,7 +145,7 @@ PaySystemContractForm.propTypes = {
 
 export default connect(
     (state)=>({
-        paysysContracts: state.entities.paysysContracts
+        paysysContracts: state.entities.paysysContracts,
     }),
     {}
 )(PaySystemContractForm)

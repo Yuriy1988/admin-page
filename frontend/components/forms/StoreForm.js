@@ -166,13 +166,13 @@ class StoreForm extends Component {
                                    placeholder="http://www.example.com/fail"/>
                         </Field>
 
-                        <Field error={errors.store_settings.commission_pct}>
-                            <label htmlFor="commission_pct">Comission %</label>
-                            <input type="text" className="form-control " id="commission_pct"
-                                   onChange={bindStoreSettings("commission_pct")}
-                                   value={store.settings.commissionPct}
-                                   placeholder="2.4"/>
-                        </Field>
+                        {/*<Field error={errors.store_settings.commission_pct}>*/}
+                            {/*<label htmlFor="commission_pct">Comission %</label>*/}
+                            {/*<input type="text" className="form-control " id="commission_pct"*/}
+                                   {/*onChange={bindStoreSettings("commission_pct")}*/}
+                                   {/*value={store.settings.commissionPct}*/}
+                                   {/*placeholder="2.4"/>*/}
+                        {/*</Field>*/}
                     </div>
                 </div>
 

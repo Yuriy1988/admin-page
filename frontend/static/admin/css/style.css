@@ -204,6 +204,10 @@ th .fa-sort-desc, th .fa-sort-asc {
     float: right;
 }
 
+.to-margin {
+   margin:5%;
+}
+
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

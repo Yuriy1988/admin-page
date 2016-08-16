@@ -117,10 +117,6 @@ class StorePage extends Component {
                             <div className="box-body">
                                 <ul className="list-group list-group-unbordered">
                                     <li className="list-group-item">
-                                        <b>Comission</b>
-                                        <p className="text-muted pull-right">{storeInfo.settings.commissionPct}%</p>
-                                    </li>
-                                    <li className="list-group-item">
                                         <b>Failure Url</b>
                                         <p className="text-muted pull-right">{storeInfo.settings.failureUrl}</p>
                                     </li>

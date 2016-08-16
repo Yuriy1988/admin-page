@@ -4,6 +4,7 @@ import { Schema, arrayOf, valuesOf} from 'normalizr'
  * SYSTEM_ACTIONS
  */
 export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET", isAuth: false}; // waiting for server fix;
+export const PAYMENT_INTERFACE_GET = {path: "constants/payment_interface", method: "GET"};
 
 /**
  * USER_ACTIONS

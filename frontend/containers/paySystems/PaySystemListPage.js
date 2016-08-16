@@ -6,6 +6,7 @@ import {PaySystemsActions, PaginationActions} from '../../actions/index';
 import Alert, {TYPE_ERROR} from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import Boolean from '../../components/Boolean';
+import * as SystemsActions from '../../actions/system'
 
 class PaySystemListPage extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class PaySystemListPage extends Component {
 
     componentDidMount() {
         PaySystemListPage.loadData(this.props);
+        this.props.getPaymentInterfaces();
     }
 
     static loadData(props) {
@@ -42,7 +44,7 @@ class PaySystemListPage extends Component {
                     </tbody>
                 </table>
             </div>
-        ) : <p>No items</p>;
+        ) : <p></p>;
     }
 
     handleToggle(contract) {
@@ -113,18 +115,17 @@ class PaySystemListPage extends Component {
     }
 }
 
-
 export default connect(
     (state)=>({
         paySystems: state.entities.paySystems,
         paySystemsList: state.pagination.paySystemsList,
-        editRequest: state.pagination.paySystemEdit
-
+        editRequest: state.pagination.paySystemEdit,
+        paysysCategory: state.system.category
     }),
     {
         loadPaySystems: PaySystemsActions.getList,
         loadPaySystemsCE: PaySystemsActions.getListCError,
-
+        getPaymentInterfaces: SystemsActions.getPaymentInterfaces,
         editRequestCE: PaySystemsActions.editByIdCError,
 
         enable: PaySystemsActions.enable,

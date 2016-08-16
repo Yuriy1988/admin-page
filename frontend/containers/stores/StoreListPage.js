@@ -48,7 +48,7 @@ class StoreListPage extends Component {
                     </tbody>
                 </table>
             </div>
-        ) : <p>No items</p>;
+        ) : <p></p>;
     }
 
     handleDelete(storeId) {

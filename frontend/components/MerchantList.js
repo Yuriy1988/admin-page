@@ -32,7 +32,7 @@ class MerchantList extends Component {
                     </tbody>
                 </table>
             </div>
-        ) : <p>No items</p>;
+        ) : <p></p>;
     }
 
     handleDeleteButton(mid) {
