@@ -5,7 +5,8 @@ import {
     MerchantContractActions,
     PaySystemsContractsActions,
     PaySystemsActions,
-    UserActions
+    UserActions,
+
 } from '../actions/index'
 import merge from 'lodash/merge'
 import paginate from './paginate'
@@ -15,6 +16,8 @@ import dictionary from './dictionary'
 import sideBar from './sideBar'
 import {routeReducer} from 'react-router-redux'
 import {combineReducers} from 'redux'
+import notifications from './notifications'
+
 
 // Updates an entity cache in response to any action with response.entities.
 function entities (state = {
@@ -295,6 +298,7 @@ const rootReducer = combineReducers({
     user,
     sideBar,
     dictionary,
+    notifications,
     routing: routeReducer
 });
 

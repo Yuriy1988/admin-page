@@ -12,9 +12,6 @@ export default function system (state = {}, action) {
             //localStorage.setItem("server_version", action.response.token);
             return {}; // Object.assign({}, state, action.response)
 
-        case SystemActions.PAYMENT_INTERFACE_SUCCESS:
-            return Object.assign({}, state, action.response);
-
         default:
             return state;
     }

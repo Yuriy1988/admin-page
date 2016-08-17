@@ -24,20 +24,5 @@ export function getServerVersion() {
     }
 }
 
-export const PAYMENT_INTERFACE_REQUEST = 'PAYMENT_INTERFACE_REQUEST';
-export const PAYMENT_INTERFACE_SUCCESS = 'PAYMENT_INTERFACE_SUCCESS';
-export const PAYMENT_INTERFACE_FAILURE = 'PAYMENT_INTERFACE_FAILURE';
-export const PAYMENT_INTERFACE_CERROR = 'PAYMENT_INTERFACE_CERROR';
-
-export function getPaymentInterfaces() {
-    return {
-        [CALL_API]: {
-            types: [PAYMENT_INTERFACE_REQUEST, PAYMENT_INTERFACE_SUCCESS, PAYMENT_INTERFACE_FAILURE],
-            cError: PAYMENT_INTERFACE_CERROR,
-            endpoint: PAYMENT_INTERFACE_GET,
-        }
-    }
-}
-
 // > GET /api/admin/{version}/constants/payment_interface
 // < 200 OK { sign_algorithm: ["privat", "aval", "pumb"] }

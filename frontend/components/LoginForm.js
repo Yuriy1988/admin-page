@@ -1,4 +1,3 @@
-//TODO refactor
 import React, {Component, PropTypes} from 'react'
 import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
@@ -28,7 +27,6 @@ class LoginForm extends Component {
     componentWillUnmount() {
         const {user} = this.props;
         localStorage.setItem('user', JSON.stringify(user));
-        this.props.getPaymentInterfaces();
     }
 
     handleChange(e) {
@@ -96,6 +94,4 @@ export default connect((state)=> {
 }, {
     makeLogin: UserActions.login,
 
-})(LoginForm)
-
-// (store.getState().user.exp-Date.now()/1000 - 500)*1000);
+})(LoginForm);

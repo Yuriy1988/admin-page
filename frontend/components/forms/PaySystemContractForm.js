@@ -25,6 +25,10 @@ class PaySystemContractForm extends Component {
 
     }
 
+    componentDidMount() {
+        this.props.loadPaymentInterfaces();
+    }
+
     _onCreate(e) {
         e.preventDefault();
         const {onSubmit} = this.props;
@@ -141,6 +145,7 @@ class PaySystemContractForm extends Component {
 
 PaySystemContractForm.propTypes = {
     onSubmit: PropTypes.func.isRequired
+
 };
 
 export default connect(

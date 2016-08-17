@@ -1,14 +1,17 @@
-import { CALL_API } from '../middleware/api'
-
-
+import {CALL_API} from '../middleware/api'
 
 export const DICT_UPDATE_REQUEST = 'DICT_UPDATE_REQUEST';
 export const DICT_UPDATE_SUCCESS = 'DICT_UPDATE_SUCCESS';
 export const DICT_UPDATE_FAILURE = 'DICT_UPDATE_FAILURE';
 
-
-
-import {DICT_SIGN_ALGORITHM, DICT_CATEGORY, DICT_CURRENCY, DICT_NOTIFY, DICT_PAYSYS_ID} from '../lib/api'
+import {
+    DICT_SIGN_ALGORITHM,
+    DICT_CATEGORY,
+    DICT_CURRENCY,
+    DICT_NOTIFY,
+    DICT_PAYSYS_ID,
+    DICT_PAYMENT_INTERFACES
+} from '../lib/api'
 
 function fetchSignAlgorithm() {
     return {
@@ -18,11 +21,30 @@ function fetchSignAlgorithm() {
         }
     }
 }
+
 function fetchCategories() {
     return {
         [CALL_API]: {
             types: [DICT_UPDATE_REQUEST, DICT_UPDATE_SUCCESS, DICT_UPDATE_FAILURE],
             endpoint: DICT_CATEGORY
+        }
+    }
+}
+
+//моё
+function fetchPaymentInterface() {
+    return {
+        [CALL_API]: {
+            types: [DICT_UPDATE_REQUEST, DICT_UPDATE_SUCCESS, DICT_UPDATE_FAILURE],
+            endpoint: DICT_PAYMENT_INTERFACES
+        }
+    }
+}
+export function loadPaymentInterfaces() {
+    return (dispatch, getState) => {
+        //debugger;
+        if (!getState().dictionary.paymentInterfaces || getState().dictionary.paymentInterfaces.length === 0) {
+            return dispatch(fetchPaymentInterface())
         }
     }
 }
@@ -72,15 +94,14 @@ export function loadCategories() {
     }
 }
 
-
 export function loadCurrencies() {
     return (dispatch, getState) => {
+        debugger;
         if (!getState().dictionary.currency || getState().dictionary.currency.length == 0) {
             return dispatch(fetchCurrencies())
         }
     }
 }
-
 
 export function loadNotifications() {
     return (dispatch, getState) => {
@@ -89,7 +110,6 @@ export function loadNotifications() {
         }
     }
 }
-
 
 export function loadPaysysId() {
     return (dispatch, getState) => {

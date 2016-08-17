@@ -7,13 +7,15 @@ const initial_dict = {
     currency: [],
     category: [],
     notify: [],
-    paysysId: []
+    paysysId: [],
+    paymentInterfaces: []
 };
 
 export default function user(state = initial_dict, action) {
     const { type } = action;
 
     if (type === DictionaryActions.DICT_UPDATE_SUCCESS) {
+        console.log(action.response);
         return Object.assign({}, state, action.response);
     }
 

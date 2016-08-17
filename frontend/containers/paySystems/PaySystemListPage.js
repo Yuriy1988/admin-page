@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
 
-import {PaySystemsActions, PaginationActions} from '../../actions/index';
+import {PaySystemsActions, PaginationActions, DictionaryActions} from '../../actions/index';
 import Alert, {TYPE_ERROR} from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import Boolean from '../../components/Boolean';
@@ -15,7 +15,7 @@ class PaySystemListPage extends Component {
 
     componentDidMount() {
         PaySystemListPage.loadData(this.props);
-        this.props.getPaymentInterfaces();
+
     }
 
     static loadData(props) {
@@ -125,9 +125,8 @@ export default connect(
     {
         loadPaySystems: PaySystemsActions.getList,
         loadPaySystemsCE: PaySystemsActions.getListCError,
-        getPaymentInterfaces: SystemsActions.getPaymentInterfaces,
         editRequestCE: PaySystemsActions.editByIdCError,
-
+        loadAlgorithms: DictionaryActions.loadSignAlgorithm,
         enable: PaySystemsActions.enable,
         disable: PaySystemsActions.disable,
 

@@ -12,6 +12,8 @@ import SelectRolePage    from './containers/SelectRolePage'
 import NotificationsPage from './containers/pages/NotificationsPage' //Containers
 import Statistic from './containers/pages/Statistic' //admin statistic
 
+import NotificationList from './containers/notifications/NotificationList'
+
 import MerchantsPage    from './containers/merchants/MerchantsPage'
 import MerchantList     from './components/MerchantList'
 import MerchantPage     from './containers/merchants/MerchantPage'
@@ -82,7 +84,11 @@ class Routes {
                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                             <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                             <Route path="notifications" component={NotificationsPage}
-                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+
+                                <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                            component={NotificationList}/>
+                                </Route>
 
                             <Route path="changePassword" component={selfPassChangingForm}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
@@ -92,8 +98,7 @@ class Routes {
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                 <Route path="add" component={MerchantAddPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
-                                <Route path="list" component={MerchantList}
-                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
                                 <Route path=":merchantId" component={MerchantPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                     <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
