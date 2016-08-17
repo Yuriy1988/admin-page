@@ -25,17 +25,16 @@ class NotificationList extends Component {
     }
 
     render() {
-        this.props.notifications;
         const {notifications, children} = this.props;
         debugger;
 
 
-        return <div>
+        return notifications? <div>
                 <h1 className="page-header">
                     <i className="fa fa-briefcase"/> {notifications[0].name}
                 </h1>
                 <Transition>{children}</Transition>
-            </div>
+            </div>: <div>loading</div>
     }
 }
 

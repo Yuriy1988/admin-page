@@ -31,7 +31,6 @@ class MerchantForm extends Component {
         const {loadNotifications, loadCurrencies} = this.props;
         loadCurrencies();
         loadNotifications();
-        this.props.loadPaymentInterfaces();
     }
 
     _onCreate(e) {

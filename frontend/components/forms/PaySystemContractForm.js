@@ -25,7 +25,7 @@ class PaySystemContractForm extends Component {
 
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.loadPaymentInterfaces();
     }
 
@@ -37,8 +37,7 @@ class PaySystemContractForm extends Component {
     }
 
     render() {
-        const {cancel} = this.props;
-
+        const {cancel, category} = this.props;
         let {contract} = this.state;
         contract = new PaySystemContractModel(contract);
 
@@ -71,9 +70,9 @@ class PaySystemContractForm extends Component {
                         <Field>
                             <label htmlFor="Select payment interface">Select payment interface</label>
                             <select className="form-control status-input">
-                                <option>privat</option>
-                                <option>aval</option>
-                                <option>pumb</option>
+                                {category.map(function(result) {
+                                    return <option key={Math.random()}>{result}</option>;
+                                })}
                             </select>
 
                         </Field>
@@ -148,9 +147,14 @@ PaySystemContractForm.propTypes = {
 
 };
 
+PaySystemContractForm.propTypes = {
+    category: React.PropTypes.array.isRequired,
+};
+
 export default connect(
     (state)=>({
+        category: state.dictionary.category,
         paysysContracts: state.entities.paysysContracts,
     }),
-    {}
+    { loadPaymentInterfaces: DictionaryActions.loadPaymentInterfaces}
 )(PaySystemContractForm)

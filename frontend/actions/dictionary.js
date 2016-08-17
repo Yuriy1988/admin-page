@@ -42,7 +42,6 @@ function fetchPaymentInterface() {
 }
 export function loadPaymentInterfaces() {
     return (dispatch, getState) => {
-        //debugger;
         if (!getState().dictionary.paymentInterfaces || getState().dictionary.paymentInterfaces.length === 0) {
             return dispatch(fetchPaymentInterface())
         }
@@ -96,7 +95,6 @@ export function loadCategories() {
 
 export function loadCurrencies() {
     return (dispatch, getState) => {
-        debugger;
         if (!getState().dictionary.currency || getState().dictionary.currency.length == 0) {
             return dispatch(fetchCurrencies())
         }
