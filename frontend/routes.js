@@ -1,4 +1,4 @@
-import React                 from 'react'
+import React from 'react'
 import {Route, IndexRoute} from 'react-router' //React
 
 import App               from './containers/App'
@@ -50,7 +50,6 @@ import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 import handleTokenTime from './middleware/system';
 
 
-
 //TODO fix hardcode. Move to separate module
 const ROLE = {
     ADMINISTRATOR: "admin", //ok
@@ -96,9 +95,9 @@ class Routes {
                                 <Route path=":notificationId" component={NotificationPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                     {/*<IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}*/}
-                                                {/*component={NotificationInfoPage}/>*/}
+                                    {/*component={NotificationInfoPage}/>*/}
                                     {/*<Route path="edit" component={NotificationEditPage}*/}
-                                           {/*onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
+                                    {/*onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
                                 </Route>
                             </Route>
 

@@ -39,6 +39,7 @@ class LoginForm extends Component {
     }
 
     render() {
+        debugger;
         const {login, password} = this.state;
         const {user} = this.props;
         return (

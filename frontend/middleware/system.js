@@ -6,9 +6,10 @@ export default function handleTokenTime (store) {
         if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 0) {
             console.log('logout');
             store.dispatch({
-                type: UserActions.USER_LOGOUT_SUCCESS,
+                type: UserActions.USER_UNAUTHORIZED,
             });
-            location.pathname = 'admin/access_denied'
+            localStorage.setItem('user_message', 'Please re-login to proceed working');
+            location.pathname = 'admin/'
         }
         if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 7) {
             function refreshToken(url) {

@@ -53,6 +53,11 @@ export default function user(state = initial_user, action) {
             localStorage.setItem("user", '');
             return Object.assign({}, state, {isFetching: false});
 
+        case UserActions.USER_UNAUTHORIZED:
+            localStorage.setItem("user_token", '');
+            localStorage.setItem("user", '');
+            return Object.assign({}, state, {message: 'Please re-login to proceed working'});
+
         //create pass
         case UserActions.USER_CREATE_PASS_REQUEST:
             return Object.assign({}, state, {isFetching: true});

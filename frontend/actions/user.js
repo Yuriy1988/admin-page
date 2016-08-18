@@ -134,3 +134,5 @@ export function clearStatistic() {
         type: USER_CLEAR_STATISTIC
     }
 }
+
+export const USER_UNAUTHORIZED = 'USER_UNAUTHORIZED';
