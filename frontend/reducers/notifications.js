@@ -12,13 +12,10 @@ export default function notifications (state = {notifications: [], selectedNotif
         case NotificationActions.CLEAR_NOTIFICATION:
             return Object.assign({}, {isFetching: false}, {notifications: [], selectedNotification: {}} );
 
-
-
         case NotificationActions.NOTIFICATION_GET_REQUEST:
             return Object.assign({}, {isFetching: true}, state);
 
         case NotificationActions.NOTIFICATION_GET_SUCCESS:
-            console.log(action.response);
             return Object.assign({}, state, {isFetching: false}, {selectedNotification: action.response});
         default:
             return state;
