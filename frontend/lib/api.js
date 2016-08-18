@@ -104,8 +104,9 @@ export const STORE_PAYSYS_UPDATE = (storePaysysId) => ({path: `store_paysys/${st
 /**
  * Notification
  */
-
+//GET /api/notify/{version}/notifications/{nonify_id}
 export const NOTIFICATIONS_GET = {path: `../../../api/notify/${version}/notifications`, method: "GET"};
+export const NOTIFICATION_GET_BY_ID =(id) => ({path: `../../../api/notify/${version}/notifications/${id}`, method: "GET"});
 export const NOTIFICATIONS_EDIT = {path: `../../../api/notify/${version}/notifications`, method: "GET" };
 export const NOTIFICATIONS_CRRATE = {path: `../../../api/notify/${version}/notifications`, method: "GET" };
 export const NOTIFICATIONS_DELETE = {path: `../../../api/notify/${version}/notifications`, method: "GET" };

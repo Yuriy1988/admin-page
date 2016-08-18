@@ -1,41 +1,84 @@
-//TODO refactor
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
-
-import {MerchantActions} from '../../actions/index';
 import * as NotificationActions from '../../actions/notifications';
-import Alert, {TYPE_ERROR} from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
-import Notifications from './notifications'
-import Transition from '../../containers/Transition';
 
 class NotificationList extends Component {
     constructor(props) {
         super(props);
     }
 
+    handleDeleteButton(nonify_id) {
+        const {deleteNotification} = this.props;
+        if (confirm("Are you sure you want to delete notification?")) {
+            deleteNotification(nonify_id);
+        }
+    }
+
     componentWillMount() {
         this.props.getNotifications();
     }
 
-
-    handleClick(e) {
-        // e.preventDefault();
+    componentWillUnmount() {
+        this.props.clearNotifications();
     }
 
     render() {
+        let {notifications} = this.props;
+        const list = notifications.notifications;
 
-        const {notifications, children} = this.props;
-        return !notifications.length? <div>
-                <h1 className="page-header">
-                    <i className="fa fa-briefcase"/>
-                    <ul>
-                    <Notifications notifications ={notifications}/>
-                    </ul>
-                </h1>
-                <Transition>{children}</Transition>
-            </div>:  <LoadingOverlay loading={notifications.isFetching }/>
+        const content = notifications.notifications.map((notifiction, i) => {
+            return (
+                <tr key={i}>
+                    <td>{i+1}</td>
+                    <td>
+                        <Link to={`/admin/administrator/notifications/${list[i].id}`}>
+                            {list[i].name}
+                        </Link>
+                    </td>
+                    <td>
+                        <div className="btn-toolbar pull-right">
+
+                            <Link className="btn btn-sm btn-primary"
+                                  to={`/admin/administrator/notifications/${list[i].id}/edit`}>
+                                <i className="fa fa-edit"/> Edit
+                            </Link>
+
+                            <span className="btn btn-sm btn-danger"
+                                  onClick={this.handleDeleteButton.bind(this, list[i].id)}>
+                                <i className="fa fa-trash"/> Delete
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            )
+        });
+
+        return notifications.notifications.length ?
+        <div className="box">
+            <div className="box-header with-border">
+                <h3 className="box-title"><i className="fa fa-briefcase"/> Notifications</h3>
+                <div className="box-tools pull-right">
+                    <Link className="btn btn-sm btn-success" to="/admin/administrator/notifications/add"><i
+                        className="fa fa-plus"/> Add</Link>
+                </div>
+            </div>
+            <div className="box-body no-padding">
+                <div className="table-responsive">
+                    <table className="table table-hover table-striped">
+                        <tbody>
+                        <tr key="header">
+                            <th width="5%">#</th>
+                            <th>Name</th>
+                            <th width="145px">Actions</th>
+                        </tr>
+                        {content}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>: <LoadingOverlay loading={notifications.isFetching }/>
     }
 }
 
@@ -45,6 +88,7 @@ export default connect(
     }),
     {
         getNotifications: NotificationActions.getNotifications,
+        clearNotifications: NotificationActions.clearNotifications
     }
 )(NotificationList);
 
