@@ -6,7 +6,6 @@ import {PaySystemsActions, PaginationActions, DictionaryActions} from '../../act
 import Alert, {TYPE_ERROR} from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import Boolean from '../../components/Boolean';
-import * as SystemsActions from '../../actions/system'
 
 class PaySystemListPage extends Component {
     constructor(props) {
@@ -15,7 +14,6 @@ class PaySystemListPage extends Component {
 
     componentDidMount() {
         PaySystemListPage.loadData(this.props);
-
     }
 
     static loadData(props) {

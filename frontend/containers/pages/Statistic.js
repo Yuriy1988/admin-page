@@ -74,11 +74,13 @@ class Statistic extends Component {
         }
 
         function checkCorrectDates() {
+
             let fromDateVal = moment($calendarFrom.val(), 'MM/DD/YYYY').format('YYYY-MM-DD');
             let tillDateVal = moment($calendarTill.val(), 'MM/DD/YYYY').format('YYYY-MM-DD');
             let result;
             if ($calendarFrom.val() === '') {
                 fromDate = '';
+                fromDateVal = '';
             } else {
                 fromDate = `&from_date=${fromDateVal}`
             }
@@ -158,6 +160,7 @@ class Statistic extends Component {
     }
 
     render() {
+        const isFetching = this.props.isFetching;
         const filterElem = <i className="fa fa-sort" aria-hidden="true"></i>;
         const defaultElem = <i className="fa fa-sort-desc" aria-hidden="true"></i>;
         const statistic = this.props.statistic.payments;
@@ -168,7 +171,7 @@ class Statistic extends Component {
         let paginationStyle = {};
         let displayedPages = Math.ceil(this.props.statistic.totalCount / 10);
         paginationStyle.display = displayedPages > 1 ? 'block' : 'none';
-        let infoMessage = statistic.length === 0? 'Nothing to display' : '';
+        let infoMessage = statistic.length === 0 && !isFetching ? 'Nothing to display' : '';
 
         return (
 
@@ -322,7 +325,8 @@ class Statistic extends Component {
 
 export default connect(
     (state)=>({
-        statistic: state.user.statistic
+        statistic: state.user.statistic,
+        isFetching: state.user
     }),
     {
         getAdminStatistic: UserActions.getAdminStatistic,

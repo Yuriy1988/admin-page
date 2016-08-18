@@ -47,6 +47,9 @@ import PaySysContractEditPage    from './containers/paysystemContracts/PaySystem
 import PaySysContractListPage    from './containers/paysystemContracts/PaySystemContractListPage'
 
 import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
+import handleTokenTime from './middleware/system';
+
+
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -219,6 +222,7 @@ class Routes {
                     }
                 }
             }
+            handleTokenTime(this.store);
 
             if (!user.token) {
                 accessDenied = true;
@@ -233,4 +237,5 @@ class Routes {
     }
 }
 
-export default Routes
+export default Routes;
+

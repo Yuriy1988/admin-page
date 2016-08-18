@@ -14,7 +14,7 @@ export function serverRequestError() {
     }
 }
 
-export function getServerVersion() {
+export default function getServerVersion() {
     return {
         [CALL_API]: {
             types: [SERVER_VERSION_REQUEST, SERVER_VERSION_SUCCESS, SERVER_VERSION_FAILURE],

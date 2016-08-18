@@ -25,15 +25,15 @@ class PaySystemEditPage extends Component {
 
         if (!!editRequest.result) {
             redirect(`/admin/administrator/paysys`);
-            clearPagination("paySystemEdit"); //TODO constant
-            clearPagination("paySystemGet"); //TODO constant
+            clearPagination("paySystemEdit");
+            clearPagination("paySystemGet");
         }
     }
 
     componentWillUnmount() {
         const {clearPagination} = this.props;
-        clearPagination("paySystemEdit"); //TODO constant
-        clearPagination("paySystemGet"); //TODO constant
+        clearPagination("paySystemEdit");
+        clearPagination("paySystemGet");
     }
 
     loadData() {

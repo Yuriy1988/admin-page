@@ -1,10 +1,10 @@
 import { Schema, arrayOf, valuesOf} from 'normalizr'
-const version = 'dev';
+const version = localStorage.apiVersion;
 
 /**
  * SYSTEM_ACTIONS
  */
-export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET", isAuth: false}; // waiting for server fix;
+export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false}; // waiting for server fix;
 
 
 /**
@@ -104,13 +104,12 @@ export const STORE_PAYSYS_UPDATE = (storePaysysId) => ({path: `store_paysys/${st
 /**
  * Notification
  */
-//GET /api/notify/{version}/notifications/{nonify_id}
+
 export const NOTIFICATIONS_GET = {path: `../../../api/notify/${version}/notifications`, method: "GET"};
 export const NOTIFICATION_GET_BY_ID =(id) => ({path: `../../../api/notify/${version}/notifications/${id}`, method: "GET"});
 export const NOTIFICATIONS_EDIT = {path: `../../../api/notify/${version}/notifications`, method: "GET" };
 export const NOTIFICATIONS_CRRATE = {path: `../../../api/notify/${version}/notifications`, method: "GET" };
-export const NOTIFICATIONS_DELETE = {path: `../../../api/notify/${version}/notifications`, method: "GET" };
-
+export const NOTIFICATIONS_DELETE = (id) => ({path: `../../../api/notify/${version}/notifications/${id}`, method: "DELETE" });
 
 /**
  * Sign algorithm

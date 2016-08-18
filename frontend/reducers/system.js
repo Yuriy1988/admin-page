@@ -8,9 +8,8 @@ export default function system (state = {}, action) {
             return Object.assign({}, state);
 
         case SystemActions.SERVER_VERSION_SUCCESS:
-            console.log(action.response.token);
-            //localStorage.setItem("server_version", action.response.token);
-            return {}; // Object.assign({}, state, action.response)
+           localStorage.setItem("apiVersion", action.response.apiVersion);
+            return {};
 
         default:
             return state;

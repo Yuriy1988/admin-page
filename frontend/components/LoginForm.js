@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
-
+import getServerVersion from '../actions/system'
 import Alert, {TYPE_ERROR} from '../components/Alert'
 import {Link} from 'react-router'
 import Transition from '../containers/Transition';
@@ -19,13 +19,9 @@ class LoginForm extends Component {
         };
     }
 
-    componentDidMount() {
-        //  'after server implementation here will be function that gets server version'
-        //this.props.getServerVersion();
-    }
-
     componentWillUnmount() {
         const {user} = this.props;
+        this.props.getServerVersion();
         localStorage.setItem('user', JSON.stringify(user));
     }
 
@@ -93,5 +89,6 @@ export default connect((state)=> {
     return {user: state.user}
 }, {
     makeLogin: UserActions.login,
+    getServerVersion: getServerVersion
 
 })(LoginForm);

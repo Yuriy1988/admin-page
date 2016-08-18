@@ -70,8 +70,8 @@ class PaySystemContractForm extends Component {
                         <Field>
                             <label htmlFor="Select payment interface">Select payment interface</label>
                             <select className="form-control status-input">
-                                {category.map(function(result) {
-                                    return <option key={Math.random()}>{result}</option>;
+                                {category.map(function(result, i) {
+                                    return <option key={i}>{result}</option>;
                                 })}
                             </select>
 
