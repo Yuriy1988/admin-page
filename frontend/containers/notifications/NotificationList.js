@@ -7,7 +7,7 @@ import {MerchantActions} from '../../actions/index';
 import * as NotificationActions from '../../actions/notifications';
 import Alert, {TYPE_ERROR} from '../../components/Alert';
 import LoadingOverlay from '../../components/LoadingOverlay';
-
+import Notifications from './notifications'
 import Transition from '../../containers/Transition';
 
 class NotificationList extends Component {
@@ -25,23 +25,23 @@ class NotificationList extends Component {
     }
 
     render() {
+
         const {notifications, children} = this.props;
-        debugger;
-
-
-        return notifications? <div>
+        return !notifications.length? <div>
                 <h1 className="page-header">
-                    <i className="fa fa-briefcase"/> {notifications[0].name}
+                    <i className="fa fa-briefcase"/>
+                    <ul>
+                    <Notifications notifications ={notifications}/>
+                    </ul>
                 </h1>
                 <Transition>{children}</Transition>
-            </div>: <div>loading</div>
+            </div>:  <LoadingOverlay loading={notifications.isFetching }/>
     }
 }
 
-
 export default connect(
     (state)=>({
-        notifications: state.notifications.notifications
+        notifications: state.notifications
     }),
     {
         getNotifications: NotificationActions.getNotifications,
