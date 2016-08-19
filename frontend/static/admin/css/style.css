@@ -211,6 +211,10 @@ th .fa-sort-desc, th .fa-sort-asc {
 .small-margin {
     margin: 1%;}
 
+.no-pointer {
+    cursor: default !important;
+}
+
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

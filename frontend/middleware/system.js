@@ -8,7 +8,7 @@ export default function handleTokenTime (store) {
             store.dispatch({
                 type: UserActions.USER_UNAUTHORIZED,
             });
-            localStorage.setItem('user_message', 'Please re-login to proceed working');
+            localStorage.setItem('user_message', 'Session expired. Please re-login');
             location.pathname = 'admin/'
         }
         if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 7) {

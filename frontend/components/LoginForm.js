@@ -3,7 +3,7 @@ import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
 import getServerVersion from '../actions/system'
-import Alert, {TYPE_ERROR} from '../components/Alert'
+import Alert, {TYPE_ERROR, TYPE_WARNING} from '../components/Alert'
 import {Link} from 'react-router'
 import Transition from '../containers/Transition';
 
@@ -23,6 +23,7 @@ class LoginForm extends Component {
         const {user} = this.props;
         this.props.getServerVersion();
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user_message', '');
     }
 
     handleChange(e) {
@@ -39,7 +40,6 @@ class LoginForm extends Component {
     }
 
     render() {
-        debugger;
         const {login, password} = this.state;
         const {user} = this.props;
         return (
@@ -50,6 +50,9 @@ class LoginForm extends Component {
                     </Alert>
                     <Alert type={TYPE_ERROR}>
                         {user.success}
+                    </Alert>
+                    <Alert type={TYPE_WARNING}>
+                        {localStorage.user_message}
                     </Alert>
                     <div className="form-group has-feedback">
                         <input type="text"

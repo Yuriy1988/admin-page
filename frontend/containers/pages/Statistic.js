@@ -174,7 +174,6 @@ class Statistic extends Component {
         let infoMessage = statistic.length === 0 && !isFetching ? 'Nothing to display' : '';
 
         return (
-
             <div className="statistic">
                 <div className="col-sm-2 calendar-place-holder">
                     <span style={{'whiteSpace': 'nowrap'}}>Select date </span>
@@ -270,7 +269,7 @@ class Statistic extends Component {
                                     status {filterElem}</th>
                                 <th onClick={this.setFilter.bind(this)} data="updated" rowSpan="2">
                                     updated {filterElem}</th>
-                                <th onClick={this.setFilter.bind(this)} colSpan="3">invoice</th>
+                                <th colSpan="3" c>invoice</th>
                             </tr>
                             <tr className="filter">
                                 <th data="currency" onClick={this.setFilter.bind(this)}>currency {filterElem}</th>
@@ -309,7 +308,7 @@ class Statistic extends Component {
 
                     </div>
                     <div className="chartStatistic">
-                        {/*<ReactChart data={statistic}/>*/}
+                        <ReactChart data={statistic}/>
                     </div>
                 </div>
                 <Alert type={TYPE_ERROR}>

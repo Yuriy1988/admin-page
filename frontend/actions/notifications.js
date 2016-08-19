@@ -1,7 +1,8 @@
 import {CALL_API} from '../middleware/api';
 import {NOTIFICATIONS_GET} from '../lib/api'
-import {NOTIFICATIONS_DELETE} from '../lib/api'
+import {NOTIFICATION_DELETE} from '../lib/api'
 import {NOTIFICATION_GET_BY_ID} from '../lib/api'
+import {NOTIFICATION_ADD} from '../lib/api'
 
 
 export const NOTIFICATIONS_REQUEST = 'NOTIFICATIONS_REQUEST';
@@ -58,6 +59,23 @@ export function deleteNotification(id) {
             types: [NOTIFICATION_DELETE_REQUEST, NOTIFICATION_DELETE_SUCCESS, NOTIFICATION_DELETE_FAILURE],
             cError: NOTIFICATION_DELETE_CERROR,
             endpoint: NOTIFICATION_DELETE(id),
+        },
+        id: id
+    }
+}
+
+export const NOTIFICATION_ADD_REQUEST = 'NOTIFICATION_ADD_REQUEST';
+export const NOTIFICATION_ADD_SUCCESS = 'NOTIFICATION_ADD_SUCCESS';
+export const NOTIFICATION_ADD_FAILURE = 'NOTIFICATION_ADD_FAILURE';
+export const NOTIFICATION_ADD_CERROR = 'NOTIFICATION_ADD_CERROR';
+
+export function addNotification(body) {
+    return {
+        [CALL_API]: {
+            types: [NOTIFICATION_ADD_REQUEST, NOTIFICATION_ADD_SUCCESS, NOTIFICATION_ADD_FAILURE],
+            cError: NOTIFICATION_ADD_CERROR,
+            endpoint: NOTIFICATION_ADD,
+            body
         }
     }
 }

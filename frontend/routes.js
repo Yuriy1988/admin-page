@@ -13,6 +13,7 @@ import NotificationsPage from './containers/pages/NotificationsPage' //Container
 import Statistic from './containers/pages/Statistic' //admin statistic
 
 import NotificationList from './containers/notifications/NotificationList' //notifications
+import NotificationCreatePage from './containers/notifications/NotificationCreatePage'
 import NotificationPage from './containers/notifications/NotificationPage'
 
 import MerchantsPage    from './containers/merchants/MerchantsPage'
@@ -88,6 +89,10 @@ class Routes {
 
                             <Route path="notifications" component={NotificationsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+
+                                <Route path="add" component={NotificationCreatePage}
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
 
                                 <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
                                             component={NotificationList}/>
