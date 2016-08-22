@@ -29,6 +29,9 @@ class NotificationForm extends Component {
 
     render() {
         const {errors} = this.props.selectedNotification.error;
+        const {selectedNotification} = this.props;
+
+        console.log(selectedNotification);
 
         return (
             <form role="form" onSubmit={this.onSubmit.bind(this)}>

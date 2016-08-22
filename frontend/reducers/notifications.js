@@ -1,4 +1,5 @@
 import * as NotificationActions from '../actions/notifications';
+import {browserHistory} from 'react-router'
 
 const initialState = {
     notifications: [], selectedNotification: {
@@ -23,20 +24,25 @@ export default function notifications(state = initialState, action) {
             return Object.assign({}, {isFetching: true}, state);
 
         case NotificationActions.NOTIFICATIONS_FAILURE:
-            return Object.assign({}, state, {isFetching: false}, {
+            return Object.assign({}, state, {
                 selectedNotification: action.response,
                 error: action.error.message
-            });
+            }, {isFetching: false});
         case NotificationActions.NOTIFICATIONS_SUCCESS:
             return Object.assign({}, state, {isFetching: false}, action.response);
 
         case NotificationActions.CLEAR_NOTIFICATION:
-            return Object.assign({}, initialState);
+            return Object.assign({}, {
+                notifications: [],
+                isFetching: false,
+                selectedNotification: state.selectedNotification
+            });
 
         case NotificationActions.NOTIFICATION_GET_REQUEST:
             return Object.assign({}, {isFetching: true}, state);
 
         case NotificationActions.NOTIFICATION_GET_SUCCESS:
+            debugger;
             return Object.assign({}, state, {isFetching: false}, {selectedNotification: action.response});
 
         case NotificationActions.NOTIFICATION_GET_FAILURE:
@@ -59,11 +65,23 @@ export default function notifications(state = initialState, action) {
         case  NotificationActions.NOTIFICATION_ADD_REQUEST:
             return Object.assign({}, state, {isFetching: true});
         case  NotificationActions.NOTIFICATION_ADD_SUCCESS:
-            return Object.assign({}, state, {isFetching: false});
+            return Object.assign({}, state, {
+                selectedNotification: {
+                    isFetching: false, error: {
+                        errors: {
+                            name: '',
+                            case_regex: '',
+                            case_template: '',
+                            body_template: '',
+                            subscribers_template: '',
+                            header_template: ''
+                        }
+                    }
+                }
+            });
         case  NotificationActions.NOTIFICATION_ADD_FAILURE:
             return Object.assign({}, state, {
-                isFetching: false,
-                selectedNotification: {error: action.error.serverError}
+                selectedNotification: {error: action.error.serverError, isFetching: false}
             });
 
         default:

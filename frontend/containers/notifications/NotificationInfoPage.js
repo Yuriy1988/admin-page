@@ -20,15 +20,26 @@ class NotificationPage extends Component {
         this.props.getNotificationById(id);
     }
 
+    handleDeleteButton(nonify_id) {
+        const {deleteNotification} = this.props;
+        deleteNotification(nonify_id);
+    }
+
 
     render() {
+        debugger;
         const {notification, notifications}  = this.props;
         return ( notification.name ?
                 <div className="row">
+
                     <div className="col-sm-6">
                         <div className="box with-border box-primary">
                             <div className="box-header with-border">
                                 <h3 className="box-title">Notification info</h3>
+                                <button className="btn btn-success small-margin pull-right">Edit</button>
+                                <button
+                                    onClick={this.handleDeleteButton.bind(this, notification.id)}
+                                    className="btn btn-warning small-margin pull-right">Delete</button>
                             </div>
                             <div className="box-body">
                                 <ul className="list-group list-group-unbordered">
@@ -39,8 +50,7 @@ class NotificationPage extends Component {
 
                                     <li className="list-group-item">
                                         <b>Body template</b>
-                                        <div
-                                            className="">{notification.bodyTemplate}</div>
+                                        <div>{notification.bodyTemplate}</div>
                                     </li>
 
                                     <li className="list-group-item">
@@ -89,6 +99,7 @@ export default connect(
     }),
     {
         getNotificationById: NotificationActions.getNotificationById,
+        deleteNotification: NotificationActions.deleteNotification,
         clearNotifications: NotificationActions.clearNotifications
     }
 )(NotificationPage)

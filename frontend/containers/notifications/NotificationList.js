@@ -25,7 +25,7 @@ class NotificationList extends Component {
     }
 
     render() {
-        let {notifications} = this.props;
+        let {notifications, getNotificationById} = this.props;
         const list = notifications.notifications;
 
         const content = notifications.notifications.map((notification, i) => {
@@ -39,8 +39,10 @@ class NotificationList extends Component {
                     </td>
                     <td key={Math.random()}>
                         <div className="btn-toolbar pull-right">
-                            <Link className="btn btn-sm btn-primary"
+                            <Link onClick={()=>{getNotificationById(list[i].id)}}
+                                  className="btn btn-sm btn-primary"
                                   to={`/admin/administrator/notifications/${list[i].id}/edit`}>
+
                                 <i className="fa fa-edit"/> Edit
                             </Link>
                             <span className="btn btn-sm btn-danger"
@@ -81,8 +83,9 @@ class NotificationList extends Component {
                         {notifications.error}
                     </Alert>
                 </div>
+                <LoadingOverlay loading={notifications.isFetching }/>
             </div>
-            <LoadingOverlay loading={notifications.isFetching }/>
+
         </div>
 
     }
@@ -93,6 +96,7 @@ export default connect(
         notifications: state.notifications
     }),
     {
+        getNotificationById: NotificationActions.getNotificationById,
         getNotifications: NotificationActions.getNotifications,
         clearNotifications: NotificationActions.clearNotifications,
         deleteNotification: NotificationActions.deleteNotification

@@ -14,7 +14,8 @@ import Statistic from './containers/pages/Statistic' //admin statistic
 
 import NotificationList from './containers/notifications/NotificationList' //notifications
 import NotificationCreatePage from './containers/notifications/NotificationCreatePage'
-import NotificationPage from './containers/notifications/NotificationPage'
+import NotificationPage from './containers/notifications/NotificationInfoPage'
+import NotificationEditPage from './containers/notifications/NotificationEditPage'
 
 import MerchantsPage    from './containers/merchants/MerchantsPage'
 import MerchantList     from './components/MerchantList'
@@ -103,6 +104,10 @@ class Routes {
                                     {/*component={NotificationInfoPage}/>*/}
                                     {/*<Route path="edit" component={NotificationEditPage}*/}
                                     {/*onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
+                                </Route>
+
+                                <Route path=":notificationId/edit" component={NotificationEditPage}
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                 </Route>
                             </Route>
 

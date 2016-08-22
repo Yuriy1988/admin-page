@@ -3,6 +3,8 @@ import {NOTIFICATIONS_GET} from '../lib/api'
 import {NOTIFICATION_DELETE} from '../lib/api'
 import {NOTIFICATION_GET_BY_ID} from '../lib/api'
 import {NOTIFICATION_ADD} from '../lib/api'
+import {NOTIFICATION_EDIT} from '../lib/api'
+
 
 
 export const NOTIFICATIONS_REQUEST = 'NOTIFICATIONS_REQUEST';
@@ -49,7 +51,7 @@ export function getNotificationById(id) {
 }
 
 export const NOTIFICATION_DELETE_REQUEST = 'NOTIFICATION_DELETE_REQUEST';
-export const NOTIFICATION_DELETE_SUCCESS = 'NOTIFICATION_DELETE_SUCCESS';
+export const NOTIFICATION_DELETE_SUCCESS = {name: 'NOTIFICATION_DELETE_SUCCESS', redirectTo: '/admin/administrator/notifications'};
 export const NOTIFICATION_DELETE_FAILURE = 'NOTIFICATION_DELETE_FAILURE';
 export const NOTIFICATION_DELETE_CERROR = 'NOTIFICATION_DELETE_CERROR';
 
@@ -65,7 +67,7 @@ export function deleteNotification(id) {
 }
 
 export const NOTIFICATION_ADD_REQUEST = 'NOTIFICATION_ADD_REQUEST';
-export const NOTIFICATION_ADD_SUCCESS = 'NOTIFICATION_ADD_SUCCESS';
+export const NOTIFICATION_ADD_SUCCESS = {name: 'NOTIFICATION_ADD_SUCCESS', redirectTo: '/admin/administrator/notifications'};
 export const NOTIFICATION_ADD_FAILURE = 'NOTIFICATION_ADD_FAILURE';
 export const NOTIFICATION_ADD_CERROR = 'NOTIFICATION_ADD_CERROR';
 
@@ -75,6 +77,22 @@ export function addNotification(body) {
             types: [NOTIFICATION_ADD_REQUEST, NOTIFICATION_ADD_SUCCESS, NOTIFICATION_ADD_FAILURE],
             cError: NOTIFICATION_ADD_CERROR,
             endpoint: NOTIFICATION_ADD,
+            body
+        }
+    }
+}
+
+export const NOTIFICATION_EDIT_REQUEST = 'NOTIFICATION_EDIT_REQUEST';
+export const NOTIFICATION_EDIT_SUCCESS = {name: 'NOTIFICATION_EDIT_SUCCESS', redirectTo: '/admin/administrator/notifications'};
+export const NOTIFICATION_EDIT_FAILURE = 'NOTIFICATION_EDIT_FAILURE';
+export const NOTIFICATION_EDIT_CERROR = 'NOTIFICATION_EDIT_CERROR';
+
+export function editNotification(body) {
+    return {
+        [CALL_API]: {
+            types: [NOTIFICATION_EDIT_REQUEST, NOTIFICATION_EDIT_SUCCESS, NOTIFICATION_EDIT_FAILURE],
+            cError: NOTIFICATION_EDIT_CERROR,
+            endpoint: NOTIFICATION_EDIT,
             body
         }
     }
