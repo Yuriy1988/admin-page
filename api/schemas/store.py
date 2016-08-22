@@ -31,6 +31,12 @@ class StoreSchema(base.BaseSchema):
     store_settings = fields.Nested(StoreSettingsSchema(), required=True)
 
 
+class StoreNameSchema(base.BaseSchema):
+
+    id = fields.Str(dump_only=True)
+    store_name = fields.Str(required=True, validate=Length(min=3, max=32))
+
+
 class StorePaySysSchema(base.BaseSchema):
 
     id = fields.Str(dump_only=True)

@@ -3,7 +3,7 @@ from .currency import CurrencySchema, CurrencyRequestSchema
 from .manager import ManagerSchema
 from .merchant import MerchantSchema
 from .payment_system import PaymentSystemSchema, PaymentSystemUpdateSchema
-from .store import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema
+from .store import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema, StoreNameSchema
 from .user import (UserSchema,
                    UserAuthSchema,
                    UserChangePasswordSchema,

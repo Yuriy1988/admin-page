@@ -3,7 +3,7 @@ from flask import request, jsonify, Response
 from api import api_v1, db, utils, auth
 from api.errors import NotFoundError, ValidationError, ForbiddenError
 from api.models import Merchant, Manager, Store, StorePaySys, PaymentSystem
-from api.schemas import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema
+from api.schemas import StoreSchema, StorePaySysSchema, StorePaySysRequestSchema, StoreNameSchema
 from .decorators import autofill_id, owner_access_only
 
 __author__ = 'Kostel Serhii'
@@ -43,6 +43,15 @@ def merchant_stores_create(merchant_id):
 
     result = schema.dump(store)
     return jsonify(result.data)
+
+
+@api_v1.route('/storenames')
+@auth.auth('admin')
+def store_names():
+    stores = Store.query.all()
+    schema = StoreNameSchema(many=True)
+    result = schema.dump(stores)
+    return jsonify(stores=result.data)
 
 
 @api_v1.route('/stores/<store_id>', methods=['GET'])
