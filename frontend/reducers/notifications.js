@@ -1,33 +1,22 @@
 import * as NotificationActions from '../actions/notifications';
-import {browserHistory} from 'react-router'
 
 const initialState = {
-    notifications: [], selectedNotification: {
-        error: {
-            errors: {
-                name: '',
-                case_regex: '',
-                case_template: '',
-                body_template: '',
-                subscribers_template: '',
-                header_template: ''
-            }
-        },
-        isFetching: false
-    }
+    iisFetching: false,
+    notifications: [],
+    error:''
 };
 
 export default function notifications(state = initialState, action) {
 
     switch (action.type) {
         case NotificationActions.NOTIFICATIONS_REQUEST:
-            return Object.assign({}, {isFetching: true}, state);
+            return Object.assign({}, state, {isFetching: true});
 
         case NotificationActions.NOTIFICATIONS_FAILURE:
             return Object.assign({}, state, {
-                selectedNotification: action.response,
-                error: action.error.message
-            }, {isFetching: false});
+                error: action.error.message,
+                isFetching: false
+            });
         case NotificationActions.NOTIFICATIONS_SUCCESS:
             return Object.assign({}, state, {isFetching: false}, action.response);
 
@@ -35,18 +24,7 @@ export default function notifications(state = initialState, action) {
             return Object.assign({}, {
                 notifications: [],
                 isFetching: false,
-                selectedNotification: state.selectedNotification
             });
-
-        case NotificationActions.NOTIFICATION_GET_REQUEST:
-            return Object.assign({}, {isFetching: true}, state);
-
-        case NotificationActions.NOTIFICATION_GET_SUCCESS:
-            debugger;
-            return Object.assign({}, state, {isFetching: false}, {selectedNotification: action.response});
-
-        case NotificationActions.NOTIFICATION_GET_FAILURE:
-            return Object.assign({}, state, {isFetching: false}, {error: action.error.message});
 
         case NotificationActions.NOTIFICATION_DELETE_REQUEST:
             return Object.assign({}, state, {isFetching: true});
@@ -61,28 +39,6 @@ export default function notifications(state = initialState, action) {
         case NotificationActions.NOTIFICATION_DELETE_FAILURE:
             return Object.assign({}, state, {isFetching: false, error: action.error.message});
 
-        //add
-        case  NotificationActions.NOTIFICATION_ADD_REQUEST:
-            return Object.assign({}, state, {isFetching: true});
-        case  NotificationActions.NOTIFICATION_ADD_SUCCESS:
-            return Object.assign({}, state, {
-                selectedNotification: {
-                    isFetching: false, error: {
-                        errors: {
-                            name: '',
-                            case_regex: '',
-                            case_template: '',
-                            body_template: '',
-                            subscribers_template: '',
-                            header_template: ''
-                        }
-                    }
-                }
-            });
-        case  NotificationActions.NOTIFICATION_ADD_FAILURE:
-            return Object.assign({}, state, {
-                selectedNotification: {error: action.error.serverError, isFetching: false}
-            });
 
         default:
             return state;

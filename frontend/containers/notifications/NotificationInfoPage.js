@@ -27,7 +27,6 @@ class NotificationPage extends Component {
 
 
     render() {
-        debugger;
         const {notification, notifications}  = this.props;
         return ( notification.name ?
                 <div className="row">
@@ -87,7 +86,7 @@ class NotificationPage extends Component {
                 <div className="col-sm-3 small-margin"><Alert type={TYPE_ERROR}>
                     {notifications.error}
                 </Alert></div>
-                <LoadingOverlay loading={notifications.isFetching }/></div>
+                <LoadingOverlay loading={notifications.isFetching}/></div>
         )
     }
 }
@@ -103,3 +102,4 @@ export default connect(
         clearNotifications: NotificationActions.clearNotifications
     }
 )(NotificationPage)
+

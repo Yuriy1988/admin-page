@@ -17,6 +17,7 @@ import sideBar from './sideBar'
 import {routeReducer} from 'react-router-redux'
 import {combineReducers} from 'redux'
 import notifications from './notifications'
+import notification from './notification'
 
 
 // Updates an entity cache in response to any action with response.entities.
@@ -299,6 +300,7 @@ const rootReducer = combineReducers({
     sideBar,
     dictionary,
     notifications,
+    notification,
     routing: routeReducer
 });
 

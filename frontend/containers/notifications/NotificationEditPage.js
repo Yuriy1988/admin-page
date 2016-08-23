@@ -18,7 +18,7 @@ class NotificationEditPage extends Component {
     }
 
     render() {
-debugger;
+
         const selectedNotification = this.props.selectedNotification;
         return (
             <div>

@@ -25,10 +25,13 @@ class NotificationList extends Component {
     }
 
     render() {
-        let {notifications, getNotificationById} = this.props;
-        const list = notifications.notifications;
 
-        const content = notifications.notifications.map((notification, i) => {
+        let {notifications} = this.props;
+        let {getNotificationById} = this.props;
+        const list = notifications.notifications;
+        debugger;
+
+        const content = list.map((notification, i) => {
             return (
                 <tr key={i}>
                     <td>{i + 1}</td>
@@ -42,7 +45,6 @@ class NotificationList extends Component {
                             <Link onClick={()=>{getNotificationById(list[i].id)}}
                                   className="btn btn-sm btn-primary"
                                   to={`/admin/administrator/notifications/${list[i].id}/edit`}>
-
                                 <i className="fa fa-edit"/> Edit
                             </Link>
                             <span className="btn btn-sm btn-danger"
@@ -80,7 +82,7 @@ class NotificationList extends Component {
                 </div>
                 <div className="col-sm-3 small-margin">
                     <Alert type={TYPE_ERROR}>
-                        {notifications.error}
+                        {this.props.notifications.error}
                     </Alert>
                 </div>
                 <LoadingOverlay loading={notifications.isFetching }/>
