@@ -9,19 +9,30 @@ class NotificationForm extends Component {
         this.onSubmit = this.onSubmit.bind(this);
 
         let {selectedNotification} = this.props;
-        this.state = {
-            name: `${selectedNotification.name || ''}` ,
-            case_regex: `${selectedNotification.caseRegex || ''}`,
-            header_template: `${selectedNotification.headerTemplate  || ''}` ,
-            case_template: `${selectedNotification.caseTemplate ||''}`,
-            body_template: `${selectedNotification.bodyTemplate ||''}`,
-            subscribers_template: `${selectedNotification.subscribersTemplate ||''}`
-        };
+        if (location.pathname.split("/")[4] !== 'add') {
+            this.state = {
+                name: `${selectedNotification.name || ''}`,
+                case_regex: `${selectedNotification.caseRegex || ''}`,
+                header_template: `${selectedNotification.headerTemplate || ''}`,
+                case_template: `${selectedNotification.caseTemplate || ''}`,
+                body_template: `${selectedNotification.bodyTemplate || ''}`,
+                subscribers_template: `${selectedNotification.subscribersTemplate || ''}`
+            };
+        } else {
+            this.state = {
+                name: '',
+                case_regex: '',
+                header_template: '',
+                case_template: '',
+                body_template: '',
+                subscribers_template: ''
+            };
+        }
     }
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.onCreate(this.state);
+        this.props.onSubmit(this.state);
     }
 
     handleChange(e) {
@@ -41,7 +52,7 @@ class NotificationForm extends Component {
                             <input className="form-control" type="text" name="name"
                                    placeholder="Please, enter notification's name"
                                    onChange={this.handleChange.bind(this)}
-                            value={this.state.name}/>
+                                   value={this.state.name}/>
                         </Field>
                     </div>
 
@@ -50,7 +61,7 @@ class NotificationForm extends Component {
                             <label htmlFor="case_regex">case_regex</label>
                             <input className="form-control" type="text" name="case_regex"
                                    placeholder="Please, enter case_regex" onChange={this.handleChange.bind(this)}
-                                value={this.state.case_regex}/>
+                                   value={this.state.case_regex}/>
                         </Field>
                     </div>
 
@@ -58,7 +69,7 @@ class NotificationForm extends Component {
                         <Field error={errors.header_template}>
                             <label htmlFor="header_template">header_template</label>
                             <input value={this.state.header_template}
-                                className="form-control" type="text" name="header_template"
+                                   className="form-control" type="text" name="header_template"
                                    placeholder="Please, enter header_template" onChange={this.handleChange.bind(this)}/>
                         </Field>
                     </div>
@@ -66,7 +77,7 @@ class NotificationForm extends Component {
                         <Field error={errors.case_template}>
                             <label htmlFor="case_template">case_template</label>
                             <input value={this.state.case_template}
-                                className="form-control" type="text" name="case_template"
+                                   className="form-control" type="text" name="case_template"
                                    placeholder="Please, enter case_template" onChange={this.handleChange.bind(this)}/>
                         </Field>
                     </div>
@@ -83,8 +94,8 @@ class NotificationForm extends Component {
                         <Field error={errors.body_template}>
                             <label
                                 htmlFor="body_template">body_template</label>
-                            <textarea  value={this.state.body_template}
-                                name="body_template" className="form-control" rows="5"
+                            <textarea value={this.state.body_template}
+                                      name="body_template" className="form-control" rows="5"
                                       placeholder="Please, enter body_template"
                                       onChange={this.handleChange.bind(this)}/>
                         </Field>

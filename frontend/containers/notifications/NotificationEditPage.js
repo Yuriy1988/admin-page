@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 
-import { NotificationsActions } from '../../actions/index'
+import {NotificationsActions} from '../../actions/index'
 
 import NotificationForm from './NotificationForm'
 import LoadingOverlay from '../../components/LoadingOverlay'
@@ -18,8 +18,8 @@ class NotificationEditPage extends Component {
     }
 
     onEdit(notification) {
-        const { editNotification } = this.props;
-        editNotification(notification);
+        const {editNotification, selectedNotification} = this.props;
+        editNotification(Object.assign({}, notification, {id: selectedNotification.id}));
     }
 
     render() {
@@ -32,7 +32,8 @@ class NotificationEditPage extends Component {
                         <h3 className="box-title">Edit Notification</h3>
                     </div>
                     <div className="box-body">
-                        <NotificationForm onCreate={this.onEdit} selectedNotification={selectedNotification}/>
+                        <NotificationForm onSubmit={this.onEdit.bind(this)}
+                                          selectedNotification={selectedNotification}/>
                         <LoadingOverlay loading={selectedNotification.isFetching}/>
                     </div>
                 </div>

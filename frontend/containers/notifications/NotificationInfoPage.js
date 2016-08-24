@@ -5,6 +5,7 @@ import Alert, {TYPE_ERROR} from '../../components/Alert'
 import {Link} from 'react-router'
 import * as NotificationActions from '../../actions/notifications';
 import LoadingOverlay from '../../components/LoadingOverlay';
+import Transition from '../../containers/Transition';
 
 class NotificationPage extends Component {
     constructor(props) {

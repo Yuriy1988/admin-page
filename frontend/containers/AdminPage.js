@@ -15,7 +15,7 @@ class AdminPage extends Component {
     render() {
         const { children } = this.props;
 
-        const path = location.pathname.split("/").slice(0, 5).join("/");
+        const path = location.pathname.split("/").slice(0, 6).join("/");
 
         return (
             <div>

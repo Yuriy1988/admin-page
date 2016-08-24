@@ -30,7 +30,7 @@ class NotificationCreatePage extends Component {
                         <h3 className="box-title">Create Notification</h3>
                     </div>
                     <div className="box-body">
-                        <NotificationForm onCreate={this.onCreate} selectedNotification={selectedNotification}/>
+                        <NotificationForm onSubmit={this.onCreate.bind(this)} selectedNotification={selectedNotification}/>
                         <LoadingOverlay loading={selectedNotification.isFetching}/>
                     </div>
                 </div>
@@ -41,7 +41,7 @@ class NotificationCreatePage extends Component {
 
 export default connect(
     (state)=>({
-        selectedNotification: state.notifications.selectedNotification
+        selectedNotification: state.notification
     }),
     {
         addNotification: NotificationsActions.addNotification

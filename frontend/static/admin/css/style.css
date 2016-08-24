@@ -218,6 +218,11 @@ th .fa-sort-desc, th .fa-sort-asc {
     margin-bottom: 20px;
 }
 
+.message {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/
