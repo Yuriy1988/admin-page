@@ -98,16 +98,12 @@ class Routes {
                                 <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
                                             component={NotificationList}/>
 
-                                <Route path=":notificationId" component={NotificationPage}
+                                <Route path=":notificationId"
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                                    {/*<IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}*/}
-                                    {/*component={NotificationInfoPage}/>*/}
-                                    {/*<Route path="edit" component={NotificationEditPage}*/}
-                                    {/*onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>*/}
-                                </Route>
-
-                                <Route path=":notificationId/edit" component={NotificationEditPage}
-                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                                component={NotificationPage}/>
+                                    <Route path="edit" component={NotificationEditPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 </Route>
                             </Route>
 

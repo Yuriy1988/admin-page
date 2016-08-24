@@ -7,10 +7,10 @@ import {NOTIFICATION_EDIT} from '../lib/api'
 
 
 
-export const NOTIFICATIONS_REQUEST = 'NOTIFICATIONS_REQUEST';
-export const NOTIFICATIONS_SUCCESS = 'NOTIFICATIONS_SUCCESS';
-export const NOTIFICATIONS_FAILURE = 'NOTIFICATIONS_FAILURE';
-export const NOTIFICATIONS_CERROR = 'NOTIFICATIONS_CERROR';
+export const NOTIFICATIONS_GET_REQUEST = 'NOTIFICATIONS_GET_REQUEST';
+export const NOTIFICATIONS_GET_SUCCESS = 'NOTIFICATIONS_GET_SUCCESS';
+export const NOTIFICATIONS_GET_FAILURE = 'NOTIFICATIONS_GET_FAILURE';
+export const NOTIFICATIONS_GET_CERROR = 'NOTIFICATIONS_GET_CERROR';
 
 export function notificationsRequestError() {
     return {
@@ -21,18 +21,18 @@ export function notificationsRequestError() {
 export function getNotifications() {
     return {
         [CALL_API]: {
-            types: [NOTIFICATIONS_REQUEST, NOTIFICATIONS_SUCCESS, NOTIFICATIONS_FAILURE],
-            cError: NOTIFICATIONS_CERROR,
+            types: [NOTIFICATIONS_GET_REQUEST, NOTIFICATIONS_GET_SUCCESS, NOTIFICATIONS_GET_FAILURE],
+            cError: NOTIFICATIONS_GET_CERROR,
             endpoint: NOTIFICATIONS_GET,
         }
     }
 }
 
-export const CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION';
+export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
 
 export function clearNotifications() {
     return {
-        type: CLEAR_NOTIFICATION
+        type: CLEAR_NOTIFICATIONS
     }
 }
 export const NOTIFICATION_GET_REQUEST = 'NOTIFICATION_GET_REQUEST';

@@ -11,10 +11,6 @@ class NotificationPage extends Component {
         super(props);
     }
 
-    componentWillUnmount() {
-        this.props.clearNotifications();
-    }
-
     componentWillMount() {
         const id = this.props.params.notificationId;
         this.props.getNotificationById(id);
@@ -27,7 +23,7 @@ class NotificationPage extends Component {
 
 
     render() {
-        const {notification, notifications}  = this.props;
+        const {notification, notifications, getNotificationById}  = this.props;
         return ( notification.name ?
                 <div className="row">
 
@@ -35,10 +31,23 @@ class NotificationPage extends Component {
                         <div className="box with-border box-primary">
                             <div className="box-header with-border">
                                 <h3 className="box-title">Notification info</h3>
-                                <button className="btn btn-success small-margin pull-right">Edit</button>
-                                <button
-                                    onClick={this.handleDeleteButton.bind(this, notification.id)}
-                                    className="btn btn-warning small-margin pull-right">Delete</button>
+                                <div className="btn-toolbar pull-right">
+                                <Link onClick={()=> {
+                                    getNotificationById(notification.id)
+                                }}
+                                      className="btn btn-sm btn-primary"
+                                      to={`/admin/administrator/notifications/${notification.id}/edit`}>
+                                    <i className="fa fa-edit"/> Edit
+                                </Link>
+
+
+                                <span className="btn btn-sm btn-danger"
+                                      onClick={this.handleDeleteButton.bind(this, notification.id)}>
+                                <i className="fa fa-trash"/> Delete
+                            </span>
+                                    </div>
+
+
                             </div>
                             <div className="box-body">
                                 <ul className="list-group list-group-unbordered">
@@ -93,7 +102,7 @@ class NotificationPage extends Component {
 
 export default connect(
     (state)=>({
-        notification: state.notifications.selectedNotification,
+        notification: state.notification,
         notifications: state.notifications
     }),
     {

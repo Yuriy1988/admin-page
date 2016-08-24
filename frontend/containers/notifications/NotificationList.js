@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
-import Alert, {TYPE_ERROR} from '../../components/Alert'
+import Alert, {TYPE_ERROR, TYPE_INFO} from '../../components/Alert'
 import * as NotificationActions from '../../actions/notifications';
 import LoadingOverlay from '../../components/LoadingOverlay';
 
@@ -9,6 +9,9 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 class NotificationList extends Component {
     constructor(props) {
         super(props);
+        this.message = <div className="message"><Alert type={TYPE_INFO}>
+            {this.props.message}
+        </Alert></div>
     }
 
     handleDeleteButton(nonify_id) {
@@ -24,25 +27,30 @@ class NotificationList extends Component {
         this.props.clearNotifications();
     }
 
+
     render() {
 
-        let {notifications} = this.props;
+        let {notifications, message} = this.props;
         let {getNotificationById} = this.props;
         const list = notifications.notifications;
-        debugger;
 
         const content = list.map((notification, i) => {
             return (
                 <tr key={i}>
                     <td>{i + 1}</td>
                     <td>
-                        <Link to={`/admin/administrator/notifications/${list[i].id}`}>
+                        <Link onClick={()=> {
+                            getNotificationById(list[i].id)
+                        }}
+                              to={`/admin/administrator/notifications/${list[i].id}`}>
                             {list[i].name}
                         </Link>
                     </td>
                     <td key={Math.random()}>
                         <div className="btn-toolbar pull-right">
-                            <Link onClick={()=>{getNotificationById(list[i].id)}}
+                            <Link onClick={()=> {
+                                getNotificationById(list[i].id)
+                            }}
                                   className="btn btn-sm btn-primary"
                                   to={`/admin/administrator/notifications/${list[i].id}/edit`}>
                                 <i className="fa fa-edit"/> Edit
@@ -66,6 +74,7 @@ class NotificationList extends Component {
                             className="fa fa-plus"/> Add</Link>
                     </div>
                 </div>
+                {this.message}
                 <div className="box-body no-padding">
                     <div className="table-responsive">
                         <table className="table table-hover table-striped">
@@ -95,7 +104,8 @@ class NotificationList extends Component {
 
 export default connect(
     (state)=>({
-        notifications: state.notifications
+        notifications: state.notifications,
+        message: state.notifications.message
     }),
     {
         getNotificationById: NotificationActions.getNotificationById,

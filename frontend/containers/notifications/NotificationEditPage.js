@@ -12,14 +12,19 @@ class NotificationEditPage extends Component {
         super(props);
     }
 
+    componentWillMount() {
+        const id = location.pathname.split('/')[4];
+        this.props.getNotificationById(id)
+    }
+
     onEdit(notification) {
         const { editNotification } = this.props;
         editNotification(notification);
     }
 
     render() {
-
         const selectedNotification = this.props.selectedNotification;
+
         return (
             <div>
                 <div className="box box-primary">
@@ -38,9 +43,10 @@ class NotificationEditPage extends Component {
 
 export default connect(
     (state)=>({
-        selectedNotification: state.notifications.selectedNotification
+        selectedNotification: state.notification
     }),
     {
-        editNotification: NotificationsActions.editNotification
+        editNotification: NotificationsActions.editNotification,
+        getNotificationById: NotificationsActions.getNotificationById
     }
 )(NotificationEditPage)
