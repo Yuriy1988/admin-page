@@ -1,5 +1,5 @@
 import { Schema, arrayOf, valuesOf} from 'normalizr'
-let version = localStorage.apiVersion;
+let version = localStorage.apiVersion || 'dev';
 
 /**
  * SYSTEM_ACTIONS
