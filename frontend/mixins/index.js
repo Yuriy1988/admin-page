@@ -23,7 +23,6 @@ function mixin (behaviour, sharedBehaviour = {}) {
     return _mixin;
 };
 
-
 import changeHandler from './changeHandler'
 export const changeHandlerMixin = mixin({
     changeHandler
