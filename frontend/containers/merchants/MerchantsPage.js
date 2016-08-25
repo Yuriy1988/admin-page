@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-
 class MerchantsPage extends Component {
     constructor(props) {
         super(props);

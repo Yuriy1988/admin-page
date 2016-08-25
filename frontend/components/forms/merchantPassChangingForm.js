@@ -88,12 +88,14 @@ class merchantPassChangingForm extends Component {
                             </button>
                     </div>
                 </form>
+                <div className="to-margin">
                 <Alert type={TYPE_ERROR}>
                     {user.error}
                 </Alert>
                 <Alert type={TYPE_SUCCESS}>
                     {user.success}
                 </Alert>
+                    </div>
             </div>
         )
     }

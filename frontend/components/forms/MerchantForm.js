@@ -235,6 +235,6 @@ export default connect(
     ,
     {
         loadNotifications: DictionaryActions.loadNotifications,
-        loadCurrencies: DictionaryActions.loadCurrencies
+        loadCurrencies: DictionaryActions.loadCurrencies,
     }
 )(MerchantForm);

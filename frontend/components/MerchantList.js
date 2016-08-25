@@ -32,7 +32,7 @@ class MerchantList extends Component {
                     </tbody>
                 </table>
             </div>
-        ) : <p>No items</p>;
+        ) : <p></p>;
     }
 
     handleDeleteButton(mid) {
@@ -45,7 +45,6 @@ class MerchantList extends Component {
     render() {
 
         let {merchants, merchantPagination, loadMerchantsCE,  deleteMerchantCE} = this.props;
-
         const merchantList = MerchantList.renderList(merchantPagination.ids.map((merchantId, i) => {
             return (
                 <tr key={i}>
@@ -86,11 +85,6 @@ class MerchantList extends Component {
                 </div>
                 <div className="box-body no-padding">
 
-                    {
-                        (!!merchantPagination.error) ?
-                            <Alert type={TYPE_ERROR}
-                                   handleClose={loadMerchantsCE}>{merchantPagination.error.message}</Alert> : null
-                    }
                     { merchantList }
                 </div>
                 <LoadingOverlay loading={merchantPagination.isFetching }/>

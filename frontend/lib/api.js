@@ -1,9 +1,11 @@
 import { Schema, arrayOf, valuesOf} from 'normalizr'
+let version = localStorage.apiVersion;
 
 /**
  * SYSTEM_ACTIONS
  */
-export const SERVER_VERSION_GET = {path: "../../../client/version", method: "GET", isAuth: false}; // waiting for server fix;
+export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false}; // waiting for server fix;
+
 
 /**
  * USER_ACTIONS
@@ -79,6 +81,7 @@ export const DICT_SIGN_ALGORITHM = {path: "constants/sign_algorithm", method: "G
 export const DICT_CURRENCY = {path: "constants/currency", method: "GET"};
 export const DICT_NOTIFY = {path: "constants/notify", method: "GET"};
 export const DICT_CATEGORY = {path: "constants/category", method: "GET" };
+export const DICT_PAYMENT_INTERFACES = {path: "constants/payment_interface", method: "GET"};
 export const DICT_PAYSYS_ID = {path: "payment_systems/allowed/paysys_id", method: "GET" };
 
 
@@ -97,6 +100,17 @@ const storePaySysSchema = new Schema('storePaySys');
 const storePaySysSchemaList = {storePaysys: arrayOf(storePaySysSchema)};
 export const STORE_PAYSYS_LIST = (storeId) => ({path: `stores/${storeId}/store_paysys`, method: "GET", schema: storePaySysSchemaList});
 export const STORE_PAYSYS_UPDATE = (storePaysysId) => ({path: `store_paysys/${storePaysysId}`, method: "PUT", schema: storePaySysSchema});
+
+/**
+ * Notification
+ */
+
+export const NOTIFICATIONS_GET = {path: `../../../api/notify/${version}/notifications`, method: "GET"};
+export const NOTIFICATION_GET_BY_ID =(id) => ({path: `../../../api/notify/${version}/notifications/${id}`, method: "GET"});
+export const NOTIFICATION_EDIT = (id) => ({path: `../../../api/notify/${version}/notifications/${id}`, method: "PUT" });
+export const NOTIFICATION_ADD = {path: `../../../api/notify/${version}/notifications`, method: "POST" };
+export const NOTIFICATION_DELETE = (id) => ({path: `../../../api/notify/${version}/notifications/${id}`, method: "DELETE" });
+
 
 /**
  * Sign algorithm

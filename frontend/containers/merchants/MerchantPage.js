@@ -26,9 +26,6 @@ class MerchantPage extends Component {
         MerchantPage.loadData(props, merchantId);
     }
 
-    test () {
-        console.log('edit pass');
-    }
     static loadData(props, prevMerchantId = -1) {
         const {merchantId} = props.params;
 

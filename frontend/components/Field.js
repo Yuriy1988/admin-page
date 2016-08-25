@@ -6,9 +6,9 @@ export default class Field extends Component {
     render() {
         const {children, error} = this.props;
         return (
-            <div className={`form-group ${(!!error) ? "has-error" : ""} `}>
+            <div className={`field form-group ${(!!error) ? "has-error" : ""} `}>
                 {children}
-                {(!!error) ? (error.map((e, i) => <p className="help-block" key={i}>{e}</p>)) : null}
+                <span className="absolute">{(!!error) ? <span className="help-block" > {(error.map((e, i) =>  e))}</span> : null}</span>
             </div>
         );
     }

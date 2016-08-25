@@ -1,4 +1,4 @@
-import React                 from 'react'
+import React from 'react'
 import {Route, IndexRoute} from 'react-router' //React
 
 import App               from './containers/App'
@@ -11,6 +11,11 @@ import AdminPage         from './containers/AdminPage'
 import SelectRolePage    from './containers/SelectRolePage'
 import NotificationsPage from './containers/pages/NotificationsPage' //Containers
 import Statistic from './containers/pages/Statistic' //admin statistic
+
+import NotificationList from './containers/notifications/NotificationList' //notifications
+import NotificationCreatePage from './containers/notifications/NotificationCreatePage'
+import NotificationPage from './containers/notifications/NotificationInfoPage'
+import NotificationEditPage from './containers/notifications/NotificationEditPage'
 
 import MerchantsPage    from './containers/merchants/MerchantsPage'
 import MerchantList     from './components/MerchantList'
@@ -44,6 +49,8 @@ import PaySysContractEditPage    from './containers/paysystemContracts/PaySystem
 import PaySysContractListPage    from './containers/paysystemContracts/PaySystemContractListPage'
 
 import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
+import handleTokenTime from './middleware/system';
+
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -51,7 +58,6 @@ const ROLE = {
     MERCHANT: "ROLE_MERCHANT",
     MANAGER: "ROLE_MANAGER"
 };
-
 
 
 class Routes {
@@ -81,8 +87,25 @@ class Routes {
                         <Route path="administrator" component={AdminPage}
                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                             <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
                             <Route path="notifications" component={NotificationsPage}
-                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+
+                                <Route path="add" component={NotificationCreatePage}
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
+
+                                <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                            component={NotificationList}/>
+
+                                <Route path=":notificationId"
+                                       onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                    <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
+                                                component={NotificationPage}/>
+                                    <Route path="edit" component={NotificationEditPage}
+                                           onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                                </Route>
+                            </Route>
 
                             <Route path="changePassword" component={selfPassChangingForm}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
@@ -94,6 +117,7 @@ class Routes {
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                 <Route path="list" component={MerchantList}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
                                 <Route path=":merchantId" component={MerchantPage}
                                        onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
                                     <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}
@@ -203,6 +227,7 @@ class Routes {
                     }
                 }
             }
+            handleTokenTime(this.store);
 
             if (!user.token) {
                 accessDenied = true;
@@ -217,4 +242,5 @@ class Routes {
     }
 }
 
-export default Routes
+export default Routes;
+

@@ -55,7 +55,7 @@ class MerchantContractListPage extends Component {
                     </tbody>
                 </table>
             </div>
-        ) : <p>No items</p>;
+        ) : <p></p>;
     }
 
     handleDelete(merchantContractId) {

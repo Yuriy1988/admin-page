@@ -1,9 +1,9 @@
-//TODO refactor
 import React, {Component, PropTypes} from 'react'
 import LoadingOverlay from '../components/LoadingOverlay';
 import {connect} from 'react-redux'
 import * as UserActions from '../actions/user'
-import Alert, {TYPE_ERROR} from '../components/Alert'
+import getServerVersion from '../actions/system'
+import Alert, {TYPE_ERROR, TYPE_WARNING} from '../components/Alert'
 import {Link} from 'react-router'
 import Transition from '../containers/Transition';
 
@@ -19,14 +19,11 @@ class LoginForm extends Component {
         };
     }
 
-    componentDidMount() {
-        //  'after server implementation here will be function that gets server version'
-        //this.props.getServerVersion();
-    }
-
     componentWillUnmount() {
         const {user} = this.props;
+        this.props.getServerVersion();
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user_message', '');
     }
 
     handleChange(e) {
@@ -53,6 +50,9 @@ class LoginForm extends Component {
                     </Alert>
                     <Alert type={TYPE_ERROR}>
                         {user.success}
+                    </Alert>
+                    <Alert type={TYPE_WARNING}>
+                        {localStorage.user_message}
                     </Alert>
                     <div className="form-group has-feedback">
                         <input type="text"
@@ -92,7 +92,7 @@ class LoginForm extends Component {
 export default connect((state)=> {
     return {user: state.user}
 }, {
-    makeLogin: UserActions.login
-})(LoginForm)
+    makeLogin: UserActions.login,
+    getServerVersion: getServerVersion
 
-// (store.getState().user.exp-Date.now()/1000 - 500)*1000);
+})(LoginForm);

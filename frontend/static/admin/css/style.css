@@ -176,15 +176,10 @@ hr, .mv {
     background-color: #00a65a !important;
 }
 
-/*.pagination {*/
-    /*display: block !important;*/
-/*}*/
-
 .chartStatistic {
     width: 50%;
     height: 50%;
     display: block;
-   /*position: absolute;*/
 }
 
 .statTable th{
@@ -202,6 +197,30 @@ th .fa-sort-desc, th .fa-sort-asc {
     position: relative;
     top: 4px;
     float: right;
+}
+
+.to-margin {
+   margin:5%;
+}
+
+.small-margin {
+    margin: 1%;}
+
+.no-pointer {
+    cursor: default !important;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.field {
+    margin-bottom: 20px;
+}
+
+.message {
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 /*.pagination li:hover {*/
