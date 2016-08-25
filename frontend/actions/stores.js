@@ -187,3 +187,4 @@ export function deactivatePaySys(storePaysysId) {
         allowed: false
     })
 }
+
