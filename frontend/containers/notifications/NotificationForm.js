@@ -9,25 +9,15 @@ class NotificationForm extends Component {
         this.onSubmit = this.onSubmit.bind(this);
 
         let {selectedNotification} = this.props;
-        if (location.pathname.split("/")[4] !== 'add') {
-            this.state = {
-                name: `${selectedNotification.name || ''}`,
-                case_regex: `${selectedNotification.caseRegex || ''}`,
-                header_template: `${selectedNotification.headerTemplate || ''}`,
-                case_template: `${selectedNotification.caseTemplate || ''}`,
-                body_template: `${selectedNotification.bodyTemplate || ''}`,
-                subscribers_template: `${selectedNotification.subscribersTemplate || ''}`
-            };
-        } else {
-            this.state = {
-                name: '',
-                case_regex: '',
-                header_template: '',
-                case_template: '',
-                body_template: '',
-                subscribers_template: ''
-            };
-        }
+
+        this.state = {
+            name: `${selectedNotification.name || ''}`,
+            case_regex: `${selectedNotification.caseRegex || ''}`,
+            header_template: `${selectedNotification.headerTemplate || ''}`,
+            case_template: `${selectedNotification.caseTemplate || ''}`,
+            body_template: `${selectedNotification.bodyTemplate || ''}`,
+            subscribers_template: `${selectedNotification.subscribersTemplate || ''}`
+        };
     }
 
     onSubmit(e) {

@@ -6,7 +6,6 @@ import {NOTIFICATION_ADD} from '../lib/api'
 import {NOTIFICATION_EDIT} from '../lib/api'
 
 
-
 export const NOTIFICATIONS_GET_REQUEST = 'NOTIFICATIONS_GET_REQUEST';
 export const NOTIFICATIONS_GET_SUCCESS = 'NOTIFICATIONS_GET_SUCCESS';
 export const NOTIFICATIONS_GET_FAILURE = 'NOTIFICATIONS_GET_FAILURE';
@@ -51,7 +50,10 @@ export function getNotificationById(id) {
 }
 
 export const NOTIFICATION_DELETE_REQUEST = 'NOTIFICATION_DELETE_REQUEST';
-export const NOTIFICATION_DELETE_SUCCESS = {name: 'NOTIFICATION_DELETE_SUCCESS', redirectTo: '/admin/administrator/notifications'};
+export const NOTIFICATION_DELETE_SUCCESS = {
+    name: 'NOTIFICATION_DELETE_SUCCESS',
+    redirectTo: '/admin/administrator/notifications'
+};
 export const NOTIFICATION_DELETE_FAILURE = 'NOTIFICATION_DELETE_FAILURE';
 export const NOTIFICATION_DELETE_CERROR = 'NOTIFICATION_DELETE_CERROR';
 
@@ -67,7 +69,10 @@ export function deleteNotification(id) {
 }
 
 export const NOTIFICATION_ADD_REQUEST = 'NOTIFICATION_ADD_REQUEST';
-export const NOTIFICATION_ADD_SUCCESS = {name: 'NOTIFICATION_ADD_SUCCESS', redirectTo: '/admin/administrator/notifications'};
+export const NOTIFICATION_ADD_SUCCESS = {
+    name: 'NOTIFICATION_ADD_SUCCESS',
+    redirectTo: '/admin/administrator/notifications'
+};
 export const NOTIFICATION_ADD_FAILURE = 'NOTIFICATION_ADD_FAILURE';
 export const NOTIFICATION_ADD_CERROR = 'NOTIFICATION_ADD_CERROR';
 
@@ -83,17 +88,27 @@ export function addNotification(body) {
 }
 
 export const NOTIFICATION_EDIT_REQUEST = 'NOTIFICATION_EDIT_REQUEST';
-export const NOTIFICATION_EDIT_SUCCESS = {name: 'NOTIFICATION_EDIT_SUCCESS', redirectTo: '/admin/administrator/notifications'};
+export const NOTIFICATION_EDIT_SUCCESS = {
+    name: 'NOTIFICATION_EDIT_SUCCESS',
+    redirectTo: '/admin/administrator/notifications'
+};
 export const NOTIFICATION_EDIT_FAILURE = 'NOTIFICATION_EDIT_FAILURE';
 export const NOTIFICATION_EDIT_CERROR = 'NOTIFICATION_EDIT_CERROR';
 
-export function editNotification(body) {
+export function editNotification(body, id) {
     return {
         [CALL_API]: {
             types: [NOTIFICATION_EDIT_REQUEST, NOTIFICATION_EDIT_SUCCESS, NOTIFICATION_EDIT_FAILURE],
             cError: NOTIFICATION_EDIT_CERROR,
-            endpoint: NOTIFICATION_EDIT,
+            endpoint: NOTIFICATION_EDIT(id),
             body
         }
+    }
+}
+
+export const NOTIFICATION_CLEAR = 'NOTIFICATION_CLEAR';
+export function clearNotification() {
+    return {
+        type: NOTIFICATION_CLEAR
     }
 }

@@ -55,6 +55,8 @@ export default function notification(state = initialState, action) {
         case  NotificationActions.NOTIFICATION_EDIT_FAILURE:
             return Object.assign({}, state, {error: action.error.serverError || initialState.error, isFetching: false});
 
+        case NotificationActions.NOTIFICATION_CLEAR:
+            return initialState;
         default:
             return state;
     }

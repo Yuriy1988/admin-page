@@ -17,9 +17,13 @@ class NotificationEditPage extends Component {
         this.props.getNotificationById(id)
     }
 
+    componentWillUnmount() {
+       this.props.clearNotification();
+    }
+
     onEdit(notification) {
         const {editNotification, selectedNotification} = this.props;
-        editNotification(Object.assign({}, notification, {id: selectedNotification.id}));
+        editNotification(Object.assign({}, notification, {id: selectedNotification.id}), selectedNotification.id);
     }
 
     render() {
@@ -48,6 +52,7 @@ export default connect(
     }),
     {
         editNotification: NotificationsActions.editNotification,
-        getNotificationById: NotificationsActions.getNotificationById
+        getNotificationById: NotificationsActions.getNotificationById,
+        clearNotification: NotificationsActions.clearNotification
     }
 )(NotificationEditPage)
