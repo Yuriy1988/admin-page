@@ -6,9 +6,13 @@ let version = localStorage.apiVersion || 'dev';
  */
 export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false}; // waiting for server fix; //TODO
 
-// Antifraud
+/**
+ * ANTIFRAUD
+ */
 
 export const ANTIFRAUD_GET = {path: "antifraud_settings/scoring_rules",  method: "GET"};
+export const ANTIFRAUD_PUT = {path: "antifraud_settings/scoring_rules",  method: "PUT"};
+
 
 /**
  * USER_ACTIONS

@@ -6,7 +6,6 @@ import AntiFraudTable from './AntiFraudTable'
 class AntiFraudPage extends Component {
     constructor(props) {
         super(props);
-
     }
 
     componentWillMount() {

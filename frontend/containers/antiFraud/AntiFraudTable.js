@@ -1,60 +1,69 @@
 import React, {Component, PropTypes} from 'react'
-import AntiFraudInputThreshold from './AntifFaudInputThreshold'
-import AntiFraudInputScore from './AntiFraudInputScore'
+import * as AntiFraudActions from '../../actions/antifraud';
+import {connect} from 'react-redux'
 
 class AntiFraudTable extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            rules: this.props.content,
-            HTMLItems: []
-        };
     }
 
-    componentWillMount() {
-        const self = this;
+    JsonToHTML(JSON) {
+        const strings = JSON.formattedText.split(' ');
+        let result = strings.map(function (item) {
 
-        const values = this.props.content.map(function (result, i) {
-            return self.templateToHtml(result.formattedText, result.parameters.threshold, result.id, i);
+            if (item.indexOf('{') >= 0) {
+
+                const begining = item.indexOf('{');
+                const ending = item.indexOf('}');
+                let itemVal = item.slice(begining + 1, ending);
+                return item.slice(0, begining) + `<input type="text" name="${JSON.id}" data-name="${itemVal}" value="${JSON.parameters[itemVal]}">` + item.slice(ending + 1, item.length);
+            }
+            return item;
         });
-        this.setState({HTMLItems: values});
-    }
-
-    getValueForInput(str) {
-        const strBegining = str.indexOf('{');
-        const strEnding = str.indexOf('}');
-        const htmlInput = str.slice(strBegining, strEnding + 1);
-        const htmlPart1 = str.slice(0, strBegining);
-        const htmlPart2 = str.slice(strEnding + 1);
-
-        return [htmlPart1, htmlInput, htmlPart2]
-    }
-
-    templateToHtml(str, threshold, id, i) {
-        const self = this;
-        if (threshold) {
-            const htmlParts = this.getValueForInput(str); //get python template, that will be replaced by input
-            return (
-                <div>
-                    <span> {htmlParts[0]} </span>
-                    <AntiFraudInputThreshold antiFraudId={id} threshold={self.state.rules[i].parameters.threshold}/>
-                    <span> {htmlParts[2]} </span>
-                </div>);
-        } else {
-            return str;
-        }
+        return result.join(' ');
     }
 
     handleSave() {
-       console.log(this.state);
+        let result = {
+            rules: []
+        };
+
+        const inputs = $('.antifraud-table').find('input');
+        let ids = [];
+        Array.prototype.forEach.call(inputs, function (item, i) {
+            let obj = {};
+
+            if (ids.indexOf(item.name) === -1) {
+
+                ids.push(item.name);
+                obj.id = item.name;
+
+                if (item.dataset.score) {
+                    obj.score = item.value;
+                } else {
+                    obj.parameters = {};
+                    obj.parameters[item.dataset.name] = item.value
+                }
+                result.rules.push(Object.assign({}, obj));
+            } else {
+                result.rules.forEach(function (j, k) {
+                    if (j.id === item.name) {
+                        console.log(true);
+                        result.rules[k][item.dataset.score] = item.value;
+                    }
+                });
+
+            }
+        });
+        this.props.setAntiFraud(result);
     }
 
     render() {
-        const {rules, HTMLItems} = this.state;
+        const {content} = this.props;
         const self = this;
-        return rules && rules.length > 0 ? (
-            <div>
+
+        return (<div>
             <table className=" table table-striped table-bordered">
                 <thead className="antifraud">
                 <tr className="filter">
@@ -62,22 +71,32 @@ class AntiFraudTable extends Component {
                     <th className="antifraud">Score</th>
                 </tr>
                 </thead>
-                <tbody>
-                {HTMLItems.map(function (HTML, i) {
+                <tbody className="antifraud-table">
+                {content.map(function (HTML, i) {
                     return <tr key={i}>
-                        <td key={Math.random()} className="antifraud"> {HTML}</td>
-                        <td key={Math.random()} className="antifraud"> {< AntiFraudInputScore antiFraudId={self.state.rules[i].id}
-                                                                                score={self.state.rules[i].score}/>}</td>
+                        <td key={Math.random()} className="antifraud">
+                            <div dangerouslySetInnerHTML={{__html: self.JsonToHTML(content[i])}}></div>
+                        </td>
+                        <td key={Math.random()} className="antifraud">
+                            <div
+                                dangerouslySetInnerHTML={{__html: `<input type="text" data-score="score" name=${content[i].id} value=${content[i].score}>`}}></div>
+                        </td>
                     </tr>
                 })}
                 </tbody>
             </table>
-                <button className="btn pull-left btn-success" onClick={this.handleSave.bind(this)}>
-                    <i className="fa fa-save"/>&nbsp;Save
-                </button>
-                </div>
-        ) : <div> wait </div>
+            <button className="btn pull-left btn-success" onClick={this.handleSave.bind(this)}>
+                <i className="fa fa-save"/>&nbsp;Save
+            </button>
+        </div>)
     }
 }
 
-export default AntiFraudTable;
+export default connect(
+    (state)=>({
+
+    }),
+    {
+        setAntiFraud: AntiFraudActions.setAntiFraud
+    }
+)(AntiFraudTable);
