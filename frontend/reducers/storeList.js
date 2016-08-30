@@ -1,6 +1,6 @@
 import * as StoresActions from '../actions/stores';
 
-export default function storeList (state = {}, action) {
+export default function storeList (state = {stores:[]}, action) {
 
     switch (action.type) {
 

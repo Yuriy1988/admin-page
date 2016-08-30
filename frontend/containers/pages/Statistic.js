@@ -50,7 +50,7 @@ class Statistic extends Component {
         let $moneyAmount1 = $('.moneyAmount1');
         let $moneyAmount2 = $('.moneyAmount2');
         let $calendar = $('.calendar-place-holder');
-        let $storeId = $('.store-id-input');
+        let $storeId = $('.store-id-input').find('option:selected');
         let $currency = $('.currency-input');
         let $paysysId = $('.paysyss-id-input');
         let $status = $('.status-input');
@@ -60,7 +60,7 @@ class Statistic extends Component {
         let paymentTillVal = $('.paymentTill-input').val();
         let correctDates;
 
-        storeId = $storeId.val() ? `store_id=${$storeId.val()}` : '';
+        storeId = $storeId.attr('name') ? `store_id=${$storeId.attr('name')}` : '';
         currency = $currency.val() ? `&currency=${$currency.val()}` : '';
         fromPrice = $fromPrice.val().replace(',', '.') ? `&from_total_price=${+$fromPrice.val().replace(',', '.')}` : '';
         tillPrice = $tillPrice.val().replace(',', '.') ? `&till_total_price=${+$tillPrice.val().replace(',', '.')}` : '';
@@ -164,7 +164,6 @@ class Statistic extends Component {
     }
 
     render() {
-        console.log(this.props);
         const isFetching = this.props.isFetching;
         const filterElem = <i className="fa fa-sort" aria-hidden="true"></i>;
         const defaultElem = <i className="fa fa-sort-desc" aria-hidden="true"></i>;
@@ -191,13 +190,19 @@ class Statistic extends Component {
                     </div>
                 </div>
                 <div className="col-sm-6">
-                    <span style={{'whiteSpace': 'nowrap'}}>Store id </span>
-                    <div className="input-group">
-                        <div className="input-group-addon">
-                            <i className="fa fa-shopping-cart"/>
-                        </div>
-                        <input ref="input" type="text" className="form-control store-id-input"/>
-                    </div>
+                    <span style={{'whiteSpace': 'nowrap'}}>Store Name </span>
+                    <select className="form-control store-id-input">
+                        <option name=""></option>
+                        {this.props.allStores.stores.map(function (item, i) {
+                           return  <option name={item.id} key={i}> {item.storeName} </option>
+                        })}
+                    </select>
+                    {/*<div className="input-group">*/}
+                        {/*<div className="input-group-addon">*/}
+                            {/*<i className="fa fa-shopping-cart"/>*/}
+                        {/*</div>*/}
+                        {/*<input ref="input" type="text" className="form-control store-id-input"/>*/}
+                    {/*</div>*/}
                 </div>
 
                 <div className="col-sm-2">
@@ -274,7 +279,7 @@ class Statistic extends Component {
                                     status {filterElem}</th>
                                 <th onClick={this.setFilter.bind(this)} data="updated" rowSpan="2">
                                     updated {filterElem}</th>
-                                <th colSpan="3" c>invoice</th>
+                                <th colSpan="3" >invoice</th>
                             </tr>
                             <tr className="filter">
                                 <th data="currency" onClick={this.setFilter.bind(this)}>currency {filterElem}</th>
