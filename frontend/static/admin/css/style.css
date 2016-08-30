@@ -226,6 +226,11 @@ th .fa-sort-desc, th .fa-sort-asc {
 .antifraud {
     border: 1px solid darkgreen !important;
 }
+
+.message-small {
+    /*min-width: 250px;*/
+    display: inline-block;
+}
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

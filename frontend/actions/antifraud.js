@@ -24,12 +24,12 @@ export const ANTIFRAUD_PUT_CERROR = 'ANTIFRAUD_PUT_CERROR';
 
 
 
-export function setAntiFraud (body) {
+export function setAntiFraud (body, id) {
     return {
         [CALL_API]: {
             types: [ANTIFRAUD_PUT_REQUEST, ANTIFRAUD_PUT_SUCCESS, ANTIFRAUD_PUT_FAILURE],
             cError: ANTIFRAUD_PUT_CERROR,
-            endpoint: ANTIFRAUD_PUT,
+            endpoint: ANTIFRAUD_PUT(id),
             body
         }
     }

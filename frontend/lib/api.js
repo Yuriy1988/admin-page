@@ -11,7 +11,7 @@ export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: fa
  */
 
 export const ANTIFRAUD_GET = {path: "antifraud_settings/scoring_rules",  method: "GET"};
-export const ANTIFRAUD_PUT = {path: "antifraud_settings/scoring_rules",  method: "PUT"};
+export const ANTIFRAUD_PUT = (id) => ({path: `antifraud_settings/scoring_rules/${id}`,  method: "PUT"});
 
 
 /**

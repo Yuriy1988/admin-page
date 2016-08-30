@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import * as AntiFraudActions from '../../actions/antifraud';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+import Alert, {TYPE_ERROR, TYPE_SUCCESS} from '../../components/Alert'
 
 class AntiFraudTable extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class AntiFraudTable extends Component {
                 const begining = item.indexOf('{');
                 const ending = item.indexOf('}');
                 let itemVal = item.slice(begining + 1, ending);
-                return item.slice(0, begining) + `<input type="text" name="${JSON.id}" data-name="${itemVal}" value="${JSON.parameters[itemVal]}">` + item.slice(ending + 1, item.length);
+                return item.slice(0, begining) + `<input data-text="${JSON.formattedText}" type="text" name="${JSON.id}" data-name="${itemVal}" value="${JSON.parameters[itemVal]}">` + item.slice(ending + 1, item.length);
             }
             return item;
         });
@@ -38,7 +39,7 @@ class AntiFraudTable extends Component {
 
                 ids.push(item.name);
                 obj.id = item.name;
-
+                obj['formatted_text'] = item.dataset.text;
                 if (item.dataset.score) {
                     obj.score = item.value;
                 } else {
@@ -46,6 +47,7 @@ class AntiFraudTable extends Component {
                     obj.parameters[item.dataset.name] = item.value
                 }
                 result.rules.push(Object.assign({}, obj));
+
             } else {
                 result.rules.forEach(function (j, k) {
                     if (j.id === item.name) {
@@ -56,7 +58,10 @@ class AntiFraudTable extends Component {
 
             }
         });
-        this.props.setAntiFraud(result);
+
+        result.rules.forEach(function (item) {
+            this.props.setAntiFraud(item, item.id);
+        }, this);
     }
 
     render() {
@@ -79,7 +84,7 @@ class AntiFraudTable extends Component {
                         </td>
                         <td key={Math.random()} className="antifraud">
                             <div
-                                dangerouslySetInnerHTML={{__html: `<input type="text" data-score="score" name=${content[i].id} value=${content[i].score}>`}}></div>
+                                dangerouslySetInnerHTML={{__html: `<input type="text" data-score="score"  data-text="${content[i].formattedText}" name="${content[i].id}" value="${content[i].score}">`}}></div>
                         </td>
                     </tr>
                 })}
@@ -88,13 +93,18 @@ class AntiFraudTable extends Component {
             <button className="btn pull-left btn-success" onClick={this.handleSave.bind(this)}>
                 <i className="fa fa-save"/>&nbsp;Save
             </button>
+            <div className="message message-small">
+            <Alert type={TYPE_SUCCESS}>
+                {this.props.success}
+            </Alert>
+               </div>
         </div>)
     }
 }
 
 export default connect(
     (state)=>({
-
+        success: state.antiFraud.success
     }),
     {
         setAntiFraud: AntiFraudActions.setAntiFraud

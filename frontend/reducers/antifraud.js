@@ -7,11 +7,11 @@ const initialState = {
     rules: []
 };
 
-export default function antiFraud (state= {isFetching:false, error:{}}, action) {
+export default function antiFraud (state= {isFetching:false, error:{}, success: ''}, action) {
 
     switch (action.type) {
         case AntifraudActions.ANTIFRAUD_GET_REQUEST:
-            return Object.assign({}, state, {isFetching: true});
+            return Object.assign({}, {isFetching: true});
 
         case AntifraudActions.ANTIFRAUD_GET_SUCCESS:
             return Object.assign({}, state, action.response, {isFetching: false});
@@ -24,7 +24,8 @@ export default function antiFraud (state= {isFetching:false, error:{}}, action) 
             return Object.assign({}, state, {isFetching: true});
 
         case AntifraudActions.ANTIFRAUD_PUT_SUCCESS:
-            return Object.assign({}, state, action.response, {isFetching: false});
+            return Object.assign({}, state, action.response, {isFetching: false,
+                success: 'Anti-fraud rules were updated'});
 
         case AntifraudActions.ANTIFRAUD_PUT_FAILURE:
             return Object.assign({}, state, action.error, {isFetching: false});
