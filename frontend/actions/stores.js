@@ -188,3 +188,19 @@ export function deactivatePaySys(storePaysysId) {
     })
 }
 
+
+import {STORE_GET_ALL} from '../lib/api'
+export const STORE_GET_ALL_REQUEST = 'STORE_GET_ALL_REQUEST';
+export const STORE_GET_ALL_SUCCESS = 'STORE_GET_ALL_SUCCESS';
+export const STORE_GET_ALL_FAILURE = 'STORE_GET_ALL_FAILURE';
+export const STORE_GET_ALL_CERROR = 'STORE_GET_ALL_CERROR';
+
+export function getAllStores() {
+    return {
+        [CALL_API]: {
+            types: [STORE_GET_ALL_REQUEST, STORE_GET_ALL_SUCCESS, STORE_GET_ALL_FAILURE],
+            cError: STORE_GET_ALL_CERROR,
+            endpoint: STORE_GET_ALL
+        }
+    }
+}

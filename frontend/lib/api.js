@@ -55,7 +55,7 @@ export const STORES_CREATE = (merchantId) => ({path: `merchants/${merchantId}/st
 export const STORE_GET = (storeId) => ({path: `stores/${storeId}`, method: "GET", schema: storesSchema});
 export const STORE_EDIT = (storeId) => ({path: `stores/${storeId}`, method: "PUT", schema: storesSchema});
 export const STORE_DELETE = (storeId) => ({path: `stores/${storeId}`, method: "DELETE", schema: storesSchema});
-
+export const STORE_GET_ALL = {path: `storenames`, method: "GET"};
 
 /**
  * MERCHANT_CONTRACTS

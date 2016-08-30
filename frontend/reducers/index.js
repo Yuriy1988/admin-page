@@ -19,6 +19,7 @@ import {combineReducers} from 'redux'
 import notifications from './notifications'
 import notification from './notification'
 import antiFraud from './antifraud'
+import storeList from './storeList'
 
 
 // Updates an entity cache in response to any action with response.entities.
@@ -303,6 +304,7 @@ const rootReducer = combineReducers({
     dictionary,
     notifications,
     notification,
+    storeList,
     routing: routeReducer
 });
 
