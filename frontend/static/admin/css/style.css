@@ -223,6 +223,9 @@ th .fa-sort-desc, th .fa-sort-asc {
     margin-right: 2%;
 }
 
+.antifraud {
+    border: 1px solid darkgreen !important;
+}
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

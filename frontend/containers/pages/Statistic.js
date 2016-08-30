@@ -5,6 +5,8 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 import ReactChart from '../../components/ReactChart'
 import {Pagination} from 'react-bootstrap';
 import Alert, {TYPE_INFO, TYPE_ERROR} from '../../components/Alert'
+import * as StoresActions from './../../actions/stores'
+
 
 class Statistic extends Component {
     constructor(props) {
@@ -30,7 +32,9 @@ class Statistic extends Component {
             singleDatePicker: true,
             showDropdowns: true
         });
+        this.props.getAllStores();
         this.getValues();
+
     }
 
     componentWillUnmount() {
@@ -160,6 +164,7 @@ class Statistic extends Component {
     }
 
     render() {
+        console.log(this.props);
         const isFetching = this.props.isFetching;
         const filterElem = <i className="fa fa-sort" aria-hidden="true"></i>;
         const defaultElem = <i className="fa fa-sort-desc" aria-hidden="true"></i>;
@@ -325,10 +330,12 @@ class Statistic extends Component {
 export default connect(
     (state)=>({
         statistic: state.user.statistic,
-        isFetching: state.user
+        isFetching: state.user,
+        allStores: state.storeList
     }),
     {
         getAdminStatistic: UserActions.getAdminStatistic,
-        clearStatistic: UserActions.clearStatistic
+        clearStatistic: UserActions.clearStatistic,
+        getAllStores: StoresActions.getAllStores
     }
 )(Statistic)

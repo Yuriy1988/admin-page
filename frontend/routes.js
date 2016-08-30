@@ -51,6 +51,8 @@ import PaySysContractListPage    from './containers/paysystemContracts/PaySystem
 import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 import handleTokenTime from './middleware/system';
 
+import AntifraudPage from './containers/antiFraud/AntiFraudPage'
+
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -166,6 +168,9 @@ class Routes {
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
 
                             <Route path="statistic" component={Statistic}
+                                   onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+
+                            <Route path="antifraud" component={AntifraudPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
 
                             <Route path="paysys" component={PaySystemPage}

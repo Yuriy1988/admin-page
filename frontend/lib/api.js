@@ -4,7 +4,14 @@ let version = localStorage.apiVersion || 'dev';
 /**
  * SYSTEM_ACTIONS
  */
-export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false}; // waiting for server fix;
+export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false}; // waiting for server fix; //TODO
+
+/**
+ * ANTIFRAUD
+ */
+
+export const ANTIFRAUD_GET = {path: "antifraud_settings/scoring_rules",  method: "GET"};
+export const ANTIFRAUD_PUT = {path: "antifraud_settings/scoring_rules",  method: "PUT"};
 
 
 /**
@@ -48,7 +55,7 @@ export const STORES_CREATE = (merchantId) => ({path: `merchants/${merchantId}/st
 export const STORE_GET = (storeId) => ({path: `stores/${storeId}`, method: "GET", schema: storesSchema});
 export const STORE_EDIT = (storeId) => ({path: `stores/${storeId}`, method: "PUT", schema: storesSchema});
 export const STORE_DELETE = (storeId) => ({path: `stores/${storeId}`, method: "DELETE", schema: storesSchema});
-
+export const STORE_GET_ALL = {path: `storenames`, method: "GET"};
 
 /**
  * MERCHANT_CONTRACTS

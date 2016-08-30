@@ -20,6 +20,10 @@ class NotificationCreatePage extends Component {
         addNotification(notification);
     }
 
+    componentWillUnmount() {
+        this.props.clearNotification();
+    }
+
     render() {
 
         const selectedNotification = this.props.selectedNotification;
@@ -44,6 +48,7 @@ export default connect(
         selectedNotification: state.notification
     }),
     {
-        addNotification: NotificationsActions.addNotification
+        addNotification: NotificationsActions.addNotification,
+        clearNotification: NotificationsActions.clearNotification
     }
 )(NotificationCreatePage)
