@@ -11,12 +11,18 @@ class AntiFraudPage extends Component {
 
     componentWillMount() {
         this.props.getAntiFraud();
+        this.props.getAntiFraudSettings();
+
     }
     render() {
-        const {rules} = this.props.antiFraud;
-        return  rules? (
+        const {rules, declineThreshold, threeDSecureThreshold} = this.props.antiFraud;
+        return  rules && declineThreshold && threeDSecureThreshold? (
             <div>
-                <AntiFraudTable content={rules}/>
+                <AntiFraudTable
+                    content={rules}
+                    declineThreshold={declineThreshold}
+                    threeDSecureThreshold={threeDSecureThreshold}
+                />
                 <div className="message message-small">
                     <Alert type={TYPE_SUCCESS}>
                         {this.props.antiFraud.success}
@@ -29,9 +35,10 @@ class AntiFraudPage extends Component {
 
 export default connect(
     (state)=>({
-        antiFraud: state.antiFraud
+        antiFraud: state.antiFraud,
     }),
     {
-        getAntiFraud: AntiFraudActions.getAntiFraud
+        getAntiFraud: AntiFraudActions.getAntiFraud,
+        getAntiFraudSettings: AntiFraudActions.getAntiFraudSettings
     }
 )(AntiFraudPage);

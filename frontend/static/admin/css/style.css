@@ -237,6 +237,23 @@ th .fa-sort-desc, th .fa-sort-asc {
     opacity: 0;
     transition: visibility 0s 2s, opacity 2s linear;
 }
+
+.header-antifraud {
+
+    margin: 0 auto;
+    margin-bottom: 5px;
+    padding:5px;
+}
+
+.secureVal {
+    width:4em;
+    padding-left: 3px;
+}
+
+/*.right {*/
+   /*position: relative;*/
+    /*left: 50%;*/
+/*}*/
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

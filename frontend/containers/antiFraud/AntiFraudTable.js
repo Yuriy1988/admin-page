@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import * as AntiFraudActions from '../../actions/antifraud';
 import {connect} from 'react-redux';
+import Alert, {TYPE_ERROR} from '../../components/Alert'
 
 
 class AntiFraudTable extends Component {
@@ -33,6 +34,9 @@ class AntiFraudTable extends Component {
         let result = {
             rules: []
         };
+        const $settingsInput = $('.secureVal');
+        const settingsVal = $settingsInput.val();
+
 
         const inputs = $('.antifraud-table').find('input');
         let ids = [];
@@ -63,17 +67,42 @@ class AntiFraudTable extends Component {
             }
         });
 
-        result.rules.forEach(function (item) {
-            this.props.setAntiFraud(item, item.id);
-        }, this);
+        if (isNaN(settingsVal) ||  settingsVal<=0 || settingsVal>100) {
+            $settingsInput.css({"border-color": "red",
+                "border-width":"2px",
+                "border-style":"solid"});
+        } else {
+            $settingsInput.css({"border-color": "green",
+                "border-width":"1px",
+                "border-style":"solid"});
+
+            this.props.setAntiFraudSettings({
+                three_d_secure_threshold: settingsVal,
+                decline_threshold: 100
+            });
+            result.rules.forEach(function (item) {
+                this.props.setAntiFraud(item, item.id);
+            }, this);
+        }
     }
 
     render() {
-        const {content} = this.props;
+        const {content, declineThreshold, threeDSecureThreshold} = this.props;
+
+
         const self = this;
 
         return (
             <div>
+                <table className="header-antifraud">
+                    <tbody>
+                        <tr>
+                            <td  dangerouslySetInnerHTML={{__html: `<b>Score threshold (${declineThreshold} max) &nbsp&nbsp&nbsp</b>`}}></td>
+                            <td  dangerouslySetInnerHTML={{__html: `<b>3d secure < </b> <input class="secureVal" type="text" value="${threeDSecureThreshold}"> <b> > process</b>`}}></td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <table className=" table table-striped table-bordered">
                     <thead className="antifraud">
                     <tr className="filter">
@@ -107,6 +136,7 @@ export default connect(
         success: state.antiFraud.success
     }),
     {
-        setAntiFraud: AntiFraudActions.setAntiFraud
+        setAntiFraud: AntiFraudActions.setAntiFraud,
+        setAntiFraudSettings: AntiFraudActions.setAntiFraudSettings
     }
 )(AntiFraudTable);

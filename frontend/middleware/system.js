@@ -4,7 +4,6 @@ import {camelizeKeys} from 'humps';
 export default function handleTokenTime (store) {
     if (localStorage.user) {
         if ((JSON.parse(localStorage.user).exp - Date.now() / 1000) / 60 < 0) {
-            console.log('logout');
             store.dispatch({
                 type: UserActions.USER_UNAUTHORIZED,
             });
