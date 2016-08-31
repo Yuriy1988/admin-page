@@ -18,6 +18,7 @@ import {routeReducer} from 'react-router-redux'
 import {combineReducers} from 'redux'
 import notifications from './notifications'
 import notification from './notification'
+import notification_to_add from './notification_to_add'
 import antiFraud from './antifraud'
 import storeList from './storeList'
 
@@ -303,6 +304,7 @@ const rootReducer = combineReducers({
     sideBar,
     dictionary,
     notifications,
+    notification_to_add,
     notification,
     storeList,
     routing: routeReducer

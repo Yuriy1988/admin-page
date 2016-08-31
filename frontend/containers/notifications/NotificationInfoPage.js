@@ -22,7 +22,6 @@ class NotificationPage extends Component {
         deleteNotification(nonify_id);
     }
 
-
     render() {
         const {notification, notifications, getNotificationById}  = this.props;
         return ( notification.name ?
@@ -109,7 +108,9 @@ export default connect(
     {
         getNotificationById: NotificationActions.getNotificationById,
         deleteNotification: NotificationActions.deleteNotification,
-        clearNotifications: NotificationActions.clearNotifications
+        clearNotifications: NotificationActions.clearNotifications,
+        clearNotification: NotificationActions.clearNotification,
+
     }
 )(NotificationPage)
 
