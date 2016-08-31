@@ -231,6 +231,12 @@ th .fa-sort-desc, th .fa-sort-asc {
     /*min-width: 250px;*/
     display: inline-block;
 }
+
+.to-hide {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 2s, opacity 2s linear;
+}
 /*.pagination li:hover {*/
     /*cursor: pointer;*/
 /*}*/

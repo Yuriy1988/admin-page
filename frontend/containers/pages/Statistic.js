@@ -319,6 +319,12 @@ class Statistic extends Component {
                     </div>
                     <div className="chartStatistic">
                         <ReactChart data={statistic}/>
+                        <select className="form-control">
+                            <option>Currency</option>
+                            <option>Payment system</option>
+                            <option>Payment status</option>
+                            <option>Stores</option>
+                        </select>
                     </div>
                 </div>
                 <Alert type={TYPE_ERROR}>

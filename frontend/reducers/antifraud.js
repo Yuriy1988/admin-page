@@ -21,7 +21,7 @@ export default function antiFraud (state= {isFetching:false, error:{}, success: 
         //set
 
         case AntifraudActions.ANTIFRAUD_PUT_REQUEST:
-            return Object.assign({}, state, {isFetching: true});
+            return Object.assign({}, state, {isFetching: true, success: ''});
 
         case AntifraudActions.ANTIFRAUD_PUT_SUCCESS:
             return Object.assign({}, state, action.response, {isFetching: false,

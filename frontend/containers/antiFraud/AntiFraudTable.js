@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import * as AntiFraudActions from '../../actions/antifraud';
 import {connect} from 'react-redux';
-import Alert, {TYPE_ERROR, TYPE_SUCCESS} from '../../components/Alert'
+
 
 class AntiFraudTable extends Component {
     constructor(props) {
@@ -23,6 +23,10 @@ class AntiFraudTable extends Component {
             return item;
         });
         return result.join(' ');
+    }
+
+    shouldComponentUpdate() {
+        return false
     }
 
     handleSave() {
@@ -68,37 +72,33 @@ class AntiFraudTable extends Component {
         const {content} = this.props;
         const self = this;
 
-        return (<div>
-            <table className=" table table-striped table-bordered">
-                <thead className="antifraud">
-                <tr className="filter">
-                    <th className="antifraud">Rule</th>
-                    <th className="antifraud">Score</th>
-                </tr>
-                </thead>
-                <tbody className="antifraud-table">
-                {content.map(function (HTML, i) {
-                    return <tr key={i}>
-                        <td key={Math.random()} className="antifraud">
-                            <div dangerouslySetInnerHTML={{__html: self.JsonToHTML(content[i])}}></div>
-                        </td>
-                        <td key={Math.random()} className="antifraud">
-                            <div
-                                dangerouslySetInnerHTML={{__html: `<input type="text" data-score="score"  data-text="${content[i].formattedText}" name="${content[i].id}" value="${content[i].score}">`}}></div>
-                        </td>
+        return (
+            <div>
+                <table className=" table table-striped table-bordered">
+                    <thead className="antifraud">
+                    <tr className="filter">
+                        <th className="antifraud">Rule</th>
+                        <th className="antifraud">Score</th>
                     </tr>
-                })}
-                </tbody>
-            </table>
-            <button className="btn pull-left btn-success" onClick={this.handleSave.bind(this)}>
-                <i className="fa fa-save"/>&nbsp;Save
-            </button>
-            <div className="message message-small">
-            <Alert type={TYPE_SUCCESS}>
-                {this.props.success}
-            </Alert>
-               </div>
-        </div>)
+                    </thead>
+                    <tbody className="antifraud-table">
+                    {content.map(function (HTML, i) {
+                        return <tr key={i}>
+                            <td key={Math.random()} className="antifraud">
+                                <div dangerouslySetInnerHTML={{__html: self.JsonToHTML(content[i])}}></div>
+                            </td>
+                            <td key={Math.random()} className="antifraud">
+                                <div
+                                    dangerouslySetInnerHTML={{__html: `<input type="text" data-score="score"  data-text="${content[i].formattedText}" name="${content[i].id}" value="${content[i].score}">`}}></div>
+                            </td>
+                        </tr>
+                    })}
+                    </tbody>
+                </table>
+                <button className="btn pull-left btn-success" onClick={this.handleSave.bind(this)}>
+                    <i className="fa fa-save"/>&nbsp;Save
+                </button>
+            </div>)
     }
 }
 
