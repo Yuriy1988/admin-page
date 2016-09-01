@@ -29,6 +29,11 @@ export const USER_CHANGE_SELF_PASS  = {path: `user/change_password`, method: "PO
 export const USER_GET_ADMIN_STAT = (query) =>({path: `statistics/payments?${query}`, method: "GET"});
 
 /**
+ * Statistic
+ */
+export const CHART_STAT_GET = (query, args) =>({path: `statistics/payments_count?by=${query}${args}`, method: "GET"});
+///api/admin/{version}/statistics/payments_count?by=<status|paysys|currency|store>&<args>
+/**
  * MERCHANTS
  */
 const merchantSchema = new Schema('merchants');

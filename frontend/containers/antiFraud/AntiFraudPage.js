@@ -12,8 +12,8 @@ class AntiFraudPage extends Component {
     componentWillMount() {
         this.props.getAntiFraud();
         this.props.getAntiFraudSettings();
-
     }
+
     render() {
         const {rules, declineThreshold, threeDSecureThreshold} = this.props.antiFraud;
         return  rules && declineThreshold && threeDSecureThreshold? (

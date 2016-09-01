@@ -21,6 +21,7 @@ import notification from './notification'
 import notification_to_add from './notification_to_add'
 import antiFraud from './antifraud'
 import storeList from './storeList'
+import chartStatistic from './chartStatistic'
 
 
 // Updates an entity cache in response to any action with response.entities.
@@ -299,6 +300,7 @@ const rootReducer = combineReducers({
     entities,
     pagination,
     system,
+    chartStatistic,
     user,
     antiFraud,
     sideBar,

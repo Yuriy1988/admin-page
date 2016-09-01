@@ -94,5 +94,4 @@ export default connect((state)=> {
 }, {
     makeLogin: UserActions.login,
     getServerVersion: getServerVersion
-
 })(LoginForm);

@@ -1,30 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react'
 import {Pie} from 'react-chartjs-2';
 
-const data = {
-    labels: [
-        'USD',
-        'EUR',
-        'UAH'
-    ],
-    datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: [
-            'rgb(12,222,132)',
-            'rgb(0,92,59)',
-            'rgb(20,152,122)'
-        ],
-        hoverBackgroundColor: [
-            'rgb(12,222,132)',
-            'rgb(0,92,59)',
-            'rgb(20,152,122)'
-        ]
-    }]
-};
-
-export default React.createClass({
+class ReactChart extends Component {
+    constructor(props) {
+        super(props);
+    }
 
     render() {
-        return <Pie data={data} />
+        debugger;
+         return this.props.chartStatistic &&
+             this.props.chartOptions &&
+             this.props.chartStatistic.data &&
+             this.props.chartStatistic.data.labels.length ? (
+                 <div>
+                    <Pie data={this.props.chartStatistic.data}/>
+                     <select
+                         className="form-control"
+                         onChange={this.props.onChangeStatHandler}>
+                         {this.props.chartOptions.map(function (item, i) {
+                             return  <option key = {i}>{item}</option>
+                         })}
+                     </select>
+                 </div>): <div></div>
     }
-});
+}
+
+export default ReactChart;

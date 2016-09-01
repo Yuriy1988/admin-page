@@ -6,7 +6,7 @@ import ReactChart from '../../components/ReactChart'
 import {Pagination} from 'react-bootstrap';
 import Alert, {TYPE_INFO, TYPE_ERROR} from '../../components/Alert'
 import * as StoresActions from './../../actions/stores'
-
+import getChartStats from './../../actions/statisticActions';
 
 class Statistic extends Component {
     constructor(props) {
@@ -15,12 +15,17 @@ class Statistic extends Component {
         this.getValues = this.getValues.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.displayStatistic = false;
+        this.query = '';
         this.orderBy = 'created';
         this.state = {
             activePage: 1
         };
         this.incorrectValues = false;
         this.errorMessage = '';
+        this.state = {
+            chartOptions: ['currency', 'paysys','status','store'],
+            selectedOption: 'currency'
+        }
     }
 
     componentDidMount() {
@@ -34,7 +39,7 @@ class Statistic extends Component {
         });
         this.props.getAllStores();
         this.getValues();
-
+        this.props.getChartStats(this.state.selectedOption, this.query);
     }
 
     componentWillUnmount() {
@@ -122,10 +127,16 @@ class Statistic extends Component {
             }
         }
 
-        query = `${storeId}${currency}${fromPrice}${tillPrice}${paysysId}${status}${fromDate}${tillDate}${orderBy}${limit}${offset}`;
+        query = `&${storeId}${currency}${fromPrice}${tillPrice}${paysysId}${status}${fromDate}${tillDate}${orderBy}${limit}${offset}`;
+
+
+        this.query = `${storeId}${currency}${fromPrice}${tillPrice}${paysysId}${status}${fromDate}${tillDate}`;
+
         if (isAccurateAmount() && correctDates) {
             this.errorMessage = '';
             this.incorrectValues = false;
+
+            this.props.getChartStats(this.state.selectedOption, this.query);
             getAdminStatistic(query);
         } else {
             this.incorrectValues = true;
@@ -163,6 +174,11 @@ class Statistic extends Component {
         }
     }
 
+    onChangeStatHandler(e) {
+        this.setState({selectedOption: e.target.value});
+        this.props.getChartStats(e.target.value, this.query);
+    }
+
     render() {
         const isFetching = this.props.isFetching;
         const filterElem = <i className="fa fa-sort" aria-hidden="true"></i>;
@@ -177,7 +193,7 @@ class Statistic extends Component {
         paginationStyle.display = displayedPages > 1 ? 'block' : 'none';
         let infoMessage = statistic.length === 0 && !isFetching ? 'Nothing to display' : '';
 
-        return (
+        return  (
             <div className="statistic">
                 <div className="col-sm-2 calendar-place-holder">
                     <span style={{'whiteSpace': 'nowrap'}}>Select date </span>
@@ -256,7 +272,6 @@ class Statistic extends Component {
                     </div>
                 </div>
 
-
                 <button className="getStat btn btn-success" style={{margin: '15px'}}
                         onClick={this.getValues.bind(this)}>Get
                     statistic
@@ -315,16 +330,13 @@ class Statistic extends Component {
                             </Pagination>
                         </div>
 
-
                     </div>
                     <div className="chartStatistic">
-                        <ReactChart data={statistic}/>
-                        <select className="form-control">
-                            <option>Currency</option>
-                            <option>Payment system</option>
-                            <option>Payment status</option>
-                            <option>Stores</option>
-                        </select>
+                        <ReactChart
+                            chartStatistic={this.props.chartStatistic}
+                            selectedOption = {this.state.selectedOption}
+                            onChangeStatHandler = {this.onChangeStatHandler.bind(this)}
+                            chartOptions = {this.state.chartOptions}/>
                     </div>
                 </div>
                 <Alert type={TYPE_ERROR}>
@@ -341,12 +353,14 @@ class Statistic extends Component {
 export default connect(
     (state)=>({
         statistic: state.user.statistic,
+        chartStatistic: state.chartStatistic,
         isFetching: state.user,
         allStores: state.storeList
     }),
     {
         getAdminStatistic: UserActions.getAdminStatistic,
         clearStatistic: UserActions.clearStatistic,
-        getAllStores: StoresActions.getAllStores
+        getAllStores: StoresActions.getAllStores,
+        getChartStats: getChartStats
     }
 )(Statistic)
