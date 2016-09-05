@@ -8,7 +8,6 @@ export default function paginate({types, mapActionToKey, cError, entity, paginat
         throw new Error('Expected types to be an array of three elements.')
     }
     if (!types.every(t => typeof t === 'string' || typeof t === 'object')) {
-        debugger;
         throw new Error('Expected types to be strings.')
     }
     if (typeof mapActionToKey !== 'function') {

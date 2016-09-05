@@ -1,17 +1,16 @@
 import {normalize} from 'normalizr'
 import {camelizeKeys} from 'humps'
 import 'isomorphic-fetch'
+import handleTokenTime from './system'
 
 
 const API_VERSION = "dev";
 const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 
-let isLoggedIn = false;
-
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, body) {
-
+    handleTokenTime();
     const {schema, path, method, isAuth = true} = endpoint;
 
     let fullUrl = API_ROOT + path;

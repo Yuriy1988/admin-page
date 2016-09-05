@@ -57,7 +57,6 @@ class merchantPassChangingForm extends Component {
         if (user.success) {
             user.error ='';
         }
-        debugger;
         return (
             <div className="col-xs-4">
                 <form name="form" role="form" onSubmit={this.handleSubmit}>

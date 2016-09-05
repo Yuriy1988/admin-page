@@ -52,7 +52,7 @@ import CurrenciesPage   from './containers/pages/CurrenciesPage'; //Currencies
 import handleTokenTime from './middleware/system';
 
 import AntifraudPage from './containers/antiFraud/AntiFraudPage'
-
+import getServerVersion from './actions/system'
 
 //TODO fix hardcode. Move to separate module
 const ROLE = {
@@ -70,6 +70,7 @@ class Routes {
     }
 
     getRoutes() {
+        getServerVersion();
         return (
             <Route>
 

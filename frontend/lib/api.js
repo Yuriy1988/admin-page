@@ -4,7 +4,7 @@ let version = localStorage.apiVersion || 'dev';
 /**
  * SYSTEM_ACTIONS
  */
-export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false}; // waiting for server fix; //TODO
+export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false};
 
 /**
  * ANTIFRAUD

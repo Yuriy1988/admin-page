@@ -7,7 +7,6 @@ class ReactChart extends Component {
     }
 
     render() {
-        debugger;
          return this.props.chartStatistic &&
              this.props.chartOptions &&
              this.props.chartStatistic.data &&
