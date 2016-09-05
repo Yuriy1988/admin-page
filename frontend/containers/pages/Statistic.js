@@ -48,7 +48,7 @@ class Statistic extends Component {
 
     getValues(e) {
         const {getAdminStatistic} = this.props;
-        let storeId, currency, fromPrice, tillPrice, paysysId, status, orderBy, limit, offset, query;
+        let storeId, currency, fromPrice, tillPrice, paysysId, status, orderBy, limit, offset, query, score;
         var fromDate, tillDate;
         let $fromPrice = $('.paymentFrom-input');
         let $tillPrice = $('.paymentTill-input');
@@ -186,7 +186,7 @@ class Statistic extends Component {
         const statistic = this.props.statistic.payments;
         this.displayStatistic = statistic.length ? true : false;
         let style = {};
-        style.display = this.displayStatistic && !this.incorrectValues ? 'block' : 'none';
+        // style.display = this.displayStatistic && !this.incorrectValues ? 'block' : 'none';
 
         let paginationStyle = {};
         let displayedPages = Math.ceil(this.props.statistic.totalCount / 10);
@@ -280,8 +280,8 @@ class Statistic extends Component {
                             <tr className="filter">
                                 <th onClick={this.setFilter.bind(this)} data="created" rowSpan="2">
                                     <span>created {defaultElem}</span></th>
-                                <th onClick={this.setFilter.bind(this)} data="Antifraud Score" rowSpan="2">
-                                    <span>created {defaultElem}</span></th>
+                                <th onClick={this.setFilter.bind(this)} data="score" rowSpan="2">
+                                    <span>Anti-fraud score {filterElem}</span></th>
                                 <th onClick={this.setFilter.bind(this)} data="payment_account" rowSpan="2">
                                     payment_account {filterElem}</th>
                                 <th onClick={this.setFilter.bind(this)} data="paysys_id" rowSpan="2">
