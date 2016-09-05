@@ -83,12 +83,11 @@ class Routes {
                     <Route path="/admin/access_denied" component={ErrorPage} status={403}/>
 
                     <Route path="/admin">
-
                         <IndexRoute onEnter={this.redirectToMain} component={SelectRolePage}/>
 
                         <Route path="administrator" component={AdminPage}
                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
-                            <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
+                            <IndexRoute onEnter={this.requireRole(ROLE.ADMINISTRATOR)} />
 
                             <Route path="notifications" component={NotificationsPage}
                                    onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>

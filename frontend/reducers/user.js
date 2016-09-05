@@ -29,7 +29,7 @@ export default function user(state = initial_user, action) {
         case UserActions.USER_LOGIN_SUCCESS:
             let path = '';
             if (action.response.groups[0] === 'admin') {
-                path = 'administrator';
+                path = 'administrator/statistic';
             } else {
                 path = 'anotherPath'; // todo: handle roles here;
             }

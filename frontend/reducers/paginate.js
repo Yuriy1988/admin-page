@@ -44,7 +44,6 @@ export default function paginate({types, mapActionToKey, cError, entity, paginat
 
 
         if (!!entity) {
-            debugger;
             if (!!action.deleteObject && action.deleteObject.entity == entity) {
                 state.ids = state.ids.filter((id) => id != action.deleteObject.id);
             }

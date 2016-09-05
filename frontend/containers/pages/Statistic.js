@@ -213,12 +213,6 @@ class Statistic extends Component {
                            return  <option name={item.id} key={i}> {item.storeName} </option>
                         })}
                     </select>
-                    {/*<div className="input-group">*/}
-                        {/*<div className="input-group-addon">*/}
-                            {/*<i className="fa fa-shopping-cart"/>*/}
-                        {/*</div>*/}
-                        {/*<input ref="input" type="text" className="form-control store-id-input"/>*/}
-                    {/*</div>*/}
                 </div>
 
                 <div className="col-sm-2">
@@ -286,6 +280,8 @@ class Statistic extends Component {
                             <tr className="filter">
                                 <th onClick={this.setFilter.bind(this)} data="created" rowSpan="2">
                                     <span>created {defaultElem}</span></th>
+                                <th onClick={this.setFilter.bind(this)} data="Antifraud Score" rowSpan="2">
+                                    <span>created {defaultElem}</span></th>
                                 <th onClick={this.setFilter.bind(this)} data="payment_account" rowSpan="2">
                                     payment_account {filterElem}</th>
                                 <th onClick={this.setFilter.bind(this)} data="paysys_id" rowSpan="2">
@@ -306,6 +302,7 @@ class Statistic extends Component {
                             {statistic.map(function (result, i) {
                                 return <tr key={i}>
                                     <td key={Math.random()}>{moment(result.created).format('MMMM Do YYYY')}</td>
+                                    <td key={Math.random()}>{result.score}</td>
                                     <td key={Math.random()}>{result.paymentAccount}</td>
                                     <td key={Math.random()}>{result.paysysId}</td>
                                     <td key={Math.random()}>{result.status}</td>

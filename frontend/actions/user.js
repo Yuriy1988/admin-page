@@ -37,6 +37,7 @@ export function login_authError() {
 }
 
 export function login(username, password) {
+    debugger;
     return {
         [CALL_API]: {
             types: [USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAILURE],
