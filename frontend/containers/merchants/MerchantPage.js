@@ -34,12 +34,6 @@ class MerchantPage extends Component {
             loadMerchant(merchantId);
         }
     }
-
-    handleClick(e) {
-        e.preventDefault();
-        console.log("Delete");
-    }
-
     render() {
         const { merchantId } = this.props.params;
         const { merchants, children } = this.props;
@@ -69,11 +63,6 @@ class MerchantPage extends Component {
                               to={`/admin/administrator/merchants/${merchantInfo.id}/edit`}>
                             <i className="fa fa-edit"/>&nbsp;Edit
                         </Link>
-                        {/*<Link className="btn btn-sm btn-danger"
-                         onClick={this.handleClick}
-                         to={`/admin/administrator/merchants/${merchantInfo.id}/edit`}>
-                         <i className="fa fa-trash"/>&nbsp;Delete
-                         </Link>*/}
                     </div>
                 </h1>
                 <Transition>{children}</Transition>

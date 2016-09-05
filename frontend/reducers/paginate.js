@@ -44,6 +44,7 @@ export default function paginate({types, mapActionToKey, cError, entity, paginat
 
 
         if (!!entity) {
+            debugger;
             if (!!action.deleteObject && action.deleteObject.entity == entity) {
                 state.ids = state.ids.filter((id) => id != action.deleteObject.id);
             }
@@ -57,6 +58,9 @@ export default function paginate({types, mapActionToKey, cError, entity, paginat
                     success: false
                 });
             case successType:
+                if (action.type ==='MERCHANT_DELETE_SUCCESS' )  {
+                return state;
+                }
                 const response = action.response;
                 let ids = [];
                 if (!!response.result[key]) {
