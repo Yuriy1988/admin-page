@@ -19,6 +19,9 @@ function callApi(endpoint, body) {
     const headers = new Headers();
 
     headers.append("Content-type", "application/json");
+    headers.append( "Pragma", "no-cache" );
+    headers.append( "Cache-Control", "no-cache" );
+    headers.append( "Expires", 0 );
 
     if (isAuth) {
         headers.append("Authorization", 'Bearer ' + window.localStorage.user_token);
