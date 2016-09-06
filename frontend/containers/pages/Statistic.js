@@ -186,7 +186,7 @@ class Statistic extends Component {
         const statistic = this.props.statistic.payments;
         this.displayStatistic = statistic.length ? true : false;
         let style = {};
-        // style.display = this.displayStatistic && !this.incorrectValues ? 'block' : 'none';
+         style.display = this.displayStatistic && !this.incorrectValues ? 'block' : 'none';
 
         let paginationStyle = {};
         let displayedPages = Math.ceil(this.props.statistic.totalCount / 10);

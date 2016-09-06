@@ -1,10 +1,8 @@
-//TODO refactor
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 import * as MerchantActions from '../actions/merchants';
-import Alert, {TYPE_ERROR} from '../components/Alert';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 
@@ -18,7 +16,6 @@ class MerchantList extends Component {
     }
 
     static renderList(items) {
-        // const preRender = items.map((value, i) => (value));
         return (items.length > 0) ? (
             <div className="table-responsive">
                 <table className="table table-hover table-striped">
@@ -84,7 +81,6 @@ class MerchantList extends Component {
 
                 </div>
                 <div className="box-body no-padding">
-
                     { merchantList }
                 </div>
                 <LoadingOverlay loading={merchantPagination.isFetching }/>

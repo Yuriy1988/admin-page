@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 
 import { RedirectActions, MerchantContractActions, PaginationActions } from '../../actions/index'
 
@@ -41,7 +40,7 @@ class MerchantContractAddPage extends Component {
     }
 
     render() {
-        const { createRequest, createCE, redirect } = this.props;
+        const { createRequest, createCE } = this.props;
 
         let errors = {};
         try {

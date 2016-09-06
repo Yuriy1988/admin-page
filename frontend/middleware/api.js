@@ -5,6 +5,7 @@ import handleTokenTime from './system'
 
 
 const API_VERSION = "dev";
+debugger;
 const API_ROOT = `${location.origin}/api/admin/${API_VERSION}/`;
 
 // Fetches an API response and normalizes the result JSON according to schema.

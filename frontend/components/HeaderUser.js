@@ -38,8 +38,7 @@ class HeaderUser extends Component {
 
     logoutHandle(e) {
         e.preventDefault();
-        const {logout} = this.props;
-        logout();
+       this.props.logout();
     }
 
     hideMe() {
