@@ -183,8 +183,8 @@ def store_exists(store_id):
 # Store Payment System
 
 @api_v1.route('/stores/<store_id>/store_paysys', methods=['GET'])
-@auth.auth('admin', 'system', 'merchant', 'manager')
-@owner_access_only
+# @auth.auth('admin', 'system', 'merchant', 'manager')  # TO ALLOW ACCESS FROM CLIENT FORM
+# @owner_access_only
 def store_payment_systems_list(store_id):
     if not Store.exists(store_id):
         raise NotFoundError()
