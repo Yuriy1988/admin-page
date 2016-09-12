@@ -1,6 +1,9 @@
 import * as _MerchantActions from './merchants'
 export {_MerchantActions as MerchantActions}
 
+import * as _ManagerActions from './managers'
+export {_ManagerActions as ManagerActions}
+
 import * as _NotificationsActions from './notifications'
 export {_NotificationsActions as NotificationsActions}
 

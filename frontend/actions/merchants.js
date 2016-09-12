@@ -83,6 +83,7 @@ export function editByIdCError() {
     }
 }
 export function editById(merchantId, merchant) {
+    console.log(merchant);
     return {
         [CALL_API]: {
             types: [MERCHANT_EDIT_REQUEST, MERCHANT_EDIT_SUCCESS, MERCHANT_EDIT_FAILURE],

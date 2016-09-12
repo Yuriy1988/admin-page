@@ -7,6 +7,16 @@ let version = localStorage.apiVersion || 'dev';
 export const SERVER_VERSION_GET = {path: "../version", method: "GET", isAuth: false};
 
 /**
+ * MANAGERS
+ */
+export const MANAGERLIST_GET = (merchantId) => ({path: `merchants/${merchantId}/managers`, method: "GET"});
+export const MANAGER_ADD = (merchantId) => ({path: `merchants/${merchantId}/managers`, method: "POST"});
+// export const MANAGER_GET = (merchantId) => ({path: `merchants/${merchantId}`, method: "GET"});
+// export const MANAGER_EDIT= (merchantId) => ({path: `merchants/${merchantId}`, method: "PUT");
+// export const MANAGER_DELETE = (merchantId) => ({path: `merchants/${merchantId}`, method: "DELETE"});
+
+
+/**
  * ANTIFRAUD
  */
 

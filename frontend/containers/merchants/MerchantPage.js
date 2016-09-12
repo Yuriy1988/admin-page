@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 import { MerchantActions } from '../../actions/index';
-import Alert, { TYPE_ERROR } from '../../components/Alert';
-import LoadingOverlay from '../../components/LoadingOverlay';
 
 import Transition from '../../containers/Transition';
 
@@ -45,6 +43,11 @@ class MerchantPage extends Component {
                 <h1 className="page-header">
                     <i className="fa fa-briefcase"/> {merchantInfo.merchantName}
                     <div className="box-tools pull-right btn-toolbar">
+
+                        <Link className="btn btn-sm pull-left btn-success"
+                              to={`/admin/administrator/merchants/${merchantInfo.id}/managers`}>
+                            <i className="fa fa-users"/>&nbsp;Managers
+                        </Link>
 
                         <Link className="btn btn-sm pull-left btn-warning"
                                to={`/admin/administrator/merchants/${merchantInfo.id}/passEdit`}>

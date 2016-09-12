@@ -19,6 +19,8 @@ import {combineReducers} from 'redux'
 import notifications from './notifications'
 import notification from './notification'
 import notification_to_add from './notification_to_add'
+import managerList from './managers'
+import manager_to_add from './manager_to_add'
 import antiFraud from './antifraud'
 import storeList from './storeList'
 import chartStatistic from './chartStatistic'
@@ -44,7 +46,6 @@ function entities (state = {
     }
     return state;
 }
-
 
 // Updates the pagination data for different actions.
 
@@ -168,7 +169,7 @@ const pagination = combineReducers({
         cError: MerchantActions.MERCHANT_DELETE_CERROR
     }),
     merchantEdit: paginate({
-        mapActionToKey: action => "merchant",
+        mapActionToKey: action => {return "merchant"},
         paginationId: "merchantEdit",
         types: [
             MerchantActions.MERCHANT_EDIT_REQUEST,
@@ -308,6 +309,8 @@ const rootReducer = combineReducers({
     notifications,
     notification_to_add,
     notification,
+    managerList,
+    manager_to_add,
     storeList,
     routing: routeReducer
 });

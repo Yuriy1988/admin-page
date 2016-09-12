@@ -37,7 +37,6 @@ class MerchantForm extends Component {
         e.preventDefault();
         const { onSubmit } = this.props;
         const { merchant } = this.state;
-
         onSubmit(merchant);
     }
 
@@ -46,7 +45,6 @@ class MerchantForm extends Component {
         const onCreate = this._onCreate;
 
         const { changeMerchant, changeMerchantInfo, changeMerchantAccount, changeMerchantUser } = this;
-
         let { merchant } = this.state;
         merchant = new MerchantModel(merchant);
 
