@@ -1,11 +1,9 @@
-//TODO refactor
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import Alert, {TYPE_ERROR} from '../../components/Alert'
 import {Link} from 'react-router'
 import * as NotificationActions from '../../actions/notifications';
 import LoadingOverlay from '../../components/LoadingOverlay';
-import Transition from '../../containers/Transition';
 
 class NotificationPage extends Component {
     constructor(props) {
@@ -32,20 +30,20 @@ class NotificationPage extends Component {
                             <div className="box-header with-border">
                                 <h3 className="box-title">Notification info</h3>
                                 <div className="btn-toolbar pull-right">
-                                <Link onClick={()=> {
-                                    getNotificationById(notification.id)
-                                }}
-                                      className="btn btn-sm btn-primary"
-                                      to={`/admin/administrator/notifications/${notification.id}/edit`}>
-                                    <i className="fa fa-edit"/> Edit
-                                </Link>
+                                    <Link onClick={()=> {
+                                        getNotificationById(notification.id)
+                                    }}
+                                          className="btn btn-sm btn-primary"
+                                          to={`/admin/administrator/notifications/${notification.id}/edit`}>
+                                        <i className="fa fa-edit"/> Edit
+                                    </Link>
 
 
-                                <span className="btn btn-sm btn-danger"
-                                      onClick={this.handleDeleteButton.bind(this, notification.id)}>
+                                    <span className="btn btn-sm btn-danger"
+                                          onClick={this.handleDeleteButton.bind(this, notification.id)}>
                                 <i className="fa fa-trash"/> Delete
                             </span>
-                                    </div>
+                                </div>
 
 
                             </div>
@@ -113,4 +111,3 @@ export default connect(
 
     }
 )(NotificationPage)
-

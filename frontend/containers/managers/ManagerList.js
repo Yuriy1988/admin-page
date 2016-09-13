@@ -46,7 +46,7 @@ class ManagerList extends Component {
                             getManagerById(list[i].id)
                         }}
                               to={`/admin/administrator/merchants/${merchantId}/managers/${list[i].id}`}>
-                            {list[i].name}
+                            {list[i].user.username}
                         </Link>
                     </td>
                     <td key={Math.random()}>

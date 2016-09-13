@@ -21,6 +21,7 @@ import notification from './notification'
 import notification_to_add from './notification_to_add'
 import managerList from './managers'
 import manager_to_add from './manager_to_add'
+import manager from './manager'
 import antiFraud from './antifraud'
 import storeList from './storeList'
 import chartStatistic from './chartStatistic'
@@ -311,6 +312,7 @@ const rootReducer = combineReducers({
     notification,
     managerList,
     manager_to_add,
+    manager,
     storeList,
     routing: routeReducer
 });

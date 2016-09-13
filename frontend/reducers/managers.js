@@ -1,7 +1,7 @@
 import * as ManagersActions from '../actions/managers';
 
 const initialState = {
-    iisFetching: false,
+    isFetching: false,
     managerList: [],
     error:'',
     message: ''
@@ -19,7 +19,7 @@ export default function managerList(state = initialState, action) {
                 isFetching: false
             });
         case ManagersActions.MANAGERLIST_GET_SUCCESS:
-            return Object.assign({}, state, {isFetching: false}, action.response);
+            return Object.assign({}, state, {isFetching: false}, {managerList: action.response.managers});
 
         case ManagersActions.CLEAR_MANAGERLIST:
             return Object.assign({}, {
