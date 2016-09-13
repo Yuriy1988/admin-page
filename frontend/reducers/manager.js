@@ -1,4 +1,5 @@
 import * as ManagerActions from '../actions/managers';
+import { browserHistory } from 'react-router'
 
 const initialState = {
     errors: {
@@ -9,7 +10,7 @@ const initialState = {
         phone: '',
         username: '',
     },
-    user: {manager: {}},
+    user: {},
     isFetching: false
 };
 
@@ -30,6 +31,7 @@ export default function manager(state = initialState, action) {
         case  ManagerActions.MANAGER_EDIT_REQUEST:
             return Object.assign({}, state, {isFetching: true});
         case  ManagerActions.MANAGER_EDIT_SUCCESS:
+            browserHistory.goBack();
             return Object.assign({}, state, {isFetching: false}, action.response);
         case  ManagerActions.MANAGER_EDIT_FAILURE:
             return Object.assign({}, state, {error: action.error.serverError || initialState.error, isFetching: false});

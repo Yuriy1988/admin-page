@@ -1,4 +1,5 @@
 import * as ManagerActions from '../actions/managers';
+import { browserHistory } from 'react-router'
 
 const initialState = {
         errors: {
@@ -9,6 +10,7 @@ const initialState = {
             phone: '',
             username: '',
         },
+        user: {},
         isFetching: false
 };
 
@@ -20,6 +22,7 @@ export default function manager_to_add (state = initialState, action) {
             return Object.assign({}, state, {isFetching: true});
 
         case  ManagerActions.MANAGER_ADD_SUCCESS:
+            browserHistory.goBack();
             return Object.assign({}, state, {
                 isFetching: false, error: {
                     errors: {
@@ -33,7 +36,6 @@ export default function manager_to_add (state = initialState, action) {
                 }
             });
         case  ManagerActions.MANAGER_ADD_FAILURE:
-            debugger;
             return Object.assign({}, state, {
                 errors: action.error.serverError.errors.user, isFetching: false
             });

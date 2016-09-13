@@ -38,6 +38,7 @@ class ManagerList extends Component {
         const list = managerList.managerList;
 
         const content = list.map((manager, i) => {
+            console.log(list[i].id);
             return (
                 <tr key={i}>
                     <td>{i + 1}</td>
@@ -49,7 +50,7 @@ class ManagerList extends Component {
                             {list[i].user.username}
                         </Link>
                     </td>
-                    <td key={Math.random()}>
+                    <td key={list[i].id}>
                         <div className="btn-toolbar pull-right">
                             <Link onClick={()=> {
                                 getManagerById(list[i].id)

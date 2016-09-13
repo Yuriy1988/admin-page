@@ -26,4 +26,5 @@ export default store => next => action => {
                 break;
         }
     }
+
 }

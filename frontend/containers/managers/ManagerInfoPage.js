@@ -23,8 +23,6 @@ class ManagerInfoPage extends Component {
 
     render () {
         const {manager, manager:{user}, getManagerById}  = this.props;
-        console.log('manager',manager);
-        console.log('user',user);
 
         return ( user.username ?
                 <div className="row">
@@ -35,7 +33,7 @@ class ManagerInfoPage extends Component {
                                 <h3 className="box-title">Manager info</h3>
                                 <div className="btn-toolbar pull-right">
                                     <Link
-                                        onClick={()=> {getManagerById(managerId)}}
+                                        onClick={()=> {getManagerById(manager.id)}}
                                         className="btn btn-sm btn-primary"
                                         to={`/admin/administrator/merchants/${manager.merchantId}/managers/${manager.id}/edit`}>
                                         <i className="fa fa-edit"/> Edit
@@ -43,7 +41,7 @@ class ManagerInfoPage extends Component {
 
 
                                     <span className="btn btn-sm btn-danger"
-                                          onClick={this.handleDeleteButton.bind(this, manager.managerId)}>
+                                          onClick={this.handleDeleteButton.bind(this, manager.id)}>
                                         <i className="fa fa-trash"/> Delete
                                     </span>
                                 </div>

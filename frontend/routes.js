@@ -28,6 +28,7 @@ import merchantPassChangingForm from './components/forms/merchantPassChangingFor
 import ManagerList from './containers/managers/ManagerList'
 import ManagerCreatePage from './containers/managers/ManagerCreatePage'
 import ManagerInfoPage from './containers/managers/ManagerInfoPage'
+import ManagerEditPage from './containers/managers/ManagerEditPage'
 
 import StoresPage       from './containers/stores/StoresPage'
 import StoreAddPage     from './containers/stores/StoreAddPage'
@@ -148,10 +149,11 @@ class Routes {
                                         <Route path="add" component={ManagerCreatePage}
                                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                         <Route path=":managerId" component={ManagerInfoPage}
+                                               onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>
+                                        </Route>
+                                        <Route path=":managerId/edit" component={ManagerEditPage}
                                                onEnter={this.requireRole(ROLE.ADMINISTRATOR)}/>
                                     </Route>
-
-
 
                                     <Route path="contracts" component={MerchantContractsPage}
                                            onEnter={this.requireRole(ROLE.ADMINISTRATOR)}>

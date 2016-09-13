@@ -49,10 +49,12 @@ export function getManagerById(id) {
     }
 }
 
+let path = location.pathname.split('/');
+path.length = 6;
+path = path.join('/');
+
 export const MANAGER_DELETE_REQUEST = 'MANAGER_DELETE_REQUEST';
-export const MANAGER_DELETE_SUCCESS = {
-    name: 'MANAGER_DELETE_SUCCESS',
-};
+export const MANAGER_DELETE_SUCCESS = {redirectTo:path};
 export const MANAGER_DELETE_FAILURE = 'MANAGER_DELETE_FAILURE';
 export const MANAGER_DELETE_CERROR = 'MANAGER_DELETE_CERROR';
 
@@ -89,12 +91,12 @@ export const MANAGER_EDIT_SUCCESS = 'MANAGER_EDIT_SUCCESS';
 export const MANAGER_EDIT_FAILURE = 'MANAGER_EDIT_FAILURE';
 export const MANAGER_EDIT_CERROR = 'MANAGER_EDIT_CERROR';
 
-export function editManager(body, merchantId) {
+export function editManager(body, managerId) {
     return {
         [CALL_API]: {
             types: [MANAGER_EDIT_REQUEST, MANAGER_EDIT_SUCCESS, MANAGER_EDIT_FAILURE],
             cError: MANAGER_EDIT_CERROR,
-            endpoint: MANAGER_EDIT(merchantId),
+            endpoint: MANAGER_EDIT(managerId),
             body
         }
     }

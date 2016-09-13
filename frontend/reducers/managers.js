@@ -1,5 +1,5 @@
 import * as ManagersActions from '../actions/managers';
-
+import { browserHistory } from 'react-router'
 const initialState = {
     isFetching: false,
     managerList: [],
@@ -36,6 +36,7 @@ export default function managerList(state = initialState, action) {
             state.managerList.filter(function (manager) {
                 manager.id !== action.id ? result.push(manager) : managerName = manager.name;
             });
+
             return Object.assign({}, state, {isFetching: false, managerList: result}, {message: `Manager ${managerName} was deleted`});
 
         case ManagersActions.MANAGER_DELETE_FAILURE:

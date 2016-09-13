@@ -7,14 +7,14 @@ export default class ManagerForm extends Component {
         let {selectedManager} = this.props;
 
         this.state = {
-            username: `${selectedManager.username || ''}`,
-            email: `${selectedManager.email || ''}`,
+            username: `${selectedManager.user.username || ''}`,
+            email: `${selectedManager.user.email || ''}`,
             groups: ['manager'],
-            first_name: `${selectedManager.firstName || ''}`,
-            last_name: `${selectedManager.lastName || ''}`,
-            phone: `${selectedManager.phone || ''}`,
-            notify: `${selectedManager.notify || 'EMAIL'}`,
-            enabled: `${selectedManager.enabled || true}`
+            first_name: `${selectedManager.user.firstName || ''}`,
+            last_name: `${selectedManager.user.lastName || ''}`,
+            phone: `${selectedManager.user.phone || ''}`,
+            notify: `${selectedManager.user.notify || 'EMAIL'}`,
+            enabled: `${selectedManager.user.enabled || true}`
         };
     }
 
@@ -37,7 +37,6 @@ export default class ManagerForm extends Component {
 
     render () {
         const {errors} = this.props.selectedManager;
-        console.log(this.state);
         return (
             <form role="form" onSubmit={this.onSubmit.bind(this)}>
 
